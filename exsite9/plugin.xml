@@ -31,5 +31,17 @@
          </property>
       </product>
    </extension>
+   <extension
+         id="product1"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="au.org.intersect.exsite9.application"
+            name="ExSite9">
+         <property
+               name="appName"
+               value="ExSite9">
+         </property>
+      </product>
+   </extension>
 
 </plugin>
