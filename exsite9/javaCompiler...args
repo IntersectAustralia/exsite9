@@ -1,3 +1,6 @@
+# This file has been removed from the build.xml - I cannot see what good it provides. It has been kept incase we need one.
+
+
 #ADAPTER#ACCESS#Developer/eclipse-3.7.2/plugins/org.eclipse.ui_3.7.0.v20110928-1505.jar[~org/eclipse/ui/internal/*:+org/eclipse/ui/internal/cocoa/*:?**/*]
 #ADAPTER#ACCESS#Developer/eclipse-3.7.2/plugins/org.eclipse.ui.cocoa_1.1.0.I20101109-0800.jar[~org/eclipse/ui/internal/*:+org/eclipse/ui/internal/cocoa/*:?**/*]
 #ADAPTER#ACCESS#Developer/eclipse-3.7.2/plugins/org.eclipse.core.runtime_3.7.0.v20110110.jar[~org/eclipse/core/internal/preferences/legacy/*:~org/eclipse/core/internal/runtime/*:+org/eclipse/core/runtime/*:?**/*]
