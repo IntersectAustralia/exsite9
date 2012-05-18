@@ -40,7 +40,8 @@
 			<arg value="org.eclipse.ant.core.antRunner"/>
 			<arg value="-buildfile"/>
 			<arg value="${org.eclipse.pde.build.xml}"/>
-			<jvmarg value="-Dbuilder=${buildConfig.dir}"/>
+			<jvmarg value="-Dbuilder=${basedir}"/>
+			<jvmarg value="-DbaseLocation=${eclipse.home}"/>
 		</java>
 	</target>
 
