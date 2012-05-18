@@ -27,7 +27,7 @@
 
 
    <plugins>
-      <plugin id="au.org.intersect.exsite9" version="1.0.0"/>
+      <plugin id="au.org.intersect.exsite9"/>
       <plugin id="com.ibm.icu"/>
       <plugin id="org.eclipse.core.commands"/>
       <plugin id="org.eclipse.core.contenttype"/>

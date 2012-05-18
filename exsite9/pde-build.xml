@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="au.org.intersect.exsite9" default="build.jars" basedir=".">
+<project name="au.org.intersect.exsite9" default="build.update.jar" basedir=".">
 
-	<property name="buildDirectory" value="${basedir}/build/pde-build"/>
+	<property name="build.dir" value="${basedir}/build"/>
+
+	<property name="buildDirectory" value="${build.dir}/pde-build"/>
 	<property name="p2.build.repo" value="file:${buildDirectory}/buildRepo"/>
 	<property name="basews" value="${ws}"/>
 	<property name="baseos" value="${os}"/>
@@ -51,9 +53,9 @@
 		<condition property="build.result.folder" value="${pluginTemp}/au.org.intersect.exsite9_1.0.0"		>
 			<isset property="buildTempFolder"/>
 		</condition>
-		<property name="build.result.folder" value="${basedir}"/>
-		<property name="temp.folder" value="${basedir}/temp.folder"/>
-		<property name="plugin.destination" value="${basedir}"/>
+		<property name="build.result.folder" value="${build.dir}/dist"/>
+		<property name="temp.folder" value="${build.dir}/temp"/>
+		<property name="plugin.destination" value="${build.dir}/dist"/>
 		<condition property="p2.publish.parts" value="true"		>
 			<istrue value="${p2.gathering}"/>
 		</condition>
@@ -274,12 +276,7 @@
 	</target>
 
 	<target name="clean" depends="init" description="Clean the plug-in: au.org.intersect.exsite9 of all the zips, jars and logs created.">
-		<delete dir="${build.result.folder}/@dot"/>
-		<delete file="${build.result.folder}/src.zip"/>
-		<delete file="${plugin.destination}/au.org.intersect.exsite9_1.0.0.jar"/>
-		<delete file="${plugin.destination}/au.org.intersect.exsite9_1.0.0.zip"/>
-		<delete dir="${temp.folder}"/>
-		<delete file="${compilation.problem.marker}" quiet="true"/>
+		<delete dir="${build.dir}" />
 	</target>
 
 	<target name="refresh" depends="init" if="eclipse.running" description="Refresh this folder.">
