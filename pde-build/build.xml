@@ -1,0 +1,29 @@
+<project name="ExSite9 PDE Builder" basedir=".">
+
+	<property name="parent.dir" value="${basedir}/.."/>
+	<property name="build.dir" value="${basedir}/build"/>
+
+	<property name="exsite9.dir" value="${parent.dir}/exsite9"/>
+	<property name="exsite9.build.dir" value="${exsite9.dir}/build"/>
+	<property name="exsite9.dist.dir" value="${exsite9.build.dir}/dist"/>
+
+	<property name="exsite9.product" value="${exsite9.dir}/exsite9.product" />
+	<property name="exsite9.plugin.xml" value="${exsite9.dir}/plugin.xml" />
+	<property name="exsite9.jar" value="${exsite9.dist.dir}/au.org.intersect.exsite9_1.0.0.jar" />
+
+	<target name="clean">
+		<delete dir="${build.dir}" />
+	</target>
+
+	<target name="dist" depends="clean">
+		<mkdir dir="${build.dir}"/>
+		<mkdir dir="${build.dir}/features"/>
+		<mkdir dir="${build.dir}/plugins"/>
+
+		<copy todir="${build.dir}/plugins">
+			<fileset file="${exsite9.jar}" />
+			<fileset file="${exsite9.product}" />
+		</copy>
+	</target>
+
+</project>
