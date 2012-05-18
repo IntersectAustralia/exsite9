@@ -1,7 +1,14 @@
-<project name="ExSite9 PDE Builder" basedir=".">
+<project name="ExSite9 PDE Builder" basedir="." default="dist">
+
+	<property environment="env"/>
+	<fail unless="env.ECLIPSE_HOME" message="ECLIPSE_HOME not set." />
+	<property name="eclipse.home" value="${env.ECLIPSE_HOME}"/>
+
+	<echo message="Using eclipse.home = ${eclipse.home}"/>
 
 	<property name="parent.dir" value="${basedir}/.."/>
 	<property name="build.dir" value="${basedir}/build"/>
+	<property name="buildConfig.dir" value="${basedir}/buildConfiguration"/>
 
 	<property name="exsite9.dir" value="${parent.dir}/exsite9"/>
 	<property name="exsite9.build.dir" value="${exsite9.dir}/build"/>
@@ -20,10 +27,21 @@
 		<mkdir dir="${build.dir}/features"/>
 		<mkdir dir="${build.dir}/plugins"/>
 
-		<copy todir="${build.dir}/plugins">
+		<copy todir="${build.dir}/plugins" failonerror="true">
 			<fileset file="${exsite9.jar}" />
 			<fileset file="${exsite9.product}" />
 		</copy>
+
+		<property name="org.eclipse.equinox.launcher.jar" value="${eclipse.home}/plugins/org.eclipse.equinox.launcher_1.2.0.v20110502.jar" />
+		<property name="org.eclipse.pde.build.xml" value="${eclipse.home}/plugins/org.eclipse.pde.build_3.7.0.v20111116-2009/scripts/productBuild/productBuild.xml" />
+
+		<java jar="${org.eclipse.equinox.launcher.jar}" fork="true" failonerror="true">
+			<arg value="-application"/>
+			<arg value="org.eclipse.ant.core.antRunner"/>
+			<arg value="-buildfile"/>
+			<arg value="${org.eclipse.pde.build.xml}"/>
+			<jvmarg value="-Dbuilder=${buildConfig.dir}"/>
+		</java>
 	</target>
 
 </project>
