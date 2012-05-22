@@ -6,8 +6,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
-import com.google.common.base.Strings;
-
 /**
  * This class controls all aspects of the application's execution
  */
@@ -19,10 +17,6 @@ public class Application implements IApplication {
 	public Object start(IApplicationContext context) throws Exception {
 		Display display = PlatformUI.createDisplay();
 		try {
-
-			// This is just to test google guava jar bundling in RCP
-			System.out.println("Hello World!" + Strings.nullToEmpty(null));
-
 			int returnCode = PlatformUI.createAndRunWorkbench(display, new ApplicationWorkbenchAdvisor());
 			if (returnCode == PlatformUI.RETURN_RESTART)
 				return IApplication.EXIT_RESTART;
@@ -31,7 +25,6 @@ public class Application implements IApplication {
 		} finally {
 			display.dispose();
 		}
-		
 	}
 
 	/* (non-Javadoc)

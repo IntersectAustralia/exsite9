@@ -1,4 +1,4 @@
-<project name="ExSite9 PDE Builder" basedir="." default="dist">
+<project name="ExSite9 RCP Builder" basedir="." default="dist">
 
 	<property environment="env"/>
 	<fail unless="env.ECLIPSE_HOME" message="ECLIPSE_HOME not set." />
@@ -14,9 +14,14 @@
 	<property name="exsite9.build.dir" value="${exsite9.dir}/build"/>
 	<property name="exsite9.dist.dir" value="${exsite9.build.dir}/dist"/>
 
+	<property name="exsite9libs.dir" value="${parent.dir}/exsite9_libraries"/>
+	<property name="exsite9libs.build.dir" value="${exsite9libs.dir}/build"/>
+	<property name="exsite9libs.dist.dir" value="${exsite9libs.build.dir}/dist"/>
+
 	<property name="exsite9.product" value="${exsite9.dir}/exsite9.product" />
 	<property name="exsite9.plugin.xml" value="${exsite9.dir}/plugin.xml" />
 	<property name="exsite9.jar" value="${exsite9.dist.dir}/au.org.intersect.exsite9_1.0.0.jar" />
+	<property name="exsite9libs.jar" value="${exsite9libs.dist.dir}/au.org.intersect.exsite9.libs_1.0.0.jar" />
 
 	<target name="clean">
 		<delete dir="${build.dir}" />
@@ -27,10 +32,17 @@
 		<mkdir dir="${build.dir}/features"/>
 		<mkdir dir="${build.dir}/plugins"/>
 
+		<!-- Pull-in the exsite9 libraries plugin -->
+		<copy todir="${build.dir}/plugins" failonerror="true">
+			<fileset file="${exsite9libs.jar}" />
+		</copy>
+
+		<!-- Pull-in the exsite9 plugin -->
 		<copy todir="${build.dir}/plugins" failonerror="true">
 			<fileset file="${exsite9.jar}" />
 			<fileset file="${exsite9.product}" />
 		</copy>
+
 
 		<property name="org.eclipse.equinox.launcher.jar" value="${eclipse.home}/plugins/org.eclipse.equinox.launcher_1.2.0.v20110502.jar" />
 		<property name="org.eclipse.pde.build.xml" value="${eclipse.home}/plugins/org.eclipse.pde.build_3.7.0.v20111116-2009/scripts/productBuild/productBuild.xml" />

@@ -19,7 +19,7 @@
 	<property name="p2.publishonerror" value="false"/>
 
 	<!-- Compiler settings. -->
-	<property name="javacFailOnError" value="false"/>
+	<property name="javacFailOnError" value="true"/>
 	<property name="javacDebugInfo" value="on"/>
 	<property name="javacVerbose" value="false"/>
 	<property name="logExtension" value=".log"/>
@@ -77,7 +77,7 @@
 		<property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
 	</target>
 
-	<target name="build.update.jar" depends="init" description="Build the plug-in: au.org.intersect.exsite9 for an update site.">
+	<target name="build.update.jar" depends="clean, init" description="Build the plug-in: au.org.intersect.exsite9 for an update site.">
 		<delete dir="${temp.folder}"/>
 		<mkdir dir="${temp.folder}"/>
 		<antcall target="build.jars"/>
@@ -149,6 +149,8 @@
 			<pathelement path="${eclipse.home}/plugins/org.eclipse.core.variables_3.2.500.v20110928-1503.jar"/>
 			<pathelement path="${eclipse.home}/plugins/org.eclipse.core.filesystem_1.3.100.v20110423-0524.jar"/>
 			<pathelement path="${eclipse.home}/plugins/org.eclipse.core.filesystem.macosx_1.3.0.v20110423-0524.jar"/>
+			<!-- Refer to all 3rd party jars here -->
+			<pathelement path="${basedir}/../exsite9_libraries/guava-12.0.jar"/>
 		</path>
 		<!-- compile the source code -->
 		<javac destdir="${build.result.folder}/@dot" failonerror="${javacFailOnError}" verbose="${javacVerbose}" debug="${javacDebugInfo}" includeAntRuntime="no" bootclasspath="${bundleBootClasspath}" source="${bundleJavacSource}" target="${bundleJavacTarget}"		>

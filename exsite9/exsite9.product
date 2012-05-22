@@ -12,6 +12,7 @@
 
    <plugins>
       <plugin id="au.org.intersect.exsite9"/>
+      <plugin id="au.org.intersect.exsite9.libs"/>
       <plugin id="com.ibm.icu"/>
       <plugin id="javax.servlet"/>
       <plugin id="org.eclipse.core.commands"/>
