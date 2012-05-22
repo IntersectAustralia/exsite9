@@ -1,8 +1,7 @@
 package au.org.intersect.exsite9.domain;
 
-import static au.org.intersect.exsite9.test.Assert.assertNotEqualsHashCode;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static au.org.intersect.exsite9.test.Assert.*;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -55,5 +54,9 @@ public final class GroupUnitTest {
 		toTest1.getFiles().add(new File("some File"));
 		assertNotEqualsHashCode(toTest1, toTest2);
 		assertNotEqualsHashCode(toTest1, toTest3);
+
+		assertNotEquals(toTest1, null);
+		assertNotEquals(toTest1, n1);
+		assertNotEquals(toTest1, new Object());
 	}
 }
