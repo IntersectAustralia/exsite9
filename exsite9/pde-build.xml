@@ -151,6 +151,7 @@
 			<pathelement path="${eclipse.home}/plugins/org.eclipse.core.filesystem.macosx_1.3.0.v20110423-0524.jar"/>
 			<!-- Refer to all 3rd party jars here -->
 			<pathelement path="${basedir}/../exsite9_libraries/guava-12.0.jar"/>
+			<pathelement path="${basedir}/../exsite9_libraries/commons-lang3-3.1.jar"/>
 		</path>
 		<!-- compile the source code -->
 		<javac destdir="${build.result.folder}/@dot" failonerror="${javacFailOnError}" verbose="${javacVerbose}" debug="${javacDebugInfo}" includeAntRuntime="no" bootclasspath="${bundleBootClasspath}" source="${bundleJavacSource}" target="${bundleJavacTarget}"		>

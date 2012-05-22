@@ -116,7 +116,6 @@
 		<antcall target="apitools.generation">
 			<param name="target.folder" value="${build.result.folder}"/>
 			<param name="projectLocation" value="${basedir}"/>
-			<param name="binary.folders" value="${basedir}/guava-12.0.jar"/>
 			<param name="projectName" value="${bundleId}_${bundleVersion}"/>
 		</antcall>
 		<eclipse.gatherBundle 
@@ -133,12 +132,12 @@
 			<fileset dir="${basedir}">
 				<include name="META-INF/"/>
 				<include name="guava-12.0.jar"/>
+				<include name="commons-lang3-3.1.jar"/>
 			</fileset>
 		</copy>
 		<antcall target="apitools.generation">
 			<param name="target.folder" value="${destination.temp.folder}/au.org.intersect.exsite9.libs_1.0.0"/>
 			<param name="projectLocation" value="${basedir}"/>
-			<param name="binary.folders" value="${basedir}/guava-12.0.jar"/>
 			<param name="projectName" value="${bundleId}_${bundleVersion}"/>
 		</antcall>
 	</target>

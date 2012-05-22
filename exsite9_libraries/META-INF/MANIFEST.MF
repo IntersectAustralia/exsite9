@@ -3,7 +3,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Exsite9 Libraries
 Bundle-SymbolicName: au.org.intersect.exsite9.libs
 Bundle-Version: 1.0.0
-Bundle-ClassPath: guava-12.0.jar
+Bundle-ClassPath: guava-12.0.jar,
+ commons-lang3-3.1.jar
 Export-Package: com.google.common.annotations,
  com.google.common.base,
  com.google.common.base.internal,
@@ -16,5 +17,17 @@ Export-Package: com.google.common.annotations,
  com.google.common.net,
  com.google.common.primitives,
  com.google.common.reflect,
- com.google.common.util.concurrent
+ com.google.common.util.concurrent,
+ org.apache.commons.lang3,
+ org.apache.commons.lang3.builder,
+ org.apache.commons.lang3.concurrent,
+ org.apache.commons.lang3.event,
+ org.apache.commons.lang3.exception,
+ org.apache.commons.lang3.math,
+ org.apache.commons.lang3.mutable,
+ org.apache.commons.lang3.reflect,
+ org.apache.commons.lang3.text,
+ org.apache.commons.lang3.text.translate,
+ org.apache.commons.lang3.time,
+ org.apache.commons.lang3.tuple
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
