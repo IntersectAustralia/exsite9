@@ -22,6 +22,7 @@ public final class FileUnitTest {
 		final File toTest3 = new File(f2);
 
 		assertEquals(toTest1, toTest1);
+		assertEquals(f1, toTest1.getName());
 
 		assertEquals(toTest1, toTest2);
 		assertEquals(toTest2, toTest1);

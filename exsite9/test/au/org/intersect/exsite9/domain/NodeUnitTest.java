@@ -49,14 +49,19 @@ public final class NodeUnitTest {
 		assertNotEqualsHashCode(toTest1, toTest3);
 		assertNotEqualsHashCode(toTest2, toTest3);
 
-		// Different child nodes.
+		// Different child groups.
 		toTest1.getGroups().add(new Group("some group"));
 		assertNotEqualsHashCode(toTest1, toTest2);
 		assertNotEqualsHashCode(toTest1, toTest3);
+		toTest2.getGroups().add(new Group("some group"));
 
 		// Different child files.
 		toTest1.getFiles().add(new File("some File"));
 		assertNotEqualsHashCode(toTest1, toTest2);
 		assertNotEqualsHashCode(toTest1, toTest3);
+
+		assertNotEquals(toTest1, null);
+		assertNotEquals(toTest1, new Object());
+		assertNotEquals(toTest1, n1);
 	}
 }
