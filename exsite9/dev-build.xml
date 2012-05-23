@@ -16,6 +16,7 @@
 	<property name="build.classes-test.dir" value="${build.dir}/classes-test" />
 	<property name="build.classes-instrumented.dir" value="${build.dir}/classes-instrumented" />
 	<property name="build.reports.dir" value="${build.dir}/reports" />
+	<property name="cobertura.ser" value="${build.reports.dir}/cobertura.ser" />
 
 	<path id="eclipse.rcp.classpath">
 		<pathelement location="${eclipse.home}/plugins/org.eclipse.ui_3.7.0.v20110928-1505.jar"/>
@@ -79,7 +80,6 @@
 		<delete dir="${build.classes-test.dir}" />
 		<delete dir="${build.classes-instrumented.dir}" />
 		<delete dir="${build.reports.dir}" />
-		<delete file="${basedir}/cobertura.ser"/>
 	</target>
 
 	<target name="compile" depends="clean">
@@ -97,67 +97,23 @@
 	</target>
 
 	<target name="unittest" depends="compile-test">
-		<mkdir dir="${build.reports.dir}/unittest/xml"/>
-		<mkdir dir="${build.reports.dir}/unittest/html"/>
-
-		<junit printsummary="true">
-			<classpath>
-				<path refid="test.classpath"/>
-			</classpath>
-			<formatter type="xml"/>
-			<batchtest todir="${build.reports.dir}/unittest/xml" failureproperty="tests.failed">
-				<fileset dir="${test.dir}">
-					<include name="**/*UnitTest.java"/>
-				</fileset>
-			</batchtest>
-		</junit>
-
-		<junitreport todir="${build.reports.dir}/unittest/xml">
-			<fileset dir="${build.reports.dir}/unittest/xml">
-				<include name="TEST-*.xml"/>
-			</fileset>
-			<report format="frames" todir="${build.reports.dir}/unittest/html"/>
-		</junitreport>
-
+		<inner-unittest/>
 		<fail if="tests.failed" message="Test failures." />
 	</target>
 
 	<target name="coverage" depends="compile-test">
-		<mkdir dir="${build.reports.dir}/unittest/xml"/>
-		<mkdir dir="${build.reports.dir}/unittest/html"/>
-		<mkdir dir="${build.reports.dir}/coverage/html"/>
 
 		<taskdef classpathref="cobertura.classpath" resource="tasks.properties"/>
 
-		<cobertura-instrument todir="${build.classes-instrumented.dir}">
+		<cobertura-instrument todir="${build.classes-instrumented.dir}" datafile="${cobertura.ser}" >
 			<fileset dir="${build.classes.dir}">
 				<include name="**/*.class"/>
 			</fileset>
 		</cobertura-instrument>
 
-		<junit printsummary="true">
-			<sysproperty key="net.sourceforge.cobertura.datafile" file="${basedir}/cobertura.ser" />
-			<classpath location="${build.classes-instrumented.dir}"/>
-			<classpath refid="cobertura.classpath"/>
-			<classpath>
-				<path refid="test.classpath"/>
-			</classpath>
-			<formatter type="xml"/>
-			<batchtest fork="true" todir="${build.reports.dir}/unittest/xml" failureproperty="tests.failed">
-				<fileset dir="${test.dir}">
-					<include name="**/*UnitTest.java"/>
-				</fileset>
-			</batchtest>
-		</junit>
+		<inner-unittest/>
 
-		<junitreport todir="${build.reports.dir}/unittest/xml">
-			<fileset dir="${build.reports.dir}/unittest/xml">
-				<include name="TEST-*.xml"/>
-			</fileset>
-			<report format="frames" todir="${build.reports.dir}/unittest/html"/>
-		</junitreport>
-
-		<cobertura-report format="html" destdir="${build.reports.dir}/coverage/html">
+		<cobertura-report format="html" destdir="${build.reports.dir}/coverage/html" datafile="${cobertura.ser}" >
 			<fileset dir="${src.dir}">
 				<include name="**/*.java"/>
 			</fileset>
@@ -165,5 +121,36 @@
 
 		<fail if="tests.failed" message="Test failures." />
 	</target>
+
+	<macrodef name="inner-unittest">
+		<sequential>
+
+			<mkdir dir="${build.reports.dir}/unittest/xml"/>
+			<mkdir dir="${build.reports.dir}/unittest/html"/>
+			<mkdir dir="${build.reports.dir}/coverage/html"/>
+
+			<junit fork="true" forkmode="once" printsummary="true">
+				<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.ser}" />
+				<classpath location="${build.classes-instrumented.dir}"/>
+				<classpath refid="cobertura.classpath"/>
+				<classpath>
+					<path refid="test.classpath"/>
+				</classpath>
+				<formatter type="xml"/>
+				<batchtest todir="${build.reports.dir}/unittest/xml" failureproperty="tests.failed">
+					<fileset dir="${test.dir}">
+						<include name="**/*UnitTest.java"/>
+					</fileset>
+				</batchtest>
+			</junit>
+
+			<junitreport todir="${build.reports.dir}/unittest/xml">
+				<fileset dir="${build.reports.dir}/unittest/xml">
+					<include name="TEST-*.xml"/>
+				</fileset>
+				<report format="frames" todir="${build.reports.dir}/unittest/html"/>
+			</junitreport>
+		</sequential>
+	</macrodef>
 
 </project>
