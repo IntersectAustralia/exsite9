@@ -7,6 +7,7 @@
 
 	<property name="parent.dir" value="${basedir}/.."/>
 	<property name="3rdparty.dir" value="${parent.dir}/3rdParty"/>
+	<property name="exsite9-libs.dir" value="${parent.dir}/exsite9_libraries"/>
 
 	<property name="src.dir" value="${basedir}/src" />
 	<property name="test.dir" value="${basedir}/test" />
@@ -58,8 +59,8 @@
 
 	<path id="build.classpath">
 		<path refid="eclipse.rcp.classpath"/>
-		<pathelement location="${3rdparty.dir}/google-guava/12.0/guava-12.0.jar"/>
-		<pathelement location="${3rdparty.dir}/apache-commons-lang/3.1/commons-lang3-3.1.jar"/>
+		<pathelement location="${exsite9-libs.dir}/guava-12.0.jar"/>
+		<pathelement location="${exsite9-libs.dir}/commons-lang3-3.1.jar"/>
 	</path>
 
 	<path id="test.classpath">
