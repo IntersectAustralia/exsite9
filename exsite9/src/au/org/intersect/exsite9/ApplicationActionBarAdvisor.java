@@ -14,19 +14,19 @@ import org.eclipse.ui.application.IActionBarConfigurer;
 /**
  *
  */
-public class ApplicationActionBarAdvisor extends ActionBarAdvisor
+public final class ApplicationActionBarAdvisor extends ActionBarAdvisor
 {
 
-    public ApplicationActionBarAdvisor(IActionBarConfigurer configurer)
+    public ApplicationActionBarAdvisor(final IActionBarConfigurer configurer)
     {
         super(configurer);
     }
 
-    protected void makeActions(IWorkbenchWindow window)
+    protected void makeActions(final IWorkbenchWindow window)
     {
     }
 
-    protected void fillMenuBar(IMenuManager menuBar)
+    protected void fillMenuBar(final IMenuManager menuBar)
     {
     }
 

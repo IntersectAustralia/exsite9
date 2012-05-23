@@ -13,12 +13,12 @@ import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 /**
  * 
  */
-public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor
+public final class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor
 {
 
     private static final String PERSPECTIVE_ID = "au.org.intersect.exsite9.perspective"; //$NON-NLS-1$
 
-    public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer)
+    public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(final IWorkbenchWindowConfigurer configurer)
     {
         return new ApplicationWorkbenchWindowAdvisor(configurer);
     }

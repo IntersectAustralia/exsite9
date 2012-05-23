@@ -43,5 +43,14 @@
          </property>
       </product>
    </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="au.org.intersect.exsite9.view.ProjectExplorerView"
+            id="au.org.intersect.exsite9.view.ProjectExplorerView"
+            name="Project Explorer View"
+            restorable="true">
+      </view>
+   </extension>
 
 </plugin>
