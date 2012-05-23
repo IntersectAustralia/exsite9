@@ -32,7 +32,7 @@ public abstract class Node
     /**
      * The child files that are encapsulated as part of this node.
      */
-    private final Set<File> files = new HashSet<File>();
+    private final Set<ResearchFile> files = new HashSet<ResearchFile>();
 
     /**
      * Constructor
@@ -70,7 +70,7 @@ public abstract class Node
      * 
      * @return Child files.
      */
-    public Set<File> getFiles()
+    public Set<ResearchFile> getFiles()
     {
         return this.files;
     }

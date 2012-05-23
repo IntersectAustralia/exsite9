@@ -133,6 +133,7 @@
 				<include name="META-INF/"/>
 				<include name="guava-12.0.jar"/>
 				<include name="commons-lang3-3.1.jar"/>
+				<include name="commons-io-2.3.jar"/>
 			</fileset>
 		</copy>
 		<antcall target="apitools.generation">

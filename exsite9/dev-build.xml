@@ -61,6 +61,7 @@
 		<path refid="eclipse.rcp.classpath"/>
 		<pathelement location="${exsite9-libs.dir}/guava-12.0.jar"/>
 		<pathelement location="${exsite9-libs.dir}/commons-lang3-3.1.jar"/>
+		<pathelement location="${exsite9-libs.dir}/commons-io-2.3.jar"/>
 	</path>
 
 	<path id="test.classpath">

@@ -6,30 +6,31 @@
  */
 package au.org.intersect.exsite9.domain;
 
+import java.io.File;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.google.common.base.Objects;
 
 /**
- * Represents a File.
+ * Represents a research data file in a folder that the researcher has associated with a project.
  */
-public final class File
+public final class ResearchFile
 {
 
-    /**
-     * The name of the file.
-     */
     private final String name;
+    private final String path;
 
-    /**
-     * Constructor
-     * 
-     * @param name
-     *            The name of the file.
-     */
-    public File(final String name)
+    public ResearchFile(final String name)
     {
         this.name = name;
+        this.path = "";
+    }
+    
+    public ResearchFile(File fileOnDisk)
+    {
+        this.name = fileOnDisk.getName();
+        this.path = fileOnDisk.getAbsolutePath();
     }
 
     /**
@@ -52,11 +53,11 @@ public final class File
         {
             return true;
         }
-        if (!(obj instanceof File))
+        if (!(obj instanceof ResearchFile))
         {
             return false;
         }
-        final File other = (File) obj;
+        final ResearchFile other = (ResearchFile) obj;
         return Objects.equal(this.name, other.name);
     }
 
@@ -77,6 +78,7 @@ public final class File
     {
         final ToStringBuilder tsb = new ToStringBuilder(this);
         tsb.append("name", this.name);
+        tsb.append("path", this.path);
         return tsb.toString();
     }
 }
