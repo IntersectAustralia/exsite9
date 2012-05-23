@@ -32,6 +32,8 @@ public final class ProjectExplorerView extends ViewPart
     @Override
     public void createPartControl(final Composite parent)
     {
+        this.setPartName("Project View");
+
         final Label label = new Label(parent, SWT.NONE);
         label.setText("This is the placeholder for the project explorer view");
     }
