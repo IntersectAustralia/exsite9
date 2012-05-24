@@ -5,7 +5,8 @@ Bundle-SymbolicName: au.org.intersect.exsite9.libs
 Bundle-Version: 1.0.0
 Bundle-ClassPath: guava-12.0.jar,
  commons-lang3-3.1.jar,
- commons-io-2.3.jar
+ commons-io-2.3.jar,
+ hsqldb-2.2.8.jar
 Export-Package: com.google.common.annotations,
  com.google.common.base,
  com.google.common.base.internal,
@@ -36,5 +37,26 @@ Export-Package: com.google.common.annotations,
  org.apache.commons.lang3.text,
  org.apache.commons.lang3.text.translate,
  org.apache.commons.lang3.time,
- org.apache.commons.lang3.tuple
+ org.apache.commons.lang3.tuple,
+ org.hsqldb,
+ org.hsqldb.auth,
+ org.hsqldb.dbinfo,
+ org.hsqldb.error,
+ org.hsqldb.index,
+ org.hsqldb.jdbc,
+ org.hsqldb.jdbc.pool,
+ org.hsqldb.lib,
+ org.hsqldb.lib.java,
+ org.hsqldb.lib.tar,
+ org.hsqldb.navigator,
+ org.hsqldb.persist,
+ org.hsqldb.resources,
+ org.hsqldb.result,
+ org.hsqldb.rights,
+ org.hsqldb.rowio,
+ org.hsqldb.scriptio,
+ org.hsqldb.server,
+ org.hsqldb.store,
+ org.hsqldb.types,
+ org.hsqldb.util
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
