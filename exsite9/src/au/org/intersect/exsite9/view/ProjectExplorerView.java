@@ -6,10 +6,16 @@
  */
 package au.org.intersect.exsite9.view;
 
-import org.eclipse.swt.SWT;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.part.ViewPart;
+
+import au.org.intersect.exsite9.domain.File;
+import au.org.intersect.exsite9.domain.Group;
+import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.view.provider.ProjectExplorerViewConentProvider;
+import au.org.intersect.exsite9.view.provider.ProjectExplorerViewInput;
+import au.org.intersect.exsite9.view.provider.ProjectExplorerViewLabelProvider;
 
 /**
  * This is the ViewPart that will hold the Project Explorer UI component.
@@ -34,8 +40,22 @@ public final class ProjectExplorerView extends ViewPart
     {
         this.setPartName("Project View");
 
-        final Label label = new Label(parent, SWT.NONE);
-        label.setText("This is the placeholder for the project explorer view");
+        final TreeViewer treeViewer = new TreeViewer(parent);
+        treeViewer.setContentProvider(new ProjectExplorerViewConentProvider());
+        treeViewer.setLabelProvider(new ProjectExplorerViewLabelProvider());
+
+        // Provide some mock stuff.
+        final Project project = new Project("My Project");
+        final Group group1 = new Group("Group 1");
+        final Group group2 = new Group("Group 2");
+        group1.getFiles().add(new File("File 1"));
+        group1.getFiles().add(new File("File 2"));
+        project.getGroups().add(group1);
+        project.getGroups().add(group2);
+        final ProjectExplorerViewInput wrapper = new ProjectExplorerViewInput(project);
+        treeViewer.setInput(wrapper);
+
+        treeViewer.expandAll();
     }
 
     /**
