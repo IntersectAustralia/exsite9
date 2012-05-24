@@ -9,8 +9,8 @@ package au.org.intersect.exsite9.view.provider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-import au.org.intersect.exsite9.domain.File;
 import au.org.intersect.exsite9.domain.Node;
+import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.view.ProjectExplorerView;
 
 /**
@@ -36,12 +36,12 @@ public final class ProjectExplorerViewLabelProvider extends LabelProvider
             final Node node = (Node) element;
             return node.getName();
         }
-        if (element instanceof File)
+        if (element instanceof ResearchFile)
         {
-            final File file = (File) element;
-            return file.getName();
+            final ResearchFile researchFile = (ResearchFile) element;
+            return researchFile.getName();
         }
-        return "<unknown>";
+        throw new IllegalArgumentException("Unknown tree element");
     }
 
 
@@ -51,6 +51,7 @@ public final class ProjectExplorerViewLabelProvider extends LabelProvider
     @Override
     public Image getImage(final Object element)
     {
+        // TODO: Insert some nice icons for Project, Group, ResearchFile.
         return super.getImage(element);
     }
 }
