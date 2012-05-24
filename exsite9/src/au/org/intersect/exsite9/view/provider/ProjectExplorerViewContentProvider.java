@@ -19,12 +19,12 @@ import au.org.intersect.exsite9.view.ProjectExplorerView;
 /**
  * Provides content to {@link ProjectExplorerView}
  */
-public final class ProjectExplorerViewConentProvider implements ITreeContentProvider
+public final class ProjectExplorerViewContentProvider implements ITreeContentProvider
 {
     /**
      * Constructor
      */
-    public ProjectExplorerViewConentProvider()
+    public ProjectExplorerViewContentProvider()
     {
     }
 
@@ -69,7 +69,7 @@ public final class ProjectExplorerViewConentProvider implements ITreeContentProv
             final List<Object> toReturn = new ArrayList<Object>();
             final Node node = (Node) parentElement;
             toReturn.addAll(node.getGroups());
-            toReturn.addAll(node.getFiles());
+            toReturn.addAll(node.getResearchFiles());
             return toReturn.toArray();
         }
         return Collections.emptyList().toArray();
@@ -93,7 +93,7 @@ public final class ProjectExplorerViewConentProvider implements ITreeContentProv
         if (element instanceof Node)
         {
             final Node node = (Node) element;
-            return !node.getGroups().isEmpty() || !node.getFiles().isEmpty();
+            return !node.getGroups().isEmpty() || !node.getResearchFiles().isEmpty();
         }
         return false;
     }

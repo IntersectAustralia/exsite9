@@ -32,7 +32,7 @@ public abstract class Node
     /**
      * The child files that are encapsulated as part of this node.
      */
-    private final Set<ResearchFile> files = new HashSet<ResearchFile>();
+    private final Set<ResearchFile> researchFiles = new HashSet<ResearchFile>();
 
     /**
      * Constructor
@@ -70,9 +70,9 @@ public abstract class Node
      * 
      * @return Child files.
      */
-    public Set<ResearchFile> getFiles()
+    public Set<ResearchFile> getResearchFiles()
     {
-        return this.files;
+        return this.researchFiles;
     }
 
     /**
@@ -91,7 +91,7 @@ public abstract class Node
         }
         final Node other = (Node) obj;
         return Objects.equal(this.name, other.name) && Objects.equal(this.groups, other.groups)
-                && Objects.equal(this.files, other.files);
+                && Objects.equal(this.researchFiles, other.researchFiles);
     }
 
     /**
@@ -100,7 +100,7 @@ public abstract class Node
     @Override
     public int hashCode()
     {
-        return Objects.hashCode(this.name, this.groups, this.files);
+        return Objects.hashCode(this.name, this.groups, this.researchFiles);
     }
 
     /**
@@ -112,7 +112,7 @@ public abstract class Node
         final ToStringBuilder tsb = new ToStringBuilder(this);
         tsb.append("name", this.name);
         tsb.append("groups", this.groups);
-        tsb.append("files", this.files);
+        tsb.append("researchFiles", this.researchFiles);
         return tsb.toString();
     }
 }

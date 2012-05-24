@@ -70,6 +70,7 @@
 		<dirset dir="${build.classes.dir}"/>
 		<dirset dir="${build.classes-test.dir}"/>
 		<pathelement location="${3rdparty.dir}/junit/4.10/junit-4.10.jar"/>
+		<pathelement location="${3rdparty.dir}/mockito/1.9.0/mockito-all-1.9.0.jar"/>
 	</path>
 
 	<path id="cobertura.classpath">

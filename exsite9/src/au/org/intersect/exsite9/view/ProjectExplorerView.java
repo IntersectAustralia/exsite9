@@ -10,10 +10,10 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
-import au.org.intersect.exsite9.domain.File;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.Project;
-import au.org.intersect.exsite9.view.provider.ProjectExplorerViewConentProvider;
+import au.org.intersect.exsite9.domain.ResearchFile;
+import au.org.intersect.exsite9.view.provider.ProjectExplorerViewContentProvider;
 import au.org.intersect.exsite9.view.provider.ProjectExplorerViewInput;
 import au.org.intersect.exsite9.view.provider.ProjectExplorerViewLabelProvider;
 
@@ -41,15 +41,15 @@ public final class ProjectExplorerView extends ViewPart
         this.setPartName("Project View");
 
         final TreeViewer treeViewer = new TreeViewer(parent);
-        treeViewer.setContentProvider(new ProjectExplorerViewConentProvider());
+        treeViewer.setContentProvider(new ProjectExplorerViewContentProvider());
         treeViewer.setLabelProvider(new ProjectExplorerViewLabelProvider());
 
         // Provide some mock stuff.
         final Project project = new Project("My Project");
         final Group group1 = new Group("Group 1");
         final Group group2 = new Group("Group 2");
-        group1.getFiles().add(new File("File 1"));
-        group1.getFiles().add(new File("File 2"));
+        group1.getResearchFiles().add(new ResearchFile("File 1"));
+        group1.getResearchFiles().add(new ResearchFile("File 2"));
         project.getGroups().add(group1);
         project.getGroups().add(group2);
         final ProjectExplorerViewInput wrapper = new ProjectExplorerViewInput(project);

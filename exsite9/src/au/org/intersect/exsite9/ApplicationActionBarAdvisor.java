@@ -28,7 +28,6 @@ public final class ApplicationActionBarAdvisor extends ActionBarAdvisor
     public ApplicationActionBarAdvisor(final IActionBarConfigurer configurer)
     {
         super(configurer);
-        
     }
 
     /**
@@ -51,5 +50,4 @@ public final class ApplicationActionBarAdvisor extends ActionBarAdvisor
         fileMenu.add(this.exitAction);
         menuBar.add(fileMenu);
     }
-
 }
