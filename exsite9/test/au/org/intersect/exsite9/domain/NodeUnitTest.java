@@ -28,10 +28,10 @@ public final class NodeUnitTest
 
         assertEquals(n1, toTest1.getName());
         assertTrue(toTest1.getGroups().isEmpty());
-        assertTrue(toTest1.getFiles().isEmpty());
+        assertTrue(toTest1.getResearchFiles().isEmpty());
 
         final String toString = toTest1.toString();
-        assertTrue(toString.contains("name=node 1,groups=[],files=[]"));
+        assertTrue(toString.contains("name=node 1,groups=[],researchFiles=[]"));
     }
 
     @Test
@@ -67,7 +67,7 @@ public final class NodeUnitTest
         toTest2.getGroups().add(new Group("some group"));
 
         // Different child files.
-        toTest1.getFiles().add(new ResearchFile("some File"));
+        toTest1.getResearchFiles().add(new ResearchFile("some File"));
         assertNotEqualsHashCode(toTest1, toTest2);
         assertNotEqualsHashCode(toTest1, toTest3);
 
