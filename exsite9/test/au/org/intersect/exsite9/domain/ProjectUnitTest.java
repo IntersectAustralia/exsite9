@@ -58,7 +58,7 @@ public final class ProjectUnitTest
         assertNotEqualsHashCode(toTest1, toTest3);
 
         // Different child files.
-        toTest1.getFiles().add(new File("some File"));
+        toTest1.getFiles().add(new ResearchFile("some File"));
         assertNotEqualsHashCode(toTest1, toTest2);
         assertNotEqualsHashCode(toTest1, toTest3);
 

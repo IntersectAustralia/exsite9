@@ -67,7 +67,7 @@ public final class NodeUnitTest
         toTest2.getGroups().add(new Group("some group"));
 
         // Different child files.
-        toTest1.getFiles().add(new File("some File"));
+        toTest1.getFiles().add(new ResearchFile("some File"));
         assertNotEqualsHashCode(toTest1, toTest2);
         assertNotEqualsHashCode(toTest1, toTest3);
 

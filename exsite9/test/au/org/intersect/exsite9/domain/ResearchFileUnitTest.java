@@ -12,9 +12,9 @@ import static au.org.intersect.exsite9.test.Assert.*;
 import org.junit.Test;
 
 /**
- * Tests {@link File}
+ * Tests {@link ResearchFile}
  */
-public final class FileUnitTest
+public final class ResearchFileUnitTest
 {
 
     @Test
@@ -23,9 +23,9 @@ public final class FileUnitTest
         final String f1 = "filename1";
         final String f2 = "filename2";
 
-        final File toTest1 = new File(f1);
-        final File toTest2 = new File(f1);
-        final File toTest3 = new File(f2);
+        final ResearchFile toTest1 = new ResearchFile(f1);
+        final ResearchFile toTest2 = new ResearchFile(f1);
+        final ResearchFile toTest3 = new ResearchFile(f2);
 
         assertEquals(toTest1, toTest1);
         assertEquals(f1, toTest1.getName());
