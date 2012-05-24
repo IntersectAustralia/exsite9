@@ -7,12 +7,10 @@
 package au.org.intersect.exsite9.view.provider;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
+import org.eclipse.jface.viewers.ViewerCell;
 import org.junit.Test;
-
-import au.org.intersect.exsite9.domain.Group;
-import au.org.intersect.exsite9.domain.Project;
-import au.org.intersect.exsite9.domain.ResearchFile;
 
 /**
  * Tests {@link ProjectExplorerViewLabelProvider}
@@ -24,10 +22,11 @@ public final class ProjectExplorerViewLabelProviderUnitTest
     public void testGetText()
     {
         final ProjectExplorerViewLabelProvider toTest = new ProjectExplorerViewLabelProvider();
+        final ViewerCell cell = mock(ViewerCell.class);
 
         try
         {
-            toTest.getText("SomeString");
+            toTest.update(cell);
             fail();
         }
         catch (final IllegalArgumentException e)
@@ -35,9 +34,10 @@ public final class ProjectExplorerViewLabelProviderUnitTest
             // Expected.
         }
 
+        when(cell.getElement()).thenReturn("");
         try
         {
-            toTest.getText(null);
+            toTest.update(cell);
             fail();
         }
         catch (final IllegalArgumentException e)
@@ -45,9 +45,10 @@ public final class ProjectExplorerViewLabelProviderUnitTest
             // Expected.
         }
 
+        when(cell.getElement()).thenReturn(new Object());
         try
         {
-            toTest.getText(new Object());
+            toTest.update(cell);
             fail();
         }
         catch (final IllegalArgumentException e)
@@ -55,15 +56,7 @@ public final class ProjectExplorerViewLabelProviderUnitTest
             // Expected.
         }
 
-        final String projectName = "projName";
-        final String groupName = "groupName";
-        final String fileName = "fName";
-        final Project project = new Project(projectName);
-        final Group group = new Group(groupName);
-        final ResearchFile rf = new ResearchFile(fileName);
-
-        assertEquals(projectName, toTest.getText(project));
-        assertEquals(groupName, toTest.getText(group));
-        assertEquals(fileName, toTest.getText(rf));
+        // The rest of the class is difficult to test because there is no Workbench at unit test time.
     }
+    
 }

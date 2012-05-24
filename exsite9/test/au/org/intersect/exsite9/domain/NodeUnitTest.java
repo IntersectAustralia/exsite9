@@ -31,7 +31,7 @@ public final class NodeUnitTest
         assertTrue(toTest1.getResearchFiles().isEmpty());
 
         final String toString = toTest1.toString();
-        assertTrue(toString.contains("name=node 1,groups=[],files=[]"));
+        assertTrue(toString.contains("name=node 1,groups=[],researchFiles=[]"));
     }
 
     @Test

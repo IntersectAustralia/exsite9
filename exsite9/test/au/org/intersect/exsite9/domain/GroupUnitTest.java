@@ -29,7 +29,7 @@ public final class GroupUnitTest
         assertTrue(toTest1.getResearchFiles().isEmpty());
 
         final String toString = toTest1.toString();
-        assertTrue(toString.contains("name=group 1,groups=[],files=[]"));
+        assertTrue(toString.contains("name=group 1,groups=[],researchFiles=[]"));
     }
 
     @Test

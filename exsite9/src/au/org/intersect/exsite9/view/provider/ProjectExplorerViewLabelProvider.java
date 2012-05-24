@@ -6,8 +6,11 @@
  */
 package au.org.intersect.exsite9.view.provider;
 
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.swt.graphics.Image;
+import org.eclipse.jface.viewers.StyledCellLabelProvider;
+import org.eclipse.jface.viewers.StyledString;
+import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 
 import au.org.intersect.exsite9.domain.Node;
 import au.org.intersect.exsite9.domain.ResearchFile;
@@ -16,7 +19,7 @@ import au.org.intersect.exsite9.view.ProjectExplorerView;
 /**
  * Provides labels to {@link ProjectExplorerView}
  */
-public final class ProjectExplorerViewLabelProvider extends LabelProvider
+public final class ProjectExplorerViewLabelProvider extends StyledCellLabelProvider
 {
     /**
      * Constructor
@@ -26,32 +29,34 @@ public final class ProjectExplorerViewLabelProvider extends LabelProvider
     }
 
     /**
-     * {@inheritDoc}
+     * @{inheritDoc}
      */
     @Override
-    public String getText(final Object element)
+    public void update(final ViewerCell cell)
     {
+        final Object element = cell.getElement();
+        final StyledString text = new StyledString();
+
         if (element instanceof Node)
         {
             final Node node = (Node) element;
-            return node.getName();
+            text.append(node.getName());
+            cell.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FOLDER));
+            text.append(" (" + (node.getGroups().size() + node.getResearchFiles().size()) + ")", StyledString.COUNTER_STYLER);
         }
-        if (element instanceof ResearchFile)
+        else if (element instanceof ResearchFile)
         {
-            final ResearchFile researchFile = (ResearchFile) element;
-            return researchFile.getName();
+            final ResearchFile rf = (ResearchFile) element;
+            text.append(rf.getName());
+            cell.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE));
         }
-        throw new IllegalArgumentException("Unknown tree element");
-    }
+        else
+        {
+            throw new IllegalArgumentException("Unknown type in project explorer tree");
+        }
 
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Image getImage(final Object element)
-    {
-        // TODO: Insert some nice icons for Project, Group, ResearchFile.
-        return super.getImage(element);
+        cell.setText(text.toString());
+        cell.setStyleRanges(text.getStyleRanges());
+        super.update(cell);
     }
 }
