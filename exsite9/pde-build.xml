@@ -287,7 +287,8 @@
 	</target>
 
 	<target name="clean" depends="init" description="Clean the plug-in: au.org.intersect.exsite9 of all the zips, jars and logs created.">
-		<delete dir="${build.dir}" />
+		<delete dir="${build.dir}/pde-build" />
+		<delete dir="${build.dir}/dist" />
 	</target>
 
 	<target name="refresh" depends="init" if="eclipse.running" description="Refresh this folder.">

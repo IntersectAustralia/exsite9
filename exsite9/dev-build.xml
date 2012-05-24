@@ -123,6 +123,12 @@
 			</fileset>
 		</cobertura-report>
 
+		<cobertura-report format="xml" destdir="${build.reports.dir}/coverage/xml" datafile="${cobertura.ser}" >
+			<fileset dir="${src.dir}">
+				<include name="**/*.java"/>
+			</fileset>
+		</cobertura-report>
+
 		<fail if="tests.failed" message="Test failures." />
 	</target>
 
@@ -132,6 +138,7 @@
 			<mkdir dir="${build.reports.dir}/unittest/xml"/>
 			<mkdir dir="${build.reports.dir}/unittest/html"/>
 			<mkdir dir="${build.reports.dir}/coverage/html"/>
+			<mkdir dir="${build.reports.dir}/coverage/xml"/>
 
 			<junit fork="true" forkmode="once" printsummary="true">
 				<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.ser}" />
