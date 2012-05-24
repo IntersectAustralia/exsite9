@@ -135,6 +135,8 @@
 				<include name="commons-lang3-3.1.jar"/>
 				<include name="commons-io-2.3.jar"/>
 				<include name="hsqldb-2.2.8.jar"/>
+				<include name="eclipselink-2.3.2.jar"/>
+				<include name="javax.persistence_2.0.3.jar"/>
 			</fileset>
 		</copy>
 		<antcall target="apitools.generation">

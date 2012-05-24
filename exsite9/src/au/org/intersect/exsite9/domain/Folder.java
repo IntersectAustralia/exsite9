@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.persistence.Entity;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.AgeFileFilter;
 import org.apache.commons.io.filefilter.IOFileFilter;
@@ -19,6 +21,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 /**
  * Represents a folder on the researcher's desktop that contains research data files
  */
+@Entity
 public final class Folder
 {
     private final String name;

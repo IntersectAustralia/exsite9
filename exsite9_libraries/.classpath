@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="javax.persistence_2.0.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="eclipselink-2.3.2.jar" sourcepath="/3rdParty/eclipselink/2.3.2/src/eclipselink-src.zip"/>
 	<classpathentry exported="true" kind="lib" path="hsqldb-2.2.8.jar"/>
 	<classpathentry exported="true" kind="lib" path="commons-io-2.3.jar" sourcepath="/3rdParty/apache-commons-io/2.3/src/commons-io-2.3-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="commons-lang3-3.1.jar" sourcepath="/3rdParty/apache-commons-lang/3.1/src/commons-lang3-3.1-sources.jar"/>

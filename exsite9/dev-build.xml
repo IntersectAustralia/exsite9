@@ -63,6 +63,8 @@
 		<pathelement location="${exsite9-libs.dir}/commons-lang3-3.1.jar"/>
 		<pathelement location="${exsite9-libs.dir}/commons-io-2.3.jar"/>
 		<pathelement location="${exsite9-libs.dir}/hsqldb-2.2.8.jar"/>
+		<pathelement location="${exsite9-libs.dir}/eclipselink-2.3.2.jar"/>
+		<pathelement location="${exsite9-libs.dir}/javax.persistence_2.0.3.jar"/>
 	</path>
 
 	<path id="test.classpath">
