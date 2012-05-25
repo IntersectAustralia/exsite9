@@ -99,7 +99,9 @@
 		<mkdir dir="${build.classes-test.dir}"/>
 		<javac srcdir="${test.dir}" destdir="${build.classes-test.dir}" debug="true" includeantruntime="false">
 			<classpath refid="test.classpath" />
-		</javac>
+    </javac>
+    <copydir src="${test.dir}/META-INF"
+             dest="${build.classes-test.dir}/META-INF"/>
 	</target>
 
 	<target name="unittest" depends="compile-test">

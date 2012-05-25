@@ -8,6 +8,10 @@ package au.org.intersect.exsite9.domain;
 
 import java.io.File;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.google.common.base.Objects;
@@ -15,12 +19,21 @@ import com.google.common.base.Objects;
 /**
  * Represents a research data file in a folder that the researcher has associated with a project.
  */
+@Entity
 public final class ResearchFile
 {
-
+    @Id
+    @GeneratedValue
+    private Long id;
     private final String name;
     private final String path;
 
+    public ResearchFile()
+    {
+        name = "";
+        path = "";
+    }
+    
     public ResearchFile(final String name)
     {
         this.name = name;
@@ -33,6 +46,16 @@ public final class ResearchFile
         this.path = fileOnDisk.getAbsolutePath();
     }
 
+    public Long getId()
+    {
+        return this.id;
+    }
+    
+    public void setId(Long id)
+    {
+        this.id = id;
+    }
+    
     /**
      * Obtains the name of the file.
      * 

@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 import org.apache.commons.io.FileUtils;
@@ -26,6 +27,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 public final class Folder
 {
     @Id
+    @GeneratedValue
     private Long id;
     private String name;
     private String path;
