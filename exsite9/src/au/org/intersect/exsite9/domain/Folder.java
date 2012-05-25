@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.AgeFileFilter;
@@ -24,9 +25,17 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 @Entity
 public final class Folder
 {
-    private final String name;
-    private final String path;
+    @Id
+    private Long id;
+    private String name;
+    private String path;
     private long lastCheckTimeInMillis = 0L;
+    
+    public Folder()
+    {
+        name = "";
+        path = "";
+    }
     
     public Folder(String name, String path)
     {
@@ -73,6 +82,16 @@ public final class Folder
         return newFileList;
     }
 
+    public Long getId()
+    {
+        return id;
+    }
+    
+    public void setId(Long id)
+    {
+        this.id = id;
+    }
+    
     public long getLastCheckTimeInMillis()
     {
         return lastCheckTimeInMillis;

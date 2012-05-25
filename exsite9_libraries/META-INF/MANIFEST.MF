@@ -305,3 +305,4 @@ Export-Package: com.google.common.annotations,
  org.hsqldb.util,
  org.osgi.service.jpa
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Eclipse-BuddyPolicy: registered

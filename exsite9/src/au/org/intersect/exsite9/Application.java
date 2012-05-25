@@ -6,11 +6,13 @@
  */
 package au.org.intersect.exsite9;
 
+import javax.persistence.EntityManager;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
+import au.org.intersect.exsite9.database.ExSite9EntityManagerFactory;
 
 /**
  * This is the main entry point of the Eclipse RCP Application.
@@ -26,6 +28,11 @@ public final class Application implements IApplication
         final Display display = PlatformUI.createDisplay();
         try
         {
+            // TODO: This is just to show jpa config working. When we start using the
+            // persistence layer in code we can remove it.
+            EntityManager em = ExSite9EntityManagerFactory.createEntityManager();
+            em.close();
+            
             final int returnCode = PlatformUI.createAndRunWorkbench(display, new ApplicationWorkbenchAdvisor());
             if (returnCode == PlatformUI.RETURN_RESTART)
             {
