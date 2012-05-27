@@ -5,17 +5,17 @@
  * and should be treated as Confidential.
  */
 
-package au.org.intersect.exsite9.manager;
+package au.org.intersect.exsite9.dao;
 
 import javax.persistence.EntityManager;
 
 import au.org.intersect.exsite9.domain.ResearchFile;
 
-public class ResearchFileManager
+public class ResearchFileDAO
 {
     private final EntityManager em;
     
-    public ResearchFileManager(EntityManager em)
+    public ResearchFileDAO(EntityManager em)
     {
         this.em = em;
     }

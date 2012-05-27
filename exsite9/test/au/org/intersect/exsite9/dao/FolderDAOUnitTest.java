@@ -5,7 +5,7 @@
  * and should be treated as Confidential.
  */
 
-package au.org.intersect.exsite9.manager;
+package au.org.intersect.exsite9.dao;
 
 import java.io.File;
 
@@ -13,11 +13,12 @@ import javax.persistence.EntityManager;
 
 import org.junit.Test;
 
+import au.org.intersect.exsite9.dao.FolderDAO;
 import au.org.intersect.exsite9.domain.Folder;
 
-public class FolderManagerUnitTest extends JPATest
+public class FolderDAOUnitTest extends JPATest
 {
-    private FolderManager folderManager = null;
+    private FolderDAO folderManager = null;
     
     @Test
     public void createNewFolderTest()
@@ -27,7 +28,7 @@ public class FolderManagerUnitTest extends JPATest
         File folderOnDisk = new File("/tmp");
         Folder tempFolder = new Folder(folderOnDisk);
         
-        folderManager = new FolderManager(em);
+        folderManager = new FolderDAO(em);
         folderManager.createFolder(tempFolder);
         
         em.close();

@@ -5,7 +5,7 @@
  * and should be treated as Confidential.
  */
 
-package au.org.intersect.exsite9.manager;
+package au.org.intersect.exsite9.dao;
 
 import static org.eclipse.persistence.config.PersistenceUnitProperties.TRANSACTION_TYPE;
 

@@ -1,15 +1,15 @@
-package au.org.intersect.exsite9.manager;
+package au.org.intersect.exsite9.dao;
 
 import javax.persistence.EntityManager;
 
 import au.org.intersect.exsite9.domain.Folder;
 
-public class FolderManager
+public class FolderDAO
 {
 
     private final EntityManager em;
     
-    public FolderManager(EntityManager em)
+    public FolderDAO(EntityManager em)
     {
         this.em = em;
     }
