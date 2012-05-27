@@ -21,7 +21,7 @@ public final class ProjectExplorerViewInputUnitTest
     @Test
     public void testConstruction()
     {
-        final Project project = new Project("some project name");
+        final Project project = new Project("some project name","");
         final ProjectExplorerViewInput toTest = new ProjectExplorerViewInput(project);
         assertEquals(project, toTest.getProject());
     }
