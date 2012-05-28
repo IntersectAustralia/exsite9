@@ -6,14 +6,33 @@
  */
 package au.org.intersect.exsite9.domain;
 
+import java.io.Serializable;
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * Represents a Group.
  */
-public final class Group extends Node
+public final class Group extends Node implements Serializable
 {
 
+	/**
+	 * Generated UID
+	 */
+	private static final long serialVersionUID = 1700329934000740424L;
+	
+	@Id
+    @GeneratedValue
+    private Long id;
+	
+	public Group()
+	{
+		super();
+	}
+	
     /**
      * Constructor
      * 
@@ -25,7 +44,16 @@ public final class Group extends Node
         super(name);
     }
 
-    /**
+    
+    public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	/**
      * {@inheritDoc}
      */
     @Override
