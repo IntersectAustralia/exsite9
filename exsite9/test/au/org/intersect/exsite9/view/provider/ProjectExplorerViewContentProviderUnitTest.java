@@ -36,7 +36,7 @@ public final class ProjectExplorerViewContentProviderUnitTest
 
         final Object[] out = toTest.getElements(projectExplorerViewInput);
         assertEquals(1, out.length);
-        assertEquals(project, out[0]);
+        assertEquals(project.getRootNode(), out[0]);
     }
 
     @Test
@@ -51,12 +51,12 @@ public final class ProjectExplorerViewContentProviderUnitTest
         final Group group2 = new Group("group2");
         final ResearchFile rf1 = new ResearchFile("someFile");
 
-        project.getGroups().add(group1);
-        project.getGroups().add(group2);
+        project.getRootNode().getGroups().add(group1);
+        project.getRootNode().getGroups().add(group2);
 
         group1.getResearchFiles().add(rf1);
 
-        final List<Object> out1 = Arrays.asList(toTest.getChildren(project));
+        final List<Object> out1 = Arrays.asList(toTest.getChildren(project.getRootNode()));
         assertEquals(2, out1.size());
         assertTrue(out1.contains(group1));
         assertTrue(out1.contains(group2));

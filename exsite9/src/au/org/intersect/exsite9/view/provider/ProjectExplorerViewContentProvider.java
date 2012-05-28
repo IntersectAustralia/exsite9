@@ -53,7 +53,7 @@ public final class ProjectExplorerViewContentProvider implements ITreeContentPro
         if (inputElement instanceof ProjectExplorerViewInput)
         {
             final ProjectExplorerViewInput viewInput = (ProjectExplorerViewInput) inputElement;
-            return new Object[]{viewInput.getProject()};
+            return new Object[]{viewInput.getProject().getRootNode()};
         }
         return Collections.emptyList().toArray();
     }

@@ -50,8 +50,8 @@ public final class ProjectExplorerView extends ViewPart
         final Group group2 = new Group("Group 2");
         group1.getResearchFiles().add(new ResearchFile("File 1"));
         group1.getResearchFiles().add(new ResearchFile("File 2"));
-        project.getGroups().add(group1);
-        project.getGroups().add(group2);
+        project.getRootNode().getGroups().add(group1);
+        project.getRootNode().getGroups().add(group2);
         final ProjectExplorerViewInput wrapper = new ProjectExplorerViewInput(project);
         treeViewer.setInput(wrapper);
 

@@ -26,8 +26,8 @@ public final class ProjectUnitTest
         final Project toTest1 = new Project(n1,d1);
 
         assertEquals(n1, toTest1.getName());
-        assertTrue(toTest1.getGroups().isEmpty());
-        assertTrue(toTest1.getResearchFiles().isEmpty());
+        assertTrue(toTest1.getRootNode().getGroups().isEmpty());
+        assertTrue(toTest1.getRootNode().getResearchFiles().isEmpty());
 
         final String toString = toTest1.toString();
         assertTrue(toString.contains("name=project 1,groups=[],researchFiles=[]"));
@@ -56,12 +56,12 @@ public final class ProjectUnitTest
         assertNotEqualsHashCode(toTest2, toTest3);
 
         // Different child nodes.
-        toTest1.getGroups().add(new Group("some group"));
+        toTest1.getRootNode().getGroups().add(new Group("some group"));
         assertNotEqualsHashCode(toTest1, toTest2);
         assertNotEqualsHashCode(toTest1, toTest3);
 
         // Different child files.
-        toTest1.getResearchFiles().add(new ResearchFile("some File"));
+        toTest1.getRootNode().getResearchFiles().add(new ResearchFile("some File"));
         assertNotEqualsHashCode(toTest1, toTest2);
         assertNotEqualsHashCode(toTest1, toTest3);
 
