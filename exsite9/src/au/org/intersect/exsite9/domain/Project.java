@@ -6,9 +6,14 @@
  */
 package au.org.intersect.exsite9.domain;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -27,6 +32,13 @@ public final class Project
     private Long id;
     private String name;
     private String description;
+    
+    @ManyToMany
+    @JoinTable(
+            name="project_folder",
+            joinColumns={@JoinColumn(name="project_id", referencedColumnName="id")},
+            inverseJoinColumns={@JoinColumn(name="folder_id", referencedColumnName="id")})
+    private List<Folder> folders;
     
     // TODO: Persist the root node
     @Transient
@@ -85,6 +97,17 @@ public final class Project
     public void setRootNode(Group rootNode)
     {
         this.rootNode = rootNode;
+    }
+
+    
+    public List<Folder> getFolders()
+    {
+        return folders;
+    }
+
+    public void setFolders(List<Folder> folders)
+    {
+        this.folders = folders;
     }
 
     /**
