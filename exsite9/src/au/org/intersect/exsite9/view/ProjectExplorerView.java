@@ -45,7 +45,7 @@ public final class ProjectExplorerView extends ViewPart
         treeViewer.setLabelProvider(new ProjectExplorerViewLabelProvider());
 
         // Provide some mock stuff.
-        final Project project = new Project("My Project","This is my project");
+        final Project project = new Project("My Project","Me","This is my project");
         final Group group1 = new Group("Group 1");
         final Group group2 = new Group("Group 2");
         group1.getResearchFiles().add(new ResearchFile("File 1"));

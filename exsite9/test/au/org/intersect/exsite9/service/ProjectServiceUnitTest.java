@@ -29,7 +29,7 @@ public class ProjectServiceUnitTest extends JPATest
         
         projectService = new ProjectService(projectDAO, folderDAO);
         
-        Project project = projectService.createProject("Project One","This is project one.");
+        Project project = projectService.createProject("Project One","Ownwer One","This is project one.");
         
         Project newProject = projectDAO.findById(project.getId());
         
@@ -48,7 +48,7 @@ public class ProjectServiceUnitTest extends JPATest
         
         projectService = new ProjectService(projectDAO, folderDAO);
         
-        Project project = projectService.createProject("Project One","This is project one.");
+        Project project = projectService.createProject("Project One","Ownwer One","This is project one.");
         
         Folder folder = new Folder(new File("/tmp"));
         

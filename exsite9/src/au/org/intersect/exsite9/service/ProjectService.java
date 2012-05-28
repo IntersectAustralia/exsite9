@@ -17,9 +17,9 @@ public class ProjectService
         this.folderDAO = folderDAO;
     }
     
-    public Project createProject(String name, String description)
+    public Project createProject(String name, String owner, String description)
     {
-        Project project = new Project(name, description);
+        Project project = new Project(name, owner, description);
         projectDAO.createProject(project);
         return project;
     }

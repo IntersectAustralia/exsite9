@@ -31,7 +31,7 @@ public final class ProjectExplorerViewContentProviderUnitTest
         assertArrayEquals(Collections.emptyList().toArray(), toTest.getElements(null));
         assertArrayEquals(Collections.emptyList().toArray(), toTest.getElements(new Object()));
 
-        final Project project = new Project("[TM]","");
+        final Project project = new Project("[TM]","owner","description");
         final ProjectExplorerViewInput projectExplorerViewInput = new ProjectExplorerViewInput(project);
 
         final Object[] out = toTest.getElements(projectExplorerViewInput);
@@ -46,7 +46,7 @@ public final class ProjectExplorerViewContentProviderUnitTest
         assertArrayEquals(Collections.emptyList().toArray(), toTest.getChildren(null));
         assertArrayEquals(Collections.emptyList().toArray(), toTest.getChildren(new Object()));
 
-        final Project project = new Project("SomeProject","");
+        final Project project = new Project("SomeProject","owner","description");
         final Group group1 = new Group("group1");
         final Group group2 = new Group("group2");
         final ResearchFile rf1 = new ResearchFile("someFile");

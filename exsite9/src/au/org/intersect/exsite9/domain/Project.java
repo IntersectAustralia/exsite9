@@ -31,6 +31,7 @@ public final class Project
     @GeneratedValue
     private Long id;
     private String name;
+    private String owner;
     private String description;
     
     @ManyToMany
@@ -47,13 +48,15 @@ public final class Project
     public Project()
     {
         name = "";
+        owner = "";
         description = "";
     }
 
-    public Project(final String name, final String description)
+    public Project(final String name, final String owner, final String description)
     {
         this.name = name;
         this.description = description;
+        this.owner = owner;
         this.rootNode = new Group(this.name);
     }
 
@@ -89,6 +92,16 @@ public final class Project
     }
 
     
+    public String getOwner()
+    {
+        return owner;
+    }
+
+    public void setOwner(String owner)
+    {
+        this.owner = owner;
+    }
+
     public Group getRootNode()
     {
         return rootNode;
@@ -125,8 +138,10 @@ public final class Project
             return false;
         }
         Project other = (Project) obj;
-        return Objects.equal(this.name, other.name) && Objects.equal(this.description, other.description) 
-                && Objects.equal(this.rootNode, other.rootNode);
+        return Objects.equal(this.name, other.name) 
+            && Objects.equal(this.description, other.description) 
+            && Objects.equal(this.owner, other.owner)
+            && Objects.equal(this.rootNode, other.rootNode);
     }
 
     /**
@@ -135,7 +150,7 @@ public final class Project
     @Override
     public int hashCode()
     {
-        return Objects.hashCode(this.name, this.description, this.rootNode);
+        return Objects.hashCode(this.name, this.description, this.owner, this.rootNode);
     }
 
     /**

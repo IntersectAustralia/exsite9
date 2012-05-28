@@ -21,9 +21,10 @@ public final class ProjectUnitTest
     public void testConstruction()
     {
         final String n1 = "project 1";
+        final String o1 = "owner 1";
         final String d1 = "Project One";
 
-        final Project toTest1 = new Project(n1,d1);
+        final Project toTest1 = new Project(n1,o1,d1);
 
         assertEquals(n1, toTest1.getName());
         assertTrue(toTest1.getRootNode().getGroups().isEmpty());
@@ -37,13 +38,15 @@ public final class ProjectUnitTest
     public void testEqualsHashCode()
     {
         final String n1 = "project 1";
+        final String o1 = "owner 1";
         final String d1 = "Project One";
         final String n2 = "project 2";
+        final String o2 = "owner 2";
         final String d2 = "Project Two";
 
-        final Project toTest1 = new Project(n1,d1);
-        final Project toTest2 = new Project(n1,d1);
-        final Project toTest3 = new Project(n2,d2);
+        final Project toTest1 = new Project(n1,o1,d1);
+        final Project toTest2 = new Project(n1,o1,d1);
+        final Project toTest3 = new Project(n2,o2,d2);
 
         assertEquals(toTest1, toTest1);
 
