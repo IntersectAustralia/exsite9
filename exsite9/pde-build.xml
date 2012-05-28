@@ -246,6 +246,7 @@
 			<fileset dir="${basedir}">
 				<include name="plugin.xml"/>
 				<include name="META-INF/"/>
+				<include name="icons/"/>
 			</fileset>
 		</copy>
 		<antcall target="apitools.generation">

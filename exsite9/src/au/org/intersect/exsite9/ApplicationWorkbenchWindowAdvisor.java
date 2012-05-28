@@ -31,8 +31,10 @@ public final class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvi
     public void preWindowOpen()
     {
         final IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
+
+        // TODO: we probably want to center it on the screen and have a larger initial size.
         configurer.setInitialSize(new Point(400, 300));
-        configurer.setShowCoolBar(false);
+        configurer.setShowCoolBar(true);
         configurer.setShowStatusLine(false);
         configurer.setTitle("ExSite9"); //$NON-NLS-1$
     }
