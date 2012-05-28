@@ -6,6 +6,7 @@ import java.io.File;
 
 import javax.persistence.EntityManager;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import au.org.intersect.exsite9.dao.FolderDAO;
@@ -17,16 +18,23 @@ import au.org.intersect.exsite9.domain.Project;
 public class ProjectServiceUnitTest extends JPATest
 {
 
+    private static EntityManager em;
+    private static ProjectDAO projectDAO;
+    private static FolderDAO folderDAO;
+    
     private ProjectService projectService;
+    
+    @BeforeClass
+    public static void setupOnce()
+    {
+        em = createEntityManager();
+        projectDAO = ProjectDAO.getInstance(em);
+        folderDAO = new FolderDAO(em);
+    }
     
     @Test
     public void createNewProjectTest()
     {
-        EntityManager em = createEntityManager();
-        
-        ProjectDAO projectDAO = new ProjectDAO(em);
-        FolderDAO folderDAO = new FolderDAO(em);
-        
         projectService = new ProjectService(projectDAO, folderDAO);
         
         Project project = projectService.createProject("Project One","Ownwer One","This is project one.");
@@ -34,18 +42,11 @@ public class ProjectServiceUnitTest extends JPATest
         Project newProject = projectDAO.findById(project.getId());
         
         assertEquals(project, newProject);
-        
-        em.close();
     }
     
     @Test
     public void mapFolderToProjectTest()
     {
-        EntityManager em = createEntityManager();
-        
-        ProjectDAO projectDAO = new ProjectDAO(em);
-        FolderDAO folderDAO = new FolderDAO(em);
-        
         projectService = new ProjectService(projectDAO, folderDAO);
         
         Project project = projectService.createProject("Project One","Ownwer One","This is project one.");
@@ -57,8 +58,6 @@ public class ProjectServiceUnitTest extends JPATest
         Project newProject = projectDAO.findById(project.getId());
         
         assertEquals(project, newProject);
-        
-        em.close();
     }
     
     
