@@ -72,8 +72,19 @@
             allPopups="false"
             locationURI="menu:org.eclipse.ui.main.menu">
          <menu
-               id="fileMenu"
+               id="au.org.intersect.exsite9.menu.file"
                label="File">
+            <command
+                  commandId="au.org.intersect.exsite9.commands.NewProjectCommand"
+                  icon="icons/alt_window_16.gif"
+                  label="New Project"
+                  style="push"
+                  tooltip="Create a new project">
+            </command>
+            <separator
+                  name="au.org.intersect.exsite9.menu.file.separator1"
+                  visible="true">
+            </separator>
             <command
                   commandId="au.org.intersect.exsite9.commands.ExitCommand"
                   label="Exit"
