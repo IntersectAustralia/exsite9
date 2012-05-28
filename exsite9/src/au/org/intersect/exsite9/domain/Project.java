@@ -9,15 +9,17 @@ package au.org.intersect.exsite9.domain;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import com.google.common.base.Objects;
 
 /**
  * Represents a Research Project
  */
-// TODO: Project is not a node
 @Entity
-public final class Project extends Node
+public final class Project
 {
 
     @Id
@@ -26,18 +28,21 @@ public final class Project extends Node
     private String name;
     private String description;
     
+    // TODO: Persist the root node
+    @Transient
+    private Group rootNode;
+    
     public Project()
     {
-        super("");
         name = "";
         description = "";
     }
 
     public Project(final String name, final String description)
     {
-        super(name);
         this.name = name;
         this.description = description;
+        this.rootNode = new Group(this.name);
     }
 
     
@@ -71,6 +76,17 @@ public final class Project extends Node
         this.description = description;
     }
 
+    
+    public Group getRootNode()
+    {
+        return rootNode;
+    }
+
+    public void setRootNode(Group rootNode)
+    {
+        this.rootNode = rootNode;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -85,7 +101,9 @@ public final class Project extends Node
         {
             return false;
         }
-        return super.equals(obj);
+        Project other = (Project) obj;
+        return Objects.equal(this.name, other.name) && Objects.equal(this.description, other.description) 
+                && Objects.equal(this.rootNode, other.rootNode);
     }
 
     /**
@@ -94,7 +112,7 @@ public final class Project extends Node
     @Override
     public int hashCode()
     {
-        return super.hashCode();
+        return Objects.hashCode(this.name, this.description, this.rootNode);
     }
 
     /**
@@ -104,6 +122,7 @@ public final class Project extends Node
     public String toString()
     {
         final ToStringBuilder tsb = new ToStringBuilder(this);
+        tsb.append(this.rootNode);
         tsb.appendSuper(super.toString());
         return tsb.toString();
     }
