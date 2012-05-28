@@ -10,8 +10,11 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
-import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.handlers.HandlerUtil;
+
+import au.org.intersect.exsite9.wizard.newproject.NewProjectWizard;
 
 /**
  * Handles the New Project action.
@@ -43,7 +46,19 @@ public final class NewProjectHandler implements IHandler
     @Override
     public Object execute(final ExecutionEvent event) throws ExecutionException
     {
-        MessageDialog.openInformation(HandlerUtil.getActiveWorkbenchWindow(event).getShell(), "Info", "This will create a new project!");
+        final Shell shell = HandlerUtil.getActiveWorkbenchWindow(event).getShell();
+        final NewProjectWizard wizard = new NewProjectWizard();
+        final WizardDialog wizardDialog = new WizardDialog(shell, wizard);
+        final int result = wizardDialog.open();
+
+        if (result == WizardDialog.OK)
+        {
+            
+        } else
+        {
+            
+        }
+
         return null;
     }
 
@@ -71,7 +86,5 @@ public final class NewProjectHandler implements IHandler
     @Override
     public void removeHandlerListener(final IHandlerListener handlerListener)
     {
-
     }
-
 }
