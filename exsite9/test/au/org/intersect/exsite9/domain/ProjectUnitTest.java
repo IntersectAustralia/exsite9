@@ -27,11 +27,14 @@ public final class ProjectUnitTest
         final Project toTest1 = new Project(n1,o1,d1);
 
         assertEquals(n1, toTest1.getName());
-        assertTrue(toTest1.getRootNode().getGroups().isEmpty());
+        assertTrue(toTest1.getRootNode().getGroups().size() == 1);
         assertTrue(toTest1.getRootNode().getResearchFiles().isEmpty());
 
         final String toString = toTest1.toString();
-        assertTrue(toString.contains("name=project 1,groups=[],researchFiles=[]"));
+       
+        assertTrue(toString.contains("name=project"));
+        assertTrue(toString.contains("name=New Files"));
+        assertTrue(toString.contains("researchFiles=[]"));
     }
 
     @Test

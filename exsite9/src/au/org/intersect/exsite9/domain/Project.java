@@ -61,6 +61,7 @@ public final class Project
         this.owner = owner;
         this.rootNode = new Group(this.name);
         this.newFilesNode = new Group("New Files");
+        this.rootNode.getGroups().add(newFilesNode);
     }
 
     public Long getId()

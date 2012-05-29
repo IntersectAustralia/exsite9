@@ -57,7 +57,8 @@ public final class ProjectExplorerViewContentProviderUnitTest
         group1.getResearchFiles().add(rf1);
 
         final List<Object> out1 = Arrays.asList(toTest.getChildren(project.getRootNode()));
-        assertEquals(2, out1.size());
+        // There will be 3 groups because a project gets a New Files group on creation
+        assertEquals(3, out1.size());
         assertTrue(out1.contains(group1));
         assertTrue(out1.contains(group2));
 
