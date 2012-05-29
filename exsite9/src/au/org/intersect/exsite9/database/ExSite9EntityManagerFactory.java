@@ -31,7 +31,7 @@ public class ExSite9EntityManagerFactory
         String workspace = Platform.getInstallLocation().getURL().getPath();
         properties.put(PersistenceUnitProperties.TARGET_DATABASE, TargetDatabase.HSQL);
         properties.put(PersistenceUnitProperties.JDBC_DRIVER, jdbcDriver.class.getCanonicalName());
-        properties.put(PersistenceUnitProperties.JDBC_URL,"jdbc:hsqldb:file:" + workspace + "/database/exsite9;shutdown=true");
+        properties.put(PersistenceUnitProperties.JDBC_URL,"jdbc:hsqldb:file:" + workspace + "/database/exsite9;shutdown=true;hsqldb.write_delay=false;");
         properties.put(PersistenceUnitProperties.JDBC_USER, "sa");
         properties.put(PersistenceUnitProperties.JDBC_PASSWORD, "");
         properties.put(PersistenceUnitProperties.DDL_GENERATION, "drop-and-create-tables");
