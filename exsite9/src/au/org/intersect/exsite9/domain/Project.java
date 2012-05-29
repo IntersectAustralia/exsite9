@@ -60,7 +60,6 @@ public final class Project
         this.rootNode = new Group(this.name);
     }
 
-    
     public Long getId()
     {
         return id;

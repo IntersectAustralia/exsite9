@@ -6,7 +6,6 @@
  */
 package au.org.intersect.exsite9;
 
-import javax.persistence.EntityManager;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.swt.widgets.Display;
@@ -30,8 +29,7 @@ public final class Application implements IApplication
         {
             // TODO: This is just to show jpa config working. When we start using the
             // persistence layer in code we can remove it.
-            EntityManager em = ExSite9EntityManagerFactory.createEntityManager();
-            em.close();
+            ExSite9EntityManagerFactory.createEntityManager();
             
             final int returnCode = PlatformUI.createAndRunWorkbench(display, new ApplicationWorkbenchAdvisor());
             if (returnCode == PlatformUI.RETURN_RESTART)

@@ -109,5 +109,13 @@
          </toolbar>
       </menuContribution>
    </extension>
+   <extension
+         point="org.eclipse.ui.services">
+      <serviceFactory
+            factoryClass="au.org.intersect.exsite9.service.factory.ProjectServiceFactory">
+         <service
+               serviceClass="au.org.intersect.exsite9.service.IProjectService"></service>
+      </serviceFactory>
+   </extension>
 
 </plugin>
