@@ -49,16 +49,7 @@ public final class NewProjectHandler implements IHandler
         final Shell shell = HandlerUtil.getActiveWorkbenchWindow(event).getShell();
         final NewProjectWizard wizard = new NewProjectWizard();
         final WizardDialog wizardDialog = new WizardDialog(shell, wizard);
-        final int result = wizardDialog.open();
-
-        if (result == WizardDialog.OK)
-        {
-            
-        } else
-        {
-            
-        }
-
+        wizardDialog.open();
         return null;
     }
 
