@@ -12,7 +12,7 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
-import au.org.intersect.exsite9.domain.Node;
+import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.view.ProjectExplorerView;
 
@@ -37,12 +37,12 @@ public final class ProjectExplorerViewLabelProvider extends StyledCellLabelProvi
         final Object element = cell.getElement();
         final StyledString text = new StyledString();
 
-        if (element instanceof Node)
+        if (element instanceof Group)
         {
-            final Node node = (Node) element;
-            text.append(node.getName());
+            final Group group = (Group) element;
+            text.append(group.getName());
             cell.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FOLDER));
-            text.append(" (" + (node.getGroups().size() + node.getResearchFiles().size()) + ")", StyledString.COUNTER_STYLER);
+            text.append(" (" + (group.getGroups().size() + group.getResearchFiles().size()) + ")", StyledString.COUNTER_STYLER);
         }
         else if (element instanceof ResearchFile)
         {

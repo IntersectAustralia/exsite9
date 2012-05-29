@@ -7,16 +7,23 @@
 package au.org.intersect.exsite9.domain;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-
+import javax.persistence.Table;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import com.google.common.base.Objects;
 
 /**
  * Represents a Group.
  */
-public final class Group extends Node implements Serializable
+@Entity
+@Table(name="RESEARCH_GROUP")
+public final class Group implements Serializable
 {
 
 	/**
@@ -28,22 +35,20 @@ public final class Group extends Node implements Serializable
     @GeneratedValue
     private Long id;
 	
+	private final String name;
+	
+	private final Set<Group> groups = new HashSet<Group>();
+	private final Set<ResearchFile> researchFiles = new HashSet<ResearchFile>();
+	
 	public Group()
 	{
-		super();
+		name = "";
 	}
 	
-    /**
-     * Constructor
-     * 
-     * @param name
-     *            The name of the group.
-     */
     public Group(final String name)
     {
-        super(name);
+        this.name = name;
     }
-
     
     public Long getId() {
 		return id;
@@ -53,7 +58,22 @@ public final class Group extends Node implements Serializable
 		this.id = id;
 	}
 
-	/**
+	public String getName()
+    {
+        return name;
+    }
+
+    public Set<Group> getGroups()
+    {
+        return groups;
+    }
+
+    public Set<ResearchFile> getResearchFiles()
+    {
+        return researchFiles;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -67,7 +87,9 @@ public final class Group extends Node implements Serializable
         {
             return false;
         }
-        return super.equals(obj);
+        final Group other = (Group) obj;
+        return Objects.equal(this.name, other.name) && Objects.equal(this.groups, other.groups)
+                && Objects.equal(this.researchFiles, other.researchFiles);
     }
 
     /**
@@ -76,7 +98,7 @@ public final class Group extends Node implements Serializable
     @Override
     public int hashCode()
     {
-        return super.hashCode();
+        return Objects.hashCode(this.name, this.groups, this.researchFiles);
     }
 
     /**
@@ -86,7 +108,9 @@ public final class Group extends Node implements Serializable
     public String toString()
     {
         final ToStringBuilder tsb = new ToStringBuilder(this);
-        tsb.appendSuper(super.toString());
+        tsb.append("name", this.name);
+        tsb.append("groups", this.groups);
+        tsb.append("researchFiles", this.researchFiles);
         return tsb.toString();
     }
 }

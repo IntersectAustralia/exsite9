@@ -29,6 +29,7 @@ public final class NewProjectHandler implements IHandler
     @Override
     public void addHandlerListener(final IHandlerListener handlerListener)
     {
+
     }
 
     /**
