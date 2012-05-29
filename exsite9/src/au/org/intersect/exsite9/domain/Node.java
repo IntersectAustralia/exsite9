@@ -18,8 +18,7 @@ import com.google.common.base.Objects;
  */
 public abstract class Node
 {
-
-    /**
+	/**
      * The name given to the node.
      */
     private final String name;
@@ -34,6 +33,11 @@ public abstract class Node
      */
     private final Set<ResearchFile> researchFiles = new HashSet<ResearchFile>();
 
+    public Node()
+    {
+    	this.name = "";
+    }
+    
     /**
      * Constructor
      * 
