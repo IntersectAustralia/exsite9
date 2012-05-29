@@ -14,8 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.Transient;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.google.common.base.Objects;
@@ -41,9 +39,8 @@ public final class Project
             inverseJoinColumns={@JoinColumn(name="folder_id", referencedColumnName="id")})
     private List<Folder> folders;
     
-    // TODO: Persist the root node
-    @Transient
     private Group rootNode;
+    private Group newFilesNode;
     
     public Project()
     {
@@ -112,7 +109,15 @@ public final class Project
     }
 
     
-    public List<Folder> getFolders()
+    public Group getNewFilesNode() {
+		return newFilesNode;
+	}
+
+	public void setNewFilesNode(Group newFilesNode) {
+		this.newFilesNode = newFilesNode;
+	}
+
+	public List<Folder> getFolders()
     {
         return folders;
     }
