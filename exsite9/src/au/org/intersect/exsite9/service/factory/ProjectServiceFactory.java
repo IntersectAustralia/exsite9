@@ -6,6 +6,8 @@
  */
 package au.org.intersect.exsite9.service.factory;
 
+import javax.persistence.EntityManager;
+
 import org.eclipse.ui.services.AbstractServiceFactory;
 import org.eclipse.ui.services.IServiceLocator;
 
@@ -32,13 +34,14 @@ public final class ProjectServiceFactory extends AbstractServiceFactory
      */
     @Override
     @SuppressWarnings("rawtypes")
-    public Object create(Class serviceInterface, IServiceLocator parentLocator, IServiceLocator locator)
+    public Object create(final Class serviceInterface, final IServiceLocator parentLocator, final IServiceLocator locator)
     {
-        // TODO: construction of these DAOs should use factories.
-        final ProjectDAO projectDAO = new ProjectDAO(ExSite9EntityManagerFactory.createEntityManager());
+        final EntityManager em = ExSite9EntityManagerFactory.createEntityManager();
+        final ProjectDAO projectDAO = ProjectDAO.getInstance(em);
+
+        // TODO: Construction of this DAO should use a singleton.
         final FolderDAO folderDAO = new FolderDAO(ExSite9EntityManagerFactory.createEntityManager());
 
-        final ProjectService projectService = new ProjectService(projectDAO, folderDAO);
-        return projectService;
+        return new ProjectService(projectDAO, folderDAO);
     }
 }
