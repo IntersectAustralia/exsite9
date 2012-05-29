@@ -19,6 +19,8 @@ public final class NewProjectWizard extends Wizard
 {
     private final NewProjectWizardPage1 page1 = new NewProjectWizardPage1();
 
+    private Project newProject;
+
     /**
      * Constructor 
      */
@@ -48,7 +50,12 @@ public final class NewProjectWizard extends Wizard
         final String projectDescription = page1.getProjectDescription();
 
         final IProjectService projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
-        final Project project = projectService.createProject(projectName, projectOwner, projectDescription);
-        return project != null;
+        this.newProject = projectService.createProject(projectName, projectOwner, projectDescription);
+        return this.newProject != null;
+    }
+
+    public Project getNewProject()
+    {
+        return this.newProject;
     }
 }

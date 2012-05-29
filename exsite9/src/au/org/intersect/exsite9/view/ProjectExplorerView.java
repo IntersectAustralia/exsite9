@@ -6,13 +6,18 @@
  */
 package au.org.intersect.exsite9.view;
 
+import org.eclipse.core.commands.Command;
+import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.IExecutionListener;
+import org.eclipse.core.commands.NotHandledException;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.part.ViewPart;
 
-import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.Project;
-import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.view.provider.ProjectExplorerViewContentProvider;
 import au.org.intersect.exsite9.view.provider.ProjectExplorerViewInput;
 import au.org.intersect.exsite9.view.provider.ProjectExplorerViewLabelProvider;
@@ -20,10 +25,12 @@ import au.org.intersect.exsite9.view.provider.ProjectExplorerViewLabelProvider;
 /**
  * This is the ViewPart that will hold the Project Explorer UI component.
  */
-public final class ProjectExplorerView extends ViewPart
+public final class ProjectExplorerView extends ViewPart implements IExecutionListener
 {
     // This needs to match what is defined in the plugin.xml
     public static final String ID = ProjectExplorerView.class.getName();
+
+    private TreeViewer treeViewer;
 
     /**
      * Constructor
@@ -40,22 +47,15 @@ public final class ProjectExplorerView extends ViewPart
     {
         this.setPartName("Project View");
 
-        final TreeViewer treeViewer = new TreeViewer(parent);
-        treeViewer.setContentProvider(new ProjectExplorerViewContentProvider());
-        treeViewer.setLabelProvider(new ProjectExplorerViewLabelProvider());
+        this.treeViewer = new TreeViewer(parent);
+        this.treeViewer.setContentProvider(new ProjectExplorerViewContentProvider());
+        this.treeViewer.setLabelProvider(new ProjectExplorerViewLabelProvider());
 
-        // Provide some mock stuff.
-        final Project project = new Project("My Project","Me","This is my project");
-        final Group group1 = new Group("Group 1");
-        final Group group2 = new Group("Group 2");
-        group1.getResearchFiles().add(new ResearchFile("File 1"));
-        group1.getResearchFiles().add(new ResearchFile("File 2"));
-        project.getRootNode().getGroups().add(group1);
-        project.getRootNode().getGroups().add(group2);
-        final ProjectExplorerViewInput wrapper = new ProjectExplorerViewInput(project);
-        treeViewer.setInput(wrapper);
+        final ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
 
-        treeViewer.expandAll();
+        // This command is defined in the plugin.xml
+        final Command newProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.NewProjectCommand");
+        newProjectCommand.addExecutionListener(this);
     }
 
     /**
@@ -67,4 +67,42 @@ public final class ProjectExplorerView extends ViewPart
 
     }
 
+    /**
+     * @{inheritDoc}
+     */
+    @Override
+    public void notHandled(final String commandId, final NotHandledException exception)
+    {
+    }
+
+    /**
+     * @{inheritDoc}
+     */
+    @Override
+    public void postExecuteFailure(final String commandId, final ExecutionException exception)
+    {
+    }
+
+    /**
+     * @{inheritDoc}
+     */
+    @Override
+    public void postExecuteSuccess(final String commandId, final Object returnValue)
+    {
+        if (commandId.equals("au.org.intersect.exsite9.commands.NewProjectCommand"))
+        {
+            final Project project = (Project) returnValue;
+            final ProjectExplorerViewInput wrapper = new ProjectExplorerViewInput(project);
+            this.treeViewer.setInput(wrapper);
+            this.treeViewer.expandAll();
+        }
+    }
+
+    /**
+     * @{inheritDoc}
+     */
+    @Override
+    public void preExecute(final String commandId, final ExecutionEvent event)
+    {
+    }
 }

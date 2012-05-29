@@ -14,6 +14,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.wizard.newproject.NewProjectWizard;
 
 /**
@@ -28,7 +29,6 @@ public final class NewProjectHandler implements IHandler
     @Override
     public void addHandlerListener(final IHandlerListener handlerListener)
     {
-
     }
 
     /**
@@ -50,7 +50,9 @@ public final class NewProjectHandler implements IHandler
         final NewProjectWizard wizard = new NewProjectWizard();
         final WizardDialog wizardDialog = new WizardDialog(shell, wizard);
         wizardDialog.open();
-        return null;
+
+        final Project newProject = wizard.getNewProject();
+        return newProject;
     }
 
     /**
