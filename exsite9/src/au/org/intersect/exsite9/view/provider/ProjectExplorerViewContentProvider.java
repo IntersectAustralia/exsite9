@@ -13,7 +13,7 @@ import java.util.List;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import au.org.intersect.exsite9.domain.Node;
+import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.view.ProjectExplorerView;
 
 /**
@@ -64,12 +64,12 @@ public final class ProjectExplorerViewContentProvider implements ITreeContentPro
     @Override
     public Object[] getChildren(final Object parentElement)
     {
-        if (parentElement instanceof Node)
+        if (parentElement instanceof Group)
         {
             final List<Object> toReturn = new ArrayList<Object>();
-            final Node node = (Node) parentElement;
-            toReturn.addAll(node.getGroups());
-            toReturn.addAll(node.getResearchFiles());
+            final Group group = (Group) parentElement;
+            toReturn.addAll(group.getGroups());
+            toReturn.addAll(group.getResearchFiles());
             return toReturn.toArray();
         }
         return Collections.emptyList().toArray();
@@ -90,10 +90,10 @@ public final class ProjectExplorerViewContentProvider implements ITreeContentPro
     @Override
     public boolean hasChildren(final Object element)
     {
-        if (element instanceof Node)
+        if (element instanceof Group)
         {
-            final Node node = (Node) element;
-            return !node.getGroups().isEmpty() || !node.getResearchFiles().isEmpty();
+            final Group group = (Group) element;
+            return !group.getGroups().isEmpty() || !group.getResearchFiles().isEmpty();
         }
         return false;
     }
