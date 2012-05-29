@@ -29,7 +29,7 @@ public class ProjectServiceUnitTest extends JPATest
     {
         em = createEntityManager();
         projectDAO = ProjectDAO.getInstance(em);
-        folderDAO = new FolderDAO(em);
+        folderDAO = FolderDAO.getInstance(em);
     }
     
     @Test

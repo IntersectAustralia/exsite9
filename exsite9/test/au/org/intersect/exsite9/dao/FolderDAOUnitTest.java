@@ -11,6 +11,7 @@ import java.io.File;
 
 import javax.persistence.EntityManager;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import au.org.intersect.exsite9.dao.FolderDAO;
@@ -18,19 +19,22 @@ import au.org.intersect.exsite9.domain.Folder;
 
 public class FolderDAOUnitTest extends JPATest
 {
-    private FolderDAO folderManager = null;
+    private static FolderDAO folderDAO = null;
+    private static EntityManager em;
+    
+    @BeforeClass
+    public static void setupOnce()
+    {
+        em = createEntityManager();
+        folderDAO = FolderDAO.getInstance(em);
+    }
     
     @Test
     public void createNewFolderTest()
     {
-        EntityManager em = createEntityManager();
-        
         File folderOnDisk = new File("/tmp");
         Folder tempFolder = new Folder(folderOnDisk);
         
-        folderManager = new FolderDAO(em);
-        folderManager.createFolder(tempFolder);
-        
-        em.close();
+        folderDAO.createFolder(tempFolder);
     }
 }

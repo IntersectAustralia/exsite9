@@ -38,10 +38,8 @@ public final class ProjectServiceFactory extends AbstractServiceFactory
     {
         final EntityManager em = ExSite9EntityManagerFactory.createEntityManager();
         final ProjectDAO projectDAO = ProjectDAO.getInstance(em);
-
-        // TODO: Construction of this DAO should use a singleton.
-        final FolderDAO folderDAO = new FolderDAO(ExSite9EntityManagerFactory.createEntityManager());
-
+        final FolderDAO folderDAO = FolderDAO.getInstance(em);
+        
         return new ProjectService(projectDAO, folderDAO);
     }
 }

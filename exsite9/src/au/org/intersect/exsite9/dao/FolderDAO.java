@@ -7,9 +7,19 @@ import au.org.intersect.exsite9.domain.Folder;
 public class FolderDAO
 {
 
+	private static FolderDAO instance = null;
     private final EntityManager em;
     
-    public FolderDAO(EntityManager em)
+    public static FolderDAO getInstance(EntityManager em)
+    {
+    	if (instance == null)
+    	{
+    		instance = new FolderDAO(em);
+    	}
+    	return instance;
+    }
+    
+    private FolderDAO(EntityManager em)
     {
         this.em = em;
     }
