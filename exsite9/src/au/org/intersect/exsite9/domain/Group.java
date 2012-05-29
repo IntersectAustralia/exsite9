@@ -10,9 +10,10 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-
+import javax.persistence.Table;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.google.common.base.Objects;
@@ -20,6 +21,8 @@ import com.google.common.base.Objects;
 /**
  * Represents a Group.
  */
+@Entity
+@Table(name="RESEARCH_GROUP")
 public final class Group implements Serializable
 {
 

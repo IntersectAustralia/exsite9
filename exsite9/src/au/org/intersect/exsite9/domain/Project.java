@@ -8,12 +8,14 @@ package au.org.intersect.exsite9.domain;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.google.common.base.Objects;
@@ -39,7 +41,10 @@ public final class Project
             inverseJoinColumns={@JoinColumn(name="folder_id", referencedColumnName="id")})
     private List<Folder> folders;
     
+    @OneToOne(cascade = CascadeType.ALL)
     private Group rootNode;
+    
+    @OneToOne(cascade = CascadeType.ALL)
     private Group newFilesNode;
     
     public Project()
@@ -55,6 +60,7 @@ public final class Project
         this.description = description;
         this.owner = owner;
         this.rootNode = new Group(this.name);
+        this.newFilesNode = new Group("New Files");
     }
 
     public Long getId()

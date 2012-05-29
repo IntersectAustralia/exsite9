@@ -34,7 +34,7 @@ public class ExSite9EntityManagerFactory
         properties.put(PersistenceUnitProperties.JDBC_URL,"jdbc:hsqldb:file:" + workspace + "/database/exsite9;shutdown=true");
         properties.put(PersistenceUnitProperties.JDBC_USER, "sa");
         properties.put(PersistenceUnitProperties.JDBC_PASSWORD, "");
-        properties.put(PersistenceUnitProperties.DDL_GENERATION, "update");
+        properties.put(PersistenceUnitProperties.DDL_GENERATION, "drop-and-create-tables");
         
         properties.put("eclipselink.logging.level", "FINE");
         properties.put("eclipselink.logging.timestamp", "false");
