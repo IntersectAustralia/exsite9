@@ -14,11 +14,6 @@ public class FileService implements IFileService
 	private ResearchFileDAO researchFileDAO = null;
 	private ProjectDAO projectDAO = null;
 	
-	public FileService()
-	{
-		
-	}
-	
 	public FileService(ProjectDAO projectDAO, ResearchFileDAO researchFileDAO)
 	{
 		this.researchFileDAO = researchFileDAO;
