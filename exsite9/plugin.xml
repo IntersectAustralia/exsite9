@@ -65,6 +65,10 @@
             id="au.org.intersect.exsite9.commands.NewProjectCommand"
             name="New Project">
       </command>
+      <command
+            id="au.org.intersect.exsite9.commands.AddFolderToProjectCommand"
+            name="Add Folder to Project">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -108,6 +112,28 @@
             </command>
          </toolbar>
       </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:au.org.intersect.exsite9.view.ProjectExplorerView">
+         <command
+               commandId="au.org.intersect.exsite9.commands.AddFolderToProjectCommand"
+               label="Add Folder to Project"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false"
+                        operator="or">
+                     <instanceof
+                           value="au.org.intersect.exsite9.domain.Project">
+                     </instanceof>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+      </menuContribution>
    </extension>
    <extension
          point="org.eclipse.ui.services">
@@ -121,6 +147,13 @@
          <service
                serviceClass="au.org.intersect.exsite9.service.IFileService"></service>
       </serviceFactory>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="au.org.intersect.exsite9.commands.handlers.AddFolderToProjectHandler"
+            commandId="au.org.intersect.exsite9.commands.AddFolderToProjectCommand">
+      </handler>
    </extension>
 
 </plugin>

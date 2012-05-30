@@ -6,32 +6,20 @@
  */
 package au.org.intersect.exsite9.view;
 
-import java.io.File;
-
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IExecutionListener;
 import org.eclipse.core.commands.NotHandledException;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IMenuListener;
-import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.part.ViewPart;
 
-import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
-import au.org.intersect.exsite9.service.IFileService;
-import au.org.intersect.exsite9.service.IProjectService;
 import au.org.intersect.exsite9.view.provider.ProjectExplorerViewContentProvider;
 import au.org.intersect.exsite9.view.provider.ProjectExplorerViewInput;
 import au.org.intersect.exsite9.view.provider.ProjectExplorerViewLabelProvider;
@@ -72,6 +60,9 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
         final Command newProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.NewProjectCommand");
         newProjectCommand.addExecutionListener(this);
 
+        final Command addFolderToProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.AddFolderToProjectCommand");
+        addFolderToProjectCommand.addExecutionListener(this);
+
         initContextMenu();
     }
 
@@ -81,74 +72,10 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
     private void initContextMenu()
     {
         final MenuManager menuManager = new MenuManager();
-        menuManager.setRemoveAllWhenShown(true);
-        menuManager.addMenuListener(new IMenuListener()
-        {
-            @Override
-            public void menuAboutToShow(final IMenuManager manager)
-            {
-                if (ProjectExplorerView.this.treeViewer.getSelection().isEmpty())
-                {
-                    return;
-                }
-
-                final IStructuredSelection selection = (IStructuredSelection) ProjectExplorerView.this.treeViewer.getSelection();
-                if (selection.size() > 1)
-                {
-                    return;
-                }
-
-                final Object selectedElement = selection.getFirstElement();
-
-                if (selectedElement instanceof Project)
-                {
-                    final Project project = (Project) selectedElement;
-                    // TODO: how do we really do this in a way that is reusable?
-                    manager.add(new Action()
-                    {
-                        @Override
-                        public String getText()
-                        {
-                            return "Add Folder";
-                        }
-
-                        @Override
-                        public void run()
-                        {
-                            final DirectoryDialog directoryDialog = new DirectoryDialog(getSite().getShell(), SWT.OPEN);
-                            directoryDialog.setMessage("Choose a folder to add to the project.");
-                            directoryDialog.setText("Choose a folder");
-
-                            final String path = directoryDialog.open();
-                            if (path != null)
-                            {
-                                final File directory = new File(path);
-
-                                if (!directory.exists() || !directory.isDirectory() || !directory.canRead())
-                                {
-                                    MessageDialog.openError(getSite().getShell(), "Error", "Provided folder does not exist or is not readable.");
-                                    return;
-                                }
-
-                                final Folder folder = new Folder(directory);
-
-                                final IProjectService projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
-                                final IFileService fileService = (IFileService) PlatformUI.getWorkbench().getService(IFileService.class);
-
-                                projectService.mapFolderToProject(project, folder);
-                                fileService.identifyNewFilesForProject(project);
-
-                                ProjectExplorerView.this.treeViewer.refresh();
-                                ProjectExplorerView.this.treeViewer.expandAll();
-                            }
-                        }
-                    });
-                }
-            }
-        });
         final Menu menu = menuManager.createContextMenu(this.treeViewer.getTree());
         this.treeViewer.getTree().setMenu(menu);
-        getSite().registerContextMenu(menuManager, treeViewer);
+        getSite().registerContextMenu(menuManager, this.treeViewer);
+        getSite().setSelectionProvider(this.treeViewer);
     }
 
     /**
@@ -191,6 +118,12 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
                 this.treeViewer.setInput(wrapper);
                 this.treeViewer.expandAll();
             }
+        }
+        else if (commandId.equals("au.org.intersect.exsite9.commands.AddFolderToProjectCommand"))
+        {
+            // The Project object is already bound - no need to get another.
+            this.treeViewer.refresh();
+            this.treeViewer.expandAll();
         }
     }
 
