@@ -6,12 +6,10 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.util.Iterator;
-
 import javax.persistence.EntityManager;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import au.org.intersect.exsite9.dao.JPATest;
@@ -34,17 +32,13 @@ public class FileServiceUnitTest extends JPATest
     
     private static EntityManager em;
     
-    @BeforeClass
-    public static void setupOnce()
-    {
-        em = createEntityManager();
-        projectDAO = ProjectDAO.createTestInstance(em);
-        researchFileDAO = ResearchFileDAO.createTestInstance(em);
-    }
-    
     @Before
     public void setUp()
     {
+    	em = createEntityManager();
+        projectDAO = ProjectDAO.createTestInstance(em);
+        researchFileDAO = ResearchFileDAO.createTestInstance(em);
+        
         testDirFile = new File(testDirName);
         testDirFile.mkdir();
     }
@@ -60,6 +54,8 @@ public class FileServiceUnitTest extends JPATest
             file.delete();
         }
         testDirFile.delete();
+        
+        em.close();
     }
     
     @Test
@@ -76,8 +72,7 @@ public class FileServiceUnitTest extends JPATest
     	
     	assertTrue(project.getNewFilesNode().getResearchFiles().isEmpty());
     }
-    
-    
+
     
     @Test
     public void identifyNewFilesForProjectSingleFileTest()
@@ -108,7 +103,40 @@ public class FileServiceUnitTest extends JPATest
     	catch(Exception e)
     	{
     		fail("Unexpected exception thrown: " + e.getMessage());
+    		e.printStackTrace();
     	}
+    }
+    
+    
+    @Test
+    public void testIdentifyNewFiles()
+    {
+        try
+        {
+        	Project project = new Project("name","owner","description");
+            Folder f = new Folder(testDirFile);
+            project.getFolders().add(f);
+            
+            fileService = new FileService(projectDAO,researchFileDAO);
+            
+            File.createTempFile("test-file-1", ".txt", testDirFile);
+            
+            fileService.identifyNewFilesForProject(project);
+            assertEquals("List has one entry",1,project.getNewFilesNode().getResearchFiles().size());
+            
+            fileService.identifyNewFilesForProject(project);
+            assertEquals("List has one entry",1,project.getNewFilesNode().getResearchFiles().size());
+            
+            File.createTempFile("test-file-2", ".txt", testDirFile);
+            
+            fileService.identifyNewFilesForProject(project);
+            assertEquals("List has two entries",2,project.getNewFilesNode().getResearchFiles().size());
+        }
+        catch(Exception e)
+        {
+            fail("Unexpected exception: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
     
 }

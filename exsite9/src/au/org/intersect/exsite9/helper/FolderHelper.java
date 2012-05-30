@@ -19,12 +19,15 @@ public class FolderHelper
      * Recursively looks for files in the folder & it's sub folders that are new since the last time
      * it checked.
      * Returns an empty list if there are no files or this is not a folder.
+     * Time resolution of ext3 & hfs+ is 1 second so when we store the time of the
+     * last check we round it down. 
      * @return A list of the files identified in the folder since the last time the folder was checked
      */
     public static List<ResearchFile> identifyNewFiles(Folder folder)
     {
+    	long startTimeInMillis = Calendar.getInstance().getTimeInMillis();
+    	
         List<ResearchFile> newFileList = new ArrayList<ResearchFile>(0);
-        long startTimeInMillis = Calendar.getInstance().getTimeInMillis();
         
         IOFileFilter ageFilter = new AgeFileFilter(folder.getLastCheckTimeInMillis(),false);
         
@@ -43,7 +46,8 @@ public class FolderHelper
             // TODO: Think about logging
         }
         
-        folder.setLastCheckTimeInMillis(startTimeInMillis);
+        // The time resolution of the various supported file systems is an issue here.
+        folder.setLastCheckTimeInMillis(startTimeInMillis - 1000);
         
         return newFileList;
     }

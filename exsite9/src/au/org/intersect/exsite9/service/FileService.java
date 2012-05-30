@@ -2,6 +2,8 @@ package au.org.intersect.exsite9.service;
 
 import java.util.List;
 
+import javax.persistence.PersistenceException;
+
 import au.org.intersect.exsite9.dao.ProjectDAO;
 import au.org.intersect.exsite9.dao.ResearchFileDAO;
 import au.org.intersect.exsite9.domain.Folder;
@@ -29,8 +31,15 @@ public class FileService implements IFileService
 			List<ResearchFile> newFileList = FolderHelper.identifyNewFiles(folder);
 			for(ResearchFile researchFile : newFileList)
 			{
-				researchFileDAO.createResearchFile(researchFile);
-				project.getNewFilesNode().getResearchFiles().add(researchFile);
+				try
+				{
+					researchFileDAO.createResearchFile(researchFile);
+					project.getNewFilesNode().getResearchFiles().add(researchFile);
+				}
+				catch(PersistenceException pe)
+				{
+					// continue without adding file to list of new files
+				}
 			}
 			projectDAO.updateProject(project);
 		}
