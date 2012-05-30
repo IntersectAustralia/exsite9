@@ -1,8 +1,11 @@
 package au.org.intersect.exsite9.service;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.util.Iterator;
 
 import javax.persistence.EntityManager;
 
@@ -16,6 +19,7 @@ import au.org.intersect.exsite9.dao.ProjectDAO;
 import au.org.intersect.exsite9.dao.ResearchFileDAO;
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.domain.ResearchFile;
 
 public class FileServiceUnitTest extends JPATest
 {
@@ -72,4 +76,39 @@ public class FileServiceUnitTest extends JPATest
     	
     	assertTrue(project.getNewFilesNode().getResearchFiles().isEmpty());
     }
+    
+    
+    
+    @Test
+    public void identifyNewFilesForProjectSingleFileTest()
+    {
+    	try
+    	{
+	    	Project project = new Project("name","owner","description");
+	    	Folder f = new Folder(testDirFile);
+	    	File.createTempFile("test-file-1", ".txt", testDirFile);
+	    	
+	    	project.getFolders().add(f);
+	    	
+	    	fileService = new FileService(projectDAO,researchFileDAO);
+	    	
+	    	fileService.identifyNewFilesForProject(project);
+	    	
+	    	assertTrue(project.getNewFilesNode().getResearchFiles().size() == 1);
+	    	
+	    	Iterator<ResearchFile> iter = project.getNewFilesNode().getResearchFiles().iterator();
+	    	
+	    	while(iter.hasNext())
+	    	{
+	    		ResearchFile file1 = iter.next();
+	    		ResearchFile file2 = researchFileDAO.findById(file1.getId());
+	    		assertEquals(file1, file2);
+	    	}
+    	}
+    	catch(Exception e)
+    	{
+    		fail("Unexpected exception thrown: " + e.getMessage());
+    	}
+    }
+    
 }

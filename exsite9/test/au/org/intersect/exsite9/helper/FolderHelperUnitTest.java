@@ -48,6 +48,13 @@ public class FolderHelperUnitTest
     }
     
     @Test
+    public void constructorTest()
+    {
+    	FolderHelper fh = new FolderHelper();
+    	assertTrue(fh instanceof FolderHelper);
+    }
+    
+    @Test
     public void testIdentifyNewFilesInvalidFolder()
     {
         String folderName = testDirName + File.separator + "DoesNotExist";

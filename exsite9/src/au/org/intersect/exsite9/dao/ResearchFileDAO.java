@@ -42,4 +42,10 @@ public class ResearchFileDAO
         em.persist(file);
         em.getTransaction().commit();
     }
+    
+    public ResearchFile findById(long id)
+    {
+        return em.find(ResearchFile.class,id);
+    }
+    
 }
