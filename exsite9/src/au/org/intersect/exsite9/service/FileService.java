@@ -1,8 +1,11 @@
 package au.org.intersect.exsite9.service;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 import javax.persistence.PersistenceException;
+
+import org.eclipse.persistence.exceptions.DatabaseException;
 
 import au.org.intersect.exsite9.dao.ProjectDAO;
 import au.org.intersect.exsite9.dao.ResearchFileDAO;
@@ -38,7 +41,20 @@ public class FileService implements IFileService
 				}
 				catch(PersistenceException pe)
 				{
-					// continue without adding file to list of new files
+					Throwable cause = pe.getCause();
+					if (cause instanceof DatabaseException)
+					{
+						cause = cause.getCause();
+						if (cause instanceof SQLIntegrityConstraintViolationException)
+						{
+							// TODO: log this
+							// continue -- tried to insert a duplicate file
+						}
+						else
+						{
+							throw pe;
+						}
+					}
 				}
 			}
 			projectDAO.updateProject(project);
