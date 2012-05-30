@@ -116,6 +116,11 @@
          <service
                serviceClass="au.org.intersect.exsite9.service.IProjectService"></service>
       </serviceFactory>
+      <serviceFactory
+            factoryClass="au.org.intersect.exsite9.service.factory.FileServiceFactory">
+         <service
+               serviceClass="au.org.intersect.exsite9.service.IFileService"></service>
+      </serviceFactory>
    </extension>
 
 </plugin>

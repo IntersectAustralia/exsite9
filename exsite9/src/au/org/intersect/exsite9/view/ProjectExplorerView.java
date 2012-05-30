@@ -6,24 +6,32 @@
  */
 package au.org.intersect.exsite9.view;
 
+import java.io.File;
+
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IExecutionListener;
 import org.eclipse.core.commands.NotHandledException;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.part.ViewPart;
 
-import au.org.intersect.exsite9.actions.AddFolderToProjectAction;
+import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.service.IFileService;
+import au.org.intersect.exsite9.service.IProjectService;
 import au.org.intersect.exsite9.view.provider.ProjectExplorerViewContentProvider;
 import au.org.intersect.exsite9.view.provider.ProjectExplorerViewInput;
 import au.org.intersect.exsite9.view.provider.ProjectExplorerViewLabelProvider;
@@ -77,7 +85,7 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
         menuManager.addMenuListener(new IMenuListener()
         {
             @Override
-            public void menuAboutToShow(IMenuManager manager)
+            public void menuAboutToShow(final IMenuManager manager)
             {
                 if (ProjectExplorerView.this.treeViewer.getSelection().isEmpty())
                 {
@@ -94,7 +102,47 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
 
                 if (selectedElement instanceof Project)
                 {
-                    manager.add(new AddFolderToProjectAction((Project)selectedElement));
+                    final Project project = (Project) selectedElement;
+                    // TODO: how do we really do this in a way that is reusable?
+                    manager.add(new Action()
+                    {
+                        @Override
+                        public String getText()
+                        {
+                            return "Add Folder";
+                        }
+
+                        @Override
+                        public void run()
+                        {
+                            final DirectoryDialog directoryDialog = new DirectoryDialog(getSite().getShell(), SWT.OPEN);
+                            directoryDialog.setMessage("Choose a folder to add to the project.");
+                            directoryDialog.setText("Choose a folder");
+
+                            final String path = directoryDialog.open();
+                            if (path != null)
+                            {
+                                final File directory = new File(path);
+
+                                if (!directory.exists() || !directory.isDirectory() || !directory.canRead())
+                                {
+                                    MessageDialog.openError(getSite().getShell(), "Error", "Provided folder does not exist or is not readable.");
+                                    return;
+                                }
+
+                                final Folder folder = new Folder(directory);
+
+                                final IProjectService projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
+                                final IFileService fileService = (IFileService) PlatformUI.getWorkbench().getService(IFileService.class);
+
+                                projectService.mapFolderToProject(project, folder);
+                                fileService.identifyNewFilesForProject(project);
+
+                                ProjectExplorerView.this.treeViewer.refresh();
+                                ProjectExplorerView.this.treeViewer.expandAll();
+                            }
+                        }
+                    });
                 }
             }
         });

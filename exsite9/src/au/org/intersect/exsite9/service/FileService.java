@@ -11,8 +11,8 @@ import au.org.intersect.exsite9.helper.FolderHelper;
 
 public class FileService implements IFileService
 {
-	private ResearchFileDAO researchFileDAO = null;
-	private ProjectDAO projectDAO = null;
+	private final ResearchFileDAO researchFileDAO;
+	private final ProjectDAO projectDAO;
 	
 	public FileService(ProjectDAO projectDAO, ResearchFileDAO researchFileDAO)
 	{
