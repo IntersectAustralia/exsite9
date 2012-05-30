@@ -7,6 +7,8 @@
 
 package au.org.intersect.exsite9.dao;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.File;
 
 import javax.persistence.EntityManager;
@@ -29,6 +31,13 @@ public class ResearchFileDAOUnitTest extends JPATest
     {
         em = createEntityManager();
         researchFileDAO = ResearchFileDAO.getInstance(em);
+    }
+    
+    @Test
+    public void constructorTest()
+    {
+        ResearchFileDAO researchFileDAO2 = ResearchFileDAO.getInstance(em);
+        assertEquals(researchFileDAO,researchFileDAO2);
     }
     
     @Test

@@ -23,6 +23,13 @@ public class ProjectDAOUnitTest extends JPATest
     }
     
     @Test
+    public void constructorTest()
+    {
+    	ProjectDAO projectDAO2 = ProjectDAO.getInstance(em);
+        assertEquals(projectDAO,projectDAO2);
+    }
+    
+    @Test
     public void createNewProjectTest()
     {
         Project project = new Project();
