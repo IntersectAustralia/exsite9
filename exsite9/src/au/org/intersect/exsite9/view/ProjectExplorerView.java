@@ -92,9 +92,12 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
         if (commandId.equals("au.org.intersect.exsite9.commands.NewProjectCommand"))
         {
             final Project project = (Project) returnValue;
-            final ProjectExplorerViewInput wrapper = new ProjectExplorerViewInput(project);
-            this.treeViewer.setInput(wrapper);
-            this.treeViewer.expandAll();
+            if (project != null)
+            {
+                final ProjectExplorerViewInput wrapper = new ProjectExplorerViewInput(project);
+                this.treeViewer.setInput(wrapper);
+                this.treeViewer.expandAll();
+            }
         }
     }
 

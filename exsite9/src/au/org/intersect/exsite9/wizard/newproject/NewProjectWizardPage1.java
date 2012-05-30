@@ -86,7 +86,7 @@ public final class NewProjectWizardPage1 extends WizardPage implements KeyListen
     @Override
     public void keyPressed(final KeyEvent e)
     {
-        final boolean pageCompleted = !this.projectNameText.getText().isEmpty() && !this.projectOwnerText.getText().isEmpty();
+        final boolean pageCompleted = !this.projectNameText.getText().isEmpty();
         setPageComplete(pageCompleted);
     }
 
