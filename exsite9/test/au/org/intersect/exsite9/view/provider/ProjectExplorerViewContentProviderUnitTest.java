@@ -36,7 +36,7 @@ public final class ProjectExplorerViewContentProviderUnitTest
 
         final Object[] out = toTest.getElements(projectExplorerViewInput);
         assertEquals(1, out.length);
-        assertEquals(project.getRootNode(), out[0]);
+        assertEquals(project, out[0]);
     }
 
     @Test

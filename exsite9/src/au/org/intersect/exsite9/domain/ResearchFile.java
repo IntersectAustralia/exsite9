@@ -8,6 +8,7 @@ package au.org.intersect.exsite9.domain;
 
 import java.io.File;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -26,6 +27,8 @@ public final class ResearchFile
     @GeneratedValue
     private Long id;
     private final String name;
+    
+    @Column(unique=true)
     private final String path;
 
     public ResearchFile()

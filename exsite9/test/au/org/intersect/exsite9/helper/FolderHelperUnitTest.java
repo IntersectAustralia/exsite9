@@ -80,7 +80,7 @@ public class FolderHelperUnitTest
             File.createTempFile("test-file-1", ".txt", testDirFile);
             
             List<ResearchFile> newFiles = FolderHelper.identifyNewFiles(f);
-            assertEquals("List is empty",1,newFiles.size());
+            assertEquals("List has 1 entry",1,newFiles.size());
         }
         catch(Exception e)
         {
@@ -89,4 +89,35 @@ public class FolderHelperUnitTest
         }
     }
     
+    @Test
+    public void testIdentifyNewFiles()
+    {
+        try
+        {
+            Folder f = new Folder(testDirFile);
+            File.createTempFile("test-file-1", ".txt", testDirFile);
+            
+            try{Thread.sleep(1000);}catch(Exception e){}
+            
+            List<ResearchFile> newFiles = FolderHelper.identifyNewFiles(f);
+            assertEquals("List has one entry",1,newFiles.size());
+            
+            try{Thread.sleep(1000);}catch(Exception e){}
+            
+            newFiles = FolderHelper.identifyNewFiles(f);
+            assertTrue("List is empty",newFiles.isEmpty());
+            
+            File.createTempFile("test-file-2", ".txt", testDirFile);
+            
+            try{Thread.sleep(1000);}catch(Exception e){}
+            
+            newFiles = FolderHelper.identifyNewFiles(f);
+            assertEquals("List has one entry",1,newFiles.size());
+        }
+        catch(Exception e)
+        {
+            fail("Unexpected exception: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }

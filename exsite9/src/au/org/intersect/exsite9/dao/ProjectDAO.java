@@ -39,7 +39,7 @@ public class ProjectDAO
     public void updateProject(Project project)
     {
         em.getTransaction().begin();
-        em.persist(project);
+        em.merge(project);
         em.getTransaction().commit();
     }
     
