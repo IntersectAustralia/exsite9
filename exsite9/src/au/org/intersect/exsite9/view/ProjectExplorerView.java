@@ -11,12 +11,18 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IExecutionListener;
 import org.eclipse.core.commands.NotHandledException;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.part.ViewPart;
 
+import au.org.intersect.exsite9.actions.AddFolderToProjectAction;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.view.provider.ProjectExplorerViewContentProvider;
 import au.org.intersect.exsite9.view.provider.ProjectExplorerViewInput;
@@ -54,8 +60,47 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
         final ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
 
         // This command is defined in the plugin.xml
+        // This is used to the view can load the project with the New Project command is executed.
         final Command newProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.NewProjectCommand");
         newProjectCommand.addExecutionListener(this);
+
+        initContextMenu();
+    }
+
+    /**
+     * Initializes the context menu for items in the tree view.
+     */
+    private void initContextMenu()
+    {
+        final MenuManager menuManager = new MenuManager();
+        menuManager.setRemoveAllWhenShown(true);
+        menuManager.addMenuListener(new IMenuListener()
+        {
+            @Override
+            public void menuAboutToShow(IMenuManager manager)
+            {
+                if (ProjectExplorerView.this.treeViewer.getSelection().isEmpty())
+                {
+                    return;
+                }
+
+                final IStructuredSelection selection = (IStructuredSelection) ProjectExplorerView.this.treeViewer.getSelection();
+                if (selection.size() > 1)
+                {
+                    return;
+                }
+
+                final Object selectedElement = selection.getFirstElement();
+
+                if (selectedElement instanceof Project)
+                {
+                    manager.add(new AddFolderToProjectAction((Project)selectedElement));
+                }
+            }
+        });
+        final Menu menu = menuManager.createContextMenu(this.treeViewer.getTree());
+        this.treeViewer.getTree().setMenu(menu);
+        getSite().registerContextMenu(menuManager, treeViewer);
     }
 
     /**

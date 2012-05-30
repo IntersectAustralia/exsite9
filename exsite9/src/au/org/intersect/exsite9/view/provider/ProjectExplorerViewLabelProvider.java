@@ -13,6 +13,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
 import au.org.intersect.exsite9.domain.Group;
+import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.view.ProjectExplorerView;
 
@@ -34,9 +35,14 @@ public final class ProjectExplorerViewLabelProvider extends StyledCellLabelProvi
     @Override
     public void update(final ViewerCell cell)
     {
-        final Object element = cell.getElement();
+        Object element = cell.getElement();
         final StyledString text = new StyledString();
 
+        if (element instanceof Project)
+        {
+            final Project project = (Project) element;
+            element = project.getRootNode();
+        }
         if (element instanceof Group)
         {
             final Group group = (Group) element;

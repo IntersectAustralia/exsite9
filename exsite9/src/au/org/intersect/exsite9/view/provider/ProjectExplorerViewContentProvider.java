@@ -14,6 +14,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import au.org.intersect.exsite9.domain.Group;
+import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.view.ProjectExplorerView;
 
 /**
@@ -53,7 +54,7 @@ public final class ProjectExplorerViewContentProvider implements ITreeContentPro
         if (inputElement instanceof ProjectExplorerViewInput)
         {
             final ProjectExplorerViewInput viewInput = (ProjectExplorerViewInput) inputElement;
-            return new Object[]{viewInput.getProject().getRootNode()};
+            return new Object[]{viewInput.getProject()};
         }
         return Collections.emptyList().toArray();
     }
@@ -64,9 +65,18 @@ public final class ProjectExplorerViewContentProvider implements ITreeContentPro
     @Override
     public Object[] getChildren(final Object parentElement)
     {
+        final List<Object> toReturn = new ArrayList<Object>();
+
+        if (parentElement instanceof Project)
+        {
+            final Project project = (Project) parentElement;
+            final Group group = project.getRootNode();
+            toReturn.addAll(group.getGroups());
+            toReturn.addAll(group.getResearchFiles());
+            return toReturn.toArray();
+        }
         if (parentElement instanceof Group)
         {
-            final List<Object> toReturn = new ArrayList<Object>();
             final Group group = (Group) parentElement;
             toReturn.addAll(group.getGroups());
             toReturn.addAll(group.getResearchFiles());
@@ -90,6 +100,12 @@ public final class ProjectExplorerViewContentProvider implements ITreeContentPro
     @Override
     public boolean hasChildren(final Object element)
     {
+        if (element instanceof Project)
+        {
+            final Project project = (Project) element;
+            final Group group = project.getRootNode();
+            return !group.getGroups().isEmpty() || !group.getResearchFiles().isEmpty();
+        }
         if (element instanceof Group)
         {
             final Group group = (Group) element;
