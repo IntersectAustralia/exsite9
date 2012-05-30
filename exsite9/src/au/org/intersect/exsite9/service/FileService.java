@@ -1,11 +1,43 @@
 package au.org.intersect.exsite9.service;
 
-import au.org.intersect.exsite9.domain.Project;
+import java.util.List;
 
-public class FileService
+import au.org.intersect.exsite9.dao.ProjectDAO;
+import au.org.intersect.exsite9.dao.ResearchFileDAO;
+import au.org.intersect.exsite9.domain.Folder;
+import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.domain.ResearchFile;
+import au.org.intersect.exsite9.helper.FolderHelper;
+
+public class FileService implements IFileService
 {
+	private ResearchFileDAO researchFileDAO = null;
+	private ProjectDAO projectDAO = null;
+	
+	public FileService()
+	{
+		
+	}
+	
+	public FileService(ProjectDAO projectDAO, ResearchFileDAO researchFileDAO)
+	{
+		this.researchFileDAO = researchFileDAO;
+		this.projectDAO = projectDAO;
+	}
+	
+	@Override
     public void identifyNewFilesForProject(Project project)
     {
-        throw new UnsupportedOperationException();
+		// TODO: Run this in its own thread.
+		for(Folder folder : project.getFolders())
+		{
+			List<ResearchFile> newFileList = FolderHelper.identifyNewFiles(folder);
+			for(ResearchFile researchFile : newFileList)
+			{
+				researchFileDAO.createResearchFile(researchFile);
+				project.getNewFilesNode().getResearchFiles().add(researchFile);
+			}
+			projectDAO.updateProject(project);
+		}
     }
 }

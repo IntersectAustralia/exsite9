@@ -6,6 +6,7 @@
  */
 package au.org.intersect.exsite9.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -34,7 +35,7 @@ public final class Project
     private String owner;
     private String description;
     
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name="project_folder",
             joinColumns={@JoinColumn(name="project_id", referencedColumnName="id")},
@@ -59,6 +60,7 @@ public final class Project
         this.name = name;
         this.description = description;
         this.owner = owner;
+        this.folders = new ArrayList<Folder>(0);
         this.rootNode = new Group(this.name);
         this.newFilesNode = new Group("New Files");
         this.rootNode.getGroups().add(newFilesNode);

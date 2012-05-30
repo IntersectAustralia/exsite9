@@ -28,8 +28,8 @@ public class ProjectServiceUnitTest extends JPATest
     public static void setupOnce()
     {
         em = createEntityManager();
-        projectDAO = ProjectDAO.getInstance(em);
-        folderDAO = FolderDAO.getInstance(em);
+        projectDAO = ProjectDAO.createTestInstance(em);
+        folderDAO = FolderDAO.createTestInstance(em);
     }
     
     @Test
@@ -49,7 +49,7 @@ public class ProjectServiceUnitTest extends JPATest
     {
         projectService = new ProjectService(projectDAO, folderDAO);
         
-        Project project = projectService.createProject("Project One","Ownwer One","This is project one.");
+        Project project = projectService.createProject("Project One","Owner One","This is project one.");
         
         Folder folder = new Folder(new File("/tmp"));
         
