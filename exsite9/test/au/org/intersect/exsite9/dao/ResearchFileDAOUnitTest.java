@@ -11,6 +11,7 @@ import java.io.File;
 
 import javax.persistence.EntityManager;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import au.org.intersect.exsite9.dao.ResearchFileDAO;
@@ -19,20 +20,24 @@ import au.org.intersect.exsite9.domain.ResearchFile;
 public class ResearchFileDAOUnitTest extends JPATest
 {
 
-    private ResearchFileDAO rfm;
+    private static ResearchFileDAO researchFileDAO;
+    
+    private static EntityManager em;
+    
+    @BeforeClass
+    public static void setupOnce()
+    {
+        em = createEntityManager();
+        researchFileDAO = ResearchFileDAO.getInstance(em);
+    }
     
     @Test
     public void testCreateNewFile()
     {
-        EntityManager em = createEntityManager();
-        
         File fileOnDisk = new File("some-file.txt");
         ResearchFile researchFile = new ResearchFile(fileOnDisk);
         
-        rfm = new ResearchFileDAO(em);
-        rfm.createResearchFile(researchFile);
-        
-        em.close();
+        researchFileDAO.createResearchFile(researchFile);
     }
     
 }

@@ -18,6 +18,11 @@ public class ProjectDAO
         }
         return instance;
     }
+
+    public static ProjectDAO createTestInstance(EntityManager em)
+    {
+    	return new ProjectDAO(em);
+    }
     
     private ProjectDAO(EntityManager em)
     {
