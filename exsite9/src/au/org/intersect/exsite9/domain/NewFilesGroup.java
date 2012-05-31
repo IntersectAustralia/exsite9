@@ -10,14 +10,11 @@ import java.util.Collections;
 import java.util.Set;
 
 import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 
 /**
  * Used only to tag the New Files group of a project, so we can easily identify this group with instanceof checks.
  */
 @Entity
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 public final class NewFilesGroup extends Group
 {
     /**

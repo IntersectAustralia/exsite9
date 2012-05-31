@@ -25,6 +25,7 @@ import com.google.common.base.Objects;
  */
 @Entity
 @Table(name="RESEARCH_GROUP")
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 public class Group implements Serializable
 {
 
