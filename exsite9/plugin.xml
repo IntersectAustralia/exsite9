@@ -121,16 +121,9 @@
                style="push">
             <visibleWhen
                   checkEnabled="false">
-               <with
-                     variable="selection">
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <instanceof
-                           value="au.org.intersect.exsite9.domain.Project">
-                     </instanceof>
-                  </iterate>
-               </with>
+               <reference
+                     definitionId="au.org.intersect.exsite9.expression.InstanceOfProject">
+               </reference>
             </visibleWhen>
          </command>
       </menuContribution>
@@ -154,6 +147,22 @@
             class="au.org.intersect.exsite9.commands.handlers.AddFolderToProjectHandler"
             commandId="au.org.intersect.exsite9.commands.AddFolderToProjectCommand">
       </handler>
+   </extension>
+   <extension
+         point="org.eclipse.core.expressions.definitions">
+      <definition
+            id="au.org.intersect.exsite9.expression.InstanceOfProject">
+         <with
+               variable="selection">
+            <iterate
+                  ifEmpty="false"
+                  operator="or">
+               <instanceof
+                     value="au.org.intersect.exsite9.domain.Project">
+               </instanceof>
+            </iterate>
+         </with>
+      </definition>
    </extension>
 
 </plugin>
