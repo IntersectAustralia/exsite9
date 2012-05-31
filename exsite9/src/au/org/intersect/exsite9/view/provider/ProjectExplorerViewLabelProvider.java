@@ -41,9 +41,10 @@ public final class ProjectExplorerViewLabelProvider extends StyledCellLabelProvi
         if (element instanceof Project)
         {
             final Project project = (Project) element;
-            element = project.getRootNode();
+            text.append(project.getName());
+            cell.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ETOOL_HOME_NAV));
         }
-        if (element instanceof Group)
+        else if (element instanceof Group)
         {
             final Group group = (Group) element;
             text.append(group.getName());

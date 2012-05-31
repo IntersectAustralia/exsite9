@@ -69,6 +69,10 @@
             id="au.org.intersect.exsite9.commands.AddFolderToProjectCommand"
             name="Add Folder to Project">
       </command>
+      <command
+            id="au.org.intersect.exsite9.commands.AddGroup"
+            name="Add Group">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -126,6 +130,21 @@
                </reference>
             </visibleWhen>
          </command>
+         <separator
+               name="exsite9.separator1"
+               visible="true">
+         </separator>
+         <command
+               commandId="au.org.intersect.exsite9.commands.AddGroup"
+               label="Add Group"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <reference
+                     definitionId="au.org.intersect.exsite9.expression.InstanceOfProjectOrGroup">
+               </reference>
+            </visibleWhen>
+         </command>
       </menuContribution>
    </extension>
    <extension
@@ -140,12 +159,21 @@
          <service
                serviceClass="au.org.intersect.exsite9.service.IFileService"></service>
       </serviceFactory>
+      <serviceFactory
+            factoryClass="au.org.intersect.exsite9.service.factory.GroupServiceFactory">
+         <service
+               serviceClass="au.org.intersect.exsite9.service.IGroupService"></service>
+      </serviceFactory>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
       <handler
             class="au.org.intersect.exsite9.commands.handlers.AddFolderToProjectHandler"
             commandId="au.org.intersect.exsite9.commands.AddFolderToProjectCommand">
+      </handler>
+      <handler
+            class="au.org.intersect.exsite9.commands.handlers.AddGroupHandler"
+            commandId="au.org.intersect.exsite9.commands.AddGroup">
       </handler>
    </extension>
    <extension
@@ -163,6 +191,41 @@
             </iterate>
          </with>
       </definition>
+      <definition
+            id="au.org.intersect.exsite9.expression.InstanceOfProjectOrGroup">
+         <or>
+            <reference
+                  definitionId="au.org.intersect.exsite9.expression.InstanceOfProject">
+            </reference>
+            <with
+                  variable="selection">
+               <iterate
+                     ifEmpty="false"
+                     operator="or">
+                  <and>
+                     <instanceof
+                           value="au.org.intersect.exsite9.domain.Group">
+                     </instanceof>
+                     <not>
+                        <test
+                              property="au.org.interset.exsite9.property.groupName"
+                              value="New Files">
+                        </test>
+                     </not>
+                  </and>
+               </iterate>
+            </with></or>
+      </definition>
+   </extension>
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="au.org.intersect.exsite9.property.GroupNameTester"
+            id="au.org.intersect.exsite9.property.GroupNameTester"
+            namespace="au.org.interset.exsite9.property"
+            properties="groupName"
+            type="au.org.intersect.exsite9.domain.Group">
+      </propertyTester>
    </extension>
 
 </plugin>

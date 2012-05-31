@@ -13,6 +13,7 @@ import org.eclipse.core.commands.IExecutionListener;
 import org.eclipse.core.commands.NotHandledException;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.PlatformUI;
@@ -49,7 +50,7 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
     {
         this.setPartName("Project View");
 
-        this.treeViewer = new TreeViewer(parent);
+        this.treeViewer = new TreeViewer(parent, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
         this.treeViewer.setContentProvider(new ProjectExplorerViewContentProvider());
         this.treeViewer.setLabelProvider(new ProjectExplorerViewLabelProvider());
 
@@ -62,6 +63,9 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
 
         final Command addFolderToProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.AddFolderToProjectCommand");
         addFolderToProjectCommand.addExecutionListener(this);
+
+        final Command addGroupCommand = commandService.getCommand("au.org.intersect.exsite9.commands.AddGroup");
+        addGroupCommand.addExecutionListener(this);
 
         initContextMenu();
     }
@@ -122,6 +126,11 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
         else if (commandId.equals("au.org.intersect.exsite9.commands.AddFolderToProjectCommand"))
         {
             // The Project object is already bound - no need to get another.
+            this.treeViewer.refresh();
+            this.treeViewer.expandAll();
+        }
+        else if (commandId.equals("au.org.intersect.exsite9.commands.AddGroup"))
+        {
             this.treeViewer.refresh();
             this.treeViewer.expandAll();
         }
