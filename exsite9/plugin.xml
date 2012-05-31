@@ -69,6 +69,10 @@
             id="au.org.intersect.exsite9.commands.AddFolderToProjectCommand"
             name="Add Folder to Project">
       </command>
+      <command
+            id="au.org.intersect.exsite9.commands.ReloadProjectCommand"
+            name="Refresh Project">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -126,6 +130,17 @@
                </reference>
             </visibleWhen>
          </command>
+         <command
+               commandId="au.org.intersect.exsite9.commands.ReloadProjectCommand"
+               label="Refresh Project"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <reference
+                     definitionId="au.org.intersect.exsite9.expression.InstanceOfProject">
+               </reference>
+            </visibleWhen>
+         </command>
       </menuContribution>
    </extension>
    <extension
@@ -146,6 +161,10 @@
       <handler
             class="au.org.intersect.exsite9.commands.handlers.AddFolderToProjectHandler"
             commandId="au.org.intersect.exsite9.commands.AddFolderToProjectCommand">
+      </handler>
+      <handler
+            class="au.org.intersect.exsite9.commands.handlers.ReloadProjectHandler"
+            commandId="au.org.intersect.exsite9.commands.ReloadProjectCommand">
       </handler>
    </extension>
    <extension
