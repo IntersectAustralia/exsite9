@@ -73,6 +73,10 @@
             id="au.org.intersect.exsite9.commands.AddGroup"
             name="Add Group">
       </command>
+      <command
+            id="au.org.intersect.exsite9.commands.ReloadProjectCommand"
+            name="Refresh Project">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -144,6 +148,17 @@
                      definitionId="au.org.intersect.exsite9.expression.InstanceOfProjectOrGroup">
                </reference>
             </visibleWhen>
+         </command>              
+         <command
+               commandId="au.org.intersect.exsite9.commands.ReloadProjectCommand"
+               label="Refresh Project"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <reference
+                     definitionId="au.org.intersect.exsite9.expression.InstanceOfProject">
+               </reference>
+            </visibleWhen>
          </command>
       </menuContribution>
    </extension>
@@ -174,6 +189,10 @@
       <handler
             class="au.org.intersect.exsite9.commands.handlers.AddGroupHandler"
             commandId="au.org.intersect.exsite9.commands.AddGroup">
+      </handler>      
+	  <handler
+            class="au.org.intersect.exsite9.commands.handlers.ReloadProjectHandler"
+            commandId="au.org.intersect.exsite9.commands.ReloadProjectCommand">
       </handler>
    </extension>
    <extension

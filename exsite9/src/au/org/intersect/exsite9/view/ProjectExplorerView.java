@@ -54,18 +54,25 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
         this.treeViewer.setContentProvider(new ProjectExplorerViewContentProvider());
         this.treeViewer.setLabelProvider(new ProjectExplorerViewLabelProvider());
 
-        final ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
+        final ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(
+                ICommandService.class);
 
         // This command is defined in the plugin.xml
         // This is used to the view can load the project with the New Project command is executed.
-        final Command newProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.NewProjectCommand");
+        final Command newProjectCommand = commandService
+                .getCommand("au.org.intersect.exsite9.commands.NewProjectCommand");
         newProjectCommand.addExecutionListener(this);
 
-        final Command addFolderToProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.AddFolderToProjectCommand");
+        final Command addFolderToProjectCommand = commandService
+                .getCommand("au.org.intersect.exsite9.commands.AddFolderToProjectCommand");
         addFolderToProjectCommand.addExecutionListener(this);
 
         final Command addGroupCommand = commandService.getCommand("au.org.intersect.exsite9.commands.AddGroup");
         addGroupCommand.addExecutionListener(this);
+
+        final Command reloadProjectCommand = commandService
+                .getCommand("au.org.intersect.exsite9.commands.ReloadProjectCommand");
+        reloadProjectCommand.addExecutionListener(this);
 
         initContextMenu();
     }
@@ -92,7 +99,7 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
     }
 
     /**
-     * @{inheritDoc}
+     * @{inheritDoc
      */
     @Override
     public void notHandled(final String commandId, final NotHandledException exception)
@@ -100,7 +107,7 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
     }
 
     /**
-     * @{inheritDoc}
+     * @{inheritDoc
      */
     @Override
     public void postExecuteFailure(final String commandId, final ExecutionException exception)
@@ -108,7 +115,7 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
     }
 
     /**
-     * @{inheritDoc}
+     * @{inheritDoc
      */
     @Override
     public void postExecuteSuccess(final String commandId, final Object returnValue)
@@ -126,18 +133,27 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
         else if (commandId.equals("au.org.intersect.exsite9.commands.AddFolderToProjectCommand"))
         {
             // The Project object is already bound - no need to get another.
-            this.treeViewer.refresh();
-            this.treeViewer.expandAll();
+            refreshAndExpand();
+            
+        }
+        else if (commandId.equals("au.org.intersect.exsite9.commands.ReloadProjectCommand"))
+        {
+            refreshAndExpand();
         }
         else if (commandId.equals("au.org.intersect.exsite9.commands.AddGroup"))
         {
-            this.treeViewer.refresh();
-            this.treeViewer.expandAll();
+            refreshAndExpand();
         }
     }
 
+    private void refreshAndExpand()
+    {
+        this.treeViewer.refresh();
+        this.treeViewer.expandAll();
+    }
+
     /**
-     * @{inheritDoc}
+     * @{inheritDoc
      */
     @Override
     public void preExecute(final String commandId, final ExecutionEvent event)

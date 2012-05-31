@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Exsite9 Development Build" basedir="." default="coverage">
 
-	<property environment="env"/>
+	<property environment="env" />
 	<fail unless="env.ECLIPSE_HOME" message="ECLIPSE_HOME not set." />
-	<property name="eclipse.home" value="${env.ECLIPSE_HOME}"/>
+	<property name="eclipse.home" value="${env.ECLIPSE_HOME}" />
 
-	<property name="parent.dir" value="${basedir}/.."/>
-	<property name="3rdparty.dir" value="${parent.dir}/3rdParty"/>
-	<property name="exsite9-libs.dir" value="${parent.dir}/exsite9_libraries"/>
+	<property name="parent.dir" value="${basedir}/.." />
+	<property name="3rdparty.dir" value="${parent.dir}/3rdParty" />
+	<property name="exsite9-libs.dir" value="${parent.dir}/exsite9_libraries" />
 
 	<property name="src.dir" value="${basedir}/src" />
 	<property name="test.dir" value="${basedir}/test" />
@@ -20,64 +20,98 @@
 	<property name="cobertura.ser" value="${build.reports.dir}/cobertura.ser" />
 
 	<path id="eclipse.rcp.classpath">
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.ui_3.7.0.v20110928-1505.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.ui.cocoa_1.1.0.I20101109-0800.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.core.runtime_3.7.0.v20110110.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.osgi_3.7.2.v20120110-1415.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.equinox.common_3.6.0.v20110523.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.core.jobs_3.5.101.v20120113-1953.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.core.runtime.compatibility.registry_3.5.0.v20110505/runtime_registry_compatibility.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.core.runtime.compatibility.registry_3.5.0.v20110505"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.equinox.registry_3.5.101.R37x_v20110810-1611.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.equinox.preferences_3.4.2.v20120111-2020.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.core.contenttype_3.4.100.v20110423-0524.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.core.runtime.compatibility.auth_3.2.200.v20110110.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.equinox.app_1.3.100.v20110321.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.osgi.services_3.3.0.v20110513.jar"/>
-		<pathelement location="${eclipse.home}/plugins/javax.servlet_2.5.0.v201103041518.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.swt_3.7.2.v3740f.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.swt.cocoa.macosx.x86_64_3.7.2.v3740f.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.jface_3.7.0.v20110928-1505.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.core.commands_3.6.0.I20110111-0800.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.ui.workbench_3.7.1.v20120104-1859.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.ui.workbench.compatibility_3.2.100.I20110413-1600/compatibility.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.ui.workbench.compatibility_3.2.100.I20110413-1600/e4-workbench.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.ui.workbench.compatibility_3.2.100.I20110413-1600"/>
-		<pathelement location="${eclipse.home}/plugins/com.ibm.icu_4.4.2.v20110823.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.help_3.5.100.v20110426.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.core.expressions_3.4.300.v20110228.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.jface.databinding_1.5.0.I20100907-0800.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.core.databinding.observable_1.4.0.I20110222-0800.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.core.databinding.property_1.4.0.I20110222-0800.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.core.databinding_1.4.0.I20110111-0800.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.core.resources_3.7.101.v20120125-1505.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.ant.core_3.2.302.v20120110-1739.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.core.variables_3.2.500.v20110928-1503.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.core.filesystem_1.3.100.v20110423-0524.jar"/>
-		<pathelement location="${eclipse.home}/plugins/org.eclipse.core.filesystem.macosx_1.3.0.v20110423-0524.jar"/>
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.ui_3.7.0.v20110928-1505.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.ui.cocoa_1.1.0.I20101109-0800.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.core.runtime_3.7.0.v20110110.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.osgi_3.7.2.v20120110-1415.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.equinox.common_3.6.0.v20110523.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.core.jobs_3.5.101.v20120113-1953.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.core.runtime.compatibility.registry_3.5.0.v20110505/runtime_registry_compatibility.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.core.runtime.compatibility.registry_3.5.0.v20110505" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.equinox.registry_3.5.101.R37x_v20110810-1611.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.equinox.preferences_3.4.2.v20120111-2020.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.core.contenttype_3.4.100.v20110423-0524.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.core.runtime.compatibility.auth_3.2.200.v20110110.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.equinox.app_1.3.100.v20110321.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.osgi.services_3.3.0.v20110513.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/javax.servlet_2.5.0.v201103041518.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.swt_3.7.2.v3740f.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.swt.cocoa.macosx.x86_64_3.7.2.v3740f.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.jface_3.7.0.v20110928-1505.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.core.commands_3.6.0.I20110111-0800.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.ui.workbench_3.7.1.v20120104-1859.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.ui.workbench.compatibility_3.2.100.I20110413-1600/compatibility.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.ui.workbench.compatibility_3.2.100.I20110413-1600/e4-workbench.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.ui.workbench.compatibility_3.2.100.I20110413-1600" />
+		<pathelement location="${eclipse.home}/plugins/com.ibm.icu_4.4.2.v20110823.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.help_3.5.100.v20110426.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.core.expressions_3.4.300.v20110228.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.jface.databinding_1.5.0.I20100907-0800.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.core.databinding.observable_1.4.0.I20110222-0800.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.core.databinding.property_1.4.0.I20110222-0800.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.core.databinding_1.4.0.I20110111-0800.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.core.resources_3.7.101.v20120125-1505.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.ant.core_3.2.302.v20120110-1739.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.core.variables_3.2.500.v20110928-1503.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.core.filesystem_1.3.100.v20110423-0524.jar" />
+		<pathelement
+			location="${eclipse.home}/plugins/org.eclipse.core.filesystem.macosx_1.3.0.v20110423-0524.jar" />
 	</path>
 
 	<path id="build.classpath">
-		<path refid="eclipse.rcp.classpath"/>
-		<pathelement location="${exsite9-libs.dir}/guava-12.0.jar"/>
-		<pathelement location="${exsite9-libs.dir}/commons-lang3-3.1.jar"/>
-		<pathelement location="${exsite9-libs.dir}/commons-io-2.3.jar"/>
-		<pathelement location="${exsite9-libs.dir}/hsqldb-2.2.8.jar"/>
-		<pathelement location="${exsite9-libs.dir}/eclipselink-2.3.2.jar"/>
-		<pathelement location="${exsite9-libs.dir}/javax.persistence_2.0.3.jar"/>
+		<path refid="eclipse.rcp.classpath" />
+		<pathelement location="${exsite9-libs.dir}/guava-12.0.jar" />
+		<pathelement location="${exsite9-libs.dir}/commons-lang3-3.1.jar" />
+		<pathelement location="${exsite9-libs.dir}/commons-io-2.3.jar" />
+		<pathelement location="${exsite9-libs.dir}/hsqldb-2.2.8.jar" />
+		<pathelement location="${exsite9-libs.dir}/eclipselink-2.3.2.jar" />
+		<pathelement location="${exsite9-libs.dir}/javax.persistence_2.0.3.jar" />
 	</path>
 
 	<path id="test.classpath">
-		<path refid="build.classpath"/>
-		<dirset dir="${build.classes.dir}"/>
-		<dirset dir="${build.classes-test.dir}"/>
-		<pathelement location="${3rdparty.dir}/junit/4.10/junit-4.10.jar"/>
-		<pathelement location="${3rdparty.dir}/mockito/1.9.0/mockito-all-1.9.0.jar"/>
+		<path refid="build.classpath" />
+		<dirset dir="${build.classes.dir}" />
+		<dirset dir="${build.classes-test.dir}" />
+		<pathelement location="${3rdparty.dir}/junit/4.10/junit-4.10.jar" />
+		<pathelement location="${3rdparty.dir}/mockito/1.9.0/mockito-all-1.9.0.jar" />
 	</path>
 
 	<path id="cobertura.classpath">
 		<fileset dir="${3rdparty.dir}/cobertura/1.9.4.1">
-			<include name="*.jar"/>
+			<include name="*.jar" />
 		</fileset>
 	</path>
 
@@ -89,47 +123,51 @@
 	</target>
 
 	<target name="compile" depends="clean">
-		<mkdir dir="${build.classes.dir}"/>
-		<javac srcdir="${src.dir}" destdir="${build.classes.dir}" debug="true" includeantruntime="false">
+		<mkdir dir="${build.classes.dir}" />
+		<javac srcdir="${src.dir}" destdir="${build.classes.dir}" debug="true"
+			includeantruntime="false">
 			<classpath refid="build.classpath" />
 		</javac>
 	</target>
 
 	<target name="compile-test" depends="compile">
-		<mkdir dir="${build.classes-test.dir}"/>
-		<javac srcdir="${test.dir}" destdir="${build.classes-test.dir}" debug="true" includeantruntime="false">
+		<mkdir dir="${build.classes-test.dir}" />
+		<javac srcdir="${test.dir}" destdir="${build.classes-test.dir}"
+			debug="true" includeantruntime="false">
 			<classpath refid="test.classpath" />
-    </javac>
-    <copydir src="${test.dir}/META-INF"
-             dest="${build.classes-test.dir}/META-INF"/>
+		</javac>
+		<copydir src="${test.dir}/META-INF" dest="${build.classes-test.dir}/META-INF" />
 	</target>
 
 	<target name="unittest" depends="compile-test">
-		<inner-unittest/>
+		<inner-unittest />
 		<fail if="tests.failed" message="Test failures." />
 	</target>
 
 	<target name="coverage" depends="compile-test">
 
-		<taskdef classpathref="cobertura.classpath" resource="tasks.properties"/>
+		<taskdef classpathref="cobertura.classpath" resource="tasks.properties" />
 
-		<cobertura-instrument todir="${build.classes-instrumented.dir}" datafile="${cobertura.ser}" >
+		<cobertura-instrument todir="${build.classes-instrumented.dir}"
+			datafile="${cobertura.ser}">
 			<fileset dir="${build.classes.dir}">
-				<include name="**/*.class"/>
+				<include name="**/*.class" />
 			</fileset>
 		</cobertura-instrument>
 
-		<inner-unittest/>
+		<inner-unittest />
 
-		<cobertura-report format="html" destdir="${build.reports.dir}/coverage/html" datafile="${cobertura.ser}" >
+		<cobertura-report format="html"
+			destdir="${build.reports.dir}/coverage/html" datafile="${cobertura.ser}">
 			<fileset dir="${src.dir}">
-				<include name="**/*.java"/>
+				<include name="**/*.java" />
 			</fileset>
 		</cobertura-report>
 
-		<cobertura-report format="xml" destdir="${build.reports.dir}/coverage/xml" datafile="${cobertura.ser}" >
+		<cobertura-report format="xml"
+			destdir="${build.reports.dir}/coverage/xml" datafile="${cobertura.ser}">
 			<fileset dir="${src.dir}">
-				<include name="**/*.java"/>
+				<include name="**/*.java" />
 			</fileset>
 		</cobertura-report>
 
@@ -139,31 +177,33 @@
 	<macrodef name="inner-unittest">
 		<sequential>
 
-			<mkdir dir="${build.reports.dir}/unittest/xml"/>
-			<mkdir dir="${build.reports.dir}/unittest/html"/>
-			<mkdir dir="${build.reports.dir}/coverage/html"/>
-			<mkdir dir="${build.reports.dir}/coverage/xml"/>
+			<mkdir dir="${build.reports.dir}/unittest/xml" />
+			<mkdir dir="${build.reports.dir}/unittest/html" />
+			<mkdir dir="${build.reports.dir}/coverage/html" />
+			<mkdir dir="${build.reports.dir}/coverage/xml" />
 
 			<junit fork="true" forkmode="once" printsummary="true">
-				<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.ser}" />
-				<classpath location="${build.classes-instrumented.dir}"/>
-				<classpath refid="cobertura.classpath"/>
+				<sysproperty key="net.sourceforge.cobertura.datafile"
+					file="${cobertura.ser}" />
+				<classpath location="${build.classes-instrumented.dir}" />
+				<classpath refid="cobertura.classpath" />
 				<classpath>
-					<path refid="test.classpath"/>
+					<path refid="test.classpath" />
 				</classpath>
-				<formatter type="xml"/>
-				<batchtest todir="${build.reports.dir}/unittest/xml" failureproperty="tests.failed">
+				<formatter type="xml" />
+				<batchtest todir="${build.reports.dir}/unittest/xml"
+					failureproperty="tests.failed">
 					<fileset dir="${test.dir}">
-						<include name="**/*UnitTest.java"/>
+						<include name="**/*UnitTest.java" />
 					</fileset>
 				</batchtest>
 			</junit>
 
 			<junitreport todir="${build.reports.dir}/unittest/xml">
 				<fileset dir="${build.reports.dir}/unittest/xml">
-					<include name="TEST-*.xml"/>
+					<include name="TEST-*.xml" />
 				</fileset>
-				<report format="frames" todir="${build.reports.dir}/unittest/html"/>
+				<report format="frames" todir="${build.reports.dir}/unittest/html" />
 			</junitreport>
 		</sequential>
 	</macrodef>
