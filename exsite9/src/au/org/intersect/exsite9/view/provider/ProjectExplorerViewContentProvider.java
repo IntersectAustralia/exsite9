@@ -15,6 +15,9 @@ import org.eclipse.jface.viewers.Viewer;
 
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.domain.ResearchFile;
+import au.org.intersect.exsite9.domain.utils.AlphabeticalGroupComparator;
+import au.org.intersect.exsite9.domain.utils.AlphabeticalResearchFileComparator;
 import au.org.intersect.exsite9.view.ProjectExplorerView;
 
 /**
@@ -65,24 +68,31 @@ public final class ProjectExplorerViewContentProvider implements ITreeContentPro
     @Override
     public Object[] getChildren(final Object parentElement)
     {
-        final List<Object> toReturn = new ArrayList<Object>();
-
+        final Group rootGroup;
         if (parentElement instanceof Project)
         {
             final Project project = (Project) parentElement;
-            final Group group = project.getRootNode();
-            toReturn.addAll(group.getGroups());
-            toReturn.addAll(group.getResearchFiles());
-            return toReturn.toArray();
+            rootGroup = project.getRootNode();
         }
-        if (parentElement instanceof Group)
+        else if (parentElement instanceof Group)
         {
-            final Group group = (Group) parentElement;
-            toReturn.addAll(group.getGroups());
-            toReturn.addAll(group.getResearchFiles());
-            return toReturn.toArray();
+            rootGroup = (Group) parentElement;
         }
-        return Collections.emptyList().toArray();
+        else
+        {
+            return Collections.emptyList().toArray();
+        }
+
+        final List<Group> groups = new ArrayList<Group>(rootGroup.getGroups());
+        final List<ResearchFile> researchFiles = new ArrayList<ResearchFile>(rootGroup.getResearchFiles());
+
+        Collections.sort(groups, new AlphabeticalGroupComparator());
+        Collections.sort(researchFiles, new AlphabeticalResearchFileComparator());
+
+        final List<Object> toReturn = new ArrayList<Object>();
+        toReturn.addAll(groups);
+        toReturn.addAll(researchFiles);
+        return toReturn.toArray();
     }
 
     /**

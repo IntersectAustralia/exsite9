@@ -207,10 +207,9 @@
                            value="au.org.intersect.exsite9.domain.Group">
                      </instanceof>
                      <not>
-                        <test
-                              property="au.org.interset.exsite9.property.groupName"
-                              value="New Files">
-                        </test>
+                        <instanceof
+                              value="au.org.intersect.exsite9.domain.NewFilesGroup">
+                        </instanceof>
                      </not>
                   </and>
                </iterate>

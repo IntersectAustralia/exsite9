@@ -13,6 +13,8 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -23,7 +25,7 @@ import com.google.common.base.Objects;
  */
 @Entity
 @Table(name="RESEARCH_GROUP")
-public final class Group implements Serializable
+public class Group implements Serializable
 {
 
 	/**

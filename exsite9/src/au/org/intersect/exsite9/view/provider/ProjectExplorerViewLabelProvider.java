@@ -13,6 +13,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
 import au.org.intersect.exsite9.domain.Group;
+import au.org.intersect.exsite9.domain.NewFilesGroup;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.view.ProjectExplorerView;
@@ -47,7 +48,14 @@ public final class ProjectExplorerViewLabelProvider extends StyledCellLabelProvi
         else if (element instanceof Group)
         {
             final Group group = (Group) element;
-            text.append(group.getName());
+            if (group instanceof NewFilesGroup)
+            {
+                text.append(group.getName(), StyledString.QUALIFIER_STYLER);
+            }
+            else
+            {
+                text.append(group.getName());
+            }
             cell.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FOLDER));
             text.append(" (" + (group.getGroups().size() + group.getResearchFiles().size()) + ")", StyledString.COUNTER_STYLER);
         }

@@ -62,7 +62,7 @@ public final class Project
         this.owner = owner;
         this.folders = new ArrayList<Folder>(0);
         this.rootNode = new Group(this.name);
-        this.newFilesNode = new Group("New Files");
+        this.newFilesNode = new NewFilesGroup();
         this.rootNode.getGroups().add(newFilesNode);
     }
 
