@@ -133,6 +133,17 @@
                      definitionId="au.org.intersect.exsite9.expression.InstanceOfProject">
                </reference>
             </visibleWhen>
+         </command>              
+         <command
+               commandId="au.org.intersect.exsite9.commands.ReloadProjectCommand"
+               label="Refresh Project"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <reference
+                     definitionId="au.org.intersect.exsite9.expression.InstanceOfProject">
+               </reference>
+            </visibleWhen>
          </command>
          <separator
                name="exsite9.separator1"
@@ -146,17 +157,6 @@
                   checkEnabled="false">
                <reference
                      definitionId="au.org.intersect.exsite9.expression.InstanceOfProjectOrGroup">
-               </reference>
-            </visibleWhen>
-         </command>              
-         <command
-               commandId="au.org.intersect.exsite9.commands.ReloadProjectCommand"
-               label="Refresh Project"
-               style="push">
-            <visibleWhen
-                  checkEnabled="false">
-               <reference
-                     definitionId="au.org.intersect.exsite9.expression.InstanceOfProject">
                </reference>
             </visibleWhen>
          </command>
