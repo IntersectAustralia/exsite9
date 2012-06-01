@@ -52,6 +52,9 @@ public final class AddGroupHandler implements IHandler
     public Object execute(final ExecutionEvent event) throws ExecutionException
     {
 
+        final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
+        final Object selectedObject = selection.getFirstElement();
+        
         final Shell shell = HandlerUtil.getActiveWorkbenchWindow(event).getShell();
         final InputDialog dialog = new InputDialog(shell, "New Group", "Add a new group", "", null);
         dialog.open();
@@ -65,9 +68,6 @@ public final class AddGroupHandler implements IHandler
         {
             return null;
         }
-
-        final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
-        final Object selectedObject = selection.getFirstElement();
 
         final Group parentGroup;
 
