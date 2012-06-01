@@ -7,8 +7,6 @@
 
 package au.org.intersect.exsite9.dao;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.File;
 
 import javax.persistence.EntityManager;
@@ -17,36 +15,32 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import au.org.intersect.exsite9.dao.ResearchFileDAO;
+import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
 import au.org.intersect.exsite9.domain.ResearchFile;
 
-public class ResearchFileDAOUnitTest extends JPATest
+public class ResearchFileDAOUnitTest extends DAOTest
 {
 
-    private static ResearchFileDAO researchFileDAO;
-    
-    private static EntityManager em;
+    private static ResearchFileDAOFactory researchFileDAOFactory;
     
     @BeforeClass
     public static void setupOnce()
     {
-        em = createEntityManager();
-        researchFileDAO = ResearchFileDAO.getInstance(em);
-    }
-    
-    @Test
-    public void constructorTest()
-    {
-        ResearchFileDAO researchFileDAO2 = ResearchFileDAO.getInstance(em);
-        assertEquals(researchFileDAO,researchFileDAO2);
+        researchFileDAOFactory = new ResearchFileDAOFactory();
     }
     
     @Test
     public void testCreateNewFile()
     {
+        EntityManager em = createEntityManager();
+        ResearchFileDAO researchFileDAO = researchFileDAOFactory.createInstance(em);
+        
         File fileOnDisk = new File("some-file.txt");
         ResearchFile researchFile = new ResearchFile(fileOnDisk);
         
         researchFileDAO.createResearchFile(researchFile);
+        
+        em.close();
     }
     
 }

@@ -7,9 +7,9 @@
 
 package au.org.intersect.exsite9.database;
 
+import java.util.List;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
@@ -23,16 +23,14 @@ import org.hsqldb.jdbcDriver;
 
 public class ExSite9EntityManagerFactory
 {
-
     private static EntityManagerFactory emf = null;
-    private static Map<String, Object> properties = new HashMap<String, Object>();
 
-    private static final ThreadLocal<EntityManager> ENTITY_MANAGER_CACHE = new ThreadLocal<EntityManager>();
-
-    private static void init() {
+    public ExSite9EntityManagerFactory()
+    {
+        Map<String, Object> properties = new HashMap<String, Object>();
         properties.put(PersistenceUnitProperties.TARGET_DATABASE, TargetDatabase.HSQL);
         properties.put(PersistenceUnitProperties.JDBC_DRIVER, jdbcDriver.class.getCanonicalName());
-
+        
         final String connectionURL;
 
         final List<String> platformArgs = Arrays.asList(Platform.getCommandLineArgs());
@@ -47,7 +45,7 @@ public class ExSite9EntityManagerFactory
             connectionURL = "jdbc:hsqldb:file:" + workspace + "/database/exsite9;shutdown=true;hsqldb.write_delay=false;";
         }
         properties.put(PersistenceUnitProperties.JDBC_URL, connectionURL);
-
+        
         properties.put(PersistenceUnitProperties.JDBC_USER, "sa");
         properties.put(PersistenceUnitProperties.JDBC_PASSWORD, "");
         properties.put(PersistenceUnitProperties.DDL_GENERATION, "drop-and-create-tables");
@@ -61,13 +59,9 @@ public class ExSite9EntityManagerFactory
         emf = new PersistenceProvider().createEntityManagerFactory("jpa", properties);
     }
 
-    public static EntityManager createEntityManager() {
-        EntityManager entityManager = ENTITY_MANAGER_CACHE.get();
-        if (entityManager == null) {
-            init();
-            entityManager = emf.createEntityManager();
-            ENTITY_MANAGER_CACHE.set(entityManager);
-        }
-        return entityManager;
+    public EntityManager getEntityManager() 
+    {
+        return emf.createEntityManager();
     }
+    
 }

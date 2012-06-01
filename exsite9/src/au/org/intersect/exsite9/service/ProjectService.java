@@ -6,21 +6,29 @@
  */
 package au.org.intersect.exsite9.service;
 
+import javax.persistence.EntityManager;
+
 import au.org.intersect.exsite9.dao.FolderDAO;
 import au.org.intersect.exsite9.dao.ProjectDAO;
+import au.org.intersect.exsite9.dao.factory.FolderDAOFactory;
+import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
+import au.org.intersect.exsite9.database.ExSite9EntityManagerFactory;
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
 
 public class ProjectService implements IProjectService
 {
-    private final ProjectDAO projectDAO;
-    private final FolderDAO folderDAO;
+    private final ExSite9EntityManagerFactory entityManagerFactory;
+    private final ProjectDAOFactory projectDAOFactory;
+    private final FolderDAOFactory folderDAOFactory;
     
-    public ProjectService(final ProjectDAO projectDAO,
-                          final FolderDAO folderDAO)
+    public ProjectService(final ExSite9EntityManagerFactory entityManagerFactory,
+                          final ProjectDAOFactory projectDAOFactory,
+                          final FolderDAOFactory folderDAOFactory)
     {
-        this.projectDAO = projectDAO;
-        this.folderDAO = folderDAO;
+        this.entityManagerFactory = entityManagerFactory;
+        this.projectDAOFactory = projectDAOFactory;
+        this.folderDAOFactory = folderDAOFactory;
     }
 
     /**
@@ -29,9 +37,18 @@ public class ProjectService implements IProjectService
     @Override
     public Project createProject(final String name, final String owner, final String description)
     {
-        Project project = new Project(name, owner, description);
-        projectDAO.createProject(project);
-        return project;
+        EntityManager em = entityManagerFactory.getEntityManager();
+        try
+        {
+            ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
+            Project project = new Project(name, owner, description);
+            projectDAO.createProject(project);
+            return project;
+        }
+        finally
+        {
+            em.close();
+        }
     }
     
     /**
@@ -40,8 +57,18 @@ public class ProjectService implements IProjectService
     @Override
     public void mapFolderToProject(final Project project, final Folder folder)
     {
-        folderDAO.createFolder(folder);
-        project.getFolders().add(folder);
-        projectDAO.updateProject(project);
+        EntityManager em = entityManagerFactory.getEntityManager();
+        try
+        {
+            ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
+            FolderDAO folderDAO = folderDAOFactory.createInstance(em);
+            folderDAO.createFolder(folder);
+            project.getFolders().add(folder);
+            projectDAO.updateProject(project);
+        }
+        finally
+        {
+            em.close();
+        }
     }
 }

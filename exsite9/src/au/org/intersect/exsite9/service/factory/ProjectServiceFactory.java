@@ -6,13 +6,11 @@
  */
 package au.org.intersect.exsite9.service.factory;
 
-import javax.persistence.EntityManager;
-
 import org.eclipse.ui.services.AbstractServiceFactory;
 import org.eclipse.ui.services.IServiceLocator;
 
-import au.org.intersect.exsite9.dao.FolderDAO;
-import au.org.intersect.exsite9.dao.ProjectDAO;
+import au.org.intersect.exsite9.dao.factory.FolderDAOFactory;
+import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.database.ExSite9EntityManagerFactory;
 import au.org.intersect.exsite9.service.ProjectService;
 
@@ -21,10 +19,7 @@ import au.org.intersect.exsite9.service.ProjectService;
  */
 public final class ProjectServiceFactory extends AbstractServiceFactory
 {
-
-    /**
-     * 
-     */
+    
     public ProjectServiceFactory()
     {
     }
@@ -36,10 +31,10 @@ public final class ProjectServiceFactory extends AbstractServiceFactory
     @SuppressWarnings("rawtypes")
     public Object create(final Class serviceInterface, final IServiceLocator parentLocator, final IServiceLocator locator)
     {
-        final EntityManager em = ExSite9EntityManagerFactory.createEntityManager();
-        final ProjectDAO projectDAO = ProjectDAO.getInstance(em);
-        final FolderDAO folderDAO = FolderDAO.getInstance(em);
+        final ExSite9EntityManagerFactory entityManagerFactory = new ExSite9EntityManagerFactory();
+        final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
+        final FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
         
-        return new ProjectService(projectDAO, folderDAO);
+        return new ProjectService(entityManagerFactory, projectDAOFactory, folderDAOFactory);
     }
 }

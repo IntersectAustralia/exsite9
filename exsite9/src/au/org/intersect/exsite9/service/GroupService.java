@@ -6,7 +6,11 @@
  */
 package au.org.intersect.exsite9.service;
 
+import javax.persistence.EntityManager;
+
 import au.org.intersect.exsite9.dao.GroupDAO;
+import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
+import au.org.intersect.exsite9.database.ExSite9EntityManagerFactory;
 import au.org.intersect.exsite9.domain.Group;
 
 /**
@@ -14,11 +18,14 @@ import au.org.intersect.exsite9.domain.Group;
  */
 public final class GroupService implements IGroupService
 {
-    private final GroupDAO groupDAO;
+    private final ExSite9EntityManagerFactory entityManagerFactory;
+    private final GroupDAOFactory groupDAOFactory;
 
-    public GroupService(final GroupDAO groupDAO)
+    public GroupService(final ExSite9EntityManagerFactory entityManagerFactory,
+                        final GroupDAOFactory groupDAOFactory)
     {
-        this.groupDAO = groupDAO;
+        this.entityManagerFactory = entityManagerFactory;
+        this.groupDAOFactory = groupDAOFactory;
     }
 
     /**
@@ -27,9 +34,18 @@ public final class GroupService implements IGroupService
     @Override
     public Group createNewGroup(final String groupName)
     {
-        final Group group = new Group(groupName);
-        this.groupDAO.createGroup(group);
-        return group;
+        EntityManager em = entityManagerFactory.getEntityManager();
+        try
+        {
+            GroupDAO groupDAO = groupDAOFactory.createInstance(em);
+            final Group group = new Group(groupName);
+            groupDAO.createGroup(group);
+            return group;
+        }
+        finally
+        {
+            em.close();
+        }
     }
 
     /**
@@ -38,7 +54,16 @@ public final class GroupService implements IGroupService
     @Override
     public void addChildGroup(final Group parentGroup, final Group childGroup)
     {
-        parentGroup.getGroups().add(childGroup);
-        this.groupDAO.updateGroup(parentGroup);
+        EntityManager em = entityManagerFactory.getEntityManager();
+        try
+        {
+            GroupDAO groupDAO = groupDAOFactory.createInstance(em);
+            parentGroup.getGroups().add(childGroup);
+            groupDAO.updateGroup(parentGroup);
+        }
+        finally
+        {
+            em.close();
+        }
     }
 }

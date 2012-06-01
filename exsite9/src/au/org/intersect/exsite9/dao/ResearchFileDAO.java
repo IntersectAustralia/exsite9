@@ -13,25 +13,9 @@ import au.org.intersect.exsite9.domain.ResearchFile;
 
 public class ResearchFileDAO
 {
-	private static ResearchFileDAO instance = null;
-	
-    private final EntityManager em;
+    private EntityManager em;
     
-    public static ResearchFileDAO getInstance(EntityManager em)
-    {
-    	if (instance == null)
-    	{
-    		instance = new ResearchFileDAO(em);
-    	}
-    	return instance;
-    }
-    
-    public static ResearchFileDAO createTestInstance(EntityManager em)
-    {
-    	return new ResearchFileDAO(em);
-    }
-    
-    private ResearchFileDAO(EntityManager em)
+    public ResearchFileDAO(EntityManager em)
     {
         this.em = em;
     }

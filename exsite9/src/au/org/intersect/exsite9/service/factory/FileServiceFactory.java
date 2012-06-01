@@ -6,13 +6,11 @@
  */
 package au.org.intersect.exsite9.service.factory;
 
-import javax.persistence.EntityManager;
-
 import org.eclipse.ui.services.AbstractServiceFactory;
 import org.eclipse.ui.services.IServiceLocator;
 
-import au.org.intersect.exsite9.dao.ProjectDAO;
-import au.org.intersect.exsite9.dao.ResearchFileDAO;
+import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
+import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
 import au.org.intersect.exsite9.database.ExSite9EntityManagerFactory;
 import au.org.intersect.exsite9.service.FileService;
 
@@ -30,10 +28,10 @@ public final class FileServiceFactory extends AbstractServiceFactory
 	@Override
     public Object create(final Class serviceInterface, final IServiceLocator parentLocator, final IServiceLocator locator)
     {
-        final EntityManager em = ExSite9EntityManagerFactory.createEntityManager();
-        final ProjectDAO projectDAO = ProjectDAO.getInstance(em);
-        final ResearchFileDAO researchFileDAO = ResearchFileDAO.getInstance(em);
+        final ExSite9EntityManagerFactory emf = new ExSite9EntityManagerFactory();
+        final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
+        final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         
-        return new FileService(projectDAO,researchFileDAO);
+        return new FileService(emf,projectDAOFactory,researchFileDAOFactory);
     }
 }

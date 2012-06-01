@@ -3,6 +3,8 @@ package au.org.intersect.exsite9.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.stub;
 
 import java.io.File;
 import java.util.Iterator;
@@ -12,33 +14,25 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import au.org.intersect.exsite9.dao.JPATest;
-import au.org.intersect.exsite9.dao.ProjectDAO;
+import au.org.intersect.exsite9.dao.DAOTest;
 import au.org.intersect.exsite9.dao.ResearchFileDAO;
+import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
+import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
+import au.org.intersect.exsite9.database.ExSite9EntityManagerFactory;
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 
-public class FileServiceUnitTest extends JPATest
+public class FileServiceUnitTest extends DAOTest
 {
-
 	private final String testDirName = System.getProperty("java.io.tmpdir") + File.separator + "exsite9-FolderUnitTest";
     private File testDirFile = null;
     
     private FileService fileService = null;
     
-    private static ProjectDAO projectDAO;
-    private static ResearchFileDAO researchFileDAO;
-    
-    private static EntityManager em;
-    
     @Before
     public void setUp()
     {
-    	em = createEntityManager();
-        projectDAO = ProjectDAO.createTestInstance(em);
-        researchFileDAO = ResearchFileDAO.createTestInstance(em);
-        
         testDirFile = new File(testDirName);
         testDirFile.mkdir();
     }
@@ -54,19 +48,23 @@ public class FileServiceUnitTest extends JPATest
             file.delete();
         }
         testDirFile.delete();
-        
-        em.close();
     }
     
     @Test
     public void identifyNewFilesForProjectEmptyFolderTest()
     {
+        ExSite9EntityManagerFactory emf = mock(ExSite9EntityManagerFactory.class);
+        stub(emf.getEntityManager()).toReturn(createEntityManager());
+        
+        ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
+        ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
+        
     	Project project = new Project("name","owner","description");
     	Folder f = new Folder(testDirFile);
     	
     	project.getFolders().add(f);
     	
-    	fileService = new FileService(projectDAO,researchFileDAO);
+    	fileService = new FileService(emf, projectDAOFactory,researchFileDAOFactory);
     	
     	fileService.identifyNewFilesForProject(project);
     	
@@ -79,18 +77,26 @@ public class FileServiceUnitTest extends JPATest
     {
     	try
     	{
+    	    ExSite9EntityManagerFactory emf = mock(ExSite9EntityManagerFactory.class);
+            stub(emf.getEntityManager()).toReturn(createEntityManager());
+            
+            ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
+            ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
+            
 	    	Project project = new Project("name","owner","description");
 	    	Folder f = new Folder(testDirFile);
 	    	File.createTempFile("test-file-1", ".txt", testDirFile);
 	    	
 	    	project.getFolders().add(f);
 	    	
-	    	fileService = new FileService(projectDAO,researchFileDAO);
+	    	fileService = new FileService(emf, projectDAOFactory,researchFileDAOFactory);
 	    	
 	    	fileService.identifyNewFilesForProject(project);
 	    	
 	    	assertTrue(project.getNewFilesNode().getResearchFiles().size() == 1);
 	    	
+	    	EntityManager em = createEntityManager();
+	    	ResearchFileDAO researchFileDAO = researchFileDAOFactory.createInstance(em);
 	    	Iterator<ResearchFile> iter = project.getNewFilesNode().getResearchFiles().iterator();
 	    	
 	    	while(iter.hasNext())
@@ -99,6 +105,8 @@ public class FileServiceUnitTest extends JPATest
 	    		ResearchFile file2 = researchFileDAO.findById(file1.getId());
 	    		assertEquals(file1, file2);
 	    	}
+	    	
+	    	em.close();
     	}
     	catch(Exception e)
     	{
@@ -113,11 +121,19 @@ public class FileServiceUnitTest extends JPATest
     {
         try
         {
+            ExSite9EntityManagerFactory emf = mock(ExSite9EntityManagerFactory.class);
+            stub(emf.getEntityManager()).toReturn(createEntityManager())
+                                        .toReturn(createEntityManager())
+                                        .toReturn(createEntityManager());
+            
+            ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
+            ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
+            
         	Project project = new Project("name","owner","description");
             Folder f = new Folder(testDirFile);
             project.getFolders().add(f);
             
-            fileService = new FileService(projectDAO,researchFileDAO);
+            fileService = new FileService(emf, projectDAOFactory,researchFileDAOFactory);
             
             File.createTempFile("test-file-1", ".txt", testDirFile);
             

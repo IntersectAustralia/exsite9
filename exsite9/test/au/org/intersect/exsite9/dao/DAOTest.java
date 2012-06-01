@@ -21,7 +21,7 @@ import org.eclipse.persistence.config.TargetDatabase;
 import org.eclipse.persistence.jpa.PersistenceProvider;
 import org.hsqldb.jdbcDriver;
 
-public class JPATest
+public class DAOTest
 {
 
     private static EntityManagerFactory emf = null;

@@ -10,27 +10,13 @@ import javax.persistence.EntityManager;
 
 import au.org.intersect.exsite9.domain.Group;
 
-/**
- * 
- */
 public final class GroupDAO
 {
-    private static GroupDAO INSTANCE;
+    private EntityManager em;
 
-    private final EntityManager em;
-
-    private GroupDAO(final EntityManager entityManager)
+    public GroupDAO(final EntityManager entityManager)
     {
         this.em = entityManager;
-    }
-
-    public static synchronized GroupDAO getInstance(final EntityManager em)
-    {
-        if (INSTANCE == null)
-        {
-            INSTANCE = new GroupDAO(em);
-        }
-        return INSTANCE;
     }
 
     public void createGroup(final Group group)

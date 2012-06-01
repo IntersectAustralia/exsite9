@@ -7,8 +7,6 @@
 
 package au.org.intersect.exsite9.dao;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.File;
 
 import javax.persistence.EntityManager;
@@ -17,33 +15,29 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import au.org.intersect.exsite9.dao.FolderDAO;
+import au.org.intersect.exsite9.dao.factory.FolderDAOFactory;
 import au.org.intersect.exsite9.domain.Folder;
 
-public class FolderDAOUnitTest extends JPATest
+public class FolderDAOUnitTest extends DAOTest
 {
-    private static FolderDAO folderDAO = null;
-    private static EntityManager em;
+    private static FolderDAOFactory folderDAOFactory = null;
     
     @BeforeClass
     public static void setupOnce()
     {
-        em = createEntityManager();
-        folderDAO = FolderDAO.getInstance(em);
-    }
-    
-    @Test
-    public void constructorTest()
-    {
-        FolderDAO folderDAO2 = FolderDAO.getInstance(em);
-        assertEquals(folderDAO,folderDAO2);
+        folderDAOFactory = new FolderDAOFactory();
     }
     
     @Test
     public void createNewFolderTest()
     {
+        EntityManager em = createEntityManager();
+        FolderDAO folderDAO = folderDAOFactory.createInstance(em);
+
         File folderOnDisk = new File("/tmp");
         Folder tempFolder = new Folder(folderOnDisk);
-        
         folderDAO.createFolder(tempFolder);
+        
+        em.close();
     }
 }

@@ -7,31 +7,26 @@ import javax.persistence.EntityManager;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.Project;
 
-public class ProjectDAOUnitTest extends JPATest
+public class ProjectDAOUnitTest extends DAOTest
 {
-    private static ProjectDAO projectDAO = null;
-    private static EntityManager em;
+    private static ProjectDAOFactory projectDAOFactory;
     
     @BeforeClass
     public static void setupOnce()
     {
-        em = createEntityManager();
-        projectDAO = ProjectDAO.getInstance(em);
-    }
-    
-    @Test
-    public void constructorTest()
-    {
-    	ProjectDAO projectDAO2 = ProjectDAO.getInstance(em);
-        assertEquals(projectDAO,projectDAO2);
+        projectDAOFactory = new ProjectDAOFactory();
     }
     
     @Test
     public void createNewProjectTest()
     {
+        EntityManager em = createEntityManager();
+        ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
+        
         Project project = new Project();
         project.setName("Project One");
         project.setDescription("This is project one.");
@@ -43,11 +38,12 @@ public class ProjectDAOUnitTest extends JPATest
         project.setRootNode(rootNode);
         project.setNewFilesNode(newFilesNode);
         
-        projectDAO = ProjectDAO.getInstance(em);
         projectDAO.createProject(project);
         
         Project project2 = projectDAO.findById(project.getId());
         
         assertEquals(project, project2);
+        
+        em.close();
     }
 }

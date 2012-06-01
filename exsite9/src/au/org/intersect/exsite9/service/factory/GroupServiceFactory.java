@@ -6,12 +6,10 @@
  */
 package au.org.intersect.exsite9.service.factory;
 
-import javax.persistence.EntityManager;
-
 import org.eclipse.ui.services.AbstractServiceFactory;
 import org.eclipse.ui.services.IServiceLocator;
 
-import au.org.intersect.exsite9.dao.GroupDAO;
+import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
 import au.org.intersect.exsite9.database.ExSite9EntityManagerFactory;
 import au.org.intersect.exsite9.service.GroupService;
 
@@ -20,10 +18,7 @@ import au.org.intersect.exsite9.service.GroupService;
  */
 public final class GroupServiceFactory extends AbstractServiceFactory
 {
-
-    /**
-     * 
-     */
+    
     public GroupServiceFactory()
     {
     }
@@ -35,8 +30,9 @@ public final class GroupServiceFactory extends AbstractServiceFactory
     @SuppressWarnings("rawtypes")
     public Object create(final Class serviceInterface, final IServiceLocator parentLocator, final IServiceLocator locator)
     {
-        final EntityManager em = ExSite9EntityManagerFactory.createEntityManager();
-        final GroupDAO groupDAO = GroupDAO.getInstance(em);
-        return new GroupService(groupDAO);
+        final ExSite9EntityManagerFactory entityManagerFactory = new ExSite9EntityManagerFactory();
+        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        
+        return new GroupService(entityManagerFactory, groupDAOFactory);
     }
 }

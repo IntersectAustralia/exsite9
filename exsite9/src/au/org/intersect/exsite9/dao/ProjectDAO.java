@@ -6,25 +6,9 @@ import au.org.intersect.exsite9.domain.Project;
 
 public class ProjectDAO
 {
-    private static ProjectDAO instance = null;
-    
     private final EntityManager em;
     
-    public static synchronized ProjectDAO getInstance(EntityManager em)
-    {
-        if (instance == null)
-        {
-            instance = new ProjectDAO(em);
-        }
-        return instance;
-    }
-
-    public static ProjectDAO createTestInstance(EntityManager em)
-    {
-    	return new ProjectDAO(em);
-    }
-    
-    private ProjectDAO(EntityManager em)
+    public ProjectDAO(EntityManager em)
     {
         this.em = em;
     }

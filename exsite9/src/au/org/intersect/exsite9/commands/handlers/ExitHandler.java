@@ -12,8 +12,6 @@ import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import au.org.intersect.exsite9.database.ExSite9EntityManagerFactory;
-
 /**
  * Handles the Exit command.
  */
@@ -44,7 +42,6 @@ public final class ExitHandler implements IHandler
     @Override
     public Object execute(final ExecutionEvent event) throws ExecutionException
     {
-        ExSite9EntityManagerFactory.createEntityManager().close();
         HandlerUtil.getActiveWorkbenchWindow(event).close();
         return null;
     }
