@@ -7,7 +7,9 @@
 
 package au.org.intersect.exsite9.database;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
@@ -28,10 +30,24 @@ public class ExSite9EntityManagerFactory
     private static final ThreadLocal<EntityManager> ENTITY_MANAGER_CACHE = new ThreadLocal<EntityManager>();
 
     private static void init() {
-        String workspace = Platform.getInstallLocation().getURL().getPath();
         properties.put(PersistenceUnitProperties.TARGET_DATABASE, TargetDatabase.HSQL);
         properties.put(PersistenceUnitProperties.JDBC_DRIVER, jdbcDriver.class.getCanonicalName());
-        properties.put(PersistenceUnitProperties.JDBC_URL,"jdbc:hsqldb:file:" + workspace + "/database/exsite9;shutdown=true;hsqldb.write_delay=false;");
+
+        final String connectionURL;
+
+        final List<String> platformArgs = Arrays.asList(Platform.getCommandLineArgs());
+        if (platformArgs.contains("-exsite9.hsqldb.debug"))
+        {
+            connectionURL = "jdbc:hsqldb:hsql://localhost/exsite9";
+            System.out.println("Using HSQLDB connection string for debug: " + connectionURL);
+        }
+        else
+        {
+            final String workspace = Platform.getInstallLocation().getURL().getPath();
+            connectionURL = "jdbc:hsqldb:file:" + workspace + "/database/exsite9;shutdown=true;hsqldb.write_delay=false;";
+        }
+        properties.put(PersistenceUnitProperties.JDBC_URL, connectionURL);
+
         properties.put(PersistenceUnitProperties.JDBC_USER, "sa");
         properties.put(PersistenceUnitProperties.JDBC_PASSWORD, "");
         properties.put(PersistenceUnitProperties.DDL_GENERATION, "drop-and-create-tables");
@@ -54,6 +70,4 @@ public class ExSite9EntityManagerFactory
         }
         return entityManager;
     }
-
-    
 }
