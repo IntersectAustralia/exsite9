@@ -1,6 +1,6 @@
 package au.org.intersect.exsite9.wizard.openproject;
 
-import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -10,28 +10,28 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.List;
 
 import au.org.intersect.exsite9.domain.Project;
 
 public class OpenProjectWizardPage1 extends WizardPage implements SelectionListener
 {
-    private List projectList;
+    private org.eclipse.swt.widgets.List projectList;
 
     private Composite container;
 
-    public java.util.List<Project> projectItems;
+    private List<Project> availableProjects;
 
-    public Project selectedProject;
+    private Project selectedProject;
 
     /**
      * Constructor
      */
-    public OpenProjectWizardPage1()
+    public OpenProjectWizardPage1(final List<Project> availableProjects)
     {
         super("Open Project");
         setTitle("Open Project");
         setDescription("Please choose the project you would like to open.");
+        this.availableProjects = availableProjects;
     }
 
     /**
@@ -47,12 +47,13 @@ public class OpenProjectWizardPage1 extends WizardPage implements SelectionListe
         final Label selectProjectLabel = new Label(this.container, SWT.NULL);
         selectProjectLabel.setText("Select Project");
 
-        this.projectList = new List(this.container, SWT.BORDER | SWT.SINGLE | SWT.WRAP | SWT.V_SCROLL);
+        this.projectList = new org.eclipse.swt.widgets.List(this.container, SWT.BORDER | SWT.SINGLE | SWT.WRAP | SWT.V_SCROLL);
 
-        for (Iterator<Project> iterator = projectItems.iterator(); iterator.hasNext();)
+        for (final Project project : this.availableProjects)
         {
-            this.projectList.add(iterator.next().getName());
+            this.projectList.add(project.getName());
         }
+
         this.projectList.addSelectionListener(this);
 
         final GridData multiLineGridData = new GridData(GridData.FILL_BOTH);
@@ -64,29 +65,27 @@ public class OpenProjectWizardPage1 extends WizardPage implements SelectionListe
     }
 
     @Override
-    public void widgetSelected(SelectionEvent e)
+    public void widgetSelected(final SelectionEvent e)
     {
-        boolean pageCompleted = false;
-        for (Iterator<Project> iterator = projectItems.iterator(); iterator.hasNext();)
+        final int numSelected = this.projectList.getSelectionCount();
+        if (numSelected == 0)
         {
-           String actual = this.projectList.getSelection()[0];
-           Project expected = iterator.next();
-           String expectedString = expected.getName();
-            if (actual.equals(expectedString))
-            {
-                selectedProject = expected;
-                pageCompleted = true;
-            }
+            setPageComplete(false);
+            return;
         }
-        setPageComplete(pageCompleted);
 
+        this.selectedProject = this.availableProjects.get(this.projectList.getSelectionIndex());
+        setPageComplete(true);
     }
 
     @Override
     public void widgetDefaultSelected(SelectionEvent e)
     {
-        // TODO Auto-generated method stub
+    }
 
+    public Project getSelectedProject()
+    {
+        return this.selectedProject;
     }
 
 }

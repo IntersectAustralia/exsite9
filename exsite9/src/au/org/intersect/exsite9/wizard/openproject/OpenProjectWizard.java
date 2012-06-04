@@ -1,5 +1,7 @@
 package au.org.intersect.exsite9.wizard.openproject;
 
+import java.util.List;
+
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.PlatformUI;
 
@@ -8,7 +10,7 @@ import au.org.intersect.exsite9.service.IProjectService;
 
 public class OpenProjectWizard extends Wizard
 {
-    private final OpenProjectWizardPage1 page1 = new OpenProjectWizardPage1();
+    private OpenProjectWizardPage1 page1;
     final IProjectService projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
 
     private Project selectedProject;
@@ -28,7 +30,8 @@ public class OpenProjectWizard extends Wizard
     @Override
     public void addPages()
     {
-        page1.projectItems = projectService.getAllProjects();
+        final List<Project> availableProjects = projectService.getAllProjects();
+        page1 = new OpenProjectWizardPage1(availableProjects);
         addPage(this.page1);
     }
 
@@ -38,13 +41,12 @@ public class OpenProjectWizard extends Wizard
     @Override
     public boolean performFinish()
     {
-        this.selectedProject = page1.selectedProject;
+        this.selectedProject = page1.getSelectedProject();
         return this.selectedProject != null;
     }
 
     public Project getSelectedProject()
     {
-        // TODO Auto-generated method stub
         return this.selectedProject;
     }
 }

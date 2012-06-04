@@ -3,7 +3,7 @@ package au.org.intersect.exsite9.dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import au.org.intersect.exsite9.domain.Project;
 
@@ -37,7 +37,7 @@ public class ProjectDAO
     
     public List<Project> findAllProjects()
     {
-        Query query = em.createQuery("SELECT p FROM Project p");
+        TypedQuery<Project> query = em.createQuery("SELECT p FROM Project p", Project.class);
         return query.getResultList();
     }
 }
