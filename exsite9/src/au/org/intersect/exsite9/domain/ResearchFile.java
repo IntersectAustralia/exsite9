@@ -109,7 +109,7 @@ public final class ResearchFile
     @Override
     public int hashCode()
     {
-        return Objects.hashCode(this.name);
+        return Objects.hashCode(this.path);
     }
 
     /**
