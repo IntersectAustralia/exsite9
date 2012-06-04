@@ -99,6 +99,7 @@
 		<pathelement location="${exsite9-libs.dir}/hsqldb-2.2.8.jar" />
 		<pathelement location="${exsite9-libs.dir}/eclipselink-2.3.2.jar" />
 		<pathelement location="${exsite9-libs.dir}/javax.persistence_2.0.3.jar" />
+		<pathelement location="${exsite9-libs.dir}/rcptoolbox.1.0.10.jar" />
 	</path>
 
 	<path id="test.classpath">

@@ -156,6 +156,7 @@
 			<pathelement path="${basedir}/../exsite9_libraries/hsqldb-2.2.8.jar"/>
 			<pathelement path="${basedir}/../exsite9_libraries/eclipselink-2.3.2.jar"/>
 			<pathelement path="${basedir}/../exsite9_libraries/javax.persistence_2.0.3.jar"/>
+			<pathelement path="${basedir}/../exsite9_libraries/rcptoolbox.1.0.10.jar"/>
 		</path>
 		<!-- compile the source code -->
 		<javac destdir="${build.result.folder}/@dot" failonerror="${javacFailOnError}" verbose="${javacVerbose}" debug="${javacDebugInfo}" includeAntRuntime="no" bootclasspath="${bundleBootClasspath}" source="${bundleJavacSource}" target="${bundleJavacTarget}"		>

@@ -16,14 +16,25 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.richclientgui.toolbox.validation.IFieldErrorMessageHandler;
+import com.richclientgui.toolbox.validation.ValidatingField;
+import com.richclientgui.toolbox.validation.string.StringValidationToolkit;
+import com.richclientgui.toolbox.validation.validator.IFieldValidator;
+
+import au.org.intersect.exsite9.wizard.WizardPageErrorHandler;
+
 /**
  * The first page of the new project wizard.
  */
 public final class NewProjectWizardPage1 extends WizardPage implements KeyListener
 {
-    private Text projectNameText;
+    private ValidatingField<String> projectNameField;
+
     private Text projectDescriptionText;
     private Text projectOwnerText;
+
+    private StringValidationToolkit stringValidatorToolkit;
+    private final IFieldErrorMessageHandler errorMessageHandler = new WizardPageErrorHandler(this);
 
     private Composite container;
 
@@ -48,12 +59,40 @@ public final class NewProjectWizardPage1 extends WizardPage implements KeyListen
         this.container.setLayout(layout);
         layout.numColumns = 2;
 
+        this.stringValidatorToolkit = new StringValidationToolkit(SWT.TOP | SWT.LEFT, 1, true);
+        this.stringValidatorToolkit.setDefaultErrorMessageHandler(this.errorMessageHandler);
+
         final Label projectNameLabel = new Label(this.container, SWT.NULL);
         projectNameLabel.setText("Project Name");
 
-        this.projectNameText = new Text(this.container, SWT.BORDER | SWT.SINGLE);
-        this.projectNameText.setText("");
-        this.projectNameText.addKeyListener(this);
+        projectNameField = this.stringValidatorToolkit.createTextField(this.container, new IFieldValidator<String>()
+        {
+            @Override
+            public boolean warningExist(final String conents)
+            {
+                return false;
+            }
+            
+            @Override
+            public boolean isValid(final String contents)
+            {
+                return !(contents.trim().isEmpty());
+            }
+            
+            @Override
+            public String getWarningMessage()
+            {
+                return "";
+            }
+            
+            @Override
+            public String getErrorMessage()
+            {
+                return "Project name must not be empty.";
+            }
+        }, true, "");
+
+        this.projectNameField.getControl().addKeyListener(this);
 
         final Label projectOwnerLabel = new Label(this.container, SWT.NULL);
         projectOwnerLabel.setText("Project Owner");
@@ -72,7 +111,7 @@ public final class NewProjectWizardPage1 extends WizardPage implements KeyListen
         final GridData singleLineGridData = new GridData(GridData.FILL_HORIZONTAL);
         final GridData multiLineGridData = new GridData(GridData.FILL_BOTH);
 
-        this.projectNameText.setLayoutData(singleLineGridData);
+        this.projectNameField.getControl().setLayoutData(singleLineGridData);
         this.projectOwnerText.setLayoutData(singleLineGridData);
         this.projectDescriptionText.setLayoutData(multiLineGridData);
 
@@ -86,8 +125,7 @@ public final class NewProjectWizardPage1 extends WizardPage implements KeyListen
     @Override
     public void keyPressed(final KeyEvent e)
     {
-        final boolean pageCompleted = !this.projectNameText.getText().isEmpty();
-        setPageComplete(pageCompleted);
+        setPageComplete(this.projectNameField.isValid());
     }
 
     /**
@@ -100,7 +138,7 @@ public final class NewProjectWizardPage1 extends WizardPage implements KeyListen
 
     public String getProjectName()
     {
-        return this.projectNameText.getText().trim();
+        return this.projectNameField.getContents().trim();
     }
 
     public String getProjectOwner()
