@@ -73,6 +73,9 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
         final Command reloadProjectCommand = commandService
                 .getCommand("au.org.intersect.exsite9.commands.ReloadProjectCommand");
         reloadProjectCommand.addExecutionListener(this);
+        
+        final Command openProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.OpenProjectCommand");
+        openProjectCommand.addExecutionListener(this);
 
         initContextMenu();
     }
@@ -122,13 +125,11 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
     {
         if (commandId.equals("au.org.intersect.exsite9.commands.NewProjectCommand"))
         {
-            final Project project = (Project) returnValue;
-            if (project != null)
-            {
-                final ProjectExplorerViewInput wrapper = new ProjectExplorerViewInput(project);
-                this.treeViewer.setInput(wrapper);
-                this.treeViewer.expandAll();
-            }
+            displayProjectAndExpand(returnValue);
+        }
+        else if (commandId.equals("au.org.intersect.exsite9.commands.OpenProjectCommand"))
+        {
+            displayProjectAndExpand(returnValue);
         }
         else if (commandId.equals("au.org.intersect.exsite9.commands.AddFolderToProjectCommand"))
         {
@@ -150,6 +151,17 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
     {
         this.treeViewer.refresh();
         this.treeViewer.expandAll();
+    }
+    
+    private void displayProjectAndExpand(final Object returnValue)
+    {
+        final Project project = (Project) returnValue;
+        if (project != null)
+        {
+            final ProjectExplorerViewInput wrapper = new ProjectExplorerViewInput(project);
+            this.treeViewer.setInput(wrapper);
+            this.treeViewer.expandAll();
+        }
     }
 
     /**

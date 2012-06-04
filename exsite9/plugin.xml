@@ -77,6 +77,11 @@
             id="au.org.intersect.exsite9.commands.ReloadProjectCommand"
             name="Refresh Project">
       </command>
+      <command
+            defaultHandler="au.org.intersect.exsite9.commands.handlers.OpenProjectHandler"
+            id="au.org.intersect.exsite9.commands.OpenProjectCommand"
+            name="Open Project">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -92,6 +97,13 @@
                   label="New Project"
                   style="push"
                   tooltip="Create a new project">
+            </command>
+            <command
+                  commandId="au.org.intersect.exsite9.commands.OpenProjectCommand"
+                  icon="icons/alt_window_16.gif"
+                  label="Open Project"
+                  style="push"
+                  tooltip="Open an existing project">
             </command>
             <separator
                   name="au.org.intersect.exsite9.menu.file.separator1"

@@ -7,6 +7,7 @@
 package au.org.intersect.exsite9.service;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
 import au.org.intersect.exsite9.dao.FolderDAO;
 import au.org.intersect.exsite9.dao.ProjectDAO;
@@ -21,10 +22,9 @@ public class ProjectService implements IProjectService
     private final ExSite9EntityManagerFactory entityManagerFactory;
     private final ProjectDAOFactory projectDAOFactory;
     private final FolderDAOFactory folderDAOFactory;
-    
+
     public ProjectService(final ExSite9EntityManagerFactory entityManagerFactory,
-                          final ProjectDAOFactory projectDAOFactory,
-                          final FolderDAOFactory folderDAOFactory)
+            final ProjectDAOFactory projectDAOFactory, final FolderDAOFactory folderDAOFactory)
     {
         this.entityManagerFactory = entityManagerFactory;
         this.projectDAOFactory = projectDAOFactory;
@@ -50,7 +50,7 @@ public class ProjectService implements IProjectService
             em.close();
         }
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -65,6 +65,21 @@ public class ProjectService implements IProjectService
             folderDAO.createFolder(folder);
             project.getFolders().add(folder);
             projectDAO.updateProject(project);
+        }
+        finally
+        {
+            em.close();
+        }
+    }
+
+    @Override
+    public List<Project> getAllProjects()
+    {
+        EntityManager em = entityManagerFactory.getEntityManager();
+        try
+        {
+            ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
+            return projectDAO.findAllProjects();
         }
         finally
         {

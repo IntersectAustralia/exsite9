@@ -6,6 +6,8 @@
  */
 package au.org.intersect.exsite9.service;
 
+import java.util.List;
+
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
 
@@ -26,4 +28,10 @@ public interface IProjectService
      * @param folder The folder to map to the project.
      */
     void mapFolderToProject(final Project project, final Folder folder);
+
+    /**
+     * finds all projects in the database.
+     * @return list of projects
+     */
+    public List<Project> getAllProjects();
 }
