@@ -51,6 +51,7 @@ public class FileService implements IFileService
     			{
     				try
     				{
+    				    researchFile.setProjectID(project.getId());
     					researchFileDAO.createResearchFile(researchFile);
     					project.getNewFilesNode().getResearchFiles().add(researchFile);
     				}

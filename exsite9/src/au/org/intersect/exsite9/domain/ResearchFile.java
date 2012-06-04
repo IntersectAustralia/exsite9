@@ -8,10 +8,11 @@ package au.org.intersect.exsite9.domain;
 
 import java.io.File;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -21,15 +22,15 @@ import com.google.common.base.Objects;
  * Represents a research data file in a folder that the researcher has associated with a project.
  */
 @Entity
+@Table(uniqueConstraints=@UniqueConstraint(columnNames={"PROJECTID","PATH"}))
 public final class ResearchFile
 {
     @Id
     @GeneratedValue
     private Long id;
     private final String name;
-    
-    @Column(unique=true)
     private final String path;
+    private long projectID;
 
     public ResearchFile()
     {
@@ -67,6 +68,21 @@ public final class ResearchFile
     public String getName()
     {
         return this.name;
+    }
+
+    public long getProjectID()
+    {
+        return projectID;
+    }
+
+    public void setProjectID(long project_id)
+    {
+        this.projectID = project_id;
+    }
+
+    public String getPath()
+    {
+        return path;
     }
 
     /**

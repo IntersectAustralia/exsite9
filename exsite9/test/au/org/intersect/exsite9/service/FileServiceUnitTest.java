@@ -84,6 +84,7 @@ public class FileServiceUnitTest extends DAOTest
             ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
             
 	    	Project project = new Project("name","owner","description");
+	    	project.setId(1L);
 	    	Folder f = new Folder(testDirFile);
 	    	File.createTempFile("test-file-1", ".txt", testDirFile);
 	    	
@@ -130,6 +131,7 @@ public class FileServiceUnitTest extends DAOTest
             ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
             
         	Project project = new Project("name","owner","description");
+        	project.setId(2L);
             Folder f = new Folder(testDirFile);
             project.getFolders().add(f);
             
