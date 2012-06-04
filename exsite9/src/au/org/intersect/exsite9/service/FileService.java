@@ -46,7 +46,7 @@ public class FileService implements IFileService
     	    
     		for(Folder folder : project.getFolders())
     		{
-    			List<ResearchFile> newFileList = FolderHelper.identifyNewFiles(folder);
+    			List<ResearchFile> newFileList = FolderHelper.getAllFilesInFolder(folder);
     			for(ResearchFile researchFile : newFileList)
     			{
     				try

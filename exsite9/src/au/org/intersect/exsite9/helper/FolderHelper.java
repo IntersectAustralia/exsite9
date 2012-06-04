@@ -25,15 +25,31 @@ public class FolderHelper
      */
     public static List<ResearchFile> identifyNewFiles(Folder folder)
     {
-    	long startTimeInMillis = Calendar.getInstance().getTimeInMillis();
+    	IOFileFilter ageFilter = new AgeFileFilter(folder.getLastCheckTimeInMillis(),false);
     	
-        List<ResearchFile> newFileList = new ArrayList<ResearchFile>(0);
+        return listFiles(folder, ageFilter, TrueFileFilter.INSTANCE);
+    }
+
+    /**
+     * Recursively looks for files in the folder & it's sub folders.
+     * Returns an empty list if there are no files or this is not a folder.
+     * 
+     * @return A list of the files in the folder
+     */
+    public static List<ResearchFile> getAllFilesInFolder(Folder folder)
+    {
+        return listFiles(folder, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+    }
+
+    private static List<ResearchFile> listFiles(Folder folder, IOFileFilter fileFilter, IOFileFilter dirFilter)
+    {
+        long startTimeInMillis = Calendar.getInstance().getTimeInMillis();
         
-        IOFileFilter ageFilter = new AgeFileFilter(folder.getLastCheckTimeInMillis(),false);
+        List<ResearchFile> newFileList = new ArrayList<ResearchFile>(0);
         
         try
         {
-            List<File> allFiles = (List<File>) FileUtils.listFiles(new File(folder.getPath()), ageFilter, TrueFileFilter.INSTANCE);
+            List<File> allFiles = (List<File>) FileUtils.listFiles(new File(folder.getPath()), fileFilter, dirFilter);
         
             for(File file : allFiles)
             {
@@ -51,5 +67,4 @@ public class FolderHelper
         
         return newFileList;
     }
-
 }
