@@ -4,7 +4,9 @@
  * This module contains Proprietary Information of Intersect,
  * and should be treated as Confidential.
  */
-package au.org.intersect.exsite9.wizard.newproject;
+package au.org.intersect.exsite9.wizard.newgroup;
+
+import java.util.Set;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -14,38 +16,35 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 
 import com.richclientgui.toolbox.validation.IFieldErrorMessageHandler;
 import com.richclientgui.toolbox.validation.ValidatingField;
 import com.richclientgui.toolbox.validation.string.StringValidationToolkit;
 import com.richclientgui.toolbox.validation.validator.IFieldValidator;
 
+import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.wizard.WizardPageErrorHandler;
 
 /**
- * The first page of the new project wizard.
+ * The wizard page to display when adding a new group.
  */
-public final class NewProjectWizardPage1 extends WizardPage implements KeyListener
+public final class NewGroupWizardPage1 extends WizardPage implements KeyListener
 {
-    private ValidatingField<String> projectNameField;
-
-    private Text projectDescriptionText;
-    private Text projectOwnerText;
+    private Composite container;
 
     private StringValidationToolkit stringValidatorToolkit;
     private final IFieldErrorMessageHandler errorMessageHandler = new WizardPageErrorHandler(this);
 
-    private Composite container;
+    private ValidatingField<String> groupNameField;
 
-    /**
-     * Constructor
-     */
-    public NewProjectWizardPage1()
+    private final Group parentGroup;
+    
+    public NewGroupWizardPage1(final Group parentGroup)
     {
-        super("New Project");
-        setTitle("New Project");
-        setDescription("Please enter the details of your new project.");
+        super("New Group");
+        setTitle("New Group");
+        setDescription("Please enter the details of your new group");
+        this.parentGroup = parentGroup;
     }
 
     /**
@@ -62,11 +61,13 @@ public final class NewProjectWizardPage1 extends WizardPage implements KeyListen
         this.stringValidatorToolkit = new StringValidationToolkit(SWT.TOP | SWT.LEFT, 1, true);
         this.stringValidatorToolkit.setDefaultErrorMessageHandler(this.errorMessageHandler);
 
-        final Label projectNameLabel = new Label(this.container, SWT.NULL);
-        projectNameLabel.setText("Project Name");
+        final Label groupNameLabel = new Label(this.container, SWT.NULL);
+        groupNameLabel.setText("Group Name");
 
-        projectNameField = this.stringValidatorToolkit.createTextField(this.container, new IFieldValidator<String>()
+        groupNameField = this.stringValidatorToolkit.createTextField(this.container, new IFieldValidator<String>()
         {
+            private String errorMessage;
+
             @Override
             public boolean warningExist(final String conents)
             {
@@ -76,7 +77,30 @@ public final class NewProjectWizardPage1 extends WizardPage implements KeyListen
             @Override
             public boolean isValid(final String contents)
             {
-                return !(contents.trim().isEmpty());
+                if (contents.trim().isEmpty())
+                {
+                    this.errorMessage = "Group name must not be empty.";
+                    return false;
+                }
+
+                if (contents.trim().length() >= 255)
+                {
+                    this.errorMessage = "Group name is too long.";
+                    return false;
+                }
+
+                // Check if there is a child group with this name already.
+                final Set<Group> existingGroups = parentGroup.getGroups();
+                for (final Group existingGroup : existingGroups)
+                {
+                    if (existingGroup.getName().equalsIgnoreCase(contents.trim()))
+                    {
+                        this.errorMessage = "A Group with that name already exists.";
+                        return false;
+                    }
+                }
+
+                return true;
             }
             
             @Override
@@ -88,32 +112,14 @@ public final class NewProjectWizardPage1 extends WizardPage implements KeyListen
             @Override
             public String getErrorMessage()
             {
-                return "Project name must not be empty.";
+                return this.errorMessage;
             }
         }, true, "");
 
-        this.projectNameField.getControl().addKeyListener(this);
-
-        final Label projectOwnerLabel = new Label(this.container, SWT.NULL);
-        projectOwnerLabel.setText("Project Owner");
-
-        this.projectOwnerText = new Text(this.container, SWT.BORDER | SWT.SINGLE);
-        this.projectOwnerText.setText("");
-        this.projectOwnerText.addKeyListener(this);
-
-        final Label projectDescriptionLabel = new Label(this.container, SWT.NULL);
-        projectDescriptionLabel.setText("Project Description");
-
-        this.projectDescriptionText = new Text(this.container, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL);
-        this.projectDescriptionText.setText("");
-        this.projectDescriptionText.addKeyListener(this);
+        this.groupNameField.getControl().addKeyListener(this);
 
         final GridData singleLineGridData = new GridData(GridData.FILL_HORIZONTAL);
-        final GridData multiLineGridData = new GridData(GridData.FILL_BOTH);
-
-        this.projectNameField.getControl().setLayoutData(singleLineGridData);
-        this.projectOwnerText.setLayoutData(singleLineGridData);
-        this.projectDescriptionText.setLayoutData(multiLineGridData);
+        this.groupNameField.getControl().setLayoutData(singleLineGridData);
 
         setControl(this.container);
         setPageComplete(false);
@@ -133,21 +139,11 @@ public final class NewProjectWizardPage1 extends WizardPage implements KeyListen
     @Override
     public void keyReleased(final KeyEvent e)
     {
-        setPageComplete(this.projectNameField.isValid());
+        setPageComplete(this.groupNameField.isValid());
     }
 
-    public String getProjectName()
+    public String getNewGroupName()
     {
-        return this.projectNameField.getContents().trim();
-    }
-
-    public String getProjectOwner()
-    {
-        return this.projectOwnerText.getText().trim();
-    }
-
-    public String getProjectDescription()
-    {
-        return this.projectDescriptionText.getText().trim();
+        return this.groupNameField.getContents().trim();
     }
 }

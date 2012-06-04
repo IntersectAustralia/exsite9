@@ -10,18 +10,14 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
-import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
-
-import com.google.common.base.Strings;
 
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.Project;
-import au.org.intersect.exsite9.service.IGroupService;
+import au.org.intersect.exsite9.wizard.newgroup.NewGroupWizard;
 
 /**
  * The handler to add a group to a node.
@@ -51,26 +47,10 @@ public final class AddGroupHandler implements IHandler
     @Override
     public Object execute(final ExecutionEvent event) throws ExecutionException
     {
-
         final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
         final Object selectedObject = selection.getFirstElement();
         
-        final Shell shell = HandlerUtil.getActiveWorkbenchWindow(event).getShell();
-        final InputDialog dialog = new InputDialog(shell, "New Group", "Add a new group", "", null);
-        dialog.open();
-
-        if (dialog.getReturnCode() != Dialog.OK)
-        {
-            return null;
-        }
-        final String newGroupName = dialog.getValue();
-        if (Strings.isNullOrEmpty(newGroupName))
-        {
-            return null;
-        }
-
         final Group parentGroup;
-
         if (selectedObject instanceof Group)
         {
             parentGroup = (Group) selectedObject;
@@ -86,11 +66,12 @@ public final class AddGroupHandler implements IHandler
             throw new RuntimeException("Trying to add a group to an element that is not a project or group.");
         }
 
-        final IGroupService groupService = (IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class);
-        final Group newGroup = groupService.createNewGroup(newGroupName);
-        groupService.addChildGroup(parentGroup, newGroup);
-        
-        return null;
+        final Shell shell = HandlerUtil.getActiveWorkbenchWindow(event).getShell();
+        final NewGroupWizard newGroupWizard = new NewGroupWizard(parentGroup);
+        final WizardDialog wizardDialog = new WizardDialog(shell, newGroupWizard);
+        wizardDialog.open();
+
+        return newGroupWizard.getNewGroup();
     }
 
     /**
