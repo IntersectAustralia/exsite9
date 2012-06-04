@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import com.google.common.base.Objects;
+
 /**
  * Represents a folder on the researcher's desktop that contains research data files
  */
@@ -71,5 +73,19 @@ public final class Folder
     public String getPath()
     {
         return path;
+    }
+
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (!(obj instanceof Folder))
+        {
+            return false;
+        }
+        final Folder other = (Folder) obj;
+        return Objects.equal(this.name, other.name) && Objects.equal(this.path, other.path);
     }
 }

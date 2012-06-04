@@ -77,6 +77,16 @@ public final class AddFolderToProjectHandler implements IHandler
 
             final Folder folder = new Folder(directory);
 
+            // Check if this folder has already been assigned to the project.
+            // TODO : We need to deal with the case that a parent directory of this one has already been added.
+            // OR this is a parent directory which contains directories that have already been added.
+
+            if (project.getFolders().contains(folder))
+            {
+                MessageDialog.openError(shell, "Error", "The folder is already assigned to the project.");
+                return null;
+            }
+
             final IProjectService projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
             final IFileService fileService = (IFileService) PlatformUI.getWorkbench().getService(IFileService.class);
 
@@ -108,8 +118,7 @@ public final class AddFolderToProjectHandler implements IHandler
      * @{inheritDoc}
      */
     @Override
-    public void removeHandlerListener(IHandlerListener handlerListener)
+    public void removeHandlerListener(final IHandlerListener handlerListener)
     {
-
     }
 }
