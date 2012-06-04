@@ -137,6 +137,7 @@
 				<include name="hsqldb-2.2.8.jar"/>
 				<include name="eclipselink-2.3.2.jar"/>
 				<include name="javax.persistence_2.0.3.jar"/>
+				<include name="rcptoolbox.1.0.10.jar"/>
 			</fileset>
 		</copy>
 		<antcall target="apitools.generation">
