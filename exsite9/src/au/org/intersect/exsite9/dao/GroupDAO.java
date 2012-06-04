@@ -32,4 +32,9 @@ public final class GroupDAO
         em.merge(group);
         em.getTransaction().commit();
     }
+    
+    public Group findById(final long id)
+    {
+        return em.find(Group.class,id);
+    }
 }
