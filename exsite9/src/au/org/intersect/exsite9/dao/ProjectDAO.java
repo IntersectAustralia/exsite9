@@ -1,6 +1,9 @@
 package au.org.intersect.exsite9.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import au.org.intersect.exsite9.domain.Project;
 
@@ -30,5 +33,11 @@ public class ProjectDAO
     public Project findById(long id)
     {
         return em.find(Project.class,id);
+    }
+    
+    public List<Project> findAllProjects()
+    {
+        Query query = em.createQuery("SELECT p FROM Project p");
+        return query.getResultList();
     }
 }
