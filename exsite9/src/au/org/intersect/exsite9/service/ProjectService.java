@@ -86,4 +86,24 @@ public class ProjectService implements IProjectService
             em.close();
         }
     }
+
+    @Override
+    public Project editProject(String name, String owner, String description, Long id)
+    {
+        EntityManager em = entityManagerFactory.getEntityManager();
+        try
+        {
+            ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
+            Project project = projectDAO.findById(id);
+            project.setName(name);
+            project.setOwner(owner);
+            project.setDescription(description);
+            projectDAO.updateProject(project);
+            return project;
+        }
+        finally
+        {
+            em.close();
+        }
+    }
 }

@@ -28,10 +28,20 @@ public interface IProjectService
      * @param folder The folder to map to the project.
      */
     void mapFolderToProject(final Project project, final Folder folder);
-
+    
     /**
      * finds all projects in the database.
      * @return list of projects
      */
     public List<Project> getAllProjects();
+    
+    /**
+     * Edit a project.
+     * @param name The updated name of the project.
+     * @param owner The updated owner of the project.
+     * @param description The updated description of the project.
+     * @param id of project to update 
+     * @return The updated project.
+     */
+    Project editProject(final String name, final String owner, final String description, Long id);
 }
