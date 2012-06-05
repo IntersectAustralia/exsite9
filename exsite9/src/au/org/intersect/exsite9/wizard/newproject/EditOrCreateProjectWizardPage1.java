@@ -26,12 +26,16 @@ import au.org.intersect.exsite9.wizard.WizardPageErrorHandler;
 /**
  * The first page of the new project wizard.
  */
-public final class NewProjectWizardPage1 extends WizardPage implements KeyListener
+public final class EditOrCreateProjectWizardPage1 extends WizardPage implements KeyListener
 {
     private ValidatingField<String> projectNameField;
 
     private Text projectDescriptionText;
     private Text projectOwnerText;
+
+    private String projectNameFieldTextDefaultValue;
+    private String projectOwnerFieldTextDefaultValue;
+    private String projectDescriptionFieldTextDefaultValue;
 
     private StringValidationToolkit stringValidatorToolkit;
     private final IFieldErrorMessageHandler errorMessageHandler = new WizardPageErrorHandler(this);
@@ -41,15 +45,20 @@ public final class NewProjectWizardPage1 extends WizardPage implements KeyListen
     /**
      * Constructor
      */
-    public NewProjectWizardPage1()
+    public EditOrCreateProjectWizardPage1(String pageTitle, String pageDescription,
+            String projectNameFieldTextDefaultValue, String projectOwnerFieldTextDefaultValue,
+            String projectDescriptionFieldTextDefaultValue)
     {
-        super("New Project");
-        setTitle("New Project");
-        setDescription("Please enter the details of your new project.");
+        super(pageTitle);
+        setTitle(pageTitle);
+        setDescription(pageDescription);
+        this.projectNameFieldTextDefaultValue = projectNameFieldTextDefaultValue;
+        this.projectOwnerFieldTextDefaultValue = projectOwnerFieldTextDefaultValue;
+        this.projectDescriptionFieldTextDefaultValue = projectDescriptionFieldTextDefaultValue;
     }
 
     /**
-     * @{inheritDoc}
+     * @{inheritDoc
      */
     @Override
     public void createControl(final Composite parent)
@@ -72,25 +81,25 @@ public final class NewProjectWizardPage1 extends WizardPage implements KeyListen
             {
                 return false;
             }
-            
+
             @Override
             public boolean isValid(final String contents)
             {
                 return !(contents.trim().isEmpty());
             }
-            
+
             @Override
             public String getWarningMessage()
             {
                 return "";
             }
-            
+
             @Override
             public String getErrorMessage()
             {
                 return "Project name must not be empty.";
             }
-        }, true, "");
+        }, true, projectNameFieldTextDefaultValue);
 
         this.projectNameField.getControl().addKeyListener(this);
 
@@ -98,14 +107,14 @@ public final class NewProjectWizardPage1 extends WizardPage implements KeyListen
         projectOwnerLabel.setText("Project Owner");
 
         this.projectOwnerText = new Text(this.container, SWT.BORDER | SWT.SINGLE);
-        this.projectOwnerText.setText("");
+        this.projectOwnerText.setText(projectOwnerFieldTextDefaultValue);
         this.projectOwnerText.addKeyListener(this);
 
         final Label projectDescriptionLabel = new Label(this.container, SWT.NULL);
         projectDescriptionLabel.setText("Project Description");
 
         this.projectDescriptionText = new Text(this.container, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL);
-        this.projectDescriptionText.setText("");
+        this.projectDescriptionText.setText(projectDescriptionFieldTextDefaultValue);
         this.projectDescriptionText.addKeyListener(this);
 
         final GridData singleLineGridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -120,7 +129,7 @@ public final class NewProjectWizardPage1 extends WizardPage implements KeyListen
     }
 
     /**
-     * @{inheritDoc}
+     * @{inheritDoc
      */
     @Override
     public void keyPressed(final KeyEvent e)
@@ -128,7 +137,7 @@ public final class NewProjectWizardPage1 extends WizardPage implements KeyListen
     }
 
     /**
-     * @{inheritDoc}
+     * @{inheritDoc
      */
     @Override
     public void keyReleased(final KeyEvent e)

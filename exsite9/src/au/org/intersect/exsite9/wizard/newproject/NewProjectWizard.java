@@ -17,7 +17,7 @@ import au.org.intersect.exsite9.service.IProjectService;
  */
 public final class NewProjectWizard extends Wizard
 {
-    private final NewProjectWizardPage1 page1 = new NewProjectWizardPage1();
+    private final EditOrCreateProjectWizardPage1 page1;
 
     private Project newProject;
 
@@ -28,6 +28,7 @@ public final class NewProjectWizard extends Wizard
     {
         super();
         setNeedsProgressMonitor(true);
+        page1 = new EditOrCreateProjectWizardPage1("New Project", "Please enter the details of your new project.", "", "", "");
     }
 
     /**
