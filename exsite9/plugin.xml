@@ -52,6 +52,13 @@
             name="Project Explorer View"
             restorable="false">
       </view>
+      <view
+            allowMultiple="false"
+            class="au.org.intersect.exsite9.view.MetadataBrowserView"
+            id="au.org.intersect.exsite9.view.MetadataBrowserView"
+            name="Metadata Browser"
+            restorable="false">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
