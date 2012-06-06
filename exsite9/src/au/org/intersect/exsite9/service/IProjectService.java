@@ -9,6 +9,7 @@ package au.org.intersect.exsite9.service;
 import java.util.List;
 
 import au.org.intersect.exsite9.domain.Folder;
+import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.Project;
 
 public interface IProjectService
@@ -43,5 +44,7 @@ public interface IProjectService
      * @param id of project to update 
      * @return The updated project.
      */
-    Project editProject(final String name, final String owner, final String description, Long id);
+    Project editProject(final String name, final String owner, final String description, final Long id);
+
+    void addMetadataCategoryToProject(final Project project, final MetadataCategory metadataCategory);
 }

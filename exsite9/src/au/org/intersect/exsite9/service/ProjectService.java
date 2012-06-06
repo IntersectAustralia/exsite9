@@ -15,6 +15,7 @@ import au.org.intersect.exsite9.dao.factory.FolderDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.database.ExSite9EntityManagerFactory;
 import au.org.intersect.exsite9.domain.Folder;
+import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.Project;
 
 public class ProjectService implements IProjectService
@@ -100,6 +101,22 @@ public class ProjectService implements IProjectService
             project.setDescription(description);
             projectDAO.updateProject(project);
             return project;
+        }
+        finally
+        {
+            em.close();
+        }
+    }
+
+    @Override
+    public void addMetadataCategoryToProject(final Project project, final MetadataCategory metadataCategory)
+    {
+        final EntityManager em = this.entityManagerFactory.getEntityManager();
+        try
+        {
+            final ProjectDAO projectDAO = this.projectDAOFactory.createInstance(em);
+            project.getMetadataCategories().add(metadataCategory);
+            projectDAO.updateProject(project);
         }
         finally
         {
