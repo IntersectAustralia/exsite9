@@ -6,11 +6,7 @@
  */
 package au.org.intersect.exsite9.view;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Set;
 
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -29,6 +25,9 @@ import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.part.ViewPart;
+
+import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.Project;
 
 /**
  * View component used for browsing Metadata.
@@ -61,21 +60,14 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
 
         final Command openProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.OpenProjectCommand");
         openProjectCommand.addExecutionListener(this);
-
-        initLayout();
     }
 
-    private void initLayout()
+    private void initLayout(final Set<MetadataCategory> metadataCategories)
     {
-        final Map<String, List<String>> metaData = new HashMap<String, List<String>>();
-        // Some Mock Metadata
-        metaData.put("DC:name", Arrays.asList("Dan", "Chris", "Jake", "Ingrid"));
-        metaData.put("DC:organization", Arrays.asList("Sydney University", "Intersect", "Sirca"));
-
         final ExpandBar expandBar = new ExpandBar(this.parent, SWT.BORDER | SWT.V_SCROLL);
         expandBar.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 
-        for (final Entry<String, List<String>> entry : metaData.entrySet())
+        for (final MetadataCategory metadataCategory : metadataCategories)
         {
             final Composite composite = new Composite(expandBar, SWT.NONE);
             composite.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
@@ -88,7 +80,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             gridLayout.verticalSpacing = 15;
             composite.setLayout(gridLayout);
 
-            for (final String metaDataValue : entry.getValue())
+            for (final String metaDataValue : metadataCategory.getValues())
             {
                 final Button button = new Button(composite, SWT.TOGGLE);
                 button.setText(metaDataValue);
@@ -96,7 +88,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             }
 
             final ExpandItem expandItem = new ExpandItem(expandBar, SWT.NONE);
-            expandItem.setText(entry.getKey());
+            expandItem.setText(metadataCategory.getName());
             expandItem.setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
             expandItem.setControl(composite);
         }
@@ -126,11 +118,11 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
     @Override
     public void postExecuteSuccess(final String commandId, final Object returnValue)
     {
-        if (commandId.equals("au.org.intersect.exsite9.commands.NewProjectCommand"))
+        if (commandId.equals("au.org.intersect.exsite9.commands.NewProjectCommand") ||
+            commandId.equals("au.org.intersect.exsite9.commands.OpenProjectCommand"))
         {
-        }
-        else if (commandId.equals("au.org.intersect.exsite9.commands.OpenProjectCommand"))
-        {
+            final Project currentProject = (Project) returnValue;
+            initLayout(currentProject.getMetadataCategories());
         }
     }
 

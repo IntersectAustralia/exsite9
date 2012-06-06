@@ -29,12 +29,20 @@ public final class ProjectUnitTest
         assertEquals(n1, toTest1.getName());
         assertTrue(toTest1.getRootNode().getGroups().size() == 1);
         assertTrue(toTest1.getRootNode().getResearchFiles().isEmpty());
+        assertEquals(d1, toTest1.getDescription());
+        assertEquals(o1, toTest1.getOwner());
+        assertTrue(toTest1.getMetadataCategories().isEmpty());
 
         final String toString = toTest1.toString();
        
-        assertTrue(toString.contains("name=project"));
-        assertTrue(toString.contains("name=New Files"));
-        assertTrue(toString.contains("researchFiles=[]"));
+        assertTrue(toString.contains("name=project 1"));
+        assertTrue(toString.contains("description=Project One"));
+        assertTrue(toString.contains("owner=owner 1"));
+
+        toTest1.setFolders(null);
+        toTest1.setMetadataCategories(null);
+        assertNull(toTest1.getFolders());
+        assertNull(toTest1.getMetadataCategories());
     }
 
     @Test

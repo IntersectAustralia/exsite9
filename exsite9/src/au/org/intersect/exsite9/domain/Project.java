@@ -7,7 +7,9 @@
 package au.org.intersect.exsite9.domain;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -41,6 +43,8 @@ public final class Project
             joinColumns={@JoinColumn(name="project_id", referencedColumnName="id")},
             inverseJoinColumns={@JoinColumn(name="folder_id", referencedColumnName="id")})
     private List<Folder> folders;
+
+    private Set<MetadataCategory> metadataCategories;
     
     @OneToOne(cascade = CascadeType.ALL)
     private Group rootNode;
@@ -64,6 +68,7 @@ public final class Project
         this.rootNode = new Group(this.name);
         this.newFilesNode = new NewFilesGroup();
         this.rootNode.getGroups().add(newFilesNode);
+        this.metadataCategories = new HashSet<MetadataCategory>();
     }
 
     public Long getId()
@@ -136,6 +141,16 @@ public final class Project
         this.folders = folders;
     }
 
+    public Set<MetadataCategory> getMetadataCategories()
+    {
+        return this.metadataCategories;
+    }
+
+    public void setMetadataCategories(final Set<MetadataCategory> mdcs)
+    {
+        this.metadataCategories = mdcs;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -154,7 +169,8 @@ public final class Project
         return Objects.equal(this.name, other.name) 
             && Objects.equal(this.description, other.description) 
             && Objects.equal(this.owner, other.owner)
-            && Objects.equal(this.rootNode, other.rootNode);
+            && Objects.equal(this.rootNode, other.rootNode)
+            && Objects.equal(this.metadataCategories, other.metadataCategories);
     }
 
     /**
@@ -163,7 +179,7 @@ public final class Project
     @Override
     public int hashCode()
     {
-        return Objects.hashCode(this.name, this.description, this.owner, this.rootNode);
+        return Objects.hashCode(this.name, this.description, this.owner, this.rootNode, this.metadataCategories);
     }
 
     /**
@@ -173,8 +189,10 @@ public final class Project
     public String toString()
     {
         final ToStringBuilder tsb = new ToStringBuilder(this);
-        tsb.append(this.rootNode);
-        tsb.appendSuper(super.toString());
+        tsb.append("id", this.id);
+        tsb.append("name", this.name);
+        tsb.append("description", this.description);
+        tsb.append("owner", this.owner);
         return tsb.toString();
     }
 }

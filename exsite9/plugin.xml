@@ -214,6 +214,11 @@
          <service
                serviceClass="au.org.intersect.exsite9.service.IGroupService"></service>
       </serviceFactory>
+      <serviceFactory
+            factoryClass="au.org.intersect.exsite9.service.factory.MetadataCategoryServiceFactory">
+         <service
+               serviceClass="au.org.intersect.exsite9.service.IMetadataCategoryService"></service>
+      </serviceFactory>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">

@@ -28,6 +28,9 @@ public final class GroupUnitTest
         assertTrue(toTest1.getGroups().isEmpty());
         assertTrue(toTest1.getResearchFiles().isEmpty());
 
+        toTest1.setId(Long.valueOf(7));
+        assertEquals(Long.valueOf(7), toTest1.getId());
+
         final String toString = toTest1.toString();
         assertTrue(toString.contains("name=group 1,groups=[],researchFiles=[]"));
     }

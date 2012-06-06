@@ -33,6 +33,8 @@ public final class ResearchFileUnitTest
 
         assertEquals(toTest1, toTest1);
         assertEquals(f1, toTest1.getName());
+        assertEquals(path1 + f1, toTest1.getPath());
+        assertEquals(0, toTest1.getProjectID());
 
         assertEquals(toTest1, toTest2);
         assertEquals(toTest2, toTest1);
@@ -43,6 +45,14 @@ public final class ResearchFileUnitTest
         assertNotEquals(toTest1, null);
         assertNotEquals(toTest1, new Object());
         assertNotEquals(toTest1, f1);
+
+        final Long id = Long.valueOf(72121);
+        toTest1.setId(id);
+        assertEquals(id, toTest1.getId());
+
+        final long projId = 7447;
+        toTest1.setProjectID(projId);
+        assertEquals(projId, toTest1.getProjectID());
 
         final String toString = toTest1.toString();
         assertTrue(toString.contains("name=" + f1));

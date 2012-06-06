@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.google.common.base.Objects;
 
 /**
@@ -75,6 +77,7 @@ public final class Folder
         return path;
     }
 
+    @Override
     public boolean equals(final Object obj)
     {
         if (this == obj)
@@ -87,5 +90,11 @@ public final class Folder
         }
         final Folder other = (Folder) obj;
         return Objects.equal(this.name, other.name) && Objects.equal(this.path, other.path);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder().append(this.name).append(this.path).toHashCode();
     }
 }

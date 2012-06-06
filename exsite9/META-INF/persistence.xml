@@ -10,6 +10,7 @@
         <class>au.org.intersect.exsite9.domain.Group</class>
         <class>au.org.intersect.exsite9.domain.ResearchFile</class>
         <class>au.org.intersect.exsite9.domain.NewFilesGroup</class>
+        <class>au.org.intersect.exsite9.domain.MetadataCategory</class>
 
        <properties/>
     </persistence-unit>
