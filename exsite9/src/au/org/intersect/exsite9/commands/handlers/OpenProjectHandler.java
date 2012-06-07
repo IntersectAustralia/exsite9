@@ -14,9 +14,11 @@ import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.wizard.openproject.OpenProjectWizard;
 
 /**
@@ -49,6 +51,10 @@ public class OpenProjectHandler implements IHandler
         wizardDialog.open();
 
         final Project project = wizard.getSelectedProject();
+
+        final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
+        projectManager.setCurrentProject(project);
+
         return project;
     }
 

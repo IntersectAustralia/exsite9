@@ -21,6 +21,7 @@ import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.part.ViewPart;
 
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.view.provider.ProjectExplorerViewContentProvider;
 import au.org.intersect.exsite9.view.provider.ProjectExplorerViewInput;
 import au.org.intersect.exsite9.view.provider.ProjectExplorerViewLabelProvider;
@@ -129,21 +130,19 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
     {
         if (commandId.equals("au.org.intersect.exsite9.commands.NewProjectCommand"))
         {
-            displayProjectAndExpand(returnValue);
+            displayProjectAndExpand();
         }
         else if (commandId.equals("au.org.intersect.exsite9.commands.OpenProjectCommand"))
         {
-            displayProjectAndExpand(returnValue);
+            displayProjectAndExpand();
         }
         else if (commandId.equals("au.org.intersect.exsite9.commands.EditProjectCommand"))
         {
-            displayProjectAndExpand(returnValue);
+            displayProjectAndExpand();
         }
         else if (commandId.equals("au.org.intersect.exsite9.commands.AddFolderToProjectCommand"))
         {
-            // The Project object is already bound - no need to get another.
             refreshAndExpand();
-            
         }
         else if (commandId.equals("au.org.intersect.exsite9.commands.ReloadProjectCommand"))
         {
@@ -161,9 +160,10 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
         this.treeViewer.expandAll();
     }
     
-    private void displayProjectAndExpand(final Object returnValue)
+    private void displayProjectAndExpand()
     {
-        final Project project = (Project) returnValue;
+        final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
+        final Project project = projectManager.getCurrentProject();
         if (project != null)
         {
             final ProjectExplorerViewInput wrapper = new ProjectExplorerViewInput(project);

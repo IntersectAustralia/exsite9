@@ -13,7 +13,6 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Shell;
@@ -23,6 +22,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.service.IFileService;
+import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.service.IProjectService;
 
 /**
@@ -55,8 +55,13 @@ public final class AddFolderToProjectHandler implements IHandler
     @Override
     public Object execute(final ExecutionEvent event) throws ExecutionException
     {
-        final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
-        final Project project = (Project) selection.getFirstElement();
+        final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
+        final Project project = projectManager.getCurrentProject();
+
+        if (project == null)
+        {
+            throw new IllegalStateException("Trying to add a folder to a null project");
+        }
 
         final Shell shell = HandlerUtil.getActiveWorkbenchWindow(event).getShell();
 

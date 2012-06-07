@@ -28,6 +28,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.service.IProjectManager;
 
 /**
  * View component used for browsing Metadata.
@@ -121,8 +122,12 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         if (commandId.equals("au.org.intersect.exsite9.commands.NewProjectCommand") ||
             commandId.equals("au.org.intersect.exsite9.commands.OpenProjectCommand"))
         {
-            final Project currentProject = (Project) returnValue;
-            initLayout(currentProject.getMetadataCategories());
+            final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
+            final Project project = projectManager.getCurrentProject();
+            if (project != null)
+            {
+                initLayout(project.getMetadataCategories());
+            }
         }
     }
 

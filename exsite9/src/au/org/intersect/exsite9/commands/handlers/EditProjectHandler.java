@@ -12,12 +12,13 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.wizard.editproject.EditProjectWizard;
 
 /**
@@ -42,19 +43,21 @@ public class EditProjectHandler implements IHandler
     }
 
     @Override
-    public Object execute(ExecutionEvent event) throws ExecutionException
+    public Object execute(final ExecutionEvent event) throws ExecutionException
     {
-        final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
-        final Object selectedObject = selection.getFirstElement();
-        Project selectedProject = (Project) selectedObject;
-        
+        final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
+        final Project selectedProject = projectManager.getCurrentProject();
+        if (selectedProject == null)
+        {
+            throw new IllegalStateException("Trying to edit a null project");
+        }
+
         final Shell shell = HandlerUtil.getActiveWorkbenchWindow(event).getShell();
         final EditProjectWizard wizard = new EditProjectWizard(selectedProject);
         final WizardDialog wizardDialog = new WizardDialog(shell, wizard);
         wizardDialog.open();
 
-        selectedProject = wizard.updateProject();
-        return selectedProject;
+        return wizard.updateProject();
     }
 
     @Override
