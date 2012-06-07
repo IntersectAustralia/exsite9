@@ -36,6 +36,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     public ValidatingField<String> categoryNameField;
     public List metadataValuesList;
     private Button removeButton;
+    private Button addButton;
     
     private Project project;
 
@@ -135,8 +136,8 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
             }
         });
         
-        Button addButton = new Button(container, SWT.PUSH);
-        addButton.setText("Add");
+        addButton = new Button(container, SWT.PUSH);
+        addButton.setText("Add...");
         addButton.addSelectionListener(this);
         
         this.removeButton = new Button(container, SWT.PUSH);
@@ -171,10 +172,8 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
 
     @Override
     public void widgetSelected(SelectionEvent e)
-    {
-        String selectionText = e.text;
-        
-        if ("Add...".equals(selectionText))
+    {        
+        if (e.widget.equals(addButton))
         {
             InputDialog userInput = new InputDialog(getShell(), "Enter Value", "Enter a new metadata value", "", new IInputValidator()
             {
@@ -205,11 +204,12 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                     return null;
                 }
             });
+            userInput.open();
             
             this.metadataValuesList.add(userInput.getValue().trim());
             
         }
-        else if ("remove".equals(selectionText))
+        else if (e.widget.equals(removeButton))
         {
             if (this.metadataValuesList.getSelectionCount() == 0)
             {
