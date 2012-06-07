@@ -12,8 +12,11 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IExecutionListener;
 import org.eclipse.core.commands.NotHandledException;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.PlatformUI;
@@ -22,6 +25,8 @@ import org.eclipse.ui.part.ViewPart;
 
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.service.IProjectManager;
+import au.org.intersect.exsite9.view.listener.ProjectExplorerDragListener;
+import au.org.intersect.exsite9.view.listener.ProjectExplorerDropListener;
 import au.org.intersect.exsite9.view.provider.ProjectExplorerViewContentProvider;
 import au.org.intersect.exsite9.view.provider.ProjectExplorerViewInput;
 import au.org.intersect.exsite9.view.provider.ProjectExplorerViewLabelProvider;
@@ -58,6 +63,14 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
         final ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(
                 ICommandService.class);
 
+        // Set up drag & drop
+        int operations = DND.DROP_MOVE;
+        Transfer[] transferTypes = new Transfer[] {LocalSelectionTransfer.getTransfer()};
+        ProjectExplorerDragListener dragListener = new ProjectExplorerDragListener(treeViewer);
+        ProjectExplorerDropListener dropListener = new ProjectExplorerDropListener(treeViewer);
+        this.treeViewer.addDragSupport(operations, transferTypes, dragListener);
+        this.treeViewer.addDropSupport(operations, transferTypes, dropListener);
+        
         // This command is defined in the plugin.xml
         // This is used to the view can load the project with the New Project command is executed.
         final Command newProjectCommand = commandService
