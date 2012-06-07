@@ -37,6 +37,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
 {
     public static final String ID = MetadataBrowserView.class.getName();
 
+    private ExpandBar expandBar;
     private Composite parent;
 
     /**
@@ -52,8 +53,6 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
     @Override
     public void createPartControl(final Composite parent)
     {
-        this.parent = parent;
-
         final ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
 
         final Command newProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.NewProjectCommand");
@@ -62,14 +61,20 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         final Command openProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.OpenProjectCommand");
         openProjectCommand.addExecutionListener(this);
         
-        final Command AddMetadataCategoryCommand = commandService.getCommand("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand");
-        AddMetadataCategoryCommand.addExecutionListener(this);
+        final Command addMetadataCategoryCommand = commandService.getCommand("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand");
+        addMetadataCategoryCommand.addExecutionListener(this);
+
+        this.parent = parent;
     }
 
     private void initLayout(final Set<MetadataCategory> metadataCategories)
     {
-        final ExpandBar expandBar = new ExpandBar(this.parent, SWT.BORDER | SWT.V_SCROLL);
-        expandBar.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
+        if (this.expandBar != null)
+        {
+            this.expandBar.dispose();
+        }
+        this.expandBar = new ExpandBar(this.parent, SWT.BORDER | SWT.V_SCROLL);
+        this.expandBar.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 
         for (final MetadataCategory metadataCategory : metadataCategories)
         {
@@ -96,6 +101,9 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             expandItem.setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
             expandItem.setControl(composite);
         }
+
+        this.parent.layout();
+        this.expandBar.layout();
     }
 
     /**
