@@ -66,6 +66,11 @@ public final class MetadataCategory implements Serializable
     {
         return this.metadataValues;
     }
+    
+    public void setValues(Set<String> values)
+    {
+        this.metadataValues = values;
+    }
 
     @Override
     public int hashCode()

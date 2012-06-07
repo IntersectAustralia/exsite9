@@ -94,6 +94,11 @@
             id="au.org.intersect.exsite9.commands.EditProjectCommand"
             name="Edit Project">
       </command>
+      <command
+            defaultHandler="au.org.intersect.exsite9.commands.handlers.AddMetadataCategoryHandler"
+            id="au.org.intersect.exsite9.commands.AddMetadataCategoryCommand"
+            name="Add Metadata Category">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -126,6 +131,17 @@
                   label="Exit"
                   style="push"
                   tooltip="Exits the application">
+            </command>
+         </menu>
+         <menu
+               id="au.org.intersect.exsite9.menu.metadata"
+               label="Metadata">
+            <command
+                  commandId="au.org.intersect.exsite9.commands.AddMetadataCategoryCommand"
+                  icon="icons/alt_window_16.gif"
+                  label="Add Metadata Category"
+                  style="push"
+                  tooltip="Add Metadata Category">
             </command>
          </menu>
       </menuContribution>

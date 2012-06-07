@@ -61,6 +61,9 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
 
         final Command openProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.OpenProjectCommand");
         openProjectCommand.addExecutionListener(this);
+        
+        final Command AddMetadataCategoryCommand = commandService.getCommand("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand");
+        AddMetadataCategoryCommand.addExecutionListener(this);
     }
 
     private void initLayout(final Set<MetadataCategory> metadataCategories)
@@ -120,7 +123,8 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
     public void postExecuteSuccess(final String commandId, final Object returnValue)
     {
         if (commandId.equals("au.org.intersect.exsite9.commands.NewProjectCommand") ||
-            commandId.equals("au.org.intersect.exsite9.commands.OpenProjectCommand"))
+            commandId.equals("au.org.intersect.exsite9.commands.OpenProjectCommand") ||
+            commandId.equals("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand"))
         {
             final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
             final Project project = projectManager.getCurrentProject();
