@@ -7,13 +7,22 @@
 
 package au.org.intersect.exsite9.view.listener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.util.LocalSelectionTransfer;
+import org.eclipse.jface.viewers.ITreeSelection;
+import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerDropAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.TransferData;
 
+
+import au.org.intersect.exsite9.domain.NewFilesGroup;
+import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
+import au.org.intersect.exsite9.dto.HierarchyMoveDTO;
 
 public class ProjectExplorerDropListener extends ViewerDropAdapter
 {
@@ -28,12 +37,36 @@ public class ProjectExplorerDropListener extends ViewerDropAdapter
     {
         System.out.println("Drop");
         
-        Object target =  determineTarget(event);
-        Object selection = LocalSelectionTransfer.getTransfer().getSelection();
+        List<HierarchyMoveDTO> moveList = new ArrayList<HierarchyMoveDTO>(0);
+        Object newParent =  determineTarget(event);
+        ITreeSelection treeSelection = (ITreeSelection) LocalSelectionTransfer.getTransfer().getSelection();
         
-        System.out.println("SELECTION= " + selection.toString());
-        System.out.println("TARGET= " + target.toString());
+        for(TreePath path : treeSelection.getPaths())
+        {
+            Object selection = path.getLastSegment();
+            if ((selection instanceof Project) || (selection instanceof NewFilesGroup))
+            {
+                continue;
+            }
             
+            Object oldParent = path.getParentPath().getLastSegment();
+            if (newParent == oldParent)
+            {
+                continue;
+            }
+
+            System.out.println("SELECTION= " + selection.toString());
+            System.out.println("OLD PARENT= " + oldParent.toString());
+            System.out.println("NEW PARENT= " + newParent.toString());
+            
+            moveList.add(new HierarchyMoveDTO(selection, oldParent, newParent));
+        }
+        
+        if(! moveList.isEmpty())
+        {
+            
+        }
+        
         super.drop(event);
     }
     

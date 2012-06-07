@@ -7,8 +7,6 @@
 
 package au.org.intersect.exsite9.view.listener;
 
-import java.util.List;
-
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -32,11 +30,11 @@ public class ProjectExplorerDragListener implements DragSourceListener
     {
         System.out.println("Drag Start");
         
-        @SuppressWarnings("unchecked")
-        List<Object> selection = ((ITreeSelection)treeViewer.getSelection()).toList();
-        
-        if (selection.size() == 1){
-            Object obj = selection.get(0);
+        // If we have a single selection we can cancel the drag/drop if the selection is
+        // the project group or the new files group
+        if(((ITreeSelection)treeViewer.getSelection()).size() == 1)
+        {
+            Object obj = ((ITreeSelection)treeViewer.getSelection()).toList().get(0);
             if ((obj instanceof NewFilesGroup) || (obj instanceof Project))
             {
                 event.doit = false;
