@@ -31,11 +31,10 @@ public final class MetadataCategory implements Serializable
     private Long id;
 
     private String name;
-    private Set<String> values = new HashSet<String>();
+    private Set<String> metadataValues = new HashSet<String>();
 
     public MetadataCategory()
     {
-        
     }
 
     public MetadataCategory(final String name)
@@ -65,7 +64,7 @@ public final class MetadataCategory implements Serializable
 
     public Set<String> getValues()
     {
-        return this.values;
+        return this.metadataValues;
     }
 
     @Override
