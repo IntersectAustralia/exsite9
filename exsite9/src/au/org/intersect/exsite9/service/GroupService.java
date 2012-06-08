@@ -124,8 +124,10 @@ public final class GroupService implements IGroupService
                 
                 if(movedOK)
                 {
+                    em.getTransaction().begin();
                     groupDAO.updateGroup(oldParent);
                     groupDAO.updateGroup(newParent);
+                    em.getTransaction().commit();
                 }
             }
         }
