@@ -1,6 +1,9 @@
 package au.org.intersect.exsite9.dao;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
 
 import javax.persistence.EntityManager;
 
@@ -40,9 +43,28 @@ public class ProjectDAOUnitTest extends DAOTest
         
         projectDAO.createProject(project);
         
-        Project project2 = projectDAO.findById(project.getId());
+        Project persistedProject = projectDAO.findById(project.getId());
         
-        assertEquals(project, project2);
+        assertEquals(project, persistedProject);
+        
+        Project project2 = new Project();
+        project2.setName("Project Two");
+        project2.setDescription("This is project two.");
+        project2.setOwner("Owner Two");
+        
+        Group rootNode2 = new Group(project2.getName());
+        Group newFilesNode2 = new Group("New Files");
+        
+        project2.setRootNode(rootNode2);
+        project2.setNewFilesNode(newFilesNode2);
+        
+        projectDAO.createProject(project2);
+        
+        List<Project> projectList = projectDAO.findAllProjects();
+        
+        assertTrue(projectList.size() == 2);
+        assertTrue(projectList.contains(project));
+        assertTrue(projectList.contains(project2));
         
         em.close();
     }
