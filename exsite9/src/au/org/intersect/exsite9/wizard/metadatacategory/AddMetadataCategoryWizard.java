@@ -38,7 +38,7 @@ public class AddMetadataCategoryWizard extends Wizard
     @Override
     public boolean performFinish()
     {
-        String categoryTitle = page1.categoryNameField.getContents();
+        String categoryTitle = page1.categoryNameField.getContents().trim();
         String[] metadataValues = page1.metadataValuesList.getItems();
         Set<String> valuesSet = new HashSet<String>(Arrays.asList(metadataValues));
         MetadataCategory newCategory = new MetadataCategory(categoryTitle);
