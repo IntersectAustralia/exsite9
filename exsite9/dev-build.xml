@@ -137,7 +137,11 @@
 			debug="true" includeantruntime="false">
 			<classpath refid="test.classpath" />
 		</javac>
-		<copydir src="${test.dir}/META-INF" dest="${build.classes-test.dir}/META-INF" />
+		<copy todir="${build.classes-test.dir}/META-INF">
+			<fileset dir="${test.dir}/META-INF">
+				<include name="*.*"/>
+			</fileset>
+		</copy>
 	</target>
 
 	<target name="unittest" depends="compile-test">
@@ -153,6 +157,9 @@
 			datafile="${cobertura.ser}">
 			<fileset dir="${build.classes.dir}">
 				<include name="**/*.class" />
+				<exclude name="**/wizard/**/*.class"/>
+				<exclude name="**/view/**/*.class"/>
+				<exclude name="**/commands/**/*.class"/>
 			</fileset>
 		</cobertura-instrument>
 
