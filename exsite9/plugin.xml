@@ -99,6 +99,11 @@
             id="au.org.intersect.exsite9.commands.AddMetadataCategoryCommand"
             name="Add Metadata Category">
       </command>
+      <command
+            defaultHandler="au.org.intersect.exsite9.commands.handlers.ListFoldersHandler"
+            id="au.org.intersect.exsite9.commands.ListFoldersCommand"
+            name="List Folders">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -135,6 +140,13 @@
                   label="Open..."
                   style="push"
                   tooltip="Open an existing project">
+            </command>
+            <command
+                  commandId="au.org.intersect.exsite9.commands.ListFoldersCommand"
+                  icon="icons/alt_window_16.gif"
+                  label="Folders..."
+                  style="push"
+                  tooltip="List the project folders">
             </command>
          </menu>
          <menu
@@ -206,7 +218,17 @@
          <separator
                name="exsite9.separator1"
                visible="true">
-         </separator>              
+         </separator>
+         <separator
+               name="exsite9.separator1"
+               visible="true">
+         </separator>
+         <command
+               commandId="au.org.intersect.exsite9.commands.ListFoldersCommand"
+               label="Folders..."
+               style="push"
+               tooltip="List the project folders">
+         </command>              
          <command
                commandId="au.org.intersect.exsite9.commands.ReloadProjectCommand"
                label="Refresh"
