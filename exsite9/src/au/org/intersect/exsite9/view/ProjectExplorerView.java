@@ -56,7 +56,7 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
     {
         this.setPartName("Project View");
 
-        this.treeViewer = new TreeViewer(parent, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+        this.treeViewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
         this.treeViewer.setContentProvider(new ProjectExplorerViewContentProvider());
         this.treeViewer.setLabelProvider(new ProjectExplorerViewLabelProvider());
 
