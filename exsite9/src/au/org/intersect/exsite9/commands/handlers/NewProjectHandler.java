@@ -58,6 +58,11 @@ public final class NewProjectHandler implements IHandler
 
         final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
         projectManager.setCurrentProject(newProject);
+
+        if (newProject != null)
+        {
+            HandlerUtils.activateShowProjectActivity(event);
+        }
         return newProject;
     }
 

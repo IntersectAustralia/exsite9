@@ -177,19 +177,17 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         {
             InputDialog userInput = new InputDialog(getShell(), "Enter Value", "Enter a new metadata value", "", new IInputValidator()
             {
-                private String errorMessage;
-                
                 @Override
                 public String isValid(String contents)
                 {
                     if (contents.trim().isEmpty())
                     {
-                        return this.errorMessage = "Value must not be empty.";
+                        return "Value must not be empty.";
                     }
                     
                     if (contents.trim().length() >= 255)
                     {
-                        return this.errorMessage = "Value is too long.";
+                        return "Value is too long.";
                     }
                                         
                     final String[] listOfValues = metadataValuesList.getItems();
@@ -198,7 +196,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                     {
                         if (existingValue.equalsIgnoreCase(contents.trim()))
                         {
-                            return this.errorMessage = "A Value with that name already exists for this Category.";
+                            return "A Value with that name already exists for this Category.";
                         }
                     }
                     return null;

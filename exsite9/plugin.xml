@@ -306,5 +306,16 @@
             type="au.org.intersect.exsite9.domain.Group">
       </propertyTester>
    </extension>
+   <extension
+         point="org.eclipse.ui.activities">
+      <activity
+            id="au.org.intersect.exsite9.activity.showProject"
+            name="Show Project">
+      </activity>
+      <activityPatternBinding
+            activityId="au.org.intersect.exsite9.activity.showProject"
+            pattern="au.org.intersect.exsite9/au.org.intersect.exsite9.menu.metadata">
+      </activityPatternBinding>
+   </extension>
 
 </plugin>

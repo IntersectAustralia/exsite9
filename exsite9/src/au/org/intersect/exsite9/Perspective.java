@@ -6,9 +6,14 @@
  */
 package au.org.intersect.exsite9;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 import org.eclipse.ui.IViewLayout;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.activities.IWorkbenchActivitySupport;
 
 import au.org.intersect.exsite9.view.MetadataBrowserView;
 import au.org.intersect.exsite9.view.ProjectExplorerView;
@@ -41,5 +46,10 @@ public final class Perspective implements IPerspectiveFactory
 
         // Disables the minimize & maximize buttons on views and editors.
         layout.setFixed(true);
+
+        // Clears all the activities - since they are persisted magically.
+        final IWorkbenchActivitySupport activitySupport = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getWorkbench().getActivitySupport();
+        final Set<String> enabledActivities = new HashSet<String>();
+        activitySupport.setEnabledActivityIds(enabledActivities);
     }
 }
