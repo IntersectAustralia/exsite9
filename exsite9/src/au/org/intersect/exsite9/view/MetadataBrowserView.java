@@ -18,12 +18,16 @@ import org.eclipse.core.commands.NotHandledException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
+import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.part.ViewPart;
@@ -72,40 +76,57 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
 
     private void initLayout(final List<MetadataCategory> metadataCategories)
     {
+        if (metadataCategories.isEmpty())
+        {
+            return;
+        }
+
         if (this.expandBar != null)
         {
             this.expandBar.dispose();
         }
         this.expandBar = new ExpandBar(this.parent, SWT.BORDER | SWT.V_SCROLL);
-        this.expandBar.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 
         final List<MetadataCategory> sorted = new ArrayList<MetadataCategory>(metadataCategories);
         Collections.sort(sorted, new AlphabeticalMetadataCategoryComparator());
 
         for (final MetadataCategory metadataCategory : sorted)
         {
-            final Composite composite = new Composite(expandBar, SWT.NONE);
-            composite.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
+            final Composite expandBarComposite = new Composite(expandBar, SWT.NONE);
+            final RowLayout expandBarLayout = new RowLayout(SWT.VERTICAL);
+            expandBarComposite.setLayout(expandBarLayout);
 
-            final GridLayout gridLayout = new GridLayout(8, false);
-            gridLayout.marginLeft = 10;
-            gridLayout.marginRight = 10;
-            gridLayout.marginTop = 10;
-            gridLayout.marginBottom = 10;
-            gridLayout.verticalSpacing = 15;
-            composite.setLayout(gridLayout);
+            final Composite headerComposite = new Composite(expandBarComposite, SWT.NONE);
+            final Composite buttonComposite = new Composite(expandBarComposite, SWT.NONE);
+
+            final ToolBar toolBar = new ToolBar(headerComposite, SWT.FLAT | SWT.WRAP | SWT.RIGHT);
+            new ToolItem(toolBar, SWT.SEPARATOR);
+            final ToolItem editButtonItem = new ToolItem(toolBar, SWT.NULL);
+            final Image editImage = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ELCL_SYNCED);
+            editButtonItem.setImage(editImage);
+            editButtonItem.addSelectionListener(new EditMetadataCategorySelectionListener(metadataCategory));
+            new ToolItem(toolBar, SWT.SEPARATOR);
+            toolBar.pack();
+
+            final GridLayout buttonHeaderLayout = new GridLayout(8, false);
+            buttonHeaderLayout.marginLeft = 10;
+            buttonHeaderLayout.marginRight = 10;
+            buttonHeaderLayout.marginTop = 10;
+            buttonHeaderLayout.marginBottom = 10;
+            buttonHeaderLayout.verticalSpacing = 15;
+            buttonComposite.setLayout(buttonHeaderLayout);
 
             for (final String metaDataValue : metadataCategory.getValues())
             {
-                final Button button = new Button(composite, SWT.TOGGLE);
+                final Button button = new Button(buttonComposite, SWT.TOGGLE);
                 button.setText(metaDataValue);
                 button.addSelectionListener(this);
             }
 
             final ExpandItem expandItem = new ExpandItem(expandBar, SWT.NONE);
             expandItem.setText(metadataCategory.getName());
-            expandItem.setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
-            expandItem.setControl(composite);
+            expandItem.setHeight(expandBarComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+            expandItem.setControl(expandBarComposite);
         }
 
         this.parent.layout();
@@ -173,5 +194,26 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
     public void widgetDefaultSelected(final SelectionEvent e)
     {
         
+    }
+
+    private static final class EditMetadataCategorySelectionListener implements SelectionListener
+    {
+        private final MetadataCategory metadataCategory;
+
+        public EditMetadataCategorySelectionListener(final MetadataCategory metadataCategory)
+        {
+            this.metadataCategory = metadataCategory;
+        }
+
+        @Override
+        public void widgetSelected(final SelectionEvent e)
+        {
+            System.out.println("Edit clicked for " + metadataCategory);
+        }
+
+        @Override
+        public void widgetDefaultSelected(final SelectionEvent e)
+        {
+        }
     }
 }
