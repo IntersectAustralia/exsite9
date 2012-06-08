@@ -7,9 +7,7 @@
 package au.org.intersect.exsite9.domain;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -44,7 +42,7 @@ public final class Project
             inverseJoinColumns={@JoinColumn(name="folder_id", referencedColumnName="id")})
     private List<Folder> folders;
 
-    private Set<MetadataCategory> metadataCategories;
+    private List<MetadataCategory> metadataCategories;
     
     @OneToOne(cascade = CascadeType.ALL)
     private Group rootNode;
@@ -68,7 +66,7 @@ public final class Project
         this.rootNode = new Group(this.name);
         this.newFilesNode = new NewFilesGroup();
         this.rootNode.getGroups().add(newFilesNode);
-        this.metadataCategories = new HashSet<MetadataCategory>();
+        this.metadataCategories = new ArrayList<MetadataCategory>();
     }
 
     public Long getId()
@@ -141,12 +139,12 @@ public final class Project
         this.folders = folders;
     }
 
-    public Set<MetadataCategory> getMetadataCategories()
+    public List<MetadataCategory> getMetadataCategories()
     {
         return this.metadataCategories;
     }
 
-    public void setMetadataCategories(final Set<MetadataCategory> mdcs)
+    public void setMetadataCategories(final List<MetadataCategory> mdcs)
     {
         this.metadataCategories = mdcs;
     }

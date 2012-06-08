@@ -6,7 +6,9 @@
  */
 package au.org.intersect.exsite9.view;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -28,6 +30,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.domain.utils.AlphabeticalMetadataCategoryComparator;
 import au.org.intersect.exsite9.service.IProjectManager;
 
 /**
@@ -67,7 +70,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         this.parent = parent;
     }
 
-    private void initLayout(final Set<MetadataCategory> metadataCategories)
+    private void initLayout(final List<MetadataCategory> metadataCategories)
     {
         if (this.expandBar != null)
         {
@@ -76,7 +79,10 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         this.expandBar = new ExpandBar(this.parent, SWT.BORDER | SWT.V_SCROLL);
         this.expandBar.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 
-        for (final MetadataCategory metadataCategory : metadataCategories)
+        final List<MetadataCategory> sorted = new ArrayList<MetadataCategory>(metadataCategories);
+        Collections.sort(sorted, new AlphabeticalMetadataCategoryComparator());
+
+        for (final MetadataCategory metadataCategory : sorted)
         {
             final Composite composite = new Composite(expandBar, SWT.NONE);
             composite.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));

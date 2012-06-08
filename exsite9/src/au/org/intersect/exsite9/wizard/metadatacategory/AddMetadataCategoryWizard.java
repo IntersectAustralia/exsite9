@@ -1,8 +1,6 @@
 package au.org.intersect.exsite9.wizard.metadatacategory;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.PlatformUI;
@@ -38,9 +36,9 @@ public class AddMetadataCategoryWizard extends Wizard
     @Override
     public boolean performFinish()
     {
-        String categoryTitle = page1.categoryNameField.getContents();
-        String[] metadataValues = page1.metadataValuesList.getItems();
-        Set<String> valuesSet = new HashSet<String>(Arrays.asList(metadataValues));
+        String categoryTitle = page1.getMetadataCategoryName();
+        List<String> valuesSet = page1.getMetadataCategoryValues();
+
         MetadataCategory newCategory = new MetadataCategory(categoryTitle);
         newCategory.setValues(valuesSet);
 

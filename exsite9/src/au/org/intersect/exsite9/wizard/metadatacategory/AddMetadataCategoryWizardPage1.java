@@ -1,6 +1,7 @@
 package au.org.intersect.exsite9.wizard.metadatacategory;
 
-import java.util.Set;
+import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -15,7 +16,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.List;
 
 import com.richclientgui.toolbox.validation.IFieldErrorMessageHandler;
 import com.richclientgui.toolbox.validation.ValidatingField;
@@ -33,8 +33,8 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
 
     private Composite container;
     
-    public ValidatingField<String> categoryNameField;
-    public List metadataValuesList;
+    private ValidatingField<String> categoryNameField;
+    private org.eclipse.swt.widgets.List metadataValuesList;
     private Button removeButton;
     private Button addButton;
     
@@ -87,7 +87,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                     return false;
                 }
                 
-                final Set<MetadataCategory> existingCategories = project.getMetadataCategories();
+                final List<MetadataCategory> existingCategories = project.getMetadataCategories();
                 
                 for (final MetadataCategory existingCategory: existingCategories)
                 {
@@ -118,7 +118,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         final Label metadataValuesLabel = new Label(this.container, SWT.NULL);
         metadataValuesLabel.setText("Metadata Values");
 
-        this.metadataValuesList = new List(this.container, SWT.BORDER | SWT.SINGLE | SWT.WRAP | SWT.V_SCROLL);
+        this.metadataValuesList = new org.eclipse.swt.widgets.List(this.container, SWT.BORDER | SWT.SINGLE | SWT.WRAP | SWT.V_SCROLL);
         this.metadataValuesList.addSelectionListener(new SelectionListener()
         {
             
@@ -131,7 +131,6 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
             @Override
             public void widgetDefaultSelected(SelectionEvent e)
             {
-                // TODO Auto-generated method stub
                 
             }
         });
@@ -160,7 +159,6 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     @Override
     public void keyPressed(KeyEvent e)
     {
-        // TODO Auto-generated method stub
         
     }
 
@@ -221,8 +219,16 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     @Override
     public void widgetDefaultSelected(SelectionEvent e)
     {
-        // TODO Auto-generated method stub
         
     }
 
+    public String getMetadataCategoryName()
+    {
+        return this.categoryNameField.getContents();
+    }
+
+    public List<String> getMetadataCategoryValues()
+    {
+        return Arrays.asList(this.metadataValuesList.getItems());
+    }
 }

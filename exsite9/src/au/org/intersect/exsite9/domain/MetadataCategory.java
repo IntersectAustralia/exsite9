@@ -7,8 +7,8 @@
 package au.org.intersect.exsite9.domain;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,7 +31,7 @@ public final class MetadataCategory implements Serializable
     private Long id;
 
     private String name;
-    private Set<String> metadataValues = new HashSet<String>();
+    private List<String> metadataValues = new ArrayList<String>();
 
     public MetadataCategory()
     {
@@ -62,12 +62,12 @@ public final class MetadataCategory implements Serializable
         this.name = name;
     }
 
-    public Set<String> getValues()
+    public List<String> getValues()
     {
         return this.metadataValues;
     }
     
-    public void setValues(Set<String> values)
+    public void setValues(List<String> values)
     {
         this.metadataValues = values;
     }
