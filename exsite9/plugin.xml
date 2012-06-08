@@ -167,31 +167,34 @@
       <menuContribution
             allPopups="false"
             locationURI="popup:au.org.intersect.exsite9.view.ProjectExplorerView">
-         <command
-               commandId="au.org.intersect.exsite9.commands.AddFolderToProjectCommand"
-               label="Add Folder to Project"
-               style="push">
-            <visibleWhen
-                  checkEnabled="false">
-               <reference
-                     definitionId="au.org.intersect.exsite9.expression.InstanceOfProject">
-               </reference>
-            </visibleWhen>
-         </command>
+         <menu
+               label="New">
+            <command
+                  commandId="au.org.intersect.exsite9.commands.AddFolderToProjectCommand"
+                  label="Folder..."
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <reference
+                        definitionId="au.org.intersect.exsite9.expression.InstanceOfProject">
+                  </reference>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="au.org.intersect.exsite9.commands.AddGroup"
+                  label="Group..."
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <reference
+                        definitionId="au.org.intersect.exsite9.expression.InstanceOfProjectOrGroup">
+                  </reference>
+               </visibleWhen>
+            </command>
+         </menu>
          <command
                commandId="au.org.intersect.exsite9.commands.EditProjectCommand"
-               label="Edit Project"
-               style="push">
-            <visibleWhen
-                  checkEnabled="false">
-               <reference
-                     definitionId="au.org.intersect.exsite9.expression.InstanceOfProject">
-               </reference>
-            </visibleWhen>
-         </command>              
-         <command
-               commandId="au.org.intersect.exsite9.commands.ReloadProjectCommand"
-               label="Refresh Project"
+               label="Edit Project Details..."
                style="push">
             <visibleWhen
                   checkEnabled="false">
@@ -203,15 +206,15 @@
          <separator
                name="exsite9.separator1"
                visible="true">
-         </separator>
+         </separator>              
          <command
-               commandId="au.org.intersect.exsite9.commands.AddGroup"
-               label="Add Group"
+               commandId="au.org.intersect.exsite9.commands.ReloadProjectCommand"
+               label="Refresh"
                style="push">
             <visibleWhen
                   checkEnabled="false">
                <reference
-                     definitionId="au.org.intersect.exsite9.expression.InstanceOfProjectOrGroup">
+                     definitionId="au.org.intersect.exsite9.expression.InstanceOfProject">
                </reference>
             </visibleWhen>
          </command>
