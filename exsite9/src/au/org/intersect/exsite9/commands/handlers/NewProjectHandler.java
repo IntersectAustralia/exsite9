@@ -12,6 +12,7 @@ import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -49,7 +50,8 @@ public final class NewProjectHandler implements IHandler
     @Override
     public Object execute(final ExecutionEvent event) throws ExecutionException
     {
-        final Shell shell = HandlerUtil.getActiveWorkbenchWindow(event).getShell();
+        final IWorkbenchWindow activeWorkbenchWindow = HandlerUtil.getActiveWorkbenchWindow(event);
+        final Shell shell = activeWorkbenchWindow.getShell();
         final NewProjectWizard wizard = new NewProjectWizard();
         final WizardDialog wizardDialog = new WizardDialog(shell, wizard);
         wizardDialog.open();
@@ -61,7 +63,7 @@ public final class NewProjectHandler implements IHandler
 
         if (newProject != null)
         {
-            HandlerUtils.activateShowProjectActivity(event);
+            HandlerUtils.activateShowProjectActivity(activeWorkbenchWindow);
         }
         return newProject;
     }
