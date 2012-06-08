@@ -6,7 +6,10 @@
  */
 package au.org.intersect.exsite9.service;
 
+import java.util.List;
+
 import au.org.intersect.exsite9.domain.Group;
+import au.org.intersect.exsite9.dto.HierarchyMoveDTO;
 
 /**
  * A Service for performing actions to Groups.
@@ -26,4 +29,10 @@ public interface IGroupService
      * @param childGroup The group that will be added.
      */
     void addChildGroup(final Group parentGroup, final Group childGroup);
+    
+    /**
+     * Moves selected group members to a new group
+     * @param moveList The list of items to move
+     */
+    void performHierarchyMove(final List<HierarchyMoveDTO> moveList);
 }

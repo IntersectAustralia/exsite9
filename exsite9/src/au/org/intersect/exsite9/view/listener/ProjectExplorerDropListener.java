@@ -17,19 +17,22 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerDropAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.TransferData;
-
+import org.eclipse.ui.PlatformUI;
 
 import au.org.intersect.exsite9.domain.NewFilesGroup;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.dto.HierarchyMoveDTO;
+import au.org.intersect.exsite9.service.IGroupService;
 
 public class ProjectExplorerDropListener extends ViewerDropAdapter
 {
-
+    private TreeViewer treeViewer;
+    
     public ProjectExplorerDropListener(TreeViewer treeViewer)
     {
         super(treeViewer);
+        this.treeViewer = treeViewer;
     }
 
     @Override
@@ -64,7 +67,9 @@ public class ProjectExplorerDropListener extends ViewerDropAdapter
         
         if(! moveList.isEmpty())
         {
-            
+            final IGroupService groupService = (IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class);
+            groupService.performHierarchyMove(moveList);
+            treeViewer.refresh();
         }
         
         super.drop(event);

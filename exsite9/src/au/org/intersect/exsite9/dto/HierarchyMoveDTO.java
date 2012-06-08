@@ -8,20 +8,20 @@ package au.org.intersect.exsite9.dto;
 
 public final class HierarchyMoveDTO
 {
-    private final Object selection;
+    private final Object child;
     private final Object oldParent;
     private final Object newParent;
     
     public HierarchyMoveDTO(Object selection, Object oldParent, Object newParent)
     {
-        this.selection = selection;
+        this.child = selection;
         this.oldParent = oldParent;
         this.newParent = newParent;
     }
 
-    public Object getSelection()
+    public Object getChild()
     {
-        return selection;
+        return child;
     }
 
     public Object getOldParent()
