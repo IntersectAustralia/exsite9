@@ -250,6 +250,11 @@
       <handler
             class="au.org.intersect.exsite9.commands.handlers.AddGroupHandler"
             commandId="au.org.intersect.exsite9.commands.AddGroup">
+         <enabledWhen>
+            <reference
+                  definitionId="au.org.intersect.exsite9.expression.OneItemSelected">
+            </reference>
+         </enabledWhen>
       </handler>      
 	  <handler
             class="au.org.intersect.exsite9.commands.handlers.ReloadProjectHandler"
@@ -294,6 +299,15 @@
                   </and>
                </iterate>
             </with></or>
+      </definition>
+      <definition
+            id="au.org.intersect.exsite9.expression.OneItemSelected">
+         <with
+               variable="selection">
+            <count
+                  value="1">
+            </count>
+         </with>
       </definition>
    </extension>
    <extension

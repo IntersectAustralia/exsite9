@@ -28,9 +28,17 @@ public final class GroupDAO
 
     public void updateGroup(final Group group)
     {
-        em.getTransaction().begin();
+        boolean localTransaction = (em.getTransaction().isActive()) ? false : true;
+        
+        if (localTransaction)
+        {
+            em.getTransaction().begin();
+        }
         em.merge(group);
-        em.getTransaction().commit();
+        if(localTransaction)
+        {
+            em.getTransaction().commit();
+        }
     }
     
     public Group findById(final long id)
