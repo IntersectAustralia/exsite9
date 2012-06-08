@@ -54,7 +54,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         this.container = new Composite(parent, SWT.NULL);
         final GridLayout layout = new GridLayout();
         this.container.setLayout(layout);
-        layout.numColumns = 2;
+        layout.numColumns = 3;
 
         this.stringValidatorToolkit = new StringValidationToolkit(SWT.TOP | SWT.LEFT, 1, true);
         this.stringValidatorToolkit.setDefaultErrorMessageHandler(this.errorMessageHandler);
@@ -114,6 +114,9 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         }, true, "");
 
         this.categoryNameField.getControl().addKeyListener(this);
+        
+        //empty cell due to having 3 columns below
+        new Label(container, SWT.NULL);
 
         final Label metadataValuesLabel = new Label(this.container, SWT.NULL);
         metadataValuesLabel.setText("Metadata Values");
@@ -139,6 +142,12 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         addButton.setText("Add...");
         addButton.addSelectionListener(this);
         
+      //empty cell due to having 3 columns below
+        new Label(container, SWT.NULL);
+        
+      //empty cell due to having 3 columns below
+        new Label(container, SWT.NULL);
+        
         this.removeButton = new Button(container, SWT.PUSH);
         removeButton.setText("Remove");
         removeButton.addSelectionListener(this);
@@ -147,9 +156,14 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
 
         final GridData singleLineGridData = new GridData(GridData.FILL_HORIZONTAL);
         final GridData multiLineGridData = new GridData(GridData.FILL_BOTH);
+        final GridData buttonGridData = new GridData(SWT.TOP);
+        //buttonGridData.horizontalAlignment = GridData.HORIZONTAL_ALIGN_END;
+
 
         this.categoryNameField.getControl().setLayoutData(singleLineGridData);
         this.metadataValuesList.setLayoutData(multiLineGridData);
+        this.addButton.setLayoutData(buttonGridData);
+        this.removeButton.setLayoutData(buttonGridData);
 
         setControl(this.container);
         setPageComplete(false);
@@ -201,6 +215,11 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                 }
             });
             userInput.open();
+            
+            if (userInput.getValue() == null)
+            {
+                return;
+            }
             
             this.metadataValuesList.add(userInput.getValue().trim());
             
