@@ -94,6 +94,9 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         {
             final Composite expandBarComposite = new Composite(expandBar, SWT.NONE);
             final RowLayout expandBarLayout = new RowLayout(SWT.VERTICAL);
+            expandBarLayout.wrap = true;
+            expandBarLayout.pack = true;
+            expandBarLayout.justify = false;
             expandBarComposite.setLayout(expandBarLayout);
 
             final Composite headerComposite = new Composite(expandBarComposite, SWT.NONE);
@@ -108,12 +111,14 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             new ToolItem(toolBar, SWT.SEPARATOR);
             toolBar.pack();
 
-            final GridLayout buttonHeaderLayout = new GridLayout(8, false);
+            final RowLayout buttonHeaderLayout = new RowLayout(SWT.HORIZONTAL);
             buttonHeaderLayout.marginLeft = 10;
             buttonHeaderLayout.marginRight = 10;
             buttonHeaderLayout.marginTop = 10;
             buttonHeaderLayout.marginBottom = 10;
-            buttonHeaderLayout.verticalSpacing = 15;
+            buttonHeaderLayout.wrap = true;
+            buttonHeaderLayout.pack = true;
+            buttonHeaderLayout.justify = false;
             buttonComposite.setLayout(buttonHeaderLayout);
 
             for (final String metaDataValue : metadataCategory.getValues())
