@@ -224,7 +224,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
 
     public String getMetadataCategoryName()
     {
-        return this.categoryNameField.getContents();
+        return this.categoryNameField.getContents().trim();
     }
 
     public List<String> getMetadataCategoryValues()
