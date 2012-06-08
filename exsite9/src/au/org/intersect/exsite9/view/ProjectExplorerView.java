@@ -151,7 +151,12 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
         }
         else if (commandId.equals("au.org.intersect.exsite9.commands.EditProjectCommand"))
         {
-            displayProjectAndExpand();
+            if (returnValue != null)
+            {
+                final ProjectExplorerViewInput wrapper = new ProjectExplorerViewInput((Project)returnValue);
+                this.treeViewer.setInput(wrapper);
+                this.treeViewer.expandAll();
+            }
         }
         else if (commandId.equals("au.org.intersect.exsite9.commands.AddFolderToProjectCommand"))
         {
