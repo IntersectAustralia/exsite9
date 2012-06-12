@@ -16,9 +16,12 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IExecutionListener;
 import org.eclipse.core.commands.NotHandledException;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -45,6 +48,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
 
     private ExpandBar expandBar;
     private Composite parent;
+    private RowData rowData;
 
     /**
      * 
@@ -71,6 +75,20 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         addMetadataCategoryCommand.addExecutionListener(this);
 
         this.parent = parent;
+
+        // So wrapping of the buttons in the rows will work
+        this.parent.addControlListener(new ControlAdapter()
+        {
+            @Override
+            public void controlResized(final ControlEvent e)
+            {
+                super.controlResized(e);
+                if (rowData != null)
+                {
+                    rowData.width = parent.getClientArea().width;
+                }
+            }
+        });
     }
 
     private void initLayout(final List<MetadataCategory> metadataCategories)
@@ -101,6 +119,11 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             final Composite headerComposite = new Composite(expandBarComposite, SWT.NONE);
             final Composite buttonComposite = new Composite(expandBarComposite, SWT.NONE);
 
+            final ExpandItem expandItem = new ExpandItem(this.expandBar, SWT.NONE);
+            expandItem.setText(metadataCategory.getName());
+            expandItem.setControl(expandBarComposite);
+            expandItem.setHeight(expandBarComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+
             final ToolBar toolBar = new ToolBar(headerComposite, SWT.FLAT | SWT.WRAP | SWT.RIGHT);
             new ToolItem(toolBar, SWT.SEPARATOR);
             final ToolItem editButtonItem = new ToolItem(toolBar, SWT.NULL);
@@ -110,15 +133,19 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             new ToolItem(toolBar, SWT.SEPARATOR);
             toolBar.pack();
 
-            final RowLayout buttonHeaderLayout = new RowLayout(SWT.HORIZONTAL);
-            buttonHeaderLayout.marginLeft = 10;
-            buttonHeaderLayout.marginRight = 10;
-            buttonHeaderLayout.marginTop = 10;
-            buttonHeaderLayout.marginBottom = 10;
-            buttonHeaderLayout.wrap = true;
-            buttonHeaderLayout.pack = true;
-            buttonHeaderLayout.justify = false;
-            buttonComposite.setLayout(buttonHeaderLayout);
+            this.rowData = new RowData();
+            this.rowData.width = parent.getClientArea().width;
+            buttonComposite.setLayoutData(rowData);
+
+            final RowLayout buttonLayout = new RowLayout(SWT.HORIZONTAL);
+            buttonLayout.marginLeft = 10;
+            buttonLayout.marginRight = 10;
+            buttonLayout.marginTop = 10;
+            buttonLayout.marginBottom = 10;
+            buttonLayout.wrap = true;
+            buttonLayout.pack = true;
+            buttonLayout.justify = false;
+            buttonComposite.setLayout(buttonLayout);
 
             for (final String metaDataValue : metadataCategory.getValues())
             {
@@ -127,14 +154,14 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                 button.addSelectionListener(this);
             }
 
-            final ExpandItem expandItem = new ExpandItem(expandBar, SWT.NONE);
-            expandItem.setText(metadataCategory.getName());
-            expandItem.setHeight(expandBarComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
-            expandItem.setControl(expandBarComposite);
+            buttonComposite.pack();
+            buttonComposite.layout(true);
         }
 
-        this.parent.layout();
+        this.expandBar.pack();
         this.expandBar.layout();
+
+        this.parent.layout();
     }
 
     /**
