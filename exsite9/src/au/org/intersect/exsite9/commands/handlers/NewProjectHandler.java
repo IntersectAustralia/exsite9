@@ -59,10 +59,10 @@ public final class NewProjectHandler implements IHandler
         final Project newProject = wizard.getNewProject();
 
         final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
-        projectManager.setCurrentProject(newProject);
 
         if (newProject != null)
         {
+            projectManager.setCurrentProject(newProject);
             HandlerUtils.activateShowProjectActivity(activeWorkbenchWindow);
         }
         return newProject;

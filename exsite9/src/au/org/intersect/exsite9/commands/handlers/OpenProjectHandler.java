@@ -55,10 +55,10 @@ public class OpenProjectHandler implements IHandler
         final Project project = wizard.getSelectedProject();
 
         final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
-        projectManager.setCurrentProject(project);
 
         if (project != null)
         {
+            projectManager.setCurrentProject(project);
             HandlerUtils.activateShowProjectActivity(activeWorkbenchWindow);
         }
 
