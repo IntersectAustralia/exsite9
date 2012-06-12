@@ -123,6 +123,15 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             expandItem.setText(metadataCategory.getName());
             expandItem.setControl(expandBarComposite);
             expandItem.setHeight(expandBarComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+            expandBarComposite.addControlListener(new ControlAdapter()
+            {
+                @Override
+                public void controlResized(ControlEvent e)
+                {
+                    super.controlResized(e);
+                    expandItem.setHeight(expandBarComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+                }
+            });
 
             final ToolBar toolBar = new ToolBar(headerComposite, SWT.FLAT | SWT.WRAP | SWT.RIGHT);
             new ToolItem(toolBar, SWT.SEPARATOR);
