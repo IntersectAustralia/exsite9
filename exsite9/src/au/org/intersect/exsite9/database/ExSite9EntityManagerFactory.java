@@ -15,6 +15,7 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.eclipse.persistence.config.TargetDatabase;
@@ -23,6 +24,8 @@ import org.hsqldb.jdbcDriver;
 
 public class ExSite9EntityManagerFactory
 {
+    private static final Logger LOG = Logger.getLogger(ExSite9EntityManagerFactory.class);
+
     private static EntityManagerFactory emf = null;
 
     public ExSite9EntityManagerFactory()
@@ -37,7 +40,7 @@ public class ExSite9EntityManagerFactory
         if (platformArgs.contains("-exsite9.hsqldb.debug"))
         {
             connectionURL = "jdbc:hsqldb:hsql://localhost/exsite9";
-            System.out.println("Using HSQLDB connection string for debug: " + connectionURL);
+            LOG.info("Using HSQLDB connection string for debug: " + connectionURL);
         }
         else
         {
@@ -49,11 +52,10 @@ public class ExSite9EntityManagerFactory
         properties.put(PersistenceUnitProperties.JDBC_USER, "sa");
         properties.put(PersistenceUnitProperties.JDBC_PASSWORD, "");
         properties.put(PersistenceUnitProperties.DDL_GENERATION, "drop-and-create-tables");
-        
-        properties.put("eclipselink.logging.level", "FINE");
-        properties.put("eclipselink.logging.timestamp", "false");
-        properties.put("eclipselink.logging.session", "false");
-        properties.put("eclipselink.logging.thread", "false");
+
+        // Rewire eclipselink to log via log4j
+        properties.put("eclipselink.logging.logger", "org.eclipse.persistence.logging.CommonsLoggingSessionLog");
+        properties.put("eclipselink.logging.level", "INFO");
         properties.put("eclipselink.logging.exceptions", "true");
 
         emf = new PersistenceProvider().createEntityManagerFactory("jpa", properties);

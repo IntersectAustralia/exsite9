@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="commons-logging-1.1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="log4j-1.2.17.jar"/>
 	<classpathentry exported="true" kind="lib" path="rcptoolbox.1.0.10.jar"/>
 	<classpathentry exported="true" kind="lib" path="javax.persistence_2.0.3.jar"/>
 	<classpathentry exported="true" kind="lib" path="eclipselink-2.3.2.jar" sourcepath="/3rdParty/eclipselink/2.3.2/src/eclipselink-src.zip"/>

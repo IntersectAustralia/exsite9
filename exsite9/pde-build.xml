@@ -157,6 +157,8 @@
 			<pathelement path="${basedir}/../exsite9_libraries/eclipselink-2.3.2.jar"/>
 			<pathelement path="${basedir}/../exsite9_libraries/javax.persistence_2.0.3.jar"/>
 			<pathelement path="${basedir}/../exsite9_libraries/rcptoolbox.1.0.10.jar"/>
+			<pathelement path="${basedir}/../exsite9_libraries/commons-logging-1.1.1.jar"/>
+			<pathelement path="${basedir}/../exsite9_libraries/log4j-1.2.17.jar"/>
 		</path>
 		<!-- compile the source code -->
 		<javac destdir="${build.result.folder}/@dot" failonerror="${javacFailOnError}" verbose="${javacVerbose}" debug="${javacDebugInfo}" includeAntRuntime="no" bootclasspath="${bundleBootClasspath}" source="${bundleJavacSource}" target="${bundleJavacTarget}"		>

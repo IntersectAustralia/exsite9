@@ -6,20 +6,30 @@
  */
 package au.org.intersect.exsite9;
 
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
+import org.apache.log4j.RollingFileAppender;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+
+import au.org.intersect.exsite9.logging.StdOutErrLog;
 
 /**
  *
  */
 public final class Activator extends AbstractUIPlugin
 {
+    private static final String LOG4J_PATTERN = "%p [%d{yyyy-MM-dd HH:mm:ss,SSS}] %C - %m%n";
+
     // The plug-in ID
     public static final String PLUGIN_ID = "au.org.intersect.exsite9"; //$NON-NLS-1$
 
     // The shared instance
     private static Activator PLUGIN;
+
 
     /**
      * The constructor
@@ -33,6 +43,21 @@ public final class Activator extends AbstractUIPlugin
      */
     public void start(final BundleContext context) throws Exception
     {
+        // Configure log4j
+        final Logger rootLogger = Logger.getRootLogger();
+        rootLogger.addAppender(new ConsoleAppender(new PatternLayout(LOG4J_PATTERN)));
+
+        final String workspaceDir = Platform.getInstallLocation().getURL().getPath();
+        final String logFile = workspaceDir + "/log/exsite9.log";
+        final RollingFileAppender fileAppender = new RollingFileAppender(new PatternLayout(LOG4J_PATTERN), logFile, true);
+        fileAppender.setImmediateFlush(true);
+        fileAppender.setMaxBackupIndex(10);
+        fileAppender.setMaxFileSize("10MB");
+        rootLogger.addAppender(fileAppender);
+
+        StdOutErrLog.redirect();
+        rootLogger.info("Starting ExSite9");
+
         super.start(context);
         PLUGIN = this;
     }
