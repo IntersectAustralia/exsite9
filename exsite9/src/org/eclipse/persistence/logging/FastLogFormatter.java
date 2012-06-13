@@ -1,3 +1,7 @@
+/**
+ * Source code taken from {@link http://wiki.eclipse.org/EclipseLink/Foundation/Logging}.
+ * Supports use of log4j with eclipselink.
+ */
 /*******************************************************************************
  * Copyright (c) 1998, 2008 Oracle. All rights reserved.
  * This program and the accompanying materials are made available under the 

@@ -162,6 +162,7 @@
 				<exclude name="**/wizard/**/*.class"/>
 				<exclude name="**/view/**/*.class"/>
 				<exclude name="**/commands/**/*.class"/>
+				<exclude name="**/org/eclipse/**/*.class"/>
 			</fileset>
 		</cobertura-instrument>
 

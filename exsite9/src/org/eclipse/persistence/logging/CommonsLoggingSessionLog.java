@@ -1,3 +1,7 @@
+/**
+ * Source code taken from {@link http://wiki.eclipse.org/EclipseLink/Foundation/Logging}.
+ * Supports use of log4j with eclipselink.
+ */
 package org.eclipse.persistence.logging;
 
 import java.io.OutputStream;
