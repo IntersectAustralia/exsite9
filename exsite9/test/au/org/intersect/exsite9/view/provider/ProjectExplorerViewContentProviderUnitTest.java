@@ -6,8 +6,11 @@
  */
 package au.org.intersect.exsite9.view.provider;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -49,7 +52,7 @@ public final class ProjectExplorerViewContentProviderUnitTest
         final Project project = new Project("SomeProject","owner","description");
         final Group group1 = new Group("group1");
         final Group group2 = new Group("group2");
-        final ResearchFile rf1 = new ResearchFile("someFile");
+        final ResearchFile rf1 = new ResearchFile(new File("someFile"));
 
         project.getRootNode().getGroups().add(group1);
         project.getRootNode().getGroups().add(group2);

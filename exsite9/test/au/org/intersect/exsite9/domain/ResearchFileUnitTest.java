@@ -22,18 +22,15 @@ public final class ResearchFileUnitTest
     @Test
     public void testConstruction()
     {
-        final String path1="/tmp1/";
-        final String f1 = "filename1";
-        final String path2 = "/tmp2/";
-        final String f2 = "filename2";
+        final File file1 = new File("/tmp1/filename1");
+        final File file2 = new File("/tmp2/filename2");
 
-        final ResearchFile toTest1 = new ResearchFile(new File(path1 + f1));
-        final ResearchFile toTest2 = new ResearchFile(new File(path1 + f1));
-        final ResearchFile toTest3 = new ResearchFile(new File(path2 + f2));
+        final ResearchFile toTest1 = new ResearchFile(file1);
+        final ResearchFile toTest2 = new ResearchFile(file1);
+        final ResearchFile toTest3 = new ResearchFile(file2);
 
         assertEquals(toTest1, toTest1);
-        assertEquals(f1, toTest1.getName());
-        assertEquals(path1 + f1, toTest1.getPath());
+        assertEquals(file1, toTest1.getFile());
         assertEquals(0, toTest1.getProjectID());
 
         assertEquals(toTest1, toTest2);
@@ -44,7 +41,7 @@ public final class ResearchFileUnitTest
 
         assertNotEquals(toTest1, null);
         assertNotEquals(toTest1, new Object());
-        assertNotEquals(toTest1, f1);
+        assertNotEquals(toTest1, file1);
 
         final Long id = Long.valueOf(72121);
         toTest1.setId(id);
@@ -55,6 +52,6 @@ public final class ResearchFileUnitTest
         assertEquals(projId, toTest1.getProjectID());
 
         final String toString = toTest1.toString();
-        assertTrue(toString.contains("name=" + f1));
+        assertTrue(toString.contains("file=" + file1));
     }
 }

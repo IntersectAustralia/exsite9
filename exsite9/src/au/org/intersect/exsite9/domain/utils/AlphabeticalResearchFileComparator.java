@@ -23,8 +23,8 @@ public final class AlphabeticalResearchFileComparator implements Comparator<Rese
     @Override
     public int compare(final ResearchFile rf1, final ResearchFile rf2)
     {
-        final String name1 = rf1.getName();
-        final String name2 = rf2.getName();
+        final String name1 = rf1.getFile().getName();
+        final String name2 = rf2.getFile().getName();
 
         final int compareIgnoreCase = name1.compareToIgnoreCase(name2);
 

@@ -6,8 +6,12 @@
  */
 package au.org.intersect.exsite9.domain;
 
-import static au.org.intersect.exsite9.test.Assert.*;
-import static org.junit.Assert.*;
+import static au.org.intersect.exsite9.test.Assert.assertNotEquals;
+import static au.org.intersect.exsite9.test.Assert.assertNotEqualsHashCode;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
 
 import org.junit.Test;
 
@@ -61,7 +65,7 @@ public final class GroupUnitTest
         assertNotEqualsHashCode(toTest1, toTest3);
 
         // Different child files.
-        toTest1.getResearchFiles().add(new ResearchFile("some File"));
+        toTest1.getResearchFiles().add(new ResearchFile(new File("some File")));
         assertNotEqualsHashCode(toTest1, toTest2);
         assertNotEqualsHashCode(toTest1, toTest3);
 

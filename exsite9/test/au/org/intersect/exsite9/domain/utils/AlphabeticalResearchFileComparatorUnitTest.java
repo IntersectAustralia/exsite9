@@ -6,8 +6,9 @@
  */
 package au.org.intersect.exsite9.domain.utils;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.util.Comparator;
 
 import org.junit.Test;
@@ -25,9 +26,9 @@ public final class AlphabeticalResearchFileComparatorUnitTest
     {
         final Comparator<ResearchFile> toTest = new AlphabeticalResearchFileComparator();
 
-        final ResearchFile rf1 = new ResearchFile("abcd.txt");
-        final ResearchFile rf2 = new ResearchFile("zxyw.txt");
-        final ResearchFile rf3 = new ResearchFile("abcd.txt");
+        final ResearchFile rf1 = new ResearchFile(new File("abcd.txt"));
+        final ResearchFile rf2 = new ResearchFile(new File("zxyw.txt"));
+        final ResearchFile rf3 = new ResearchFile(new File("abcd.txt"));
 
         assertTrue(toTest.compare(rf1, rf2) <= -1);
         assertTrue(toTest.compare(rf2, rf1) >= 1);

@@ -1,12 +1,8 @@
 package au.org.intersect.exsite9.service;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceException;
-
-import org.eclipse.persistence.exceptions.DatabaseException;
 
 import au.org.intersect.exsite9.dao.ProjectDAO;
 import au.org.intersect.exsite9.dao.ResearchFileDAO;
@@ -49,29 +45,14 @@ public class FileService implements IFileService
     			List<ResearchFile> newFileList = FolderHelper.getAllFilesInFolder(folder);
     			for(ResearchFile researchFile : newFileList)
     			{
-    				try
-    				{
-    				    researchFile.setProjectID(project.getId());
-    					researchFileDAO.createResearchFile(researchFile);
-    					project.getNewFilesNode().getResearchFiles().add(researchFile);
-    				}
-    				catch(PersistenceException pe)
-    				{
-    					Throwable cause = pe.getCause();
-    					if (cause instanceof DatabaseException)
-    					{
-    						cause = cause.getCause();
-    						if (cause instanceof SQLIntegrityConstraintViolationException)
-    						{
-    							// TODO: log this
-    							// continue -- tried to insert a duplicate file
-    						}
-    						else
-    						{
-    							throw pe;
-    						}
-    					}
-    				}
+    			    // If there is already a research file in the database, do not insert another.
+    			    final ResearchFile existing = researchFileDAO.findByPath(project, researchFile.getFile());
+    			    if (existing == null)
+    			    {
+    			        researchFile.setProjectID(project.getId());
+    			        researchFileDAO.createResearchFile(researchFile);
+    			        project.getNewFilesNode().getResearchFiles().add(researchFile);
+    			    }
     			}
     			projectDAO.updateProject(project);
     		}

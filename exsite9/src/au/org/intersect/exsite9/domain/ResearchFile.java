@@ -28,26 +28,16 @@ public final class ResearchFile
     @Id
     @GeneratedValue
     private Long id;
-    private final String name;
-    private final String path;
+    private File file;
     private long projectID;
 
     public ResearchFile()
     {
-        name = "";
-        path = "";
     }
     
-    public ResearchFile(final String name)
+    public ResearchFile(final File fileOnDisk)
     {
-        this.name = name;
-        this.path = "";
-    }
-    
-    public ResearchFile(File fileOnDisk)
-    {
-        this.name = fileOnDisk.getName();
-        this.path = fileOnDisk.getAbsolutePath();
+        this.file = fileOnDisk;
     }
 
     public Long getId()
@@ -60,16 +50,6 @@ public final class ResearchFile
         this.id = id;
     }
     
-    /**
-     * Obtains the name of the file.
-     * 
-     * @return the name of the file.
-     */
-    public String getName()
-    {
-        return this.name;
-    }
-
     public long getProjectID()
     {
         return projectID;
@@ -80,9 +60,14 @@ public final class ResearchFile
         this.projectID = project_id;
     }
 
-    public String getPath()
+    public File getFile()
     {
-        return path;
+        return this.file;
+    }
+
+    public void setFile(final File file)
+    {
+        this.file = file;
     }
 
     /**
@@ -100,7 +85,7 @@ public final class ResearchFile
             return false;
         }
         final ResearchFile other = (ResearchFile) obj;
-        return Objects.equal(this.name, other.name);
+        return Objects.equal(this.file, other.file);
     }
 
     /**
@@ -109,7 +94,7 @@ public final class ResearchFile
     @Override
     public int hashCode()
     {
-        return Objects.hashCode(this.path);
+        return Objects.hashCode(this.file);
     }
 
     /**
@@ -119,8 +104,7 @@ public final class ResearchFile
     public String toString()
     {
         final ToStringBuilder tsb = new ToStringBuilder(this);
-        tsb.append("name", this.name);
-        tsb.append("path", this.path);
+        tsb.append("file", this.file);
         return tsb.toString();
     }
 }

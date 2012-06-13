@@ -62,7 +62,7 @@ public final class ProjectExplorerViewLabelProvider extends StyledCellLabelProvi
         else if (element instanceof ResearchFile)
         {
             final ResearchFile rf = (ResearchFile) element;
-            text.append(rf.getName());
+            text.append(rf.getFile().getName());
             cell.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE));
         }
         else
