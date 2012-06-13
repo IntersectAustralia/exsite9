@@ -13,6 +13,8 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowData;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -138,32 +140,36 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
             }
         });
         
-        addButton = new Button(container, SWT.PUSH);
-        addButton.setText("Add...");
-        addButton.addSelectionListener(this);
-        
-      //empty cell due to having 3 columns below
-        new Label(container, SWT.NULL);
-        
-      //empty cell due to having 3 columns below
-        new Label(container, SWT.NULL);
-        
-        this.removeButton = new Button(container, SWT.PUSH);
-        removeButton.setText("Remove");
-        removeButton.addSelectionListener(this);
-        removeButton.setEnabled(false);
         
 
         final GridData singleLineGridData = new GridData(GridData.FILL_HORIZONTAL);
         final GridData multiLineGridData = new GridData(GridData.FILL_BOTH);
-        final GridData buttonGridData = new GridData(SWT.TOP);
-        //buttonGridData.horizontalAlignment = GridData.HORIZONTAL_ALIGN_END;
-
 
         this.categoryNameField.getControl().setLayoutData(singleLineGridData);
         this.metadataValuesList.setLayoutData(multiLineGridData);
+        
+        Composite rowComp = new Composite(container, SWT.NULL);
+        
+        RowLayout rowLayout = new RowLayout();
+        rowLayout.type = SWT.VERTICAL;
+        rowLayout.pack = false;
+        rowLayout.justify = true;
+        rowComp.setLayout(rowLayout);
+        
+        addButton = new Button(rowComp, SWT.PUSH);
+        addButton.setText("Add...");
+        addButton.addSelectionListener(this);
+        
+        this.removeButton = new Button(rowComp, SWT.PUSH);
+        removeButton.setText("Remove");
+        removeButton.addSelectionListener(this);
+        removeButton.setEnabled(false);
+
+        final RowData buttonGridData = new RowData();
+        final RowData buttonGridData2 = new RowData();
+        
         this.addButton.setLayoutData(buttonGridData);
-        this.removeButton.setLayoutData(buttonGridData);
+        this.removeButton.setLayoutData(buttonGridData2);
 
         setControl(this.container);
         setPageComplete(false);
@@ -216,7 +222,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
             });
             userInput.open();
             
-            if (userInput.getValue() == null)
+            if (userInput.getValue() == null || userInput.getValue().trim() == "")
             {
                 return;
             }
