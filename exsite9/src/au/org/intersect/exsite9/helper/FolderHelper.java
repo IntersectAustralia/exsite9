@@ -11,7 +11,6 @@ import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
 import au.org.intersect.exsite9.domain.Folder;
-import au.org.intersect.exsite9.domain.ResearchFile;
 
 public class FolderHelper
 {
@@ -23,7 +22,7 @@ public class FolderHelper
      * last check we round it down. 
      * @return A list of the files identified in the folder since the last time the folder was checked
      */
-    public static List<ResearchFile> identifyNewFiles(Folder folder)
+    public static List<File> identifyNewFiles(Folder folder)
     {
     	IOFileFilter ageFilter = new AgeFileFilter(folder.getLastCheckTimeInMillis(),false);
     	
@@ -36,16 +35,16 @@ public class FolderHelper
      * 
      * @return A list of the files in the folder
      */
-    public static List<ResearchFile> getAllFilesInFolder(Folder folder)
+    public static List<File> getAllFilesInFolder(Folder folder)
     {
         return listFiles(folder, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
     }
 
-    private static List<ResearchFile> listFiles(Folder folder, IOFileFilter fileFilter, IOFileFilter dirFilter)
+    private static List<File> listFiles(Folder folder, IOFileFilter fileFilter, IOFileFilter dirFilter)
     {
         long startTimeInMillis = Calendar.getInstance().getTimeInMillis();
         
-        List<ResearchFile> newFileList = new ArrayList<ResearchFile>(0);
+        List<File> newFileList = new ArrayList<File>();
         
         try
         {
@@ -53,7 +52,7 @@ public class FolderHelper
         
             for(File file : allFiles)
             {
-                newFileList.add(new ResearchFile(file));
+                newFileList.add(file);
             }
         }
         catch(IllegalArgumentException iae)

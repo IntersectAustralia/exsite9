@@ -18,7 +18,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import au.org.intersect.exsite9.domain.Folder;
-import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.helper.FolderHelper;
 
 public class FolderHelperUnitTest
@@ -59,7 +58,7 @@ public class FolderHelperUnitTest
     {
         String folderName = testDirName + File.separator + "DoesNotExist";
         Folder f = new Folder(new File(folderName));
-        List<ResearchFile> newFiles = FolderHelper.identifyNewFiles(f);
+        List<File> newFiles = FolderHelper.identifyNewFiles(f);
         assertTrue("List is empty",newFiles.isEmpty());
     }
     
@@ -67,7 +66,7 @@ public class FolderHelperUnitTest
     public void testIdentifyNewFilesEmptyFolder()
     {
         Folder f = new Folder(testDirFile);
-        List<ResearchFile> newFiles = FolderHelper.identifyNewFiles(f);
+        List<File> newFiles = FolderHelper.identifyNewFiles(f);
         assertTrue("List is empty",newFiles.isEmpty());
     }
     
@@ -79,7 +78,7 @@ public class FolderHelperUnitTest
             Folder f = new Folder(testDirFile);
             File.createTempFile("test-file-1", ".txt", testDirFile);
             
-            List<ResearchFile> newFiles = FolderHelper.identifyNewFiles(f);
+            List<File> newFiles = FolderHelper.identifyNewFiles(f);
             assertEquals("List has 1 entry",1,newFiles.size());
         }
         catch(Exception e)
@@ -99,7 +98,7 @@ public class FolderHelperUnitTest
             
             try{Thread.sleep(1000);}catch(Exception e){}
             
-            List<ResearchFile> newFiles = FolderHelper.identifyNewFiles(f);
+            List<File> newFiles = FolderHelper.identifyNewFiles(f);
             assertEquals("List has one entry",1,newFiles.size());
             
             try{Thread.sleep(1000);}catch(Exception e){}

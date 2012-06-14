@@ -11,30 +11,40 @@ import java.io.File;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.eclipse.persistence.annotations.Convert;
+import org.eclipse.persistence.annotations.Converter;
 
 import com.google.common.base.Objects;
+
 
 /**
  * Represents a research data file in a folder that the researcher has associated with a project.
  */
 @Entity
-@Table(uniqueConstraints=@UniqueConstraint(columnNames={"PROJECTID","PATH"}))
+@Table(uniqueConstraints=@UniqueConstraint(columnNames={"PROJECT","FILE"}))
+@Converter(name="fileToStringConverter",
+    converterClass=au.org.intersect.exsite9.domain.utils.FileToStringConverter.class)
 public final class ResearchFile
 {
     @Id
     @GeneratedValue
     private Long id;
+
+    @Convert("fileToStringConverter")
     private File file;
-    private long projectID;
+
+    @ManyToOne
+    private Project project;
 
     public ResearchFile()
     {
     }
-    
+
     public ResearchFile(final File fileOnDisk)
     {
         this.file = fileOnDisk;
@@ -49,15 +59,15 @@ public final class ResearchFile
     {
         this.id = id;
     }
-    
-    public long getProjectID()
+
+    public Project getProject()
     {
-        return projectID;
+        return project;
     }
 
-    public void setProjectID(long project_id)
+    public void setProject(final Project project)
     {
-        this.projectID = project_id;
+        this.project = project;
     }
 
     public File getFile()

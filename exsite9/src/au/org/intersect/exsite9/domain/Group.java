@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -40,6 +41,8 @@ public class Group implements Serializable
 	private final String name;
 	
 	private final List<Group> groups = new ArrayList<Group>();
+
+	@OneToMany
 	private final List<ResearchFile> researchFiles = new ArrayList<ResearchFile>();
 	
 	public Group()

@@ -2,12 +2,13 @@ package au.org.intersect.exsite9.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
+
 import javax.persistence.EntityManager;
 
 import org.junit.After;
@@ -15,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import au.org.intersect.exsite9.dao.DAOTest;
+import au.org.intersect.exsite9.dao.ProjectDAO;
 import au.org.intersect.exsite9.dao.ResearchFileDAO;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
@@ -57,9 +59,12 @@ public class FileServiceUnitTest extends DAOTest
         stub(emf.getEntityManager()).toReturn(createEntityManager());
         
         ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
+        ProjectDAO projectDAO = projectDAOFactory.createInstance(emf.getEntityManager());
         ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         
     	Project project = new Project("name","owner","description");
+    	projectDAO.createProject(project);
+
     	Folder f = new Folder(testDirFile);
     	
     	project.getFolders().add(f);
@@ -73,88 +78,78 @@ public class FileServiceUnitTest extends DAOTest
 
     
     @Test
-    public void identifyNewFilesForProjectSingleFileTest()
+    public void identifyNewFilesForProjectSingleFileTest() throws IOException
     {
-    	try
+	    ExSite9EntityManagerFactory emf = mock(ExSite9EntityManagerFactory.class);
+        stub(emf.getEntityManager()).toReturn(createEntityManager());
+        
+        ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
+        ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
+        
+    	Project project = new Project("name","owner","description");
+    	Folder f = new Folder(testDirFile);
+    	File.createTempFile("test-file-1", ".txt", testDirFile);
+
+    	project.getFolders().add(f);
+
+    	ProjectDAO projectDAO = new ProjectDAO(createEntityManager());
+    	projectDAO.createProject(project);
+    	
+    	fileService = new FileService(emf, projectDAOFactory,researchFileDAOFactory);
+    	
+    	fileService.identifyNewFilesForProject(project);
+    	
+    	assertTrue(project.getNewFilesNode().getResearchFiles().size() == 1);
+    	
+    	EntityManager em = createEntityManager();
+    	ResearchFileDAO researchFileDAO = researchFileDAOFactory.createInstance(em);
+    	Iterator<ResearchFile> iter = project.getNewFilesNode().getResearchFiles().iterator();
+    	
+    	while(iter.hasNext())
     	{
-    	    ExSite9EntityManagerFactory emf = mock(ExSite9EntityManagerFactory.class);
-            stub(emf.getEntityManager()).toReturn(createEntityManager());
-            
-            ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
-            ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
-            
-	    	Project project = new Project("name","owner","description");
-	    	project.setId(1L);
-	    	Folder f = new Folder(testDirFile);
-	    	File.createTempFile("test-file-1", ".txt", testDirFile);
-	    	
-	    	project.getFolders().add(f);
-	    	
-	    	fileService = new FileService(emf, projectDAOFactory,researchFileDAOFactory);
-	    	
-	    	fileService.identifyNewFilesForProject(project);
-	    	
-	    	assertTrue(project.getNewFilesNode().getResearchFiles().size() == 1);
-	    	
-	    	EntityManager em = createEntityManager();
-	    	ResearchFileDAO researchFileDAO = researchFileDAOFactory.createInstance(em);
-	    	Iterator<ResearchFile> iter = project.getNewFilesNode().getResearchFiles().iterator();
-	    	
-	    	while(iter.hasNext())
-	    	{
-	    		ResearchFile file1 = iter.next();
-	    		ResearchFile file2 = researchFileDAO.findById(file1.getId());
-	    		assertEquals(file1, file2);
-	    	}
-	    	
-	    	em.close();
+    		ResearchFile file1 = iter.next();
+    		ResearchFile file2 = researchFileDAO.findById(file1.getId());
+    		assertEquals(file1, file2);
     	}
-    	catch(Exception e)
-    	{
-    		fail("Unexpected exception thrown: " + e.getMessage());
-    		e.printStackTrace();
-    	}
+    	
+    	em.close();
     }
     
     
     @Test
-    public void testIdentifyNewFiles()
+    public void testIdentifyNewFiles() throws IOException
     {
-        try
-        {
-            ExSite9EntityManagerFactory emf = mock(ExSite9EntityManagerFactory.class);
-            stub(emf.getEntityManager()).toReturn(createEntityManager())
-                                        .toReturn(createEntityManager())
-                                        .toReturn(createEntityManager());
-            
-            ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
-            ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
-            
-        	Project project = new Project("name","owner","description");
-        	project.setId(2L);
-            Folder f = new Folder(testDirFile);
-            project.getFolders().add(f);
-            
-            fileService = new FileService(emf, projectDAOFactory,researchFileDAOFactory);
-            
-            File.createTempFile("test-file-1", ".txt", testDirFile);
-            
-            fileService.identifyNewFilesForProject(project);
-            assertEquals("List has one entry",1,project.getNewFilesNode().getResearchFiles().size());
-            
-            fileService.identifyNewFilesForProject(project);
-            assertEquals("List has one entry",1,project.getNewFilesNode().getResearchFiles().size());
-            
-            File.createTempFile("test-file-2", ".txt", testDirFile);
-            
-            fileService.identifyNewFilesForProject(project);
-            assertEquals("List has two entries",2,project.getNewFilesNode().getResearchFiles().size());
-        }
-        catch(Exception e)
-        {
-            fail("Unexpected exception: " + e.getMessage());
-            e.printStackTrace();
-        }
+        ExSite9EntityManagerFactory emf = mock(ExSite9EntityManagerFactory.class);
+        stub(emf.getEntityManager()).toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager());
+        
+        ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
+        ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
+        
+    	Project project = new Project("name","owner","description");
+    	project.setId(2L);
+
+    	final ProjectDAO projectDAO = new ProjectDAO(createEntityManager());
+    	projectDAO.createProject(project);
+
+        Folder f = new Folder(testDirFile);
+        project.getFolders().add(f);
+        
+        fileService = new FileService(emf, projectDAOFactory,researchFileDAOFactory);
+        
+        File.createTempFile("test-file-1", ".txt", testDirFile);
+        
+        fileService.identifyNewFilesForProject(project);
+        assertEquals("List has one entry",1,project.getNewFilesNode().getResearchFiles().size());
+        
+        fileService.identifyNewFilesForProject(project);
+        assertEquals("List has one entry",1,project.getNewFilesNode().getResearchFiles().size());
+        
+        File.createTempFile("test-file-2", ".txt", testDirFile);
+        
+        fileService.identifyNewFilesForProject(project);
+        assertEquals("List has two entries",2,project.getNewFilesNode().getResearchFiles().size());
     }
     
 }

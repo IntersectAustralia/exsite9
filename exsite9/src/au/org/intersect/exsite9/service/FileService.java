@@ -1,5 +1,6 @@
 package au.org.intersect.exsite9.service;
 
+import java.io.File;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -42,14 +43,15 @@ public class FileService implements IFileService
     	    
     		for(Folder folder : project.getFolders())
     		{
-    			List<ResearchFile> newFileList = FolderHelper.getAllFilesInFolder(folder);
-    			for(ResearchFile researchFile : newFileList)
+    			List<File> newFileList = FolderHelper.getAllFilesInFolder(folder);
+    			for (final File file : newFileList)
     			{
     			    // If there is already a research file in the database, do not insert another.
-    			    final ResearchFile existing = researchFileDAO.findByPath(project, researchFile.getFile());
+    			    final ResearchFile existing = researchFileDAO.findByPath(project, file);
     			    if (existing == null)
     			    {
-    			        researchFile.setProjectID(project.getId());
+    			        final ResearchFile researchFile = new ResearchFile(file);
+    			        researchFile.setProject(project);
     			        researchFileDAO.createResearchFile(researchFile);
     			        project.getNewFilesNode().getResearchFiles().add(researchFile);
     			    }

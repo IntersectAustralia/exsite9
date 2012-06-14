@@ -31,7 +31,6 @@ public final class ResearchFileUnitTest
 
         assertEquals(toTest1, toTest1);
         assertEquals(file1, toTest1.getFile());
-        assertEquals(0, toTest1.getProjectID());
 
         assertEquals(toTest1, toTest2);
         assertEquals(toTest2, toTest1);
@@ -46,10 +45,6 @@ public final class ResearchFileUnitTest
         final Long id = Long.valueOf(72121);
         toTest1.setId(id);
         assertEquals(id, toTest1.getId());
-
-        final long projId = 7447;
-        toTest1.setProjectID(projId);
-        assertEquals(projId, toTest1.getProjectID());
 
         final String toString = toTest1.toString();
         assertTrue(toString.contains("file=" + file1));

@@ -49,9 +49,9 @@ public class ResearchFileDAO
      */
     public ResearchFile findByPath(final Project project, final File path)
     {
-        final TypedQuery<ResearchFile> query = em.createQuery("SELECT r FROM ResearchFile r WHERE r.file = :file AND r.projectID = :projectID", ResearchFile.class);
+        final TypedQuery<ResearchFile> query = em.createQuery("SELECT r FROM ResearchFile r WHERE r.file = :file AND r.project = :project", ResearchFile.class);
         query.setParameter("file", path);
-        query.setParameter("projectID", project.getId());
+        query.setParameter("project", project);
 
         final List<ResearchFile> matches = query.getResultList();
         if (matches.size() > 1)
