@@ -55,7 +55,7 @@ public class ExSite9EntityManagerFactory
 
         // Rewire eclipselink to log via log4j
         properties.put("eclipselink.logging.logger", "org.eclipse.persistence.logging.CommonsLoggingSessionLog");
-        properties.put("eclipselink.logging.level", "INFO");
+        properties.put("eclipselink.logging.level", "FINE");
         properties.put("eclipselink.logging.exceptions", "true");
 
         emf = new PersistenceProvider().createEntityManagerFactory("jpa", properties);
