@@ -7,8 +7,7 @@
 package au.org.intersect.exsite9.domain;
 
 import java.util.Collections;
-import java.util.Set;
-
+import java.util.List;
 import javax.persistence.Entity;
 
 /**
@@ -32,8 +31,8 @@ public final class NewFilesGroup extends Group
      * @{inheritDoc}
      */
     @Override
-    public Set<Group> getGroups()
+    public List<Group> getGroups()
     {
-        return Collections.unmodifiableSet(Collections.<Group>emptySet());
+        return Collections.unmodifiableList(Collections.<Group>emptyList());
     }
 }

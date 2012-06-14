@@ -7,9 +7,8 @@
 package au.org.intersect.exsite9.domain;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -40,8 +39,8 @@ public class Group implements Serializable
 	
 	private final String name;
 	
-	private final Set<Group> groups = new HashSet<Group>();
-	private final Set<ResearchFile> researchFiles = new HashSet<ResearchFile>();
+	private final List<Group> groups = new ArrayList<Group>();
+	private final List<ResearchFile> researchFiles = new ArrayList<ResearchFile>();
 	
 	public Group()
 	{
@@ -66,12 +65,12 @@ public class Group implements Serializable
         return name;
     }
 
-    public Set<Group> getGroups()
+    public List<Group> getGroups()
     {
         return groups;
     }
 
-    public Set<ResearchFile> getResearchFiles()
+    public List<ResearchFile> getResearchFiles()
     {
         return researchFiles;
     }
@@ -111,6 +110,8 @@ public class Group implements Serializable
     public String toString()
     {
         final ToStringBuilder tsb = new ToStringBuilder(this);
+        tsb.append("hash", this.hashCode());
+        tsb.append("id", this.id);
         tsb.append("name", this.name);
         tsb.append("groups", this.groups);
         tsb.append("researchFiles", this.researchFiles);

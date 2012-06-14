@@ -6,8 +6,7 @@
  */
 package au.org.intersect.exsite9.wizard.newgroup;
 
-import java.util.Set;
-
+import java.util.List;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
@@ -90,7 +89,7 @@ public final class NewGroupWizardPage1 extends WizardPage implements KeyListener
                 }
 
                 // Check if there is a child group with this name already.
-                final Set<Group> existingGroups = parentGroup.getGroups();
+                final List<Group> existingGroups = parentGroup.getGroups();
                 for (final Group existingGroup : existingGroups)
                 {
                     if (existingGroup.getName().equalsIgnoreCase(contents.trim()))

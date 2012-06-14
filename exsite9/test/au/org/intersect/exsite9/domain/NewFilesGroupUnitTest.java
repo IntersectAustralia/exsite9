@@ -8,8 +8,7 @@ package au.org.intersect.exsite9.domain;
 
 import static org.junit.Assert.*;
 
-import java.util.Set;
-
+import java.util.List;
 import org.junit.Test;
 
 /**
@@ -24,7 +23,7 @@ public final class NewFilesGroupUnitTest
         final NewFilesGroup toTest = new NewFilesGroup();
         assertTrue(toTest instanceof Group);
         assertEquals("New Files", toTest.getName());
-        final Set<Group> childGroups = toTest.getGroups();
+        final List<Group> childGroups = toTest.getGroups();
         assertTrue(childGroups.isEmpty());
 
         try
