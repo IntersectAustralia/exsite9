@@ -10,12 +10,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import com.google.common.base.Objects;
 
 /**
  * A metadata category.
@@ -31,7 +35,9 @@ public final class MetadataCategory implements Serializable
     private Long id;
 
     private String name;
-    private List<String> metadataValues = new ArrayList<String>();
+
+    @OneToMany(cascade=CascadeType.ALL)
+    private List<MetadataValue> metadataValues = new ArrayList<MetadataValue>();
 
     public MetadataCategory()
     {
@@ -62,12 +68,12 @@ public final class MetadataCategory implements Serializable
         this.name = name;
     }
 
-    public List<String> getValues()
+    public List<MetadataValue> getValues()
     {
         return this.metadataValues;
     }
     
-    public void setValues(List<String> values)
+    public void setValues(List<MetadataValue> values)
     {
         this.metadataValues = values;
     }
@@ -76,5 +82,19 @@ public final class MetadataCategory implements Serializable
     public int hashCode()
     {
         return new HashCodeBuilder().append(this.name).toHashCode();
+    }
+
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (!(obj instanceof MetadataCategory))
+        {
+            return false;
+        }
+        final MetadataCategory other = (MetadataCategory) obj;
+        return Objects.equal(this.id, other.id) && Objects.equal(this.name, other.name);
     }
 }

@@ -7,6 +7,7 @@ import org.eclipse.ui.PlatformUI;
 
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.service.IMetadataCategoryService;
 import au.org.intersect.exsite9.service.IProjectService;
 
 public class AddMetadataCategoryWizard extends Wizard
@@ -36,15 +37,16 @@ public class AddMetadataCategoryWizard extends Wizard
     @Override
     public boolean performFinish()
     {
-        String categoryTitle = page1.getMetadataCategoryName();
-        List<String> valuesSet = page1.getMetadataCategoryValues();
-        MetadataCategory newCategory = new MetadataCategory(categoryTitle);
-        newCategory.setValues(valuesSet);
+        final String categoryTitle = page1.getMetadataCategoryName();
+        final List<String> values = page1.getMetadataCategoryValues();
 
-        final IProjectService projectService = (IProjectService) PlatformUI.getWorkbench().getService(
-                IProjectService.class);
-        
-        projectService.addMetadataCategoryToProject(project, newCategory);
+        // Persist the new metadata category.
+        final IMetadataCategoryService metadataCategoryService = (IMetadataCategoryService) PlatformUI.getWorkbench().getService(IMetadataCategoryService.class);
+        final MetadataCategory newCategory = metadataCategoryService.createNewMetadataCategory(categoryTitle, values);
+
+        final IProjectService projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
+        projectService.addMetadataCategoryToProject(this.project, newCategory);
+
         return this.project != null;
     }
 

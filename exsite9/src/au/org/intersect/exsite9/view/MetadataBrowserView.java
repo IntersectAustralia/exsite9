@@ -35,6 +35,7 @@ import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.part.ViewPart;
 
 import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.utils.AlphabeticalMetadataCategoryComparator;
 import au.org.intersect.exsite9.service.IProjectManager;
@@ -156,10 +157,10 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             buttonLayout.justify = false;
             buttonComposite.setLayout(buttonLayout);
 
-            for (final String metaDataValue : metadataCategory.getValues())
+            for (final MetadataValue metadataValue : metadataCategory.getValues())
             {
                 final Button button = new Button(buttonComposite, SWT.TOGGLE);
-                button.setText(metaDataValue);
+                button.setText(metadataValue.getValue());
                 button.addSelectionListener(this);
             }
 
