@@ -35,13 +35,13 @@ import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.ViewPart;
 
+import au.org.intersect.exsite9.Activator;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
@@ -147,7 +147,12 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             final ToolBar toolBar = new ToolBar(headerComposite, SWT.FLAT | SWT.WRAP | SWT.RIGHT);
             new ToolItem(toolBar, SWT.SEPARATOR);
             final ToolItem editButtonItem = new ToolItem(toolBar, SWT.NULL);
-            final Image editImage = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ELCL_SYNCED);
+
+            final Image editImage = Activator.getImageDescriptor("/icons/icon-metadata.png").createImage();
+
+            // This is how you gain access to Eclipse's built-in icons
+            // final Image editImage = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ELCL_SYNCED);
+
             editButtonItem.setImage(editImage);
             editButtonItem.addSelectionListener(new EditMetadataCategorySelectionListener(metadataCategory));
             new ToolItem(toolBar, SWT.SEPARATOR);
