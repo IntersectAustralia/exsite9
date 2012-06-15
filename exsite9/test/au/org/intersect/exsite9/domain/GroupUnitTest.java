@@ -9,6 +9,7 @@ package au.org.intersect.exsite9.domain;
 import static au.org.intersect.exsite9.test.Assert.assertNotEquals;
 import static au.org.intersect.exsite9.test.Assert.assertNotEqualsHashCode;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -72,5 +73,23 @@ public final class GroupUnitTest
         assertNotEquals(toTest1, null);
         assertNotEquals(toTest1, n1);
         assertNotEquals(toTest1, new Object());
+    }
+    
+    @Test
+    public void testIsAncestorOf()
+    {
+        Group parentOne = new Group("Parent One");
+        Group childOne = new Group("Child One");
+        Group grandChildOne = new Group("GrandChild One");
+        
+        childOne.getGroups().add(grandChildOne);
+        parentOne.getGroups().add(childOne);
+        
+        assertTrue(parentOne.isAnAncestorOf(childOne));
+        assertTrue(parentOne.isAnAncestorOf(grandChildOne));
+        assertTrue(childOne.isAnAncestorOf(grandChildOne));
+        
+        assertFalse(grandChildOne.isAnAncestorOf(parentOne));
+        assertFalse(childOne.isAnAncestorOf(parentOne));
     }
 }

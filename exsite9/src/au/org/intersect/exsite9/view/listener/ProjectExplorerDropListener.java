@@ -19,6 +19,7 @@ import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.ui.PlatformUI;
 
+import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.NewFilesGroup;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
@@ -36,6 +37,20 @@ public class ProjectExplorerDropListener extends ViewerDropAdapter
     }
 
     @Override
+    /**
+     * This will move the selected item(s) (groups or files) from their parent group
+     * and onto the target group.
+     * 
+     * We will not drop selected items where:
+     * 
+     * 1. The selected item is the Project Group. (The Project Group can't be moved.)
+     * 2. The selected item is the New Files Group. (The New Files Group can't be moved.) 
+     * 3. The selected item is the target group. (ie drop onto itself)
+     * 4. The selected item's parent group is the target group. (ie drop it where it already is)
+     * 5. The selected item is a group and the target group is the New Files Group. (We can't create groups in the New File Group.)
+     * 6. The target group is a descendant of the selected item. (ie cause a loop in the hierarchy.)
+     * 
+     */
     public void drop(DropTargetEvent event)
     {
         System.out.println("Drop");
@@ -46,8 +61,8 @@ public class ProjectExplorerDropListener extends ViewerDropAdapter
         
         for(TreePath path : treeSelection.getPaths())
         {
-            Object selection = path.getLastSegment();
-            if ((selection instanceof Project) || (selection instanceof NewFilesGroup))
+            Object selectedItem = path.getLastSegment();
+            if ((selectedItem instanceof Project) || (selectedItem instanceof NewFilesGroup) || (selectedItem == newParent))
             {
                 continue;
             }
@@ -57,12 +72,25 @@ public class ProjectExplorerDropListener extends ViewerDropAdapter
             {
                 continue;
             }
+            
+            if ((selectedItem instanceof Group) && 
+                (newParent instanceof NewFilesGroup))
+            {
+                continue;
+            }
+            
+            if ((selectedItem instanceof Group) && 
+                (newParent instanceof Group) &&
+                ((Group)selectedItem).isAnAncestorOf((Group)newParent))
+            {
+                continue;
+            }
 
-            System.out.println("SELECTION= " + selection.toString());
+            System.out.println("SELECTION= " + selectedItem.toString());
             System.out.println("OLD PARENT= " + oldParent.toString());
             System.out.println("NEW PARENT= " + newParent.toString());
             
-            moveList.add(new HierarchyMoveDTO(selection, oldParent, newParent));
+            moveList.add(new HierarchyMoveDTO(selectedItem, oldParent, newParent));
         }
         
         if(! moveList.isEmpty())

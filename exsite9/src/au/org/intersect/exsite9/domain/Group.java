@@ -120,4 +120,27 @@ public class Group implements Serializable
         tsb.append("researchFiles", this.researchFiles);
         return tsb.toString();
     }
+    
+    /**
+     * Returns true if this group is an ancestor of the specified group
+     * @param group The specified group
+     * @return true if this group is an ancestor of the specified group, false otherwise
+     */
+    public boolean isAnAncestorOf(Group group)
+    {
+        if (groups.contains(group))
+        {
+            return true;
+        }
+        
+        for(Group childGroup : this.groups)
+        {
+            if(childGroup.isAnAncestorOf(group))
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
 }
