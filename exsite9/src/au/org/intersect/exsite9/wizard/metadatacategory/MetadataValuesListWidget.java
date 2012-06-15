@@ -43,6 +43,14 @@ public final class MetadataValuesListWidget extends org.eclipse.swt.widgets.List
         this.metadataValues.remove(index);
     }
     
+    
+    @Override
+    public void setItem(int index, String string)
+    {
+        super.setItem(index, string);
+        this.metadataValues.get(index).setValue(string);
+    }
+
     @Override
     protected void checkSubclass()
     {

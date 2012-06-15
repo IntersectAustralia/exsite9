@@ -39,6 +39,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     private MetadataValuesListWidget metadataValuesList;
     private Button removeButton;
     private Button addButton;
+    private Button editButton;
 
     private Project project;
     private List<MetadataValue> metadataValues;
@@ -138,6 +139,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
             public void widgetSelected(final SelectionEvent e)
             {
                 removeButton.setEnabled(metadataValuesList.getSelectionCount() > 0);
+                editButton.setEnabled(metadataValuesList.getSelectionCount() > 0);
             }
 
             @Override
@@ -168,12 +170,19 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         removeButton.setText("Remove");
         removeButton.addSelectionListener(this);
         removeButton.setEnabled(false);
+        
+        this.editButton = new Button(rowComp, SWT.PUSH);
+        editButton.setText("Edit...");
+        editButton.addSelectionListener(this);
+        editButton.setEnabled(false);
 
-        final RowData buttonGridData = new RowData();
-        final RowData buttonGridData2 = new RowData();
+        final RowData addButtonGridData = new RowData();
+        final RowData removeButtonGridData = new RowData();
+        final RowData editButtonGridData = new RowData();
 
-        this.addButton.setLayoutData(buttonGridData);
-        this.removeButton.setLayoutData(buttonGridData2);
+        this.addButton.setLayoutData(addButtonGridData);
+        this.removeButton.setLayoutData(removeButtonGridData);
+        this.editButton.setLayoutData(editButtonGridData);
 
         setControl(this.container);
         setPageComplete(false);
@@ -243,6 +252,50 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
             }
 
             this.metadataValuesList.remove(this.metadataValuesList.getSelectionIndex());
+        }
+        else if (e.widget.equals(editButton))
+        {
+            if(this.metadataValuesList.getSelectionCount() == 0)
+            {
+                return;
+            }
+            
+            InputDialog userInput = new InputDialog(getShell(), "Edit Value", "Enter the amended metadata value", this.metadataValuesList.getSelection()[0],
+                    new IInputValidator()
+                    {
+                        @Override
+                        public String isValid(String contents)
+                        {
+                            if (contents.trim().isEmpty())
+                            {
+                                return "Value must not be empty.";
+                            }
+
+                            if (contents.trim().length() >= 255)
+                            {
+                                return "Value is too long.";
+                            }
+
+                            final String[] listOfValues = metadataValuesList.getItems();
+
+                            for (final String existingValue : listOfValues)
+                            {
+                                if (existingValue.equalsIgnoreCase(contents.trim()))
+                                {
+                                    return "A Value with that name already exists for this Category.";
+                                }
+                            }
+                            return null;
+                        }
+                    });
+            userInput.open();
+
+            if (userInput.getValue() == null || userInput.getValue().trim() == "")
+            {
+                return;
+            }
+            
+            this.metadataValuesList.setItem(this.metadataValuesList.getSelectionIndex(), userInput.getValue().trim());
         }
         
         setPageComplete(this.categoryNameField.isValid());
