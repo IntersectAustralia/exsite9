@@ -1,6 +1,5 @@
 package au.org.intersect.exsite9.wizard.metadatacategory;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.IInputValidator;
@@ -25,6 +24,7 @@ import com.richclientgui.toolbox.validation.string.StringValidationToolkit;
 import com.richclientgui.toolbox.validation.validator.IFieldValidator;
 
 import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.wizard.WizardPageErrorHandler;
 
@@ -36,22 +36,24 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     private Composite container;
     
     private ValidatingField<String> categoryNameField;
-    private org.eclipse.swt.widgets.List metadataValuesList;
+    private MetadataValuesListWidget metadataValuesList;
     private Button removeButton;
     private Button addButton;
-    
-    private Project project;
 
-    protected AddMetadataCategoryWizardPage1(Project project)
+    private Project project;
+    private List<MetadataValue> currentMetadataValues;
+
+    public AddMetadataCategoryWizardPage1(final Project project, final List<MetadataValue> currentMetadataValues)
     {
         super("Add Metadata Category");
         setTitle("Add Metadata Category");
         setDescription("Please enter the title of the metadata category you wish to create");
         this.project = project;
+        this.currentMetadataValues = currentMetadataValues;
     }
 
     @Override
-    public void createControl(Composite parent)
+    public void createControl(final Composite parent)
     {
         this.container = new Composite(parent, SWT.NULL);
         final GridLayout layout = new GridLayout();
@@ -123,20 +125,18 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         final Label metadataValuesLabel = new Label(this.container, SWT.NULL);
         metadataValuesLabel.setText("Metadata Values");
 
-        this.metadataValuesList = new org.eclipse.swt.widgets.List(this.container, SWT.BORDER | SWT.SINGLE | SWT.WRAP | SWT.V_SCROLL);
+        this.metadataValuesList = new MetadataValuesListWidget(this.container, SWT.BORDER | SWT.SINGLE | SWT.WRAP | SWT.V_SCROLL, this.currentMetadataValues);
         this.metadataValuesList.addSelectionListener(new SelectionListener()
         {
-            
             @Override
-            public void widgetSelected(SelectionEvent e)
+            public void widgetSelected(final SelectionEvent e)
             {
                 removeButton.setEnabled(metadataValuesList.getSelectionCount() > 0);
             }
             
             @Override
-            public void widgetDefaultSelected(SelectionEvent e)
+            public void widgetDefaultSelected(final SelectionEvent e)
             {
-                
             }
         });
         
@@ -252,8 +252,8 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         return this.categoryNameField.getContents().trim();
     }
 
-    public List<String> getMetadataCategoryValues()
+    public List<MetadataValue> getMetadataCategoryValues()
     {
-        return Arrays.asList(this.metadataValuesList.getItems());
+        return this.currentMetadataValues;
     }
 }

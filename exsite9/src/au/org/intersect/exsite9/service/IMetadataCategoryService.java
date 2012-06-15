@@ -9,11 +9,12 @@ package au.org.intersect.exsite9.service;
 import java.util.List;
 
 import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataValue;
 
 /**
  * For performing operations with {@link MetadataCategory}
  */
 public interface IMetadataCategoryService
 {
-    MetadataCategory createNewMetadataCategory(final String name, final List<String> values);
+    MetadataCategory createNewMetadataCategory(final String name, final List<MetadataValue> values);
 }

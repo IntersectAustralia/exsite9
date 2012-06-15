@@ -1,11 +1,13 @@
 package au.org.intersect.exsite9.wizard.metadatacategory;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.PlatformUI;
 
 import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.service.IMetadataCategoryService;
 import au.org.intersect.exsite9.service.IProjectService;
@@ -25,7 +27,7 @@ public class AddMetadataCategoryWizard extends Wizard
         super();
         setNeedsProgressMonitor(true);
         this.project = project;
-        page1 = new AddMetadataCategoryWizardPage1(project);
+        page1 = new AddMetadataCategoryWizardPage1(project, Collections.<MetadataValue>emptyList());
     }
 
     @Override
@@ -38,7 +40,7 @@ public class AddMetadataCategoryWizard extends Wizard
     public boolean performFinish()
     {
         final String categoryTitle = page1.getMetadataCategoryName();
-        final List<String> values = page1.getMetadataCategoryValues();
+        final List<MetadataValue> values = page1.getMetadataCategoryValues();
 
         // Persist the new metadata category.
         final IMetadataCategoryService metadataCategoryService = (IMetadataCategoryService) PlatformUI.getWorkbench().getService(IMetadataCategoryService.class);

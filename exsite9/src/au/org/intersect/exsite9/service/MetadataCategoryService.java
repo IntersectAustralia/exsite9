@@ -6,7 +6,6 @@
  */
 package au.org.intersect.exsite9.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -32,20 +31,14 @@ public final class MetadataCategoryService implements IMetadataCategoryService
      * @{inheritDoc}
      */
     @Override
-    public MetadataCategory createNewMetadataCategory(final String name, final List<String> values)
+    public MetadataCategory createNewMetadataCategory(final String name, final List<MetadataValue> values)
     {
         final EntityManager em = this.emf.getEntityManager();
         try
         {
             final MetadataCategoryDAO mdcDAO = this.metadataCategoryDAOFactory.createInstance(em);
             final MetadataCategory mdc = new MetadataCategory(name);
-            final List<MetadataValue> mdValues = new ArrayList<MetadataValue>(values.size());
-            for (final String value : values)
-            {
-                mdValues.add(new MetadataValue(value));
-            }
-
-            mdc.setValues(mdValues);
+            mdc.setValues(values);
             mdcDAO.createMetadataCategory(mdc);
             return mdc;
         }
