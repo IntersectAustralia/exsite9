@@ -8,9 +8,9 @@ package au.org.intersect.exsite9.view;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -31,7 +31,6 @@ import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.ToolBar;
@@ -39,11 +38,8 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.activities.WorkbenchActivityHelper;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
-import org.eclipse.ui.internal.Workbench;
-import org.eclipse.ui.internal.commands.WorkbenchCommandSupport;
 import org.eclipse.ui.part.ViewPart;
 
 import au.org.intersect.exsite9.domain.MetadataCategory;
@@ -58,6 +54,8 @@ import au.org.intersect.exsite9.service.IProjectManager;
 public final class MetadataBrowserView extends ViewPart implements IExecutionListener, SelectionListener
 {
     public static final String ID = MetadataBrowserView.class.getName();
+
+    private static final Logger LOG = Logger.getLogger(MetadataBrowserView.class);
 
     private ExpandBar expandBar;
     private Composite parent;
@@ -259,60 +257,52 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         }
 
         @Override
-        public void widgetSelected(final SelectionEvent e)
+        public void widgetSelected(final SelectionEvent event)
         {
-            System.out.println("Edit clicked for " + metadataCategory);
-            //erhkbveiyv;
-            //fire the command including the mC so it can be picked up by the plugin.xml
-            
-            ArrayList<Parameterization> parameters = new ArrayList<Parameterization>();
-            IParameter iparam = null;
+            // Fire the command including the metadata category ID as an argument.
+            final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+            final ICommandService commandService = (ICommandService) window.getService(ICommandService.class);
+            final Command command = commandService.getCommand("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand");
              
-            //get the command from plugin.xml
-            IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-            ICommandService commandService = (ICommandService)window.getService(ICommandService.class);
-            Command command = commandService.getCommand("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand");
-             
+            final IParameter iparam;
             try
             {
                 iparam = command.getParameter("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand.categoryParameter");
             }
-            catch (NotDefinedException e2)
+            catch (final NotDefinedException e)
             {
-                // TODO Auto-generated catch block
-                e2.printStackTrace();
+                LOG.error("Cannot add parameter to command", e);
+                return;
             }
-            Parameterization params = new Parameterization(iparam, metadataCategory.getId().toString());
+
+            final Parameterization params = new Parameterization(iparam, metadataCategory.getId().toString());
+            final ArrayList<Parameterization> parameters = new ArrayList<Parameterization>();
             parameters.add(params);
              
-            //build the parameterized command
-            ParameterizedCommand pc = new ParameterizedCommand(command, parameters.toArray(new Parameterization[parameters.size()]));
+            // Build the parameterized command
+            final ParameterizedCommand pc = new ParameterizedCommand(command, parameters.toArray(new Parameterization[parameters.size()]));
              
-            //execute the command
-            IHandlerService handlerService = (IHandlerService)window.getService(IHandlerService.class);
+            // Execute the command
+            final IHandlerService handlerService = (IHandlerService) window.getService(IHandlerService.class);
             try
             {
                 handlerService.executeCommand(pc, null);
             }
-            catch (ExecutionException e1)
+            catch (final ExecutionException e)
             {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
+                LOG.error("Cannot execute paramertized command", e);
             }
-            catch (NotDefinedException e1)
+            catch (final NotDefinedException e)
             {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
+                LOG.error("Cannot execute paramertized command", e);
             }
-            catch (NotEnabledException e1)
+            catch (final NotEnabledException e)
             {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
+                LOG.error("Cannot execute paramertized command", e);
             }
-            catch (NotHandledException e1)
+            catch (final NotHandledException e)
             {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
+                LOG.error("Cannot execute paramertized command", e);
             }
         }
 

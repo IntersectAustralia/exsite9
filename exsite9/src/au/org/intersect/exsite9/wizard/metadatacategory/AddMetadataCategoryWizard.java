@@ -1,7 +1,6 @@
 package au.org.intersect.exsite9.wizard.metadatacategory;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jface.wizard.Wizard;
@@ -63,8 +62,6 @@ public class AddMetadataCategoryWizard extends Wizard
         // Persist the new metadata category.
         final IMetadataCategoryService metadataCategoryService = (IMetadataCategoryService) PlatformUI.getWorkbench()
                 .getService(IMetadataCategoryService.class);
-        final IProjectManager IProjectManagerService = (IProjectManager) PlatformUI.getWorkbench().getService(
-                IProjectManager.class);
         final IProjectService projectService = (IProjectService) PlatformUI.getWorkbench().getService(
                 IProjectService.class);
 
@@ -79,7 +76,11 @@ public class AddMetadataCategoryWizard extends Wizard
             metadataCategoryService.updateMetadataCategory(this.metadataCategory, categoryTitle,
                     page1.getMetadataCategoryValues());
             this.project = projectService.findProjectById(this.project.getId());
-            IProjectManagerService.setCurrentProject(this.project);
+
+            // We need to do this because we do not directly update Project's object model, so we need to get a fresh object from the db.
+            final IProjectManager projectManagerService = (IProjectManager) PlatformUI.getWorkbench().getService(
+                    IProjectManager.class);
+            projectManagerService.setCurrentProject(this.project);
         }
 
         return this.project != null;

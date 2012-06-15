@@ -227,7 +227,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                     });
             userInput.open();
 
-            if (userInput.getValue() == null || userInput.getValue().trim() == "")
+            if (userInput.getValue() == null || userInput.getValue().trim().isEmpty())
             {
                 return;
             }

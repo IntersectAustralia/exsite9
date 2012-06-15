@@ -3,7 +3,7 @@
 	<classpathentry exported="true" kind="lib" path="commons-logging-1.1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="log4j-1.2.17.jar"/>
 	<classpathentry exported="true" kind="lib" path="rcptoolbox.1.0.10.jar"/>
-	<classpathentry exported="true" kind="lib" path="javax.persistence_2.0.3.jar" sourcepath="/3rdParty"/>
+	<classpathentry exported="true" kind="lib" path="javax.persistence_2.0.3.jar" sourcepath="/3rdParty/eclipselink/2.3.2/src/javax.persistence.source_2.0.3.v201010191057.zip"/>
 	<classpathentry exported="true" kind="lib" path="eclipselink-2.3.2.jar" sourcepath="/3rdParty/eclipselink/2.3.2/src/eclipselink-src.zip"/>
 	<classpathentry exported="true" kind="lib" path="hsqldb-2.2.8.jar"/>
 	<classpathentry exported="true" kind="lib" path="commons-io-2.3.jar" sourcepath="/3rdParty/apache-commons-io/2.3/src/commons-io-2.3-sources.jar"/>

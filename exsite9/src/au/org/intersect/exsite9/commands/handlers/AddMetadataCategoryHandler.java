@@ -15,7 +15,6 @@ import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.service.IMetadataCategoryService;
 import au.org.intersect.exsite9.service.IProjectManager;
-import au.org.intersect.exsite9.service.MetadataCategoryService;
 import au.org.intersect.exsite9.wizard.metadatacategory.AddMetadataCategoryWizard;
 
 public class AddMetadataCategoryHandler implements IHandler
@@ -24,38 +23,40 @@ public class AddMetadataCategoryHandler implements IHandler
     @Override
     public void addHandlerListener(final IHandlerListener handlerListener)
     {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void dispose()
     {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException
     {        
-        MetadataCategory metadataCategory = null;
-        
-        System.out.println("category parameter = " + event.getParameter("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand.categoryParameter"));
         final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
         final Project project = projectManager.getCurrentProject();
         if (project == null)
         {
             throw new IllegalStateException("Trying to edit a null project");
         }
+        final String eventParam = event.getParameter("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand.categoryParameter");
+
+        // Since the same handler is used to add Add a MetadataCategory AND Edit one, we need to check if there is an argument.
+        final MetadataCategory metadataCategory;
         
-        String eventParam = event.getParameter("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand.categoryParameter");
-        
-        if (!Strings.isNullOrEmpty(eventParam))
+        if (!Strings.nullToEmpty(eventParam).isEmpty())
         {
-           Long id = Long.valueOf(eventParam);
-           IMetadataCategoryService metadataCategpryService = (IMetadataCategoryService) PlatformUI.getWorkbench().getService(IMetadataCategoryService.class);
+           final Long id = Long.valueOf(eventParam);
+           final IMetadataCategoryService metadataCategpryService = (IMetadataCategoryService) PlatformUI.getWorkbench().getService(IMetadataCategoryService.class);
            metadataCategory = metadataCategpryService.findById(id);
         }
+        else
+        {
+            metadataCategory = null;
+        }
+
         final Shell shell = HandlerUtil.getActiveWorkbenchWindow(event).getShell();
         final AddMetadataCategoryWizard wizard = new AddMetadataCategoryWizard(project, metadataCategory);
         final WizardDialog wizardDialog = new WizardDialog(shell, wizard);
@@ -67,22 +68,18 @@ public class AddMetadataCategoryHandler implements IHandler
     @Override
     public boolean isEnabled()
     {
-        // TODO Auto-generated method stub
         return true;
     }
 
     @Override
     public boolean isHandled()
     {
-        // TODO Auto-generated method stub
         return true;
     }
 
     @Override
     public void removeHandlerListener(final IHandlerListener handlerListener)
     {
-        // TODO Auto-generated method stub
 
     }
-
 }
