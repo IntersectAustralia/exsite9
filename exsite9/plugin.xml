@@ -98,6 +98,10 @@
             defaultHandler="au.org.intersect.exsite9.commands.handlers.AddMetadataCategoryHandler"
             id="au.org.intersect.exsite9.commands.AddMetadataCategoryCommand"
             name="Add Metadata Category">
+         <commandParameter
+         		id="au.org.intersect.exsite9.commands.AddMetadataCategoryCommand.categoryParameter"
+         		name="Category">
+         </commandParameter>  
       </command>
       <command
             defaultHandler="au.org.intersect.exsite9.commands.handlers.ListFoldersHandler"

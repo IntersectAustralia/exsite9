@@ -8,13 +8,19 @@ package au.org.intersect.exsite9.view;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IExecutionListener;
+import org.eclipse.core.commands.IParameter;
+import org.eclipse.core.commands.NotEnabledException;
 import org.eclipse.core.commands.NotHandledException;
+import org.eclipse.core.commands.Parameterization;
+import org.eclipse.core.commands.ParameterizedCommand;
+import org.eclipse.core.commands.common.NotDefinedException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
@@ -25,13 +31,19 @@ import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.activities.WorkbenchActivityHelper;
 import org.eclipse.ui.commands.ICommandService;
+import org.eclipse.ui.handlers.IHandlerService;
+import org.eclipse.ui.internal.Workbench;
+import org.eclipse.ui.internal.commands.WorkbenchCommandSupport;
 import org.eclipse.ui.part.ViewPart;
 
 import au.org.intersect.exsite9.domain.MetadataCategory;
@@ -250,6 +262,58 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         public void widgetSelected(final SelectionEvent e)
         {
             System.out.println("Edit clicked for " + metadataCategory);
+            //erhkbveiyv;
+            //fire the command including the mC so it can be picked up by the plugin.xml
+            
+            ArrayList<Parameterization> parameters = new ArrayList<Parameterization>();
+            IParameter iparam = null;
+             
+            //get the command from plugin.xml
+            IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+            ICommandService commandService = (ICommandService)window.getService(ICommandService.class);
+            Command command = commandService.getCommand("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand");
+             
+            try
+            {
+                iparam = command.getParameter("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand.categoryParameter");
+            }
+            catch (NotDefinedException e2)
+            {
+                // TODO Auto-generated catch block
+                e2.printStackTrace();
+            }
+            Parameterization params = new Parameterization(iparam, metadataCategory.getId().toString());
+            parameters.add(params);
+             
+            //build the parameterized command
+            ParameterizedCommand pc = new ParameterizedCommand(command, parameters.toArray(new Parameterization[parameters.size()]));
+             
+            //execute the command
+            IHandlerService handlerService = (IHandlerService)window.getService(IHandlerService.class);
+            try
+            {
+                handlerService.executeCommand(pc, null);
+            }
+            catch (ExecutionException e1)
+            {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+            catch (NotDefinedException e1)
+            {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+            catch (NotEnabledException e1)
+            {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+            catch (NotHandledException e1)
+            {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
         }
 
         @Override

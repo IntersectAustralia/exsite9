@@ -123,4 +123,21 @@ public class ProjectService implements IProjectService
             em.close();
         }
     }
+
+    @Override
+    public Project findProjectById(Long id)
+    {
+        final EntityManager em = this.entityManagerFactory.getEntityManager();
+        try
+        {
+            final ProjectDAO projectDAO = this.projectDAOFactory.createInstance(em);
+            return projectDAO.findById(id);            
+        }
+        finally
+        {
+            em.close();
+        }        
+    }
+    
+    
 }

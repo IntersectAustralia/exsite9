@@ -47,4 +47,40 @@ public final class MetadataCategoryService implements IMetadataCategoryService
             em.close();
         }
     }
+
+    @Override
+    public MetadataCategory findById(Long id)
+    {
+        final EntityManager em = this.emf.getEntityManager();
+        try
+        {
+            final MetadataCategoryDAO mdcDAO = this.metadataCategoryDAOFactory.createInstance(em);
+            return mdcDAO.findById(id);
+        }
+        finally
+        {
+            em.close();
+        }
+    }
+
+    @Override
+    public void updateMetadataCategory(MetadataCategory existingMetadataCategoryToUpdate, String name,
+            List<MetadataValue> values)
+    {
+        final EntityManager em = this.emf.getEntityManager();
+        try
+        {
+            final MetadataCategoryDAO mdcDAO = this.metadataCategoryDAOFactory.createInstance(em);
+
+            existingMetadataCategoryToUpdate.setName(name);
+            existingMetadataCategoryToUpdate.setValues(values);
+           
+            mdcDAO.updateMetadataCategory(existingMetadataCategoryToUpdate);
+        }
+        finally
+        {
+            em.close();
+        }
+        
+    }
 }

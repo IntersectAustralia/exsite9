@@ -34,22 +34,26 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     private final IFieldErrorMessageHandler errorMessageHandler = new WizardPageErrorHandler(this);
 
     private Composite container;
-    
+
     private ValidatingField<String> categoryNameField;
     private MetadataValuesListWidget metadataValuesList;
     private Button removeButton;
     private Button addButton;
 
     private Project project;
-    private List<MetadataValue> currentMetadataValues;
+    private List<MetadataValue> metadataValues;
+    private String metadataCategoryName;
 
-    public AddMetadataCategoryWizardPage1(final Project project, final List<MetadataValue> currentMetadataValues)
+    protected AddMetadataCategoryWizardPage1(String pageTitle, String pageDescription, Project project, String metadataCategoryName,
+            List<MetadataValue> metadataValues)
     {
-        super("Add Metadata Category");
-        setTitle("Add Metadata Category");
-        setDescription("Please enter the title of the metadata category you wish to create");
+        super(pageTitle);    
+        setTitle(pageTitle);
+        setDescription(pageDescription);
+        
         this.project = project;
-        this.currentMetadataValues = currentMetadataValues;
+        this.metadataValues = metadataValues;
+        this.metadataCategoryName = metadataCategoryName;
     }
 
     @Override
@@ -69,7 +73,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         categoryNameField = this.stringValidatorToolkit.createTextField(this.container, new IFieldValidator<String>()
         {
             private String errorMessage;
-            
+
             @Override
             public boolean warningExist(final String conents)
             {
@@ -84,18 +88,19 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                     this.errorMessage = "Category title must not be empty.";
                     return false;
                 }
-                
+
                 if (contents.trim().length() >= 255)
                 {
                     this.errorMessage = "Category title is too long.";
                     return false;
                 }
-                
+
                 final List<MetadataCategory> existingCategories = project.getMetadataCategories();
-                
-                for (final MetadataCategory existingCategory: existingCategories)
+
+                for (final MetadataCategory existingCategory : existingCategories)
                 {
-                    if (existingCategory.getName().equalsIgnoreCase(contents.trim()))
+                    if (existingCategory.getName().equalsIgnoreCase(contents.trim())
+                            && !contents.trim().equalsIgnoreCase(metadataCategoryName))
                     {
                         this.errorMessage = "A Category with that name already exists for this project.";
                         return false;
@@ -115,17 +120,18 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
             {
                 return this.errorMessage;
             }
-        }, true, "");
+        }, true, metadataCategoryName);
 
         this.categoryNameField.getControl().addKeyListener(this);
-        
-        //empty cell due to having 3 columns below
+
+        // empty cell due to having 3 columns below
         new Label(container, SWT.NULL);
 
         final Label metadataValuesLabel = new Label(this.container, SWT.NULL);
         metadataValuesLabel.setText("Metadata Values");
 
-        this.metadataValuesList = new MetadataValuesListWidget(this.container, SWT.BORDER | SWT.SINGLE | SWT.WRAP | SWT.V_SCROLL, this.currentMetadataValues);
+        this.metadataValuesList = new MetadataValuesListWidget(this.container, SWT.BORDER | SWT.SINGLE | SWT.WRAP
+                | SWT.V_SCROLL, this.metadataValues);
         this.metadataValuesList.addSelectionListener(new SelectionListener()
         {
             @Override
@@ -133,33 +139,31 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
             {
                 removeButton.setEnabled(metadataValuesList.getSelectionCount() > 0);
             }
-            
+
             @Override
             public void widgetDefaultSelected(final SelectionEvent e)
             {
             }
         });
-        
-        
 
         final GridData singleLineGridData = new GridData(GridData.FILL_HORIZONTAL);
         final GridData multiLineGridData = new GridData(GridData.FILL_BOTH);
 
         this.categoryNameField.getControl().setLayoutData(singleLineGridData);
         this.metadataValuesList.setLayoutData(multiLineGridData);
-        
+
         Composite rowComp = new Composite(container, SWT.NULL);
-        
+
         RowLayout rowLayout = new RowLayout();
         rowLayout.type = SWT.VERTICAL;
         rowLayout.pack = false;
         rowLayout.justify = true;
         rowComp.setLayout(rowLayout);
-        
+
         addButton = new Button(rowComp, SWT.PUSH);
         addButton.setText("Add...");
         addButton.addSelectionListener(this);
-        
+
         this.removeButton = new Button(rowComp, SWT.PUSH);
         removeButton.setText("Remove");
         removeButton.addSelectionListener(this);
@@ -167,68 +171,69 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
 
         final RowData buttonGridData = new RowData();
         final RowData buttonGridData2 = new RowData();
-        
+
         this.addButton.setLayoutData(buttonGridData);
         this.removeButton.setLayoutData(buttonGridData2);
 
         setControl(this.container);
         setPageComplete(false);
-        
+
     }
 
     @Override
     public void keyPressed(KeyEvent e)
     {
-        
+
     }
 
     @Override
     public void keyReleased(KeyEvent e)
     {
-        setPageComplete(this.categoryNameField.isValid());        
+        setPageComplete(this.categoryNameField.isValid());
     }
 
     @Override
     public void widgetSelected(SelectionEvent e)
-    {        
+    {
         if (e.widget.equals(addButton))
         {
-            InputDialog userInput = new InputDialog(getShell(), "Enter Value", "Enter a new metadata value", "", new IInputValidator()
-            {
-                @Override
-                public String isValid(String contents)
-                {
-                    if (contents.trim().isEmpty())
+            InputDialog userInput = new InputDialog(getShell(), "Enter Value", "Enter a new metadata value", "",
+                    new IInputValidator()
                     {
-                        return "Value must not be empty.";
-                    }
-                    
-                    if (contents.trim().length() >= 255)
-                    {
-                        return "Value is too long.";
-                    }
-                                        
-                    final String[] listOfValues = metadataValuesList.getItems();
-                    
-                    for (final String existingValue: listOfValues)
-                    {
-                        if (existingValue.equalsIgnoreCase(contents.trim()))
+                        @Override
+                        public String isValid(String contents)
                         {
-                            return "A Value with that name already exists for this Category.";
+                            if (contents.trim().isEmpty())
+                            {
+                                return "Value must not be empty.";
+                            }
+
+                            if (contents.trim().length() >= 255)
+                            {
+                                return "Value is too long.";
+                            }
+
+                            final String[] listOfValues = metadataValuesList.getItems();
+
+                            for (final String existingValue : listOfValues)
+                            {
+                                if (existingValue.equalsIgnoreCase(contents.trim()))
+                                {
+                                    return "A Value with that name already exists for this Category.";
+                                }
+                            }
+                            return null;
                         }
-                    }
-                    return null;
-                }
-            });
+                    });
             userInput.open();
-            
+
             if (userInput.getValue() == null || userInput.getValue().trim() == "")
             {
                 return;
             }
-            
+
             this.metadataValuesList.add(userInput.getValue().trim());
-            
+
         }
         else if (e.widget.equals(removeButton))
         {
@@ -236,15 +241,17 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
             {
                 return;
             }
-            
+
             this.metadataValuesList.remove(this.metadataValuesList.getSelectionIndex());
-        }     
+        }
+        
+        setPageComplete(this.categoryNameField.isValid());
     }
 
     @Override
     public void widgetDefaultSelected(SelectionEvent e)
     {
-        
+
     }
 
     public String getMetadataCategoryName()
@@ -254,6 +261,6 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
 
     public List<MetadataValue> getMetadataCategoryValues()
     {
-        return this.currentMetadataValues;
+        return this.metadataValues;
     }
 }

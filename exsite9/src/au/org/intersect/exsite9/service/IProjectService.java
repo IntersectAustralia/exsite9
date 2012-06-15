@@ -47,4 +47,6 @@ public interface IProjectService
     Project editProject(final String name, final String owner, final String description, final Long id);
 
     void addMetadataCategoryToProject(final Project project, final MetadataCategory metadataCategory);
+    
+    Project findProjectById(Long id);
 }

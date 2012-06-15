@@ -1,5 +1,6 @@
 package au.org.intersect.exsite9.wizard.metadatacategory;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -10,24 +11,41 @@ import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.service.IMetadataCategoryService;
+import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.service.IProjectService;
 
 public class AddMetadataCategoryWizard extends Wizard
 {
     private final AddMetadataCategoryWizardPage1 page1;
+
+    private MetadataCategory metadataCategory;
     private Project project;
 
     /**
      * Constructor
      * 
      * @param project
+     * @param metadataCategory
+     *            can be null
      */
-    public AddMetadataCategoryWizard(Project project)
+    public AddMetadataCategoryWizard(Project project, MetadataCategory metadataCategory)
     {
         super();
         setNeedsProgressMonitor(true);
         this.project = project;
-        page1 = new AddMetadataCategoryWizardPage1(project, Collections.<MetadataValue>emptyList());
+        this.metadataCategory = metadataCategory;
+        if (metadataCategory == null)
+        {
+            page1 = new AddMetadataCategoryWizardPage1("Add Metadata Category",
+                    "Please enter the details of the metadata category you wish to create", project, "",
+                    new ArrayList<MetadataValue>());
+        }
+        else
+        {
+            page1 = new AddMetadataCategoryWizardPage1("Edit Metadata Category",
+                    "Edit the details of the metadata category you have selected", project, metadataCategory.getName(),
+                    metadataCategory.getValues());
+        }
     }
 
     @Override
@@ -43,11 +61,26 @@ public class AddMetadataCategoryWizard extends Wizard
         final List<MetadataValue> values = page1.getMetadataCategoryValues();
 
         // Persist the new metadata category.
-        final IMetadataCategoryService metadataCategoryService = (IMetadataCategoryService) PlatformUI.getWorkbench().getService(IMetadataCategoryService.class);
-        final MetadataCategory newCategory = metadataCategoryService.createNewMetadataCategory(categoryTitle, values);
+        final IMetadataCategoryService metadataCategoryService = (IMetadataCategoryService) PlatformUI.getWorkbench()
+                .getService(IMetadataCategoryService.class);
+        final IProjectManager IProjectManagerService = (IProjectManager) PlatformUI.getWorkbench().getService(
+                IProjectManager.class);
+        final IProjectService projectService = (IProjectService) PlatformUI.getWorkbench().getService(
+                IProjectService.class);
 
-        final IProjectService projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
-        projectService.addMetadataCategoryToProject(this.project, newCategory);
+        if (this.metadataCategory == null)
+        {
+            final MetadataCategory newCategory = metadataCategoryService.createNewMetadataCategory(categoryTitle,
+                    values);
+            projectService.addMetadataCategoryToProject(this.project, newCategory);
+        }
+        else
+        {
+            metadataCategoryService.updateMetadataCategory(this.metadataCategory, categoryTitle,
+                    page1.getMetadataCategoryValues());
+            this.project = projectService.findProjectById(this.project.getId());
+            IProjectManagerService.setCurrentProject(this.project);
+        }
 
         return this.project != null;
     }

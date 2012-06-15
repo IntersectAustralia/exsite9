@@ -23,6 +23,10 @@ public final class MetadataValuesListWidget extends org.eclipse.swt.widgets.List
     {
         super(parent, style);
         this.metadataValues = metadataValues;
+        for (final MetadataValue metadataValue : metadataValues)
+        {
+            super.add(metadataValue.getValue());
+        }
     }
 
     @Override
@@ -37,5 +41,11 @@ public final class MetadataValuesListWidget extends org.eclipse.swt.widgets.List
     {
         super.remove(index);
         this.metadataValues.remove(index);
+    }
+    
+    @Override
+    protected void checkSubclass()
+    {
+        
     }
 }
