@@ -258,8 +258,8 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                 return;
             }
 
-            this.metadataValuesListWidget.remove(this.metadataValuesListWidget.getSelectionIndex());
             this.metadataValues.remove(this.metadataValuesListWidget.getSelectionIndex());
+            this.metadataValuesListWidget.remove(this.metadataValuesListWidget.getSelectionIndex());
         }
         else if (e.widget.equals(editButton))
         {
@@ -304,8 +304,8 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                 return;
             }
             
-            this.metadataValuesListWidget.setItem(this.metadataValuesListWidget.getSelectionIndex(), userInput.getValue().trim());
             this.metadataValues.get(this.metadataValuesListWidget.getSelectionIndex()).setValue(userInput.getValue().trim());
+            this.metadataValuesListWidget.setItem(this.metadataValuesListWidget.getSelectionIndex(), userInput.getValue().trim());
         }
         
         setPageComplete(this.categoryNameField.isValid());
