@@ -1,5 +1,6 @@
 package au.org.intersect.exsite9.wizard.metadatacategory;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.IInputValidator;
@@ -36,7 +37,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     private Composite container;
 
     private ValidatingField<String> categoryNameField;
-    private MetadataValuesListWidget metadataValuesList;
+    private org.eclipse.swt.widgets.List metadataValuesListWidget;
     private Button removeButton;
     private Button addButton;
     private Button editButton;
@@ -131,15 +132,20 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         final Label metadataValuesLabel = new Label(this.container, SWT.NULL);
         metadataValuesLabel.setText("Metadata Values");
 
-        this.metadataValuesList = new MetadataValuesListWidget(this.container, SWT.BORDER | SWT.SINGLE | SWT.WRAP
-                | SWT.V_SCROLL, this.metadataValues);
-        this.metadataValuesList.addSelectionListener(new SelectionListener()
+        this.metadataValuesListWidget = new org.eclipse.swt.widgets.List(this.container, SWT.BORDER | SWT.SINGLE | SWT.WRAP
+                | SWT.V_SCROLL);
+        
+        for (MetadataValue value : this.metadataValues) 
+        {
+			this.metadataValuesListWidget.add(value.getValue());
+		}
+        this.metadataValuesListWidget.addSelectionListener(new SelectionListener()
         {
             @Override
             public void widgetSelected(final SelectionEvent e)
             {
-                removeButton.setEnabled(metadataValuesList.getSelectionCount() > 0);
-                editButton.setEnabled(metadataValuesList.getSelectionCount() > 0);
+                removeButton.setEnabled(metadataValuesListWidget.getSelectionCount() > 0);
+                editButton.setEnabled(metadataValuesListWidget.getSelectionCount() > 0);
             }
 
             @Override
@@ -152,7 +158,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         final GridData multiLineGridData = new GridData(GridData.FILL_BOTH);
 
         this.categoryNameField.getControl().setLayoutData(singleLineGridData);
-        this.metadataValuesList.setLayoutData(multiLineGridData);
+        this.metadataValuesListWidget.setLayoutData(multiLineGridData);
 
         Composite rowComp = new Composite(container, SWT.NULL);
 
@@ -222,7 +228,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                                 return "Value is too long.";
                             }
 
-                            final String[] listOfValues = metadataValuesList.getItems();
+                            final String[] listOfValues = metadataValuesListWidget.getItems();
 
                             for (final String existingValue : listOfValues)
                             {
@@ -241,28 +247,31 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                 return;
             }
 
-            this.metadataValuesList.add(userInput.getValue().trim());
+            this.metadataValuesListWidget.add(userInput.getValue().trim());
+            this.metadataValues.add(new MetadataValue(userInput.getValue().trim()));
 
         }
         else if (e.widget.equals(removeButton))
         {
-            if (this.metadataValuesList.getSelectionCount() == 0)
+            if (this.metadataValuesListWidget.getSelectionCount() == 0)
             {
                 return;
             }
 
-            this.metadataValuesList.remove(this.metadataValuesList.getSelectionIndex());
+            this.metadataValuesListWidget.remove(this.metadataValuesListWidget.getSelectionIndex());
+            this.metadataValues.remove(this.metadataValuesListWidget.getSelectionIndex());
         }
         else if (e.widget.equals(editButton))
         {
-            if(this.metadataValuesList.getSelectionCount() == 0)
+            if(this.metadataValuesListWidget.getSelectionCount() == 0)
             {
                 return;
             }
             
-            InputDialog userInput = new InputDialog(getShell(), "Edit Value", "Enter the amended metadata value", this.metadataValuesList.getSelection()[0],
+            InputDialog userInput = new InputDialog(getShell(), "Edit Value", "Enter the amended metadata value", this.metadataValuesListWidget.getSelection()[0],
                     new IInputValidator()
                     {
+            			
                         @Override
                         public String isValid(String contents)
                         {
@@ -276,7 +285,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                                 return "Value is too long.";
                             }
 
-                            final String[] listOfValues = metadataValuesList.getItems();
+                            final String[] listOfValues = metadataValuesListWidget.getItems();
 
                             for (final String existingValue : listOfValues)
                             {
@@ -295,7 +304,8 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                 return;
             }
             
-            this.metadataValuesList.setItem(this.metadataValuesList.getSelectionIndex(), userInput.getValue().trim());
+            this.metadataValuesListWidget.setItem(this.metadataValuesListWidget.getSelectionIndex(), userInput.getValue().trim());
+            this.metadataValues.get(this.metadataValuesListWidget.getSelectionIndex()).setValue(userInput.getValue().trim());
         }
         
         setPageComplete(this.categoryNameField.isValid());
