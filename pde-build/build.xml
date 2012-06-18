@@ -13,6 +13,7 @@
 	<property name="exsite9.dir" value="${parent.dir}/exsite9"/>
 	<property name="exsite9.build.dir" value="${exsite9.dir}/build"/>
 	<property name="exsite9.dist.dir" value="${exsite9.build.dir}/dist"/>
+	<property name="exsite9.icons.dir" value="${exsite9.dir}/icons"/>
 
 	<property name="exsite9libs.dir" value="${parent.dir}/exsite9_libraries"/>
 	<property name="exsite9libs.build.dir" value="${exsite9libs.dir}/build"/>
@@ -30,7 +31,7 @@
 	<target name="dist" depends="clean">
 		<mkdir dir="${build.dir}"/>
 		<mkdir dir="${build.dir}/features"/>
-		<mkdir dir="${build.dir}/plugins"/>
+		<mkdir dir="${build.dir}/plugins/exsite9/icons"/>
 
 		<!-- Pull-in the exsite9 libraries plugin -->
 		<copy todir="${build.dir}/plugins" failonerror="true">
@@ -42,6 +43,12 @@
 			<fileset file="${exsite9.jar}" />
 			<fileset file="${exsite9.product}" />
 		</copy>
+
+		<!-- Get the icons used to create the launchers -->
+		<copy todir="${build.dir}/plugins/exsite9/icons" failonerror="true">
+			<fileset file="${exsite9.icons.dir}/Ex9_Logo.icns" />
+	    </copy>
+		
 
 
 		<property name="org.eclipse.equinox.launcher.jar" value="${eclipse.home}/plugins/org.eclipse.equinox.launcher_1.2.0.v20110502.jar" />
