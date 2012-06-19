@@ -1,6 +1,5 @@
 package au.org.intersect.exsite9.wizard.metadatacategory;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.IInputValidator;
@@ -27,7 +26,6 @@ import com.richclientgui.toolbox.validation.validator.IFieldValidator;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
-import au.org.intersect.exsite9.view.widgets.MetadataValuesListWidget;
 import au.org.intersect.exsite9.wizard.WizardPageErrorHandler;
 
 public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyListener, SelectionListener
@@ -300,7 +298,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                     });
             userInput.open();
 
-            if (userInput.getValue() == null || userInput.getValue().trim() == "")
+            if (userInput.getValue() == null || userInput.getValue().trim().isEmpty())
             {
                 return;
             }

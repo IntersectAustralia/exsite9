@@ -8,7 +8,9 @@ package au.org.intersect.exsite9.view;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.commands.Command;
@@ -21,6 +23,7 @@ import org.eclipse.core.commands.NotHandledException;
 import org.eclipse.core.commands.Parameterization;
 import org.eclipse.core.commands.ParameterizedCommand;
 import org.eclipse.core.commands.common.NotDefinedException;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -44,14 +47,19 @@ import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.ViewPart;
 
+import com.google.common.collect.Collections2;
+
 import au.org.intersect.exsite9.Activator;
 import au.org.intersect.exsite9.domain.Group;
+import au.org.intersect.exsite9.domain.MetadataAssociation;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.utils.AlphabeticalMetadataCategoryComparator;
 import au.org.intersect.exsite9.service.IGroupService;
 import au.org.intersect.exsite9.service.IProjectManager;
+import au.org.intersect.exsite9.util.NewFilesGroupPredicate;
+import au.org.intersect.exsite9.util.Pair;
 import au.org.intersect.exsite9.view.widgets.MetadataButtonWidget;
 
 /**
@@ -71,6 +79,11 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
      * The list of currently selected (if any) groups on the RHS.
      */
     private final List<Group> selectedGroups = new ArrayList<Group>();
+
+    /**
+     * The metadata buttons that are currently shown on the page - keyed by metadata category for easy lookup.
+     */
+    private final Map<Pair<MetadataCategory, MetadataValue>, MetadataButtonWidget> metadataButtons = new HashMap<Pair<MetadataCategory,MetadataValue>, MetadataButtonWidget>();
 
     /**
      * 
@@ -132,6 +145,8 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         final List<MetadataCategory> sorted = new ArrayList<MetadataCategory>(metadataCategories);
         Collections.sort(sorted, new AlphabeticalMetadataCategoryComparator());
 
+        this.metadataButtons.clear();
+
         for (final MetadataCategory metadataCategory : sorted)
         {
             final Composite expandBarComposite = new Composite(expandBar, SWT.NONE);
@@ -185,12 +200,13 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             buttonLayout.pack = true;
             buttonLayout.justify = false;
             buttonComposite.setLayout(buttonLayout);
-
+            
             for (final MetadataValue metadataValue : metadataCategory.getValues())
             {
                 final MetadataButtonWidget mdbw = new MetadataButtonWidget(buttonComposite, SWT.TOGGLE, metadataCategory, metadataValue);
                 mdbw.setText(metadataValue.getValue());
                 mdbw.addSelectionListener(this);
+                this.metadataButtons.put(new Pair<MetadataCategory, MetadataValue>(metadataCategory, metadataValue), mdbw);
             }
 
             buttonComposite.pack();
@@ -257,6 +273,13 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
 
         final IGroupService groupService = (IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class);
 
+        // You are not able to apply metadata to the New Files Group
+        if (!Collections2.filter(this.selectedGroups, NewFilesGroupPredicate.INSANCE).isEmpty())
+        {
+            MessageDialog.openError(getSite().getWorkbenchWindow().getShell(), "Error", "Metadata cannot be assigned to the new files group.");
+            return;
+        }
+
         if (button.getSelection())
         {
             for (final Group group : this.selectedGroups)
@@ -305,6 +328,45 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             {
                 this.selectedGroups.add((Group)selectedObject);
             }
+        }
+
+        resetMetadataValueButtons();
+        if (this.selectedGroups.size() == 1)
+        {
+            final Group selectedGroup = this.selectedGroups.get(0);
+            setMetadataValuesButtonsPressed(selectedGroup.getMetadataAssociations());
+        }
+    }
+
+    /**
+     * Sets the metadata values that are pressed according to the metadata associations provided.
+     * @param metadataAssociations The metadata associations.
+     */
+    private void setMetadataValuesButtonsPressed(final List<MetadataAssociation> metadataAssociations)
+    {
+        for (final MetadataAssociation metadataAssociation : metadataAssociations)
+        {
+            final MetadataCategory metadataCategory = metadataAssociation.getMetadataCategory();
+
+            for (final MetadataValue metadataValue : metadataAssociation.getMetadataValues())
+            {
+                final MetadataButtonWidget metadataButtonWidget = this.metadataButtons.get(new Pair<MetadataCategory, MetadataValue>(metadataCategory, metadataValue));
+                if (metadataButtonWidget != null)
+                {
+                    metadataButtonWidget.setSelection(true);
+                }
+            }
+        }
+    }
+
+    /**
+     * Depresses (i.e. makes them NOT clicked) all the metadata value buttons currently on the page.
+     */
+    private void resetMetadataValueButtons()
+    {
+        for (final MetadataButtonWidget metadataButtonWidget : this.metadataButtons.values())
+        {
+            metadataButtonWidget.setSelection(false);
         }
     }
 
