@@ -4,7 +4,7 @@
  * This module contains Proprietary Information of Intersect,
  * and should be treated as Confidential.
  */
-package au.org.intersect.exsite9.wizard.metadatacategory;
+package au.org.intersect.exsite9.view.widgets;
 
 import java.util.List;
 

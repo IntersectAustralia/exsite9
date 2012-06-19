@@ -35,4 +35,14 @@ public final class NewFilesGroup extends Group
     {
         return Collections.unmodifiableList(Collections.<Group>emptyList());
     }
+
+    /**
+     * You can never add metadata associations to the NewFilesGroup.
+     * @{inheritDoc}
+     */
+    @Override
+    public List<MetadataAssociation> getMetadataAssociations()
+    {
+        return Collections.unmodifiableList(Collections.<MetadataAssociation>emptyList());
+    }
 }

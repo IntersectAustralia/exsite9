@@ -107,6 +107,8 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
         final Menu menu = menuManager.createContextMenu(this.treeViewer.getTree());
         this.treeViewer.getTree().setMenu(menu);
         getSite().registerContextMenu(menuManager, this.treeViewer);
+
+        // This allows other views to listen to selection changes.
         getSite().setSelectionProvider(this.treeViewer);
     }
 

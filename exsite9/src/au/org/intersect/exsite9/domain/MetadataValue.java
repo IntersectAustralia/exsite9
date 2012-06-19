@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.google.common.base.Objects;
 
@@ -58,6 +59,7 @@ public class MetadataValue implements Serializable
         return new HashCodeBuilder().append(this.value).toHashCode();
     }
 
+    @Override
     public boolean equals(final Object obj)
     {
         if (obj == this)
@@ -70,5 +72,11 @@ public class MetadataValue implements Serializable
         }
         final MetadataValue other = (MetadataValue) obj;
         return Objects.equal(this.value, other.value) && Objects.equal(this.id, other.id);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this).append("id", this.id).append("value", this.value).toString();
     }
 }

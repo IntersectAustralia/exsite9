@@ -26,6 +26,7 @@ import com.richclientgui.toolbox.validation.validator.IFieldValidator;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.view.widgets.MetadataValuesListWidget;
 import au.org.intersect.exsite9.wizard.WizardPageErrorHandler;
 
 public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyListener, SelectionListener

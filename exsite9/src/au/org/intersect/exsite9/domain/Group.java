@@ -9,6 +9,7 @@ package au.org.intersect.exsite9.domain;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -28,7 +29,6 @@ import com.google.common.base.Objects;
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 public class Group implements Serializable
 {
-
 	/**
 	 * Generated UID
 	 */
@@ -39,11 +39,15 @@ public class Group implements Serializable
     private Long id;
 	
 	private final String name;
-	
+
+	@OneToMany
 	private final List<Group> groups = new ArrayList<Group>();
 
 	@OneToMany
 	private final List<ResearchFile> researchFiles = new ArrayList<ResearchFile>();
+
+    @OneToMany
+    private final List<MetadataAssociation> metadataAssociations = new ArrayList<MetadataAssociation>();
 	
 	public Group()
 	{
@@ -76,6 +80,11 @@ public class Group implements Serializable
     public List<ResearchFile> getResearchFiles()
     {
         return researchFiles;
+    }
+
+    public List<MetadataAssociation> getMetadataAssociations()
+    {
+        return this.metadataAssociations;
     }
 
     /**

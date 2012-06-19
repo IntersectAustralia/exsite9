@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import au.org.intersect.exsite9.dao.DAOTest;
 import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
+import au.org.intersect.exsite9.dao.factory.MetadataAssociationDAOFactory;
 import au.org.intersect.exsite9.database.ExSite9EntityManagerFactory;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.ResearchFile;
@@ -31,8 +32,9 @@ public class GroupServiceUnitTest extends DAOTest
         stub(emf.getEntityManager()).toReturn(createEntityManager());
         
         GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        MetadataAssociationDAOFactory metadataAssocationDAOFactory = new MetadataAssociationDAOFactory();
         
-        groupService = new GroupService(emf, groupDAOFactory);
+        groupService = new GroupService(emf, groupDAOFactory, metadataAssocationDAOFactory);
         
         Group group = groupService.createNewGroup("Group One");
         
@@ -47,8 +49,9 @@ public class GroupServiceUnitTest extends DAOTest
         ExSite9EntityManagerFactory emf = mock(ExSite9EntityManagerFactory.class);
         stub(emf.getEntityManager()).toReturn(createEntityManager());
         GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        MetadataAssociationDAOFactory metadataAssocationDAOFactory = new MetadataAssociationDAOFactory();
         
-        groupService = new GroupService(emf, groupDAOFactory);
+        groupService = new GroupService(emf, groupDAOFactory, metadataAssocationDAOFactory);
         
         Group parentGroup = new Group("Parent");
         Group childGroup = new Group("Child");
@@ -72,8 +75,9 @@ public class GroupServiceUnitTest extends DAOTest
                                     .toReturn(createEntityManager());
         
         GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        MetadataAssociationDAOFactory metadataAssocationDAOFactory = new MetadataAssociationDAOFactory();
         
-        groupService = new GroupService(emf, groupDAOFactory);
+        groupService = new GroupService(emf, groupDAOFactory, metadataAssocationDAOFactory);
         
         Group parent1Group = new Group("Parent1");
         Group child1Group = new Group("Child1");
@@ -125,8 +129,9 @@ public class GroupServiceUnitTest extends DAOTest
                                     .toReturn(createEntityManager());
         
         GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        MetadataAssociationDAOFactory metadataAssocationDAOFactory = new MetadataAssociationDAOFactory();
         
-        groupService = new GroupService(emf, groupDAOFactory);
+        groupService = new GroupService(emf, groupDAOFactory, metadataAssocationDAOFactory);
         
         Group parentGroup = new Group("Parent Group");
         Group childGroup = new Group("Child Group");
@@ -172,8 +177,9 @@ public class GroupServiceUnitTest extends DAOTest
                                     .toReturn(createEntityManager());
         
         GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        MetadataAssociationDAOFactory metadataAssocationDAOFactory = new MetadataAssociationDAOFactory();
         
-        groupService = new GroupService(emf, groupDAOFactory);
+        groupService = new GroupService(emf, groupDAOFactory, metadataAssocationDAOFactory);
         
         Group parentGroup = new Group("Parent Group");
         Group childGroup = new Group("Child Group");

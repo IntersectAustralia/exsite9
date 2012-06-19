@@ -11,9 +11,14 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import au.org.intersect.exsite9.dao.GroupDAO;
+import au.org.intersect.exsite9.dao.MetadataAssociationDAO;
 import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
+import au.org.intersect.exsite9.dao.factory.MetadataAssociationDAOFactory;
 import au.org.intersect.exsite9.database.ExSite9EntityManagerFactory;
 import au.org.intersect.exsite9.domain.Group;
+import au.org.intersect.exsite9.domain.MetadataAssociation;
+import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.dto.HierarchyMoveDTO;
@@ -25,12 +30,15 @@ public final class GroupService implements IGroupService
 {
     private final ExSite9EntityManagerFactory entityManagerFactory;
     private final GroupDAOFactory groupDAOFactory;
+    private final MetadataAssociationDAOFactory metadataAssociationDAOFactory;
 
     public GroupService(final ExSite9EntityManagerFactory entityManagerFactory,
-                        final GroupDAOFactory groupDAOFactory)
+                        final GroupDAOFactory groupDAOFactory,
+                        final MetadataAssociationDAOFactory metadataAssociationDAOFactory)
     {
         this.entityManagerFactory = entityManagerFactory;
         this.groupDAOFactory = groupDAOFactory;
+        this.metadataAssociationDAOFactory = metadataAssociationDAOFactory;
     }
 
     /**
@@ -134,6 +142,86 @@ public final class GroupService implements IGroupService
         finally
         {
             em.close();
+        }
+    }
+
+    @Override
+    public void associateMetadata(final Group group, final MetadataCategory metadataCategory, final MetadataValue metadataValue)
+    {
+        final EntityManager em = this.entityManagerFactory.getEntityManager();
+        try
+        {
+            final List<MetadataAssociation> existingAssociations = group.getMetadataAssociations();
+
+            final MetadataAssociationDAO metadataAssociationDAO = this.metadataAssociationDAOFactory.createInstance(em);
+    
+            boolean addedAssociation = false;
+            for (final MetadataAssociation existingAssociation : existingAssociations)
+            {
+                if (existingAssociation.getMetadataCategory().equals(metadataCategory))
+                {
+                    if (existingAssociation.getMetadataValues().contains(metadataValue))
+                    {
+                        // nothing to do!
+                        return;
+                    }
+                    existingAssociation.getMetadataValues().add(metadataValue);
+                    metadataAssociationDAO.updateMetadataAssociation(existingAssociation);
+                    addedAssociation = true;
+                }
+            }
+
+
+            if (!addedAssociation)
+            {
+                final MetadataAssociation metadataAssociation = new MetadataAssociation(metadataCategory);
+                metadataAssociation.getMetadataValues().add(metadataValue);
+                metadataAssociationDAO.createMetadataAssociation(metadataAssociation);
+                group.getMetadataAssociations().add(metadataAssociation);
+            }
+
+            final GroupDAO groupDAO = this.groupDAOFactory.createInstance(em);
+            groupDAO.updateGroup(group);
+
+        }
+        finally
+        {
+            em.close();
+        }
+    }
+
+    @Override
+    public void disassociateMetadata(final Group group, final MetadataCategory metadataCategory, final MetadataValue metadataValue)
+    {
+        final List<MetadataAssociation> existingAssociations = group.getMetadataAssociations();
+
+        for (final MetadataAssociation existingAssociation : existingAssociations)
+        {
+            if (existingAssociation.getMetadataCategory().equals(metadataCategory))
+            {
+                if (existingAssociation.getMetadataValues().remove(metadataValue))
+                {
+                    final EntityManager em = this.entityManagerFactory.getEntityManager();
+                    try
+                    {
+                        final MetadataAssociationDAO metadataAssociationDAO = this.metadataAssociationDAOFactory.createInstance(em);
+                        metadataAssociationDAO.updateMetadataAssociation(existingAssociation);
+
+                        if (existingAssociation.getMetadataValues().isEmpty())
+                        {
+                            existingAssociations.remove(existingAssociation);
+
+                            final GroupDAO groupDAO = this.groupDAOFactory.createInstance(em);
+                            groupDAO.updateGroup(group);
+                        }
+                        return;
+                    }
+                    finally
+                    {
+                        em.close();
+                    }
+                }
+            }
         }
     }
 

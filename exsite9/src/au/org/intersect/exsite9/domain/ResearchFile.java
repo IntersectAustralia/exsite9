@@ -21,12 +21,11 @@ import org.eclipse.persistence.annotations.Converter;
 
 import com.google.common.base.Objects;
 
-
 /**
  * Represents a research data file in a folder that the researcher has associated with a project.
  */
 @Entity
-@Table(uniqueConstraints=@UniqueConstraint(columnNames={"PROJECT","FILE"}))
+@Table(uniqueConstraints=@UniqueConstraint(columnNames={"PROJECT_ID","FILE"}))
 @Converter(name="fileToStringConverter",
     converterClass=au.org.intersect.exsite9.domain.utils.FileToStringConverter.class)
 public final class ResearchFile
@@ -113,8 +112,6 @@ public final class ResearchFile
     @Override
     public String toString()
     {
-        final ToStringBuilder tsb = new ToStringBuilder(this);
-        tsb.append("file", this.file);
-        return tsb.toString();
+        return new ToStringBuilder(this).append("file", this.file).toString();
     }
 }

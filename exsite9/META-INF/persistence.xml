@@ -12,6 +12,7 @@
         <class>au.org.intersect.exsite9.domain.NewFilesGroup</class>
         <class>au.org.intersect.exsite9.domain.MetadataCategory</class>
         <class>au.org.intersect.exsite9.domain.MetadataValue</class>
+        <class>au.org.intersect.exsite9.domain.MetadataAssociation</class>
 
        <properties/>
     </persistence-unit>

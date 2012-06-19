@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.google.common.base.Objects;
 
@@ -84,6 +85,7 @@ public final class MetadataCategory implements Serializable
         return new HashCodeBuilder().append(this.name).toHashCode();
     }
 
+    @Override
     public boolean equals(final Object obj)
     {
         if (this == obj)
@@ -96,5 +98,11 @@ public final class MetadataCategory implements Serializable
         }
         final MetadataCategory other = (MetadataCategory) obj;
         return Objects.equal(this.id, other.id) && Objects.equal(this.name, other.name);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this).append("id", this.id).append("name", this.name).toString();
     }
 }

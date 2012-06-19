@@ -21,6 +21,8 @@ import org.eclipse.core.commands.NotHandledException;
 import org.eclipse.core.commands.Parameterization;
 import org.eclipse.core.commands.ParameterizedCommand;
 import org.eclipse.core.commands.common.NotDefinedException;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
@@ -29,12 +31,13 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
+import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
@@ -42,16 +45,19 @@ import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.ViewPart;
 
 import au.org.intersect.exsite9.Activator;
+import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.utils.AlphabeticalMetadataCategoryComparator;
+import au.org.intersect.exsite9.service.IGroupService;
 import au.org.intersect.exsite9.service.IProjectManager;
+import au.org.intersect.exsite9.view.widgets.MetadataButtonWidget;
 
 /**
  * View component used for browsing Metadata.
  */
-public final class MetadataBrowserView extends ViewPart implements IExecutionListener, SelectionListener
+public final class MetadataBrowserView extends ViewPart implements IExecutionListener, SelectionListener, ISelectionListener
 {
     public static final String ID = MetadataBrowserView.class.getName();
 
@@ -60,6 +66,11 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
     private ExpandBar expandBar;
     private Composite parent;
     private RowData rowData;
+
+    /**
+     * The list of currently selected (if any) groups on the RHS.
+     */
+    private final List<Group> selectedGroups = new ArrayList<Group>();
 
     /**
      * 
@@ -100,6 +111,9 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                 }
             }
         });
+
+        // So we can listen for selections in the project tree view
+        getSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(ProjectExplorerView.ID, this);
     }
 
     private void initLayout(final List<MetadataCategory> metadataCategories)
@@ -174,9 +188,9 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
 
             for (final MetadataValue metadataValue : metadataCategory.getValues())
             {
-                final Button button = new Button(buttonComposite, SWT.TOGGLE);
-                button.setText(metadataValue.getValue());
-                button.addSelectionListener(this);
+                final MetadataButtonWidget mdbw = new MetadataButtonWidget(buttonComposite, SWT.TOGGLE, metadataCategory, metadataValue);
+                mdbw.setText(metadataValue.getValue());
+                mdbw.addSelectionListener(this);
             }
 
             buttonComposite.pack();
@@ -235,14 +249,27 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
     @Override
     public void widgetSelected(final SelectionEvent e)
     {
-        final Button button = (Button) e.widget;
+        // Check that the selected groups does not contain a new group OR the project node - we CANNOT assign metadata to them.
+
+        final MetadataButtonWidget button = (MetadataButtonWidget) e.widget;
+        final MetadataCategory metadataCategory = button.getMetadataCategory();
+        final MetadataValue metadataValue = button.getMetadataValue();
+
+        final IGroupService groupService = (IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class);
+
         if (button.getSelection())
         {
-            System.out.println(button.getText() + " Selected");
+            for (final Group group : this.selectedGroups)
+            {
+                groupService.associateMetadata(group, metadataCategory, metadataValue);
+            }
         }
         else
         {
-            System.out.println(button.getText() + " Not Selected");
+            for (final Group group : this.selectedGroups)
+            {
+                groupService.disassociateMetadata(group, metadataCategory, metadataValue);
+            }
         }
     }
 
@@ -250,6 +277,35 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
     public void widgetDefaultSelected(final SelectionEvent e)
     {
         
+    }
+
+    /**
+     * Listens to selection changes on the tree viewer in the project view on the RHS.
+     * @{inheritDoc}
+     */
+    @Override
+    public void selectionChanged(final IWorkbenchPart part, final ISelection selection)
+    {
+        if (!(selection instanceof IStructuredSelection))
+        {
+            LOG.error("Unknown selection type");
+            return;
+        }
+
+        final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+
+        @SuppressWarnings("unchecked")
+        final List<Object> selectedObjects = structuredSelection.toList();
+
+        this.selectedGroups.clear();
+
+        for (final Object selectedObject : selectedObjects)
+        {
+            if (selectedObject instanceof Group)
+            {
+                this.selectedGroups.add((Group)selectedObject);
+            }
+        }
     }
 
     private static final class EditMetadataCategorySelectionListener implements SelectionListener

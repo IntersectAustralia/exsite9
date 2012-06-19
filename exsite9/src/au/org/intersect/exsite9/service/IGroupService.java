@@ -9,6 +9,8 @@ package au.org.intersect.exsite9.service;
 import java.util.List;
 
 import au.org.intersect.exsite9.domain.Group;
+import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.dto.HierarchyMoveDTO;
 
 /**
@@ -35,4 +37,20 @@ public interface IGroupService
      * @param moveList The list of items to move
      */
     void performHierarchyMove(final List<HierarchyMoveDTO> moveList);
+
+    /**
+     * Associates a metadata category and value to a Group.
+     * @param group The group to associate metadata to.
+     * @param metadataCategory The category of metadata to associate.
+     * @param metadataVale The value of metadata to associate.
+     */
+    void associateMetadata(final Group group, final MetadataCategory metadataCategory, final MetadataValue metadataValue);
+
+    /**
+     * Diassociates a metadata category and value from a Group.
+     * @param group The group to disassociate metadata from.
+     * @param metadataCategory The category of metadata to disassociate.
+     * @param metadataValue The value of metadata to disassociate.
+     */
+    void disassociateMetadata(final Group group, final MetadataCategory metadataCategory, final MetadataValue metadataValue);
 }
