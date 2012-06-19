@@ -11,7 +11,7 @@
    </launcherArgs>
 
    <launcher name="ExSite9">
-      <macosx icon="/exsite9/icons/Ex9_Logo.icns"/>
+      <macosx icon="/exsite9/icons/Ex9_Icon.icns"/>
       <solaris/>
       <win useIco="false">
          <bmp/>
