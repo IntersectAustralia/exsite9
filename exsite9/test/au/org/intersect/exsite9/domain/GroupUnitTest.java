@@ -7,7 +7,6 @@
 package au.org.intersect.exsite9.domain;
 
 import static au.org.intersect.exsite9.test.Assert.assertNotEquals;
-import static au.org.intersect.exsite9.test.Assert.assertNotEqualsHashCode;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -37,7 +36,8 @@ public final class GroupUnitTest
         assertEquals(Long.valueOf(7), toTest1.getId());
 
         final String toString = toTest1.toString();
-        assertTrue(toString.contains("name=group 1,groups=[],researchFiles=[]"));
+        assertTrue(toString.contains("name=group 1"));
+        assertTrue(toString.contains("id=7"));
     }
 
     @Test
@@ -57,18 +57,18 @@ public final class GroupUnitTest
         assertEquals(toTest1.hashCode(), toTest2.hashCode());
 
         // Different name
-        assertNotEqualsHashCode(toTest1, toTest3);
-        assertNotEqualsHashCode(toTest2, toTest3);
+        assertNotEquals(toTest1, toTest3);
+        assertNotEquals(toTest2, toTest3);
 
         // Different child nodes.
         toTest1.getGroups().add(new Group("some group"));
-        assertNotEqualsHashCode(toTest1, toTest2);
-        assertNotEqualsHashCode(toTest1, toTest3);
+        assertNotEquals(toTest1, toTest2);
+        assertNotEquals(toTest1, toTest3);
 
         // Different child files.
         toTest1.getResearchFiles().add(new ResearchFile(new File("some File")));
-        assertNotEqualsHashCode(toTest1, toTest2);
-        assertNotEqualsHashCode(toTest1, toTest3);
+        assertNotEquals(toTest1, toTest2);
+        assertNotEquals(toTest1, toTest3);
 
         assertNotEquals(toTest1, null);
         assertNotEquals(toTest1, n1);

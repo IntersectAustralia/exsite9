@@ -7,9 +7,11 @@
 package au.org.intersect.exsite9.domain;
 
 import java.io.File;
+import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -25,13 +27,15 @@ import com.google.common.base.Objects;
  * Represents a research data file in a folder that the researcher has associated with a project.
  */
 @Entity
-@Table(uniqueConstraints=@UniqueConstraint(columnNames={"PROJECT_ID","FILE"}))
+@Table(name="RESEARCH_FILE", uniqueConstraints=@UniqueConstraint(columnNames={"PROJECT_ID","FILE"}))
 @Converter(name="fileToStringConverter",
     converterClass=au.org.intersect.exsite9.domain.utils.FileToStringConverter.class)
-public final class ResearchFile
+public final class ResearchFile implements Serializable
 {
+    private static final long serialVersionUID = 5047390909436811919L;
+
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.IDENTITY, generator="SEQ_RESEARCH_FILE")
     private Long id;
 
     @Convert("fileToStringConverter")

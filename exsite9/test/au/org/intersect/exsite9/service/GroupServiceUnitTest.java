@@ -1,7 +1,6 @@
 package au.org.intersect.exsite9.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
 
@@ -12,10 +11,14 @@ import java.util.List;
 import org.junit.Test;
 
 import au.org.intersect.exsite9.dao.DAOTest;
+import au.org.intersect.exsite9.dao.MetadataCategoryDAO;
 import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
 import au.org.intersect.exsite9.dao.factory.MetadataAssociationDAOFactory;
 import au.org.intersect.exsite9.database.ExSite9EntityManagerFactory;
 import au.org.intersect.exsite9.domain.Group;
+import au.org.intersect.exsite9.domain.MetadataAssociation;
+import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.dto.HierarchyMoveDTO;
 
@@ -208,5 +211,122 @@ public class GroupServiceUnitTest extends DAOTest
         assertEquals(parent2Group.getGroups().size(),1);
         
         moveList.clear();
+    }
+
+    @Test
+    public void testAssociateMetadata()
+    {
+        final ExSite9EntityManagerFactory emf = mock(ExSite9EntityManagerFactory.class);
+        stub(emf.getEntityManager()).toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager());
+
+        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final MetadataAssociationDAOFactory metadataAssocationDAOFactory = new MetadataAssociationDAOFactory();
+        final MetadataCategoryDAO metadataCategoryDAO = new MetadataCategoryDAO(emf.getEntityManager());
+        groupService = new GroupService(emf, groupDAOFactory, metadataAssocationDAOFactory);
+
+        final MetadataCategory metadataCategory = new MetadataCategory("metadataCategory");
+        final MetadataValue metadataValue = new MetadataValue("metadataValue");
+        metadataCategory.getValues().add(metadataValue);
+        metadataCategoryDAO.createMetadataCategory(metadataCategory);
+        final Group group = new Group("group name");
+        groupService.associateMetadata(group, metadataCategory, metadataValue);
+
+        final List<MetadataAssociation> metadataAssociations = group.getMetadataAssociations();
+        assertEquals(1, metadataAssociations.size());
+        MetadataAssociation metadataAssociation = metadataAssociations.get(0);
+        assertNotNull(metadataAssociation);
+        assertEquals(metadataCategory, metadataAssociation.getMetadataCategory());
+        assertEquals(1, metadataAssociation.getMetadataValues().size());
+        assertEquals(metadataValue, metadataAssociation.getMetadataValues().get(0));
+
+        // Doing it again does nothing.
+        groupService.associateMetadata(group, metadataCategory, metadataValue);
+        assertEquals(1, metadataAssociations.size());
+        metadataAssociation = metadataAssociations.get(0);
+        assertNotNull(metadataAssociation);
+        assertEquals(metadataCategory, metadataAssociation.getMetadataCategory());
+        assertEquals(1, metadataAssociation.getMetadataValues().size());
+        assertEquals(metadataValue, metadataAssociation.getMetadataValues().get(0));
+
+        // Add another association under the same category.
+        final MetadataValue metadataValue2 = new MetadataValue("metadataValue two");
+        metadataCategory.getValues().add(metadataValue2);
+        metadataCategoryDAO.updateMetadataCategory(metadataCategory);
+
+        groupService.associateMetadata(group, metadataCategory, metadataValue2);
+        assertEquals(1, metadataAssociations.size());
+        metadataAssociation = metadataAssociations.get(0);
+        assertNotNull(metadataAssociation);
+        assertEquals(metadataCategory, metadataAssociation.getMetadataCategory());
+        assertEquals(2, metadataAssociation.getMetadataValues().size());
+        assertTrue(metadataAssociation.getMetadataValues().contains(metadataValue));
+        assertTrue(metadataAssociation.getMetadataValues().contains(metadataValue2));
+
+        // Ad another association under a different category.
+        final MetadataCategory metadataCategory2 = new MetadataCategory("metadatacategory number 2");
+        final MetadataValue metadataValue3 = new MetadataValue("metadata value three");
+        metadataCategory2.getValues().add(metadataValue3);
+        metadataCategoryDAO.createMetadataCategory(metadataCategory2);
+
+        groupService.associateMetadata(group, metadataCategory2, metadataValue3);
+        assertEquals(2, group.getMetadataAssociations().size());
+    }
+
+    @Test
+    public void testDisassociateMetadata()
+    {
+        final ExSite9EntityManagerFactory emf = mock(ExSite9EntityManagerFactory.class);
+        stub(emf.getEntityManager()).toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager());
+
+        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final MetadataAssociationDAOFactory metadataAssocationDAOFactory = new MetadataAssociationDAOFactory();
+        final MetadataCategoryDAO metadataCategoryDAO = new MetadataCategoryDAO(emf.getEntityManager());
+        groupService = new GroupService(emf, groupDAOFactory, metadataAssocationDAOFactory);
+
+        // Disassociate metadata that is not associated.
+        final MetadataCategory metadataCategory1 = new MetadataCategory("metadataCategory");
+        final MetadataValue metadataValue1 = new MetadataValue("metadataValue");
+        metadataCategory1.getValues().add(metadataValue1);
+        metadataCategoryDAO.createMetadataCategory(metadataCategory1);
+
+        final MetadataCategory metadataCategory2 = new MetadataCategory("metadataCategory two");
+        final MetadataValue metadataValue2 = new MetadataValue("metadataValue two");
+        final MetadataValue metadataValue3 = new MetadataValue("metadataValue three");
+        metadataCategory2.getValues().add(metadataValue2);
+        metadataCategory2.getValues().add(metadataValue3);
+        metadataCategoryDAO.createMetadataCategory(metadataCategory2);
+
+        final Group group = new Group("group name");
+        groupService.disassociateMetadata(group, metadataCategory1, metadataValue1);
+        assertTrue(group.getMetadataAssociations().isEmpty());
+        groupService.associateMetadata(group, metadataCategory1, metadataValue1);
+        groupService.associateMetadata(group, metadataCategory2, metadataValue2);
+        groupService.associateMetadata(group, metadataCategory2, metadataValue3);
+
+        List<MetadataAssociation> metadataAssociations = group.getMetadataAssociations();
+        assertEquals(2, metadataAssociations.size());
+
+        groupService.disassociateMetadata(group, metadataCategory2, metadataValue2);
+        metadataAssociations = group.getMetadataAssociations();
+        assertEquals(2, metadataAssociations.size());
+
+        groupService.disassociateMetadata(group, metadataCategory1, metadataValue1);
+        metadataAssociations = group.getMetadataAssociations();
+        assertEquals(1, metadataAssociations.size());
+
+        groupService.disassociateMetadata(group, metadataCategory2, metadataValue3);
+        metadataAssociations = group.getMetadataAssociations();
+        assertEquals(0, metadataAssociations.size());
     }
 }

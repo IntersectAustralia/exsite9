@@ -76,13 +76,13 @@ public final class ProjectUnitTest
 
         // Different child nodes.
         toTest1.getRootNode().getGroups().add(new Group("some group"));
-        assertNotEqualsHashCode(toTest1, toTest2);
-        assertNotEqualsHashCode(toTest1, toTest3);
+        assertNotEquals(toTest1, toTest2);
+        assertNotEquals(toTest1, toTest3);
 
         // Different child files.
         toTest1.getRootNode().getResearchFiles().add(new ResearchFile(new File("some File")));
-        assertNotEqualsHashCode(toTest1, toTest2);
-        assertNotEqualsHashCode(toTest1, toTest3);
+        assertNotEquals(toTest1, toTest2);
+        assertNotEquals(toTest1, toTest3);
 
         assertNotEquals(toTest1, null);
         assertNotEquals(toTest1, new Object());

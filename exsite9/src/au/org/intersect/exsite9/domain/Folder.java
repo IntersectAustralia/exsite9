@@ -7,9 +7,11 @@
 package au.org.intersect.exsite9.domain;
 
 import java.io.File;
+import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -20,10 +22,12 @@ import com.google.common.base.Objects;
  * Represents a folder on the researcher's desktop that contains research data files
  */
 @Entity
-public final class Folder
+public final class Folder implements Serializable
 {
+    private static final long serialVersionUID = 8420843643147102477L;
+
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.IDENTITY, generator="SEQ_FOLDER")
     private Long id;
     private String name;
     private String path;

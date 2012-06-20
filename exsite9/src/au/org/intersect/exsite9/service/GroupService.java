@@ -10,6 +10,8 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import org.apache.log4j.Logger;
+
 import au.org.intersect.exsite9.dao.GroupDAO;
 import au.org.intersect.exsite9.dao.MetadataAssociationDAO;
 import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
@@ -28,6 +30,8 @@ import au.org.intersect.exsite9.dto.HierarchyMoveDTO;
  */
 public final class GroupService implements IGroupService
 {
+    private static final Logger LOG = Logger.getLogger(GroupService.class);
+
     private final ExSite9EntityManagerFactory entityManagerFactory;
     private final GroupDAOFactory groupDAOFactory;
     private final MetadataAssociationDAOFactory metadataAssociationDAOFactory;
@@ -148,6 +152,8 @@ public final class GroupService implements IGroupService
     @Override
     public void associateMetadata(final Group group, final MetadataCategory metadataCategory, final MetadataValue metadataValue)
     {
+        LOG.info("Assosciating metadata with group. " + group + " " + metadataCategory + " " + metadataValue);
+
         final EntityManager em = this.entityManagerFactory.getEntityManager();
         try
         {
@@ -171,7 +177,6 @@ public final class GroupService implements IGroupService
                 }
             }
 
-
             if (!addedAssociation)
             {
                 final MetadataAssociation metadataAssociation = new MetadataAssociation(metadataCategory);
@@ -193,6 +198,8 @@ public final class GroupService implements IGroupService
     @Override
     public void disassociateMetadata(final Group group, final MetadataCategory metadataCategory, final MetadataValue metadataValue)
     {
+        LOG.info("Disassosciating metadata from group. " + group + " " + metadataCategory + " " + metadataValue);
+
         final List<MetadataAssociation> existingAssociations = group.getMetadataAssociations();
 
         for (final MetadataAssociation existingAssociation : existingAssociations)

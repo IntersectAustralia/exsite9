@@ -12,6 +12,7 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -29,13 +30,10 @@ import com.google.common.base.Objects;
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 public class Group implements Serializable
 {
-	/**
-	 * Generated UID
-	 */
 	private static final long serialVersionUID = 1700329934000740424L;
 	
 	@Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.IDENTITY, generator="SEQ_GROUP")
     private Long id;
 	
 	private final String name;
@@ -112,7 +110,7 @@ public class Group implements Serializable
     @Override
     public int hashCode()
     {
-        return Objects.hashCode(this.name, this.groups, this.researchFiles);
+        return Objects.hashCode(this.id);
     }
 
     /**
@@ -122,11 +120,8 @@ public class Group implements Serializable
     public String toString()
     {
         final ToStringBuilder tsb = new ToStringBuilder(this);
-        tsb.append("hash", this.hashCode());
         tsb.append("id", this.id);
         tsb.append("name", this.name);
-        tsb.append("groups", this.groups);
-        tsb.append("researchFiles", this.researchFiles);
         return tsb.toString();
     }
     

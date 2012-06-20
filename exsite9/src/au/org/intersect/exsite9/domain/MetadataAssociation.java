@@ -6,11 +6,13 @@
  */
 package au.org.intersect.exsite9.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -26,10 +28,12 @@ import com.google.common.base.Objects;
  */
 @Entity
 @Table(name="METADATA_ASSOCIATION")
-public final class MetadataAssociation
+public final class MetadataAssociation implements Serializable
 {
+    private static final long serialVersionUID = 2152083468103054575L;
+
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.IDENTITY, generator="SEQ_METADATA_ASSOCIATION")
     private Long id;
 
     private MetadataCategory metadataCategory;

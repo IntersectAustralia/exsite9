@@ -7,10 +7,13 @@
 package au.org.intersect.exsite9.view;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.commands.Command;
@@ -51,11 +54,11 @@ import com.google.common.collect.Collections2;
 
 import au.org.intersect.exsite9.Activator;
 import au.org.intersect.exsite9.domain.Group;
-import au.org.intersect.exsite9.domain.MetadataAssociation;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.utils.AlphabeticalMetadataCategoryComparator;
+import au.org.intersect.exsite9.domain.utils.GroupUtils;
 import au.org.intersect.exsite9.service.IGroupService;
 import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.util.NewFilesGroupPredicate;
@@ -277,7 +280,19 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         if (!Collections2.filter(this.selectedGroups, NewFilesGroupPredicate.INSANCE).isEmpty())
         {
             MessageDialog.openError(getSite().getWorkbenchWindow().getShell(), "Error", "Metadata cannot be assigned to the new files group.");
+            button.setSelection(false);
             return;
+        }
+
+        if (this.selectedGroups.size() > 1)
+        {
+            final boolean performOperation = MessageDialog.openConfirm(getSite().getWorkbenchWindow().getShell(), "Caution",
+                    "The metadata operation is about to be performed on all selected groups. Are you sure you wish to proceed?");
+            if (!performOperation)
+            {
+                button.setSelection(!button.getSelection());
+                return;
+            }
         }
 
         if (button.getSelection())
@@ -331,30 +346,31 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         }
 
         resetMetadataValueButtons();
-        if (this.selectedGroups.size() == 1)
+        if (!this.selectedGroups.isEmpty())
         {
-            final Group selectedGroup = this.selectedGroups.get(0);
-            setMetadataValuesButtonsPressed(selectedGroup.getMetadataAssociations());
+            // Determine a common set of buttons that should be pressed and press them.
+            final Set<Pair<MetadataCategory, MetadataValue>> intersection = new HashSet<Pair<MetadataCategory,MetadataValue>>(GroupUtils.getCategoryToValueMapping(this.selectedGroups.get(0)));
+
+            for (int i = 1; i < this.selectedGroups.size(); i++)
+            {
+                intersection.retainAll(GroupUtils.getCategoryToValueMapping(this.selectedGroups.get(i)));
+            }
+            setMetadataValuesButtonsPressed(intersection);
         }
     }
 
     /**
      * Sets the metadata values that are pressed according to the metadata associations provided.
-     * @param metadataAssociations The metadata associations.
+     * @param metadataButtons the metadata buttons to press.
      */
-    private void setMetadataValuesButtonsPressed(final List<MetadataAssociation> metadataAssociations)
+    private void setMetadataValuesButtonsPressed(final Collection<Pair<MetadataCategory, MetadataValue>> metadataButtons)
     {
-        for (final MetadataAssociation metadataAssociation : metadataAssociations)
+        for (final Pair<MetadataCategory, MetadataValue> pair : metadataButtons)
         {
-            final MetadataCategory metadataCategory = metadataAssociation.getMetadataCategory();
-
-            for (final MetadataValue metadataValue : metadataAssociation.getMetadataValues())
+            final MetadataButtonWidget metadataButtonWidget = this.metadataButtons.get(pair);
+            if (metadataButtonWidget != null)
             {
-                final MetadataButtonWidget metadataButtonWidget = this.metadataButtons.get(new Pair<MetadataCategory, MetadataValue>(metadataCategory, metadataValue));
-                if (metadataButtonWidget != null)
-                {
-                    metadataButtonWidget.setSelection(true);
-                }
+                metadataButtonWidget.setSelection(true);
             }
         }
     }

@@ -6,12 +6,14 @@
  */
 package au.org.intersect.exsite9.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -26,11 +28,12 @@ import com.google.common.base.Objects;
  * Represents a Research Project
  */
 @Entity
-public final class Project
+public final class Project implements Serializable
 {
+    private static final long serialVersionUID = 8533546987283338604L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.IDENTITY, generator="SEQ_PROJECT")
     private Long id;
     private String name;
     private String owner;
