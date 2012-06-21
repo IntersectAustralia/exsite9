@@ -9,6 +9,8 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+
+import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.service.IFileService;
 import au.org.intersect.exsite9.service.IProjectManager;
@@ -18,17 +20,36 @@ public class IdentifyAllNewFilesForProjectJob extends Job
 {
     private static final String jobName = "IdentifyAllNewFilesForProject";
     
+    private final Project project;
+    private final Folder folder;
+    
     public IdentifyAllNewFilesForProjectJob()
     {
         super(jobName);
-    }
-
-    @Override
-    protected IStatus run(IProgressMonitor monitor)
-    {
         
         final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
         final Project project = projectManager.getCurrentProject();
+        this.project = project;
+        this.folder = null;
+    }
+    
+    public IdentifyAllNewFilesForProjectJob(Project project)
+    {
+        super(jobName);
+        this.project = project;
+        this.folder = null;
+    }
+
+    public IdentifyAllNewFilesForProjectJob(Project project, Folder folder)
+    {
+        super(jobName);
+        this.project = project;
+        this.folder = folder;
+    }
+    
+    @Override
+    protected IStatus run(IProgressMonitor monitor)
+    {
         if (project == null)
         {
             throw new IllegalStateException("Trying to edit a null project");
@@ -40,7 +61,15 @@ public class IdentifyAllNewFilesForProjectJob extends Job
         }
         
         final IFileService fileService = (IFileService) PlatformUI.getWorkbench().getService(IFileService.class);
-        fileService.identifyNewFilesForProject(project);
+        
+        if (folder == null)
+        {
+            fileService.identifyNewFilesForProject(project);
+        }
+        else
+        {
+            fileService.identifyNewFilesForFolder(project, this.folder);
+        }
         
         // Refresh the project explorer view in the ui thread
         Display.getDefault().syncExec(new Runnable() {

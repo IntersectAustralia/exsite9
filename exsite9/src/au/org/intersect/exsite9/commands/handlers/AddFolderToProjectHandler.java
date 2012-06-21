@@ -96,7 +96,7 @@ public final class AddFolderToProjectHandler implements IHandler
             final IProjectService projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
             projectService.mapFolderToProject(project, folder);
             
-            Job identifyAllNewFilesForProject = new IdentifyAllNewFilesForProjectJob();
+            Job identifyAllNewFilesForProject = new IdentifyAllNewFilesForProjectJob(project, folder);
             identifyAllNewFilesForProject.schedule();
         }
         return null;
