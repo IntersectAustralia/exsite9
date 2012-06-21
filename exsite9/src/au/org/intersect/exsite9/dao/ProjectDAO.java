@@ -40,9 +40,4 @@ public class ProjectDAO
         TypedQuery<Project> query = em.createQuery("SELECT p FROM Project p", Project.class);
         return query.getResultList();
     }
-    
-    public void refresh(Project project)
-    {
-        em.refresh(project);
-    }
 }

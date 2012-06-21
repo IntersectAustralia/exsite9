@@ -21,9 +21,16 @@ public interface IGroupService
     /**
      * Creates a new group.
      * @param groupName The name of the new group to created.
+     * @param parentGroup The parent of this new group.
      * @return The newly created Group.
      */
     Group createNewGroup(final String groupName);
+
+    /**
+     * Deletes a group. Moves all the child groups and files to the provided group's parent.
+     * @param groupToDelete The group to delete.
+     */
+    void deleteGroup(final Group groupToDelete);
 
     /**
      * Adds a group to another group.

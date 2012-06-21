@@ -6,13 +6,19 @@
  */
 package au.org.intersect.exsite9.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+
+import org.apache.log4j.Logger;
 
 import au.org.intersect.exsite9.domain.Group;
 
 public final class GroupDAO
 {
     private EntityManager em;
+    private static final Logger LOG = Logger.getLogger(GroupDAO.class);
 
     public GroupDAO(final EntityManager entityManager)
     {
@@ -26,7 +32,21 @@ public final class GroupDAO
         em.getTransaction().commit();
     }
 
-    public void updateGroup(final Group group)
+    public void deleteGroup(final Group group)
+    {
+        final boolean localTransaction = em.getTransaction().isActive();
+        if (!localTransaction)
+        {
+            em.getTransaction().begin();
+        }
+        em.remove(em.merge(group));
+        if (!localTransaction)
+        {
+            em.getTransaction().commit();
+        }
+    }
+
+    public Group updateGroup(final Group group)
     {
         boolean localTransaction = (em.getTransaction().isActive()) ? false : true;
         
@@ -34,15 +54,31 @@ public final class GroupDAO
         {
             em.getTransaction().begin();
         }
-        em.merge(group);
+        final Group updatedGroup = em.merge(group);
         if(localTransaction)
         {
             em.getTransaction().commit();
         }
+        return updatedGroup;
     }
     
     public Group findById(final long id)
     {
         return em.find(Group.class,id);
+    }
+
+    public Group getParent(final Group group)
+    {
+        final TypedQuery<Group> query = em.createQuery("SELECT g FROM Group g WHERE :child MEMBER OF g.groups", Group.class);
+        query.setParameter("child", group);
+
+        final List<Group> results = query.getResultList();
+
+        if (results.size() != 1)
+        {
+            LOG.error("A Group has multiple parents, or does not have a parent.");
+            return null;
+        }
+        return results.get(0);
     }
 }

@@ -54,10 +54,39 @@ public final class GroupService implements IGroupService
         EntityManager em = entityManagerFactory.getEntityManager();
         try
         {
-            GroupDAO groupDAO = groupDAOFactory.createInstance(em);
+            final GroupDAO groupDAO = groupDAOFactory.createInstance(em);
             final Group group = new Group(groupName);
             groupDAO.createGroup(group);
             return group;
+        }
+        finally
+        {
+            em.close();
+        }
+    }
+
+    /**
+     * @{inheritDoc}
+     */
+    @Override
+    public void deleteGroup(final Group groupToDelete)
+    {
+        final EntityManager em = entityManagerFactory.getEntityManager();
+        try
+        {
+            final GroupDAO groupDAO = groupDAOFactory.createInstance(em);
+
+            final Group parentGroup = groupDAO.getParent(groupToDelete);
+
+            parentGroup.getGroups().remove(groupToDelete);
+            parentGroup.getGroups().addAll(groupToDelete.getGroups());
+            parentGroup.getResearchFiles().addAll(groupToDelete.getResearchFiles());
+
+            groupToDelete.getGroups().clear();
+            groupToDelete.getResearchFiles().clear();
+
+            groupDAO.updateGroup(parentGroup);
+            groupDAO.deleteGroup(groupToDelete);
         }
         finally
         {

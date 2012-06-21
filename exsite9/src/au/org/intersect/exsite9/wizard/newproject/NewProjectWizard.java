@@ -52,6 +52,7 @@ public final class NewProjectWizard extends Wizard
 
         final IProjectService projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
         this.newProject = projectService.createProject(projectName, projectOwner, projectDescription);
+
         return this.newProject != null;
     }
 

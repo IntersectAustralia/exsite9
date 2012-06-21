@@ -108,6 +108,10 @@
             id="au.org.intersect.exsite9.commands.ListFoldersCommand"
             name="List Folders">
       </command>
+      <command
+            id="au.org.intersect.exsite9.commands.DeleteGroupCommand"
+            name="Delete Group">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -234,6 +238,12 @@
                label="Folders..."
                style="push"
                tooltip="List the project folders">
+            <visibleWhen
+                  checkEnabled="false">
+               <reference
+                     definitionId="au.org.intersect.exsite9.expression.InstanceOfProject">
+               </reference>
+            </visibleWhen>
          </command>              
          <command
                commandId="au.org.intersect.exsite9.commands.ReloadProjectCommand"
@@ -243,6 +253,17 @@
                   checkEnabled="false">
                <reference
                      definitionId="au.org.intersect.exsite9.expression.InstanceOfProject">
+               </reference>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="au.org.intersect.exsite9.commands.DeleteGroupCommand"
+               label="Delete"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <reference
+                     definitionId="au.org.intersect.exsite9.expression.InstanceOfGroup">
                </reference>
             </visibleWhen>
          </command>
@@ -295,6 +316,15 @@
             class="au.org.intersect.exsite9.commands.handlers.ReloadProjectHandler"
             commandId="au.org.intersect.exsite9.commands.ReloadProjectCommand">
       </handler>
+   <handler
+         class="au.org.intersect.exsite9.commands.handlers.DeleteGroupHandler"
+         commandId="au.org.intersect.exsite9.commands.DeleteGroupCommand">
+      <enabledWhen>
+         <reference
+               definitionId="au.org.intersect.exsite9.expression.OneItemSelected">
+         </reference>
+      </enabledWhen>
+   </handler>
    </extension>
    <extension
          point="org.eclipse.core.expressions.definitions">
@@ -317,23 +347,9 @@
             <reference
                   definitionId="au.org.intersect.exsite9.expression.InstanceOfProject">
             </reference>
-            <with
-                  variable="selection">
-               <iterate
-                     ifEmpty="false"
-                     operator="or">
-                  <and>
-                     <instanceof
-                           value="au.org.intersect.exsite9.domain.Group">
-                     </instanceof>
-                     <not>
-                        <instanceof
-                              value="au.org.intersect.exsite9.domain.NewFilesGroup">
-                        </instanceof>
-                     </not>
-                  </and>
-               </iterate>
-            </with></or>
+            <reference
+                  definitionId="au.org.intersect.exsite9.expression.InstanceOfGroup">
+            </reference></or>
       </definition>
       <definition
             id="au.org.intersect.exsite9.expression.OneItemSelected">
@@ -342,6 +358,25 @@
             <count
                   value="1">
             </count>
+         </with>
+      </definition>
+      <definition
+            id="au.org.intersect.exsite9.expression.InstanceOfGroup">
+         <with
+               variable="selection">
+            <iterate
+                  ifEmpty="false"
+                  operator="or">
+               <and>
+                  <instanceof
+                        value="au.org.intersect.exsite9.domain.Group">
+                  </instanceof>
+                  <not>
+                     <instanceof
+                           value="au.org.intersect.exsite9.domain.NewFilesGroup">
+                     </instanceof>
+                  </not></and>
+            </iterate>
          </with>
       </definition>
    </extension>

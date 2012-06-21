@@ -138,6 +138,4 @@ public class ProjectService implements IProjectService
             em.close();
         }        
     }
-    
-    
 }
