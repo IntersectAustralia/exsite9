@@ -83,10 +83,6 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
 
         final Command addGroupCommand = commandService.getCommand("au.org.intersect.exsite9.commands.AddGroup");
         addGroupCommand.addExecutionListener(this);
-
-        final Command reloadProjectCommand = commandService
-                .getCommand("au.org.intersect.exsite9.commands.ReloadProjectCommand");
-        reloadProjectCommand.addExecutionListener(this);
         
         final Command openProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.OpenProjectCommand");
         openProjectCommand.addExecutionListener(this);
@@ -168,17 +164,13 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
         {
             refreshAndExpand();
         }
-        else if (commandId.equals("au.org.intersect.exsite9.commands.ReloadProjectCommand"))
-        {
-            refreshAndExpand();
-        }
         else if (commandId.equals("au.org.intersect.exsite9.commands.AddGroup"))
         {
             refreshAndExpand();
         }
     }
 
-    private void refreshAndExpand()
+    public void refreshAndExpand()
     {
         this.treeViewer.refresh();
         this.treeViewer.expandAll();

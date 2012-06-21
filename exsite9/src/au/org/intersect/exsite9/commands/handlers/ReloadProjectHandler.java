@@ -4,11 +4,8 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
-import org.eclipse.ui.PlatformUI;
-
-import au.org.intersect.exsite9.domain.Project;
-import au.org.intersect.exsite9.service.IFileService;
-import au.org.intersect.exsite9.service.IProjectManager;
+import org.eclipse.core.runtime.jobs.Job;
+import au.org.intersect.exsite9.jobs.IdentifyAllNewFilesForProjectJob;
 
 public class ReloadProjectHandler implements IHandler
 {
@@ -16,15 +13,9 @@ public class ReloadProjectHandler implements IHandler
     @Override
     public Object execute(final ExecutionEvent event) throws ExecutionException
     {
-        final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
-        final Project project = projectManager.getCurrentProject();
-        if (project == null)
-        {
-            throw new IllegalStateException("Trying to edit a null project");
-        }
-
-        final IFileService fileService = (IFileService) PlatformUI.getWorkbench().getService(IFileService.class);
-        fileService.identifyNewFilesForProject(project);
+        Job identifyAllNewFilesForProject = new IdentifyAllNewFilesForProjectJob();
+        identifyAllNewFilesForProject.schedule();
+        
         return null;
     }
 

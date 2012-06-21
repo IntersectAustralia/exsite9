@@ -33,15 +33,13 @@ public class FileService implements IFileService
 	@Override
     public void identifyNewFilesForProject(Project project)
     {
-	 // TODO: Run this in its own thread.
-    
 	    EntityManager em = entityManagerFactory.getEntityManager();
 	    try
 	    {
     	    ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
     	    ResearchFileDAO researchFileDAO = researchFileDAOFactory.createInstance(em);
     	    
-    		for(Folder folder : project.getFolders())
+    	    for(Folder folder : project.getFolders())
     		{
     			List<File> newFileList = FolderHelper.getAllFilesInFolder(folder);
     			for (final File file : newFileList)
