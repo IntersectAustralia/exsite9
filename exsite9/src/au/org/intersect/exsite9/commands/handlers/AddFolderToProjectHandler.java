@@ -12,6 +12,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.DirectoryDialog;
@@ -21,7 +22,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
-import au.org.intersect.exsite9.service.IFileService;
+import au.org.intersect.exsite9.jobs.IdentifyAllNewFilesForProjectJob;
 import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.service.IProjectService;
 
@@ -93,10 +94,10 @@ public final class AddFolderToProjectHandler implements IHandler
             }
 
             final IProjectService projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
-            final IFileService fileService = (IFileService) PlatformUI.getWorkbench().getService(IFileService.class);
-
             projectService.mapFolderToProject(project, folder);
-            fileService.identifyNewFilesForProject(project);
+            
+            Job identifyAllNewFilesForProject = new IdentifyAllNewFilesForProjectJob(folder);
+            identifyAllNewFilesForProject.schedule();
         }
         return null;
     }

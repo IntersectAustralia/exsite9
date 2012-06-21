@@ -33,35 +33,45 @@ public class FileService implements IFileService
 	@Override
     public void identifyNewFilesForProject(Project project)
     {
-	 // TODO: Run this in its own thread.
-    
-	    EntityManager em = entityManagerFactory.getEntityManager();
-	    try
-	    {
-    	    ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
-    	    ResearchFileDAO researchFileDAO = researchFileDAOFactory.createInstance(em);
-    	    
-    		for(Folder folder : project.getFolders())
-    		{
-    			List<File> newFileList = FolderHelper.getAllFilesInFolder(folder);
-    			for (final File file : newFileList)
-    			{
-    			    // If there is already a research file in the database, do not insert another.
-    			    final ResearchFile existing = researchFileDAO.findByPath(project, file);
-    			    if (existing == null)
-    			    {
-    			        final ResearchFile researchFile = new ResearchFile(file);
-    			        researchFile.setProject(project);
-    			        researchFileDAO.createResearchFile(researchFile);
-    			        project.getNewFilesNode().getResearchFiles().add(researchFile);
-    			    }
-    			}
-    			projectDAO.updateProject(project);
-    		}
-	    }
-	    finally
-	    {
-	        em.close();
-	    }
+	    for(Folder folder : project.getFolders())
+		{
+	        addFilesFromFolder(project, folder);
+		}
     }
+
+    @Override
+    public void identifyNewFilesForFolder(Project project, Folder folder)
+    {
+        addFilesFromFolder(project, folder);
+    }
+
+    private void addFilesFromFolder(Project project, Folder folder)
+    {
+        EntityManager em = entityManagerFactory.getEntityManager();
+        try
+        {
+            ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
+            ResearchFileDAO researchFileDAO = researchFileDAOFactory.createInstance(em);
+            
+            List<File> newFileList = FolderHelper.getAllFilesInFolder(folder);
+            for (final File file : newFileList)
+            {
+                // If there is already a research file in the database, do not insert another.
+                final ResearchFile existing = researchFileDAO.findByPath(project, file);
+                if (existing == null)
+                {
+                    final ResearchFile researchFile = new ResearchFile(file);
+                    researchFile.setProject(project);
+                    researchFileDAO.createResearchFile(researchFile);
+                    project.getNewFilesNode().getResearchFiles().add(researchFile);
+                }
+            }
+            projectDAO.updateProject(project);
+        }
+        finally
+        {
+            em.close();
+        }
+    }
+
 }

@@ -6,6 +6,7 @@
  */
 package au.org.intersect.exsite9.service;
 
+import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
 
 /**
@@ -14,4 +15,6 @@ import au.org.intersect.exsite9.domain.Project;
 public interface IFileService 
 {
 	public void identifyNewFilesForProject(Project project);
+	
+	public void identifyNewFilesForFolder(Project project, Folder folder);
 }

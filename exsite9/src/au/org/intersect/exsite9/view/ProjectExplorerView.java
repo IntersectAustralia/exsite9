@@ -73,29 +73,25 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
         
         // This command is defined in the plugin.xml
         // This is used to the view can load the project with the New Project command is executed.
-        final Command newProjectCommand = commandService
-                .getCommand("au.org.intersect.exsite9.commands.NewProjectCommand");
+        final Command newProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.NewProjectCommand");
         newProjectCommand.addExecutionListener(this);
 
-        final Command addFolderToProjectCommand = commandService
-                .getCommand("au.org.intersect.exsite9.commands.AddFolderToProjectCommand");
+        final Command addFolderToProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.AddFolderToProjectCommand");
         addFolderToProjectCommand.addExecutionListener(this);
 
         final Command addGroupCommand = commandService.getCommand("au.org.intersect.exsite9.commands.AddGroup");
         addGroupCommand.addExecutionListener(this);
-        
+
         final Command deleteGroupCommand = commandService.getCommand("au.org.intersect.exsite9.commands.DeleteGroupCommand");
         deleteGroupCommand.addExecutionListener(this);
 
-        final Command reloadProjectCommand = commandService
-                .getCommand("au.org.intersect.exsite9.commands.ReloadProjectCommand");
+        final Command reloadProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.ReloadProjectCommand");
         reloadProjectCommand.addExecutionListener(this);
         
         final Command openProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.OpenProjectCommand");
         openProjectCommand.addExecutionListener(this);
         
-        final Command editProjectCommand = commandService
-                .getCommand("au.org.intersect.exsite9.commands.EditProjectCommand");
+        final Command editProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.EditProjectCommand");
         editProjectCommand.addExecutionListener(this);
 
         initContextMenu();
@@ -171,10 +167,6 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
         {
             refreshAndExpand();
         }
-        else if (commandId.equals("au.org.intersect.exsite9.commands.ReloadProjectCommand"))
-        {
-            refreshAndExpand();
-        }
         else if (commandId.equals("au.org.intersect.exsite9.commands.AddGroup"))
         {
             refreshAndExpand();
@@ -183,9 +175,14 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
         {
             displayProjectAndExpand();
         }
+        else if (commandId.equals("au.org.intersect.exsite9.commands.ReloadProjectCommand"))
+        {
+            refreshAndExpand();
+        }
+
     }
 
-    private void refreshAndExpand()
+    public void refreshAndExpand()
     {
         this.treeViewer.refresh();
         this.treeViewer.expandAll();
