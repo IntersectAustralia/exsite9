@@ -15,7 +15,6 @@ public class ReloadProjectHandler implements IHandler
     {
         Job identifyAllNewFilesForProject = new IdentifyAllNewFilesForProjectJob();
         identifyAllNewFilesForProject.schedule();
-        
         return null;
     }
 

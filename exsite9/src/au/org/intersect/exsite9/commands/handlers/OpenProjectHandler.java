@@ -12,6 +12,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -19,6 +20,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.jobs.IdentifyAllNewFilesForProjectJob;
 import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.wizard.openproject.OpenProjectWizard;
 
@@ -59,6 +61,8 @@ public class OpenProjectHandler implements IHandler
         if (project != null)
         {
             projectManager.setCurrentProject(project);
+            Job identifyAllNewFilesForProject = new IdentifyAllNewFilesForProjectJob();
+            identifyAllNewFilesForProject.schedule();
             HandlerUtils.activateShowProjectActivity(activeWorkbenchWindow);
         }
 
