@@ -35,14 +35,8 @@ public class IdentifyAllNewFilesForProjectJob extends Job
         super(jobName);
         this.folder = null;
     }
-    
-    public IdentifyAllNewFilesForProjectJob(Project project)
-    {
-        super(jobName);
-        this.folder = null;
-    }
 
-    public IdentifyAllNewFilesForProjectJob(Project project, Folder folder)
+    public IdentifyAllNewFilesForProjectJob(Folder folder)
     {
         super(jobName);
         this.folder = folder;
@@ -74,7 +68,6 @@ public class IdentifyAllNewFilesForProjectJob extends Job
             }
             
             final IFileService fileService = (IFileService) PlatformUI.getWorkbench().getService(IFileService.class);
-            
             if (folder == null)
             {
                 fileService.identifyNewFilesForProject(project);
