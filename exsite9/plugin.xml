@@ -112,6 +112,11 @@
             id="au.org.intersect.exsite9.commands.DeleteGroupCommand"
             name="Delete Group">
       </command>
+      <command
+            defaultHandler="au.org.intersect.exsite9.commands.handlers.ExportProjectXMLHandler"
+            id="au.org.intersect.exsite9.commands.ExportProjectXMLCommand"
+            name="Export Project XML">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -155,6 +160,12 @@
                   label="Folders..."
                   style="push"
                   tooltip="List the project folders">
+            </command>
+            <command
+                  commandId="au.org.intersect.exsite9.commands.ExportProjectXMLCommand"
+                  label="Export..."
+                  style="push"
+                  tooltip="Export the project&apos;s details to XML">
             </command>
          </menu>
          <menu
@@ -228,10 +239,6 @@
                name="exsite9.separator1"
                visible="true">
          </separator>
-         <separator
-               name="exsite9.separator1"
-               visible="true">
-         </separator>
          <command
                commandId="au.org.intersect.exsite9.commands.ListFoldersCommand"
                icon="icons/icon-folder.png"
@@ -264,6 +271,21 @@
                   checkEnabled="false">
                <reference
                      definitionId="au.org.intersect.exsite9.expression.InstanceOfGroup">
+               </reference>
+            </visibleWhen>
+         </command>
+         <separator
+               name="exsite9.separator2"
+               visible="true">
+         </separator>
+         <command
+               commandId="au.org.intersect.exsite9.commands.ExportProjectXMLCommand"
+               label="Export..."
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <reference
+                     definitionId="au.org.intersect.exsite9.expression.InstanceOfProject">
                </reference>
             </visibleWhen>
          </command>
