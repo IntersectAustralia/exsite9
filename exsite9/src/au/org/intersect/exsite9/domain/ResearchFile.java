@@ -35,7 +35,7 @@ public final class ResearchFile implements Serializable
     private static final long serialVersionUID = 5047390909436811919L;
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY, generator="SEQ_RESEARCH_FILE")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
     @Convert("fileToStringConverter")

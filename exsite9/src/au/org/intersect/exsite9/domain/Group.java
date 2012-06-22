@@ -33,7 +33,7 @@ public class Group implements Serializable
 	private static final long serialVersionUID = 1700329934000740424L;
 	
 	@Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY, generator="SEQ_GROUP")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 	
 	private final String name;
