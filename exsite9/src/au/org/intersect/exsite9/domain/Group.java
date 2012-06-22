@@ -36,7 +36,7 @@ public class Group implements Serializable
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 	
-	private final String name;
+	private String name;
 
 	@OneToMany
 	private final List<Group> groups = new ArrayList<Group>();
@@ -68,6 +68,11 @@ public class Group implements Serializable
 	public String getName()
     {
         return name;
+    }
+	
+    public void setName(String name)
+    {
+        this.name = name;
     }
 
     public List<Group> getGroups()
