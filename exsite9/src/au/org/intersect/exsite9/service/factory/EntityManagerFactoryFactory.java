@@ -1,9 +1,18 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.service.factory;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.Platform;
@@ -14,6 +23,9 @@ import org.eclipse.ui.services.AbstractServiceFactory;
 import org.eclipse.ui.services.IServiceLocator;
 import org.hsqldb.jdbcDriver;
 
+/**
+ * Holds one instance of {@link EntityManagerFactory} for Services to create {@link EntityManager}s from.
+ */
 public final class EntityManagerFactoryFactory extends AbstractServiceFactory
 {
     private static final Logger LOG = Logger.getLogger(EntityManagerFactoryFactory.class);

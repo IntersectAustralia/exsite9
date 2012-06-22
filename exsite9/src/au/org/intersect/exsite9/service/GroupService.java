@@ -288,13 +288,13 @@ public final class GroupService implements IGroupService
     }
 
     @Override
-    public void renameGroup(Group groupToBeRenamed, String NewName)
+    public void renameGroup(final Group groupToBeRenamed, final String newName)
     {
-        EntityManager em = entityManagerFactory.getEntityManager();
+        final EntityManager em = entityManagerFactory.createEntityManager();
         try
         {
             final GroupDAO groupDAO = groupDAOFactory.createInstance(em);
-            groupToBeRenamed.setName(NewName);
+            groupToBeRenamed.setName(newName);
             groupDAO.updateGroup(groupToBeRenamed);
         }
         finally
