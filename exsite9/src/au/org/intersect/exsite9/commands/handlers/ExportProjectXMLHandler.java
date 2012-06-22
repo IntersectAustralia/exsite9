@@ -9,7 +9,6 @@ package au.org.intersect.exsite9.commands.handlers;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -24,7 +23,6 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.ByteStreams;
-import com.google.common.io.CharStreams;
 import com.google.common.io.Files;
 import com.google.common.io.OutputSupplier;
 
