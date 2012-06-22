@@ -53,8 +53,6 @@ public class ProjectExplorerDropListener extends ViewerDropAdapter
      */
     public void drop(DropTargetEvent event)
     {
-        System.out.println("Drop");
-        
         List<HierarchyMoveDTO> moveList = new ArrayList<HierarchyMoveDTO>(0);
         Object newParent =  determineTarget(event);
         ITreeSelection treeSelection = (ITreeSelection) LocalSelectionTransfer.getTransfer().getSelection();
@@ -86,10 +84,6 @@ public class ProjectExplorerDropListener extends ViewerDropAdapter
                 continue;
             }
 
-            System.out.println("SELECTION= " + selectedItem.toString());
-            System.out.println("OLD PARENT= " + oldParent.toString());
-            System.out.println("NEW PARENT= " + newParent.toString());
-            
             moveList.add(new HierarchyMoveDTO(selectedItem, oldParent, newParent));
         }
         
@@ -106,7 +100,6 @@ public class ProjectExplorerDropListener extends ViewerDropAdapter
     @Override
     public boolean performDrop(Object data)
     {
-        System.out.println("Perform drop");
         return false;
     }
 
@@ -115,7 +108,6 @@ public class ProjectExplorerDropListener extends ViewerDropAdapter
     {
         if (target instanceof ResearchFile)
         {
-            System.out.println("Invalid drop");
             return false;
         }
         return true;

@@ -28,8 +28,6 @@ public class ProjectExplorerDragListener implements DragSourceListener
     @Override
     public void dragStart(DragSourceEvent event)
     {
-        System.out.println("Drag Start");
-        
         // If we have a single selection we can cancel the drag/drop if the selection is
         // the project group or the new files group
         if(((ITreeSelection)treeViewer.getSelection()).size() == 1)
@@ -38,7 +36,6 @@ public class ProjectExplorerDragListener implements DragSourceListener
             if ((obj instanceof NewFilesGroup) || (obj instanceof Project))
             {
                 event.doit = false;
-                System.out.println("Drag cancelled");
             }
         }
     }
@@ -46,14 +43,11 @@ public class ProjectExplorerDragListener implements DragSourceListener
     @Override
     public void dragSetData(DragSourceEvent event)
     {
-        System.out.println("Drag Set Data");
         LocalSelectionTransfer.getTransfer().setSelection(treeViewer.getSelection());
     }
 
     @Override
     public void dragFinished(DragSourceEvent event)
     {
-        System.out.println("Drag Finished.");
     }
-
 }
