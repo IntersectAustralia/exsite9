@@ -56,5 +56,8 @@
       <plugin id="org.eclipse.ui.workbench"/>
    </plugins>
 
+   <configurations>
+      <property name="exsite9.refreshTimeInMins" value="60" />
+   </configurations>
 
 </product>

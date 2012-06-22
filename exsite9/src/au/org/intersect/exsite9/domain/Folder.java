@@ -27,7 +27,7 @@ public final class Folder implements Serializable
     private static final long serialVersionUID = 8420843643147102477L;
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY, generator="SEQ_FOLDER")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String path;

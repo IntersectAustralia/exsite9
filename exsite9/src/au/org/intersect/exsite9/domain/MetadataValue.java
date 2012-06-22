@@ -20,7 +20,7 @@ public class MetadataValue implements Serializable
     private static final long serialVersionUID = 6279526422015017195L;
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY, generator="SEQ_METADATA_VALUE")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
     private String value;

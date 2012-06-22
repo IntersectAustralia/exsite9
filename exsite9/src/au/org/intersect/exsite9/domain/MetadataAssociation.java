@@ -33,7 +33,7 @@ public final class MetadataAssociation implements Serializable
     private static final long serialVersionUID = 2152083468103054575L;
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY, generator="SEQ_METADATA_ASSOCIATION")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
     private MetadataCategory metadataCategory;

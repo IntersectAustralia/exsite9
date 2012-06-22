@@ -33,7 +33,7 @@ public final class Project implements Serializable
     private static final long serialVersionUID = 8533546987283338604L;
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY, generator="SEQ_PROJECT")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String owner;

@@ -12,6 +12,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
+import au.org.intersect.exsite9.jobs.IdentifyAllNewFilesForProjectRepeatingJob;
+
+
 /**
  * This is the main entry point of the Eclipse RCP Application.
  */
@@ -26,6 +29,25 @@ public final class Application implements IApplication
         final Display display = PlatformUI.createDisplay();
         try
         {
+            // Start the scheduled find files job
+            try
+            {
+                Integer refreshTimeInMins = Integer.parseInt(System.getProperty("exsite9.refreshTimeInMins"));
+                if(refreshTimeInMins != null)
+                {
+                    if (refreshTimeInMins>0)
+                    {
+                        long delay = refreshTimeInMins * 60 * 1000;
+                        IdentifyAllNewFilesForProjectRepeatingJob findFilesJob = new IdentifyAllNewFilesForProjectRepeatingJob(delay);
+                        findFilesJob.schedule(delay);
+                    }
+                }
+            }
+            catch(NumberFormatException nfe)
+            {
+                // TODO: Figure out what we want to do here.
+            }
+            
             final int returnCode = PlatformUI.createAndRunWorkbench(display, new ApplicationWorkbenchAdvisor());
             if (returnCode == PlatformUI.RETURN_RESTART)
             {
