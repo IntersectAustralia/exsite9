@@ -30,6 +30,10 @@ public abstract class AbstractRepeatingJob extends Job
         return running;
     }
     
+    public void start() {
+        running = true;
+    }
+    
     public void stop() {
         running = false;
     }

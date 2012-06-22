@@ -57,14 +57,9 @@ public class IdentifyAllNewFilesForProjectJob extends Job
             final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
             final Project project = projectManager.getCurrentProject();
      
-            if (project == null)
+            if (project == null || project.getId() == null)
             {
-                throw new IllegalStateException("Trying to edit a null project");
-            }
-    
-            if (project.getId() == null)
-            {
-                throw new IllegalStateException("Active project doesn't have an Id");
+                return Status.CANCEL_STATUS;
             }
             
             final IFileService fileService = (IFileService) PlatformUI.getWorkbench().getService(IFileService.class);
