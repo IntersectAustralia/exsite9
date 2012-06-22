@@ -39,7 +39,7 @@ public final class MetadataAssociationDAO
     public void removeMetadataAssociation(final MetadataAssociation metadataAssociation)
     {
         em.getTransaction().begin();
-        em.remove(metadataAssociation);
+        em.remove(em.merge(metadataAssociation));
         em.getTransaction().commit();
     }
 }

@@ -8,13 +8,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManagerFactory;
+
 import org.junit.Test;
 
 import au.org.intersect.exsite9.dao.DAOTest;
 import au.org.intersect.exsite9.dao.MetadataCategoryDAO;
 import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
 import au.org.intersect.exsite9.dao.factory.MetadataAssociationDAOFactory;
-import au.org.intersect.exsite9.database.ExSite9EntityManagerFactory;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataAssociation;
 import au.org.intersect.exsite9.domain.MetadataCategory;
@@ -30,9 +31,9 @@ public class GroupServiceUnitTest extends DAOTest
     @Test
     public void createNewGroupTest()
     {
-        ExSite9EntityManagerFactory emf = mock(ExSite9EntityManagerFactory.class);
+        EntityManagerFactory emf = mock(EntityManagerFactory.class);
 
-        stub(emf.getEntityManager()).toReturn(createEntityManager());
+        stub(emf.createEntityManager()).toReturn(createEntityManager());
         
         GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
         MetadataAssociationDAOFactory metadataAssocationDAOFactory = new MetadataAssociationDAOFactory();
@@ -49,8 +50,8 @@ public class GroupServiceUnitTest extends DAOTest
     @Test
     public void addGroupToGroupTest()
     {
-        ExSite9EntityManagerFactory emf = mock(ExSite9EntityManagerFactory.class);
-        stub(emf.getEntityManager()).toReturn(createEntityManager());
+        EntityManagerFactory emf = mock(EntityManagerFactory.class);
+        stub(emf.createEntityManager()).toReturn(createEntityManager());
         GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
         MetadataAssociationDAOFactory metadataAssocationDAOFactory = new MetadataAssociationDAOFactory();
         
@@ -69,8 +70,8 @@ public class GroupServiceUnitTest extends DAOTest
     @Test
     public void moveGroupsTest()
     {
-        ExSite9EntityManagerFactory emf = mock(ExSite9EntityManagerFactory.class);
-        stub(emf.getEntityManager()).toReturn(createEntityManager())
+        EntityManagerFactory emf = mock(EntityManagerFactory.class);
+        stub(emf.createEntityManager()).toReturn(createEntityManager())
                                     .toReturn(createEntityManager())
                                     .toReturn(createEntityManager())
                                     .toReturn(createEntityManager())
@@ -123,8 +124,8 @@ public class GroupServiceUnitTest extends DAOTest
     @Test
     public void moveGroupWithGroupTest()
     {
-        ExSite9EntityManagerFactory emf = mock(ExSite9EntityManagerFactory.class);
-        stub(emf.getEntityManager()).toReturn(createEntityManager())
+        EntityManagerFactory emf = mock(EntityManagerFactory.class);
+        stub(emf.createEntityManager()).toReturn(createEntityManager())
                                     .toReturn(createEntityManager())
                                     .toReturn(createEntityManager())
                                     .toReturn(createEntityManager())
@@ -171,8 +172,8 @@ public class GroupServiceUnitTest extends DAOTest
     @Test
     public void moveGroupWithFileTest()
     {
-        ExSite9EntityManagerFactory emf = mock(ExSite9EntityManagerFactory.class);
-        stub(emf.getEntityManager()).toReturn(createEntityManager())
+        EntityManagerFactory emf = mock(EntityManagerFactory.class);
+        stub(emf.createEntityManager()).toReturn(createEntityManager())
                                     .toReturn(createEntityManager())
                                     .toReturn(createEntityManager())
                                     .toReturn(createEntityManager())
@@ -216,8 +217,8 @@ public class GroupServiceUnitTest extends DAOTest
     @Test
     public void testAssociateMetadata()
     {
-        final ExSite9EntityManagerFactory emf = mock(ExSite9EntityManagerFactory.class);
-        stub(emf.getEntityManager()).toReturn(createEntityManager())
+        final EntityManagerFactory emf = mock(EntityManagerFactory.class);
+        stub(emf.createEntityManager()).toReturn(createEntityManager())
                                     .toReturn(createEntityManager())
                                     .toReturn(createEntityManager())
                                     .toReturn(createEntityManager())
@@ -226,7 +227,7 @@ public class GroupServiceUnitTest extends DAOTest
 
         final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
         final MetadataAssociationDAOFactory metadataAssocationDAOFactory = new MetadataAssociationDAOFactory();
-        final MetadataCategoryDAO metadataCategoryDAO = new MetadataCategoryDAO(emf.getEntityManager());
+        final MetadataCategoryDAO metadataCategoryDAO = new MetadataCategoryDAO(emf.createEntityManager());
         groupService = new GroupService(emf, groupDAOFactory, metadataAssocationDAOFactory);
 
         final MetadataCategory metadataCategory = new MetadataCategory("metadataCategory");
@@ -280,8 +281,9 @@ public class GroupServiceUnitTest extends DAOTest
     @Test
     public void testDisassociateMetadata()
     {
-        final ExSite9EntityManagerFactory emf = mock(ExSite9EntityManagerFactory.class);
-        stub(emf.getEntityManager()).toReturn(createEntityManager())
+        final EntityManagerFactory emf = mock(EntityManagerFactory.class);
+        stub(emf.createEntityManager()).toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
                                     .toReturn(createEntityManager())
                                     .toReturn(createEntityManager())
                                     .toReturn(createEntityManager())
@@ -291,7 +293,7 @@ public class GroupServiceUnitTest extends DAOTest
 
         final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
         final MetadataAssociationDAOFactory metadataAssocationDAOFactory = new MetadataAssociationDAOFactory();
-        final MetadataCategoryDAO metadataCategoryDAO = new MetadataCategoryDAO(emf.getEntityManager());
+        final MetadataCategoryDAO metadataCategoryDAO = new MetadataCategoryDAO(emf.createEntityManager());
         groupService = new GroupService(emf, groupDAOFactory, metadataAssocationDAOFactory);
 
         // Disassociate metadata that is not associated.
@@ -307,7 +309,7 @@ public class GroupServiceUnitTest extends DAOTest
         metadataCategory2.getValues().add(metadataValue3);
         metadataCategoryDAO.createMetadataCategory(metadataCategory2);
 
-        final Group group = new Group("group name");
+        final Group group = groupService.createNewGroup("group name");
         groupService.disassociateMetadata(group, metadataCategory1, metadataValue1);
         assertTrue(group.getMetadataAssociations().isEmpty());
         groupService.associateMetadata(group, metadataCategory1, metadataValue1);

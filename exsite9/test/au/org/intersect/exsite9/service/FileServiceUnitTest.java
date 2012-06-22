@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,7 +21,6 @@ import au.org.intersect.exsite9.dao.ProjectDAO;
 import au.org.intersect.exsite9.dao.ResearchFileDAO;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
-import au.org.intersect.exsite9.database.ExSite9EntityManagerFactory;
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
@@ -55,11 +55,11 @@ public class FileServiceUnitTest extends DAOTest
     @Test
     public void identifyNewFilesForProjectEmptyFolderTest()
     {
-        ExSite9EntityManagerFactory emf = mock(ExSite9EntityManagerFactory.class);
-        stub(emf.getEntityManager()).toReturn(createEntityManager());
+        EntityManagerFactory emf = mock(EntityManagerFactory.class);
+        stub(emf.createEntityManager()).toReturn(createEntityManager());
         
         ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
-        ProjectDAO projectDAO = projectDAOFactory.createInstance(emf.getEntityManager());
+        ProjectDAO projectDAO = projectDAOFactory.createInstance(emf.createEntityManager());
         ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         
     	Project project = new Project("name","owner","description");
@@ -80,8 +80,8 @@ public class FileServiceUnitTest extends DAOTest
     @Test
     public void identifyNewFilesForProjectSingleFileTest() throws IOException
     {
-	    ExSite9EntityManagerFactory emf = mock(ExSite9EntityManagerFactory.class);
-        stub(emf.getEntityManager()).toReturn(createEntityManager());
+	    EntityManagerFactory emf = mock(EntityManagerFactory.class);
+        stub(emf.createEntityManager()).toReturn(createEntityManager());
         
         ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
@@ -119,8 +119,8 @@ public class FileServiceUnitTest extends DAOTest
     @Test
     public void testIdentifyNewFiles() throws IOException
     {
-        ExSite9EntityManagerFactory emf = mock(ExSite9EntityManagerFactory.class);
-        stub(emf.getEntityManager()).toReturn(createEntityManager())
+        EntityManagerFactory emf = mock(EntityManagerFactory.class);
+        stub(emf.createEntityManager()).toReturn(createEntityManager())
                                     .toReturn(createEntityManager())
                                     .toReturn(createEntityManager());
         

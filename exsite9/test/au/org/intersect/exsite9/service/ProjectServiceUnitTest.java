@@ -1,16 +1,18 @@
 package au.org.intersect.exsite9.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.stub;
 
-import static org.mockito.Mockito.*;
 import java.io.File;
+
+import javax.persistence.EntityManagerFactory;
 
 import org.junit.Test;
 
 import au.org.intersect.exsite9.dao.DAOTest;
 import au.org.intersect.exsite9.dao.factory.FolderDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
-import au.org.intersect.exsite9.database.ExSite9EntityManagerFactory;
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
 
@@ -21,9 +23,9 @@ public class ProjectServiceUnitTest extends DAOTest
     @Test
     public void createNewProjectTest()
     {
-        ExSite9EntityManagerFactory emf = mock(ExSite9EntityManagerFactory.class);
+        EntityManagerFactory emf = mock(EntityManagerFactory.class);
 
-        stub(emf.getEntityManager()).toReturn(createEntityManager());
+        stub(emf.createEntityManager()).toReturn(createEntityManager());
         
         ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         
@@ -39,9 +41,9 @@ public class ProjectServiceUnitTest extends DAOTest
     @Test
     public void mapFolderToProjectTest()
     {
-        ExSite9EntityManagerFactory emf = mock(ExSite9EntityManagerFactory.class);
+        EntityManagerFactory emf = mock(EntityManagerFactory.class);
         
-        stub(emf.getEntityManager()).toReturn(createEntityManager())
+        stub(emf.createEntityManager()).toReturn(createEntityManager())
                                     .toReturn(createEntityManager());
 
         ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();

@@ -1,36 +1,33 @@
-/**
- * Copyright (C) Intersect 2012.
- * 
- * This module contains Proprietary Information of Intersect,
- * and should be treated as Confidential.
- */
+package au.org.intersect.exsite9.service.factory;
 
-package au.org.intersect.exsite9.database;
-
-import java.util.List;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.eclipse.persistence.config.TargetDatabase;
 import org.eclipse.persistence.jpa.PersistenceProvider;
+import org.eclipse.ui.services.AbstractServiceFactory;
+import org.eclipse.ui.services.IServiceLocator;
 import org.hsqldb.jdbcDriver;
 
-public class ExSite9EntityManagerFactory
+public final class EntityManagerFactoryFactory extends AbstractServiceFactory
 {
-    private static final Logger LOG = Logger.getLogger(ExSite9EntityManagerFactory.class);
+    private static final Logger LOG = Logger.getLogger(EntityManagerFactoryFactory.class);
 
-    private static EntityManagerFactory emf = null;
-
-    public ExSite9EntityManagerFactory()
+    /**
+     * @{inheritDoc}
+     */
+    @Override
+    @SuppressWarnings("rawtypes")
+    public Object create(final Class serviceInterface, final IServiceLocator parentLocator, final IServiceLocator locator)
     {
-        Map<String, Object> properties = new HashMap<String, Object>();
+        LOG.info("Initializing EntityManagerFactory");
+
+        final Map<String, Object> properties = new HashMap<String, Object>();
         properties.put(PersistenceUnitProperties.TARGET_DATABASE, TargetDatabase.HSQL);
         properties.put(PersistenceUnitProperties.JDBC_DRIVER, jdbcDriver.class.getCanonicalName());
         
@@ -58,12 +55,7 @@ public class ExSite9EntityManagerFactory
         properties.put("eclipselink.logging.level", "FINE");
         properties.put("eclipselink.logging.exceptions", "true");
 
-        emf = new PersistenceProvider().createEntityManagerFactory("jpa", properties);
+        return new PersistenceProvider().createEntityManagerFactory("jpa", properties);
     }
 
-    public EntityManager getEntityManager() 
-    {
-        return emf.createEntityManager();
-    }
-    
 }

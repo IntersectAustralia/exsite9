@@ -75,6 +75,7 @@ public final class MetadataAssociationDAOUnitTest
         final MetadataAssociation mda = new MetadataAssociation(mdc);
 
         when(em.getTransaction()).thenReturn(et);
+        when(em.merge(mda)).thenReturn(mda);
 
         toTest.removeMetadataAssociation(mda);
 

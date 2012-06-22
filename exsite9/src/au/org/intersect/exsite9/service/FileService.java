@@ -4,12 +4,12 @@ import java.io.File;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 import au.org.intersect.exsite9.dao.ProjectDAO;
 import au.org.intersect.exsite9.dao.ResearchFileDAO;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
-import au.org.intersect.exsite9.database.ExSite9EntityManagerFactory;
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
@@ -17,11 +17,11 @@ import au.org.intersect.exsite9.helper.FolderHelper;
 
 public class FileService implements IFileService
 {
-    private final ExSite9EntityManagerFactory entityManagerFactory;
+    private final EntityManagerFactory entityManagerFactory;
 	private final ResearchFileDAOFactory researchFileDAOFactory;
 	private final ProjectDAOFactory projectDAOFactory;
 	
-	public FileService(ExSite9EntityManagerFactory entityManagerFactory,
+	public FileService(EntityManagerFactory entityManagerFactory,
 	                   ProjectDAOFactory projectDAOFactory,
 	                   ResearchFileDAOFactory researchFileDAOFactory)
 	{
@@ -47,7 +47,7 @@ public class FileService implements IFileService
 
     private void addFilesFromFolder(Project project, Folder folder)
     {
-        EntityManager em = entityManagerFactory.getEntityManager();
+        EntityManager em = entityManagerFactory.createEntityManager();
         try
         {
             ProjectDAO projectDAO = projectDAOFactory.createInstance(em);

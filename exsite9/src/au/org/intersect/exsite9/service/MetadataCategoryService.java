@@ -9,19 +9,19 @@ package au.org.intersect.exsite9.service;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 import au.org.intersect.exsite9.dao.MetadataCategoryDAO;
 import au.org.intersect.exsite9.dao.factory.MetadataCategoryDAOFactory;
-import au.org.intersect.exsite9.database.ExSite9EntityManagerFactory;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
 
 public final class MetadataCategoryService implements IMetadataCategoryService
 {
-    private final ExSite9EntityManagerFactory emf;
+    private final EntityManagerFactory emf;
     private final MetadataCategoryDAOFactory metadataCategoryDAOFactory;
 
-    public MetadataCategoryService(final ExSite9EntityManagerFactory emf, final MetadataCategoryDAOFactory metadataCategoryDAOFactory)
+    public MetadataCategoryService(final EntityManagerFactory emf, final MetadataCategoryDAOFactory metadataCategoryDAOFactory)
     {
         this.emf = emf;
         this.metadataCategoryDAOFactory = metadataCategoryDAOFactory;
@@ -33,7 +33,7 @@ public final class MetadataCategoryService implements IMetadataCategoryService
     @Override
     public MetadataCategory createNewMetadataCategory(final String name, final List<MetadataValue> values)
     {
-        final EntityManager em = this.emf.getEntityManager();
+        final EntityManager em = this.emf.createEntityManager();
         try
         {
             final MetadataCategoryDAO mdcDAO = this.metadataCategoryDAOFactory.createInstance(em);
@@ -49,9 +49,9 @@ public final class MetadataCategoryService implements IMetadataCategoryService
     }
 
     @Override
-    public MetadataCategory findById(Long id)
+    public MetadataCategory findById(final Long id)
     {
-        final EntityManager em = this.emf.getEntityManager();
+        final EntityManager em = this.emf.createEntityManager();
         try
         {
             final MetadataCategoryDAO mdcDAO = this.metadataCategoryDAOFactory.createInstance(em);
@@ -67,7 +67,7 @@ public final class MetadataCategoryService implements IMetadataCategoryService
     public void updateMetadataCategory(MetadataCategory existingMetadataCategoryToUpdate, String name,
             List<MetadataValue> values)
     {
-        final EntityManager em = this.emf.getEntityManager();
+        final EntityManager em = this.emf.createEntityManager();
         try
         {
             final MetadataCategoryDAO mdcDAO = this.metadataCategoryDAOFactory.createInstance(em);

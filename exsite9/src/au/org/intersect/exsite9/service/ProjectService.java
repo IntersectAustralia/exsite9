@@ -6,25 +6,26 @@
  */
 package au.org.intersect.exsite9.service;
 
-import javax.persistence.EntityManager;
 import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 import au.org.intersect.exsite9.dao.FolderDAO;
 import au.org.intersect.exsite9.dao.ProjectDAO;
 import au.org.intersect.exsite9.dao.factory.FolderDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
-import au.org.intersect.exsite9.database.ExSite9EntityManagerFactory;
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.Project;
 
 public class ProjectService implements IProjectService
 {
-    private final ExSite9EntityManagerFactory entityManagerFactory;
+    private final EntityManagerFactory entityManagerFactory;
     private final ProjectDAOFactory projectDAOFactory;
     private final FolderDAOFactory folderDAOFactory;
 
-    public ProjectService(final ExSite9EntityManagerFactory entityManagerFactory,
+    public ProjectService(final EntityManagerFactory entityManagerFactory,
             final ProjectDAOFactory projectDAOFactory, final FolderDAOFactory folderDAOFactory)
     {
         this.entityManagerFactory = entityManagerFactory;
@@ -38,7 +39,7 @@ public class ProjectService implements IProjectService
     @Override
     public Project createProject(final String name, final String owner, final String description)
     {
-        EntityManager em = entityManagerFactory.getEntityManager();
+        EntityManager em = entityManagerFactory.createEntityManager();
         try
         {
             ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
@@ -58,7 +59,7 @@ public class ProjectService implements IProjectService
     @Override
     public void mapFolderToProject(final Project project, final Folder folder)
     {
-        EntityManager em = entityManagerFactory.getEntityManager();
+        EntityManager em = entityManagerFactory.createEntityManager();
         try
         {
             ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
@@ -76,7 +77,7 @@ public class ProjectService implements IProjectService
     @Override
     public List<Project> getAllProjects()
     {
-        EntityManager em = entityManagerFactory.getEntityManager();
+        EntityManager em = entityManagerFactory.createEntityManager();
         try
         {
             ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
@@ -91,7 +92,7 @@ public class ProjectService implements IProjectService
     @Override
     public Project editProject(String name, String owner, String description, Long id)
     {
-        EntityManager em = entityManagerFactory.getEntityManager();
+        EntityManager em = entityManagerFactory.createEntityManager();
         try
         {
             ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
@@ -111,7 +112,7 @@ public class ProjectService implements IProjectService
     @Override
     public void addMetadataCategoryToProject(final Project project, final MetadataCategory metadataCategory)
     {
-        final EntityManager em = this.entityManagerFactory.getEntityManager();
+        final EntityManager em = this.entityManagerFactory.createEntityManager();
         try
         {
             final ProjectDAO projectDAO = this.projectDAOFactory.createInstance(em);
@@ -127,7 +128,7 @@ public class ProjectService implements IProjectService
     @Override
     public Project findProjectById(Long id)
     {
-        final EntityManager em = this.entityManagerFactory.getEntityManager();
+        final EntityManager em = this.entityManagerFactory.createEntityManager();
         try
         {
             final ProjectDAO projectDAO = this.projectDAOFactory.createInstance(em);

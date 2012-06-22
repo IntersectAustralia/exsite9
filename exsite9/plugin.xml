@@ -318,6 +318,11 @@
          <service
                serviceClass="au.org.intersect.exsite9.service.IProjectManager"></service>
       </serviceFactory>
+      <serviceFactory
+            factoryClass="au.org.intersect.exsite9.service.factory.EntityManagerFactoryFactory">
+         <service
+               serviceClass="javax.persistence.EntityManagerFactory"></service>
+      </serviceFactory>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">

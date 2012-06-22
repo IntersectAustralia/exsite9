@@ -6,11 +6,13 @@
  */
 package au.org.intersect.exsite9.service.factory;
 
+import javax.persistence.EntityManagerFactory;
+
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.services.AbstractServiceFactory;
 import org.eclipse.ui.services.IServiceLocator;
 
 import au.org.intersect.exsite9.dao.factory.MetadataCategoryDAOFactory;
-import au.org.intersect.exsite9.database.ExSite9EntityManagerFactory;
 import au.org.intersect.exsite9.service.MetadataCategoryService;
 
 /**
@@ -26,9 +28,9 @@ public final class MetadataCategoryServiceFactory extends AbstractServiceFactory
     @SuppressWarnings("rawtypes")
     public Object create(Class serviceInterface, IServiceLocator parentLocator, IServiceLocator locator)
     {
-        final ExSite9EntityManagerFactory entityManagerFactory = new ExSite9EntityManagerFactory();
+        final EntityManagerFactory emf = (EntityManagerFactory) PlatformUI.getWorkbench().getService(EntityManagerFactory.class);
         final MetadataCategoryDAOFactory mdcDAOFactory = new MetadataCategoryDAOFactory();
-        return new MetadataCategoryService(entityManagerFactory, mdcDAOFactory);
+        return new MetadataCategoryService(emf, mdcDAOFactory);
     }
 
 }

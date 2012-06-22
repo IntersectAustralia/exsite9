@@ -6,12 +6,14 @@
  */
 package au.org.intersect.exsite9.service.factory;
 
+import javax.persistence.EntityManagerFactory;
+
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.services.AbstractServiceFactory;
 import org.eclipse.ui.services.IServiceLocator;
 
 import au.org.intersect.exsite9.dao.factory.FolderDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
-import au.org.intersect.exsite9.database.ExSite9EntityManagerFactory;
 import au.org.intersect.exsite9.service.ProjectService;
 
 /**
@@ -31,10 +33,10 @@ public final class ProjectServiceFactory extends AbstractServiceFactory
     @SuppressWarnings("rawtypes")
     public Object create(final Class serviceInterface, final IServiceLocator parentLocator, final IServiceLocator locator)
     {
-        final ExSite9EntityManagerFactory entityManagerFactory = new ExSite9EntityManagerFactory();
+        final EntityManagerFactory emf = (EntityManagerFactory) PlatformUI.getWorkbench().getService(EntityManagerFactory.class);
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         final FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
         
-        return new ProjectService(entityManagerFactory, projectDAOFactory, folderDAOFactory);
+        return new ProjectService(emf, projectDAOFactory, folderDAOFactory);
     }
 }

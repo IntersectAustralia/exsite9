@@ -9,6 +9,7 @@ package au.org.intersect.exsite9.service;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 import org.apache.log4j.Logger;
 
@@ -16,7 +17,6 @@ import au.org.intersect.exsite9.dao.GroupDAO;
 import au.org.intersect.exsite9.dao.MetadataAssociationDAO;
 import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
 import au.org.intersect.exsite9.dao.factory.MetadataAssociationDAOFactory;
-import au.org.intersect.exsite9.database.ExSite9EntityManagerFactory;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataAssociation;
 import au.org.intersect.exsite9.domain.MetadataCategory;
@@ -32,11 +32,11 @@ public final class GroupService implements IGroupService
 {
     private static final Logger LOG = Logger.getLogger(GroupService.class);
 
-    private final ExSite9EntityManagerFactory entityManagerFactory;
+    private final EntityManagerFactory entityManagerFactory;
     private final GroupDAOFactory groupDAOFactory;
     private final MetadataAssociationDAOFactory metadataAssociationDAOFactory;
 
-    public GroupService(final ExSite9EntityManagerFactory entityManagerFactory,
+    public GroupService(final EntityManagerFactory entityManagerFactory,
                         final GroupDAOFactory groupDAOFactory,
                         final MetadataAssociationDAOFactory metadataAssociationDAOFactory)
     {
@@ -51,7 +51,7 @@ public final class GroupService implements IGroupService
     @Override
     public Group createNewGroup(final String groupName)
     {
-        EntityManager em = entityManagerFactory.getEntityManager();
+        EntityManager em = entityManagerFactory.createEntityManager();
         try
         {
             final GroupDAO groupDAO = groupDAOFactory.createInstance(em);
@@ -71,7 +71,7 @@ public final class GroupService implements IGroupService
     @Override
     public void deleteGroup(final Group groupToDelete)
     {
-        final EntityManager em = entityManagerFactory.getEntityManager();
+        final EntityManager em = entityManagerFactory.createEntityManager();
         try
         {
             final GroupDAO groupDAO = groupDAOFactory.createInstance(em);
@@ -100,7 +100,7 @@ public final class GroupService implements IGroupService
     @Override
     public void addChildGroup(final Group parentGroup, final Group childGroup)
     {
-        EntityManager em = entityManagerFactory.getEntityManager();
+        EntityManager em = entityManagerFactory.createEntityManager();
         try
         {
             GroupDAO groupDAO = groupDAOFactory.createInstance(em);
@@ -119,7 +119,7 @@ public final class GroupService implements IGroupService
     @Override
     public void performHierarchyMove(List<HierarchyMoveDTO> moveList)
     {
-        EntityManager em = entityManagerFactory.getEntityManager();
+        EntityManager em = entityManagerFactory.createEntityManager();
         GroupDAO groupDAO = groupDAOFactory.createInstance(em);
         try
         {
@@ -183,7 +183,7 @@ public final class GroupService implements IGroupService
     {
         LOG.info("Assosciating metadata with group. " + group + " " + metadataCategory + " " + metadataValue);
 
-        final EntityManager em = this.entityManagerFactory.getEntityManager();
+        final EntityManager em = this.entityManagerFactory.createEntityManager();
         try
         {
             final List<MetadataAssociation> existingAssociations = group.getMetadataAssociations();
@@ -237,7 +237,7 @@ public final class GroupService implements IGroupService
             {
                 if (existingAssociation.getMetadataValues().remove(metadataValue))
                 {
-                    final EntityManager em = this.entityManagerFactory.getEntityManager();
+                    final EntityManager em = this.entityManagerFactory.createEntityManager();
                     try
                     {
                         final MetadataAssociationDAO metadataAssociationDAO = this.metadataAssociationDAOFactory.createInstance(em);
@@ -249,6 +249,8 @@ public final class GroupService implements IGroupService
 
                             final GroupDAO groupDAO = this.groupDAOFactory.createInstance(em);
                             groupDAO.updateGroup(group);
+
+                            metadataAssociationDAO.removeMetadataAssociation(existingAssociation);
                         }
                         return;
                     }
