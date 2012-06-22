@@ -31,6 +31,13 @@ public interface IGroupService
      * @param groupToDelete The group to delete.
      */
     void deleteGroup(final Group groupToDelete);
+    
+    /**
+     * Renames a group.
+     * @param groupToBeRenamed The group to renamed.
+     * @param NewName The new group name.
+     */
+    void renameGroup(final Group groupToBeRenamed, final String NewName);
 
     /**
      * Adds a group to another group.

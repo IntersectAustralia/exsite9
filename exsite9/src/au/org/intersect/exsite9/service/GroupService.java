@@ -284,4 +284,20 @@ public final class GroupService implements IGroupService
         }
         return false;
     }
+
+    @Override
+    public void renameGroup(Group groupToBeRenamed, String NewName)
+    {
+        EntityManager em = entityManagerFactory.getEntityManager();
+        try
+        {
+            final GroupDAO groupDAO = groupDAOFactory.createInstance(em);
+            groupToBeRenamed.setName(NewName);
+            groupDAO.updateGroup(groupToBeRenamed);
+        }
+        finally
+        {
+            em.close();
+        }
+    }
 }

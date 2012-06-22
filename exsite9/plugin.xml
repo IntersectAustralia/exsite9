@@ -116,6 +116,11 @@
             defaultHandler="au.org.intersect.exsite9.commands.handlers.ExportProjectXMLHandler"
             id="au.org.intersect.exsite9.commands.ExportProjectXMLCommand"
             name="Export Project XML">
+	  </command>
+	  <command
+            defaultHandler="au.org.intersect.exsite9.commands.handlers.RenameGroupHandler"
+            id="au.org.intersect.exsite9.commands.RenameGroupCommand"
+            name="Rename Group">
       </command>
    </extension>
    <extension
@@ -282,10 +287,22 @@
                commandId="au.org.intersect.exsite9.commands.ExportProjectXMLCommand"
                label="Export..."
                style="push">
-            <visibleWhen
+               <visibleWhen
                   checkEnabled="false">
                <reference
                      definitionId="au.org.intersect.exsite9.expression.InstanceOfProject">
+                 </reference>
+            	</visibleWhen>
+         </command>
+
+         <command
+               commandId="au.org.intersect.exsite9.commands.RenameGroupCommand"
+               label="Rename Group"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <reference
+                     definitionId="au.org.intersect.exsite9.expression.InstanceOfGroup">
                </reference>
             </visibleWhen>
          </command>

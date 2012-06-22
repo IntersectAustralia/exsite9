@@ -93,6 +93,9 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
         
         final Command editProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.EditProjectCommand");
         editProjectCommand.addExecutionListener(this);
+        
+        final Command renameGroupCommand = commandService.getCommand("au.org.intersect.exsite9.commands.RenameGroupCommand");
+        renameGroupCommand.addExecutionListener(this);
 
         initContextMenu();
     }
@@ -168,6 +171,10 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
             refreshAndExpand();
         }
         else if (commandId.equals("au.org.intersect.exsite9.commands.AddGroup"))
+        {
+            refreshAndExpand();
+        }
+        else if (commandId.equals("au.org.intersect.exsite9.commands.RenameGroupCommand"))
         {
             refreshAndExpand();
         }
