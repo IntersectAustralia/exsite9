@@ -35,9 +35,12 @@ public final class Application implements IApplication
                 Integer refreshTimeInMins = Integer.parseInt(System.getProperty("exsite9.refreshTimeInMins"));
                 if(refreshTimeInMins != null)
                 {
-                    long delay = refreshTimeInMins * 60 * 1000;
-                    IdentifyAllNewFilesForProjectRepeatingJob findFilesJob = new IdentifyAllNewFilesForProjectRepeatingJob(delay);
-                    findFilesJob.schedule(delay);
+                    if (refreshTimeInMins>0)
+                    {
+                        long delay = refreshTimeInMins * 60 * 1000;
+                        IdentifyAllNewFilesForProjectRepeatingJob findFilesJob = new IdentifyAllNewFilesForProjectRepeatingJob(delay);
+                        findFilesJob.schedule(delay);
+                    }
                 }
             }
             catch(NumberFormatException nfe)
