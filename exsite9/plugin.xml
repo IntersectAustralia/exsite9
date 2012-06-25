@@ -445,5 +445,11 @@
             pattern="au.org.intersect.exsite9/au.org.intersect.exsite9.menu.metadata">
       </activityPatternBinding>
    </extension>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="au.org.intersect.exsite9.startup.InitializeDB">
+      </startup>
+   </extension>
 
 </plugin>
