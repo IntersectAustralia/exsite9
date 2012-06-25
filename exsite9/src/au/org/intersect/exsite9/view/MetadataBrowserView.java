@@ -76,6 +76,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
 
     private ExpandBar expandBar;
     private Composite parent;
+    private Composite placeholder;
     private RowData rowData;
 
     /**
@@ -134,15 +135,22 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
 
     private void initLayout(final List<MetadataCategory> metadataCategories)
     {
-        if (metadataCategories.isEmpty())
-        {
-            return;
-        }
-
         if (this.expandBar != null)
         {
             this.expandBar.dispose();
         }
+
+        if (this.placeholder != null)
+        {
+            this.placeholder.dispose();
+        }
+
+        if (metadataCategories.isEmpty())
+        {
+            this.placeholder = new Composite(this.parent, SWT.BORDER);
+            return;
+        }
+
         this.expandBar = new ExpandBar(this.parent, SWT.BORDER | SWT.V_SCROLL);
 
         final List<MetadataCategory> sorted = new ArrayList<MetadataCategory>(metadataCategories);
@@ -258,10 +266,13 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             {
                 initLayout(project.getMetadataCategories());
 
-                // Refresh this page according to the currently selected items in the RHS.
-                final ProjectExplorerView projectExplorerView = (ProjectExplorerView)ViewUtils.getViewByID(PlatformUI.getWorkbench().getActiveWorkbenchWindow(), ProjectExplorerView.ID);
-                final ISelection currentSelection = projectExplorerView.getSelection();
-                selectionChanged(projectExplorerView, currentSelection);
+                if (!project.getMetadataCategories().isEmpty())
+                {
+                    // Refresh this page according to the currently selected items in the RHS.
+                    final ProjectExplorerView projectExplorerView = (ProjectExplorerView)ViewUtils.getViewByID(PlatformUI.getWorkbench().getActiveWorkbenchWindow(), ProjectExplorerView.ID);
+                    final ISelection currentSelection = projectExplorerView.getSelection();
+                    selectionChanged(projectExplorerView, currentSelection);
+                }
             }
         }
     }
