@@ -137,7 +137,7 @@ public final class ProjectXMLBuilder
     private static void appendResearchFile(final Document doc, final Element parent, final ResearchFile researchFile)
     {
         final Element researchFileElement = doc.createElement("file");
-        researchFileElement.appendChild(doc.createTextNode(researchFile.getFile().getAbsolutePath()));
+        researchFileElement.appendChild(doc.createTextNode(researchFile.getFile().getName()));
         parent.appendChild(researchFileElement);
     }
 }

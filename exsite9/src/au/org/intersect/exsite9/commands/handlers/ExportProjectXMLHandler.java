@@ -59,17 +59,18 @@ public final class ExportProjectXMLHandler implements IHandler
     {
         final Shell shell = HandlerUtil.getActiveWorkbenchWindow(event).getShell();
 
+        final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
+        final Project currentproject = projectManager.getCurrentProject();
+
         final FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
         fileDialog.setOverwrite(true);
+        fileDialog.setFileName(currentproject.getName() + ".xml");
         final String filePath = fileDialog.open();
 
         if (filePath == null)
         {
             return null;
         }
-
-        final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
-        final Project currentproject = projectManager.getCurrentProject();
 
         final String xml = ProjectXMLBuilder.buildXML(currentproject);
 
