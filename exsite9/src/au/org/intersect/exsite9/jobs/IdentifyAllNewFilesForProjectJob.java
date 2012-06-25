@@ -8,9 +8,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IViewReference;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 import au.org.intersect.exsite9.domain.Folder;
@@ -18,6 +15,7 @@ import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.service.IFileService;
 import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.view.ProjectExplorerView;
+import au.org.intersect.exsite9.view.ViewUtils;
 
 public class IdentifyAllNewFilesForProjectJob extends Job
 {
@@ -76,22 +74,8 @@ public class IdentifyAllNewFilesForProjectJob extends Job
             Display.getDefault().syncExec(new Runnable() {
                 @Override
                 public void run() {
-                    final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-                    
-                    final IViewReference[] viewRefs = window.getActivePage().getViewReferences();
-                    
-                    for(int i = 0; i < viewRefs.length;++i)
-                    {
-                        final IViewReference viewRef = viewRefs[i];
-                        final IViewPart viewPart = viewRef.getView(false);
-                        
-                        if (viewPart instanceof ProjectExplorerView)
-                        {
-                            final ProjectExplorerView view = (ProjectExplorerView) viewPart;
-                            view.refreshAndExpand();
-                            break;
-                        }
-                    }
+                    final ProjectExplorerView view = (ProjectExplorerView) ViewUtils.getViewByID(PlatformUI.getWorkbench().getActiveWorkbenchWindow(), ProjectExplorerView.ID);
+                    view.refreshAndExpand();
                 }
             });
             

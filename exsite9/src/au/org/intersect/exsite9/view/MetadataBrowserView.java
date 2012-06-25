@@ -209,11 +209,13 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                 final MetadataButtonWidget mdbw = new MetadataButtonWidget(buttonComposite, SWT.TOGGLE, metadataCategory, metadataValue);
                 mdbw.setText(metadataValue.getValue());
                 mdbw.addSelectionListener(this);
-                this.metadataButtons.put(new Pair<MetadataCategory, MetadataValue>(metadataCategory, metadataValue), mdbw);
+                final Pair<MetadataCategory, MetadataValue> pair = new Pair<MetadataCategory, MetadataValue>(metadataCategory, metadataValue);
+                this.metadataButtons.put(pair, mdbw);
             }
 
             buttonComposite.pack();
             buttonComposite.layout(true);
+            expandItem.setExpanded(true);
         }
 
         this.expandBar.pack();
@@ -255,6 +257,11 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             if (project != null)
             {
                 initLayout(project.getMetadataCategories());
+
+                // Refresh this page according to the currently selected items in the RHS.
+                final ProjectExplorerView projectExplorerView = (ProjectExplorerView)ViewUtils.getViewByID(PlatformUI.getWorkbench().getActiveWorkbenchWindow(), ProjectExplorerView.ID);
+                final ISelection currentSelection = projectExplorerView.getSelection();
+                selectionChanged(projectExplorerView, currentSelection);
             }
         }
     }

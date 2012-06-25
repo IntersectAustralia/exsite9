@@ -57,7 +57,7 @@ public class MetadataValue implements Serializable
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.value).toHashCode();
+        return new HashCodeBuilder().append(this.id).toHashCode();
     }
 
     @Override
@@ -72,7 +72,7 @@ public class MetadataValue implements Serializable
             return false;
         }
         final MetadataValue other = (MetadataValue) obj;
-        return Objects.equal(this.value, other.value) && Objects.equal(this.id, other.id);
+        return Objects.equal(this.id, other.id);
     }
 
     @Override

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
@@ -17,15 +18,18 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.PlatformUI;
 
 import com.richclientgui.toolbox.validation.IFieldErrorMessageHandler;
 import com.richclientgui.toolbox.validation.ValidatingField;
 import com.richclientgui.toolbox.validation.string.StringValidationToolkit;
 import com.richclientgui.toolbox.validation.validator.IFieldValidator;
 
+import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.service.IGroupService;
 import au.org.intersect.exsite9.wizard.WizardPageErrorHandler;
 
 public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyListener, SelectionListener
@@ -43,10 +47,10 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
 
     private Project project;
     private List<MetadataValue> metadataValues;
-    private String metadataCategoryName;
+    private MetadataCategory metadataCategory;
 
-    protected AddMetadataCategoryWizardPage1(String pageTitle, String pageDescription, Project project, String metadataCategoryName,
-            List<MetadataValue> metadataValues)
+    protected AddMetadataCategoryWizardPage1(final String pageTitle, final String pageDescription, final Project project, final MetadataCategory metadataCategory,
+            final List<MetadataValue> metadataValues)
     {
         super(pageTitle);    
         setTitle(pageTitle);
@@ -54,7 +58,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         
         this.project = project;
         this.metadataValues = metadataValues;
-        this.metadataCategoryName = metadataCategoryName;
+        this.metadataCategory = metadataCategory;
     }
 
     @Override
@@ -100,8 +104,8 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
 
                 for (final MetadataCategory existingCategory : existingCategories)
                 {
-                    if (existingCategory.getName().equalsIgnoreCase(contents.trim())
-                            && !contents.trim().equalsIgnoreCase(metadataCategoryName))
+                    final String currentMetadataCategoryName = metadataCategory == null ? "" : metadataCategory.getName();
+                    if (existingCategory.getName().equalsIgnoreCase(contents.trim()) && !contents.trim().equals(currentMetadataCategoryName))
                     {
                         this.errorMessage = "A Category with that name already exists for this project.";
                         return false;
@@ -121,7 +125,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
             {
                 return this.errorMessage;
             }
-        }, true, metadataCategoryName);
+        }, true, metadataCategory == null ? "" : metadataCategory.getName());
 
         this.categoryNameField.getControl().addKeyListener(this);
 
@@ -257,8 +261,33 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                 return;
             }
 
-            this.metadataValues.remove(this.metadataValuesListWidget.getSelectionIndex());
-            this.metadataValuesListWidget.remove(this.metadataValuesListWidget.getSelectionIndex());
+            final int selectedIndex = this.metadataValuesListWidget.getSelectionIndex();
+
+            // Check to see if the metadata value is assigned to anything - and throw a warning if it is being deleted!
+            if (this.metadataCategory != null)
+            {
+                final MetadataValue metadataValueToDelete = this.metadataValues.get(selectedIndex);
+                final IGroupService groupService = (IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class);
+
+                final List<Group> assignedGroups = groupService.getGroupsWithAssociatedMetadata(metadataCategory, metadataValueToDelete);
+                if (!assignedGroups.isEmpty())
+                {
+                    final boolean deleteAssociations = MessageDialog.openConfirm(getShell(), "", "Metadata value '" + metadataValueToDelete.getValue() + "' is currently associated with "
+                       + assignedGroups.size() + " group(s). Removing this value will cause these associations to also be deleted. Are you sure you want to proceed?");
+                    if (!deleteAssociations)
+                    {
+                        return;
+                    }
+                    for (final Group assignedGroup : assignedGroups)
+                    {
+                        groupService.disassociateMetadata(assignedGroup, metadataCategory, metadataValueToDelete);
+                    }
+                }
+            }
+
+
+            this.metadataValues.remove(selectedIndex);
+            this.metadataValuesListWidget.remove(selectedIndex);
         }
         else if (e.widget.equals(editButton))
         {

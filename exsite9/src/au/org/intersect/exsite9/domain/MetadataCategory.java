@@ -83,7 +83,7 @@ public final class MetadataCategory implements Serializable
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.name).toHashCode();
+        return new HashCodeBuilder().append(this.id).toHashCode();
     }
 
     @Override
@@ -98,7 +98,7 @@ public final class MetadataCategory implements Serializable
             return false;
         }
         final MetadataCategory other = (MetadataCategory) obj;
-        return Objects.equal(this.id, other.id) && Objects.equal(this.name, other.name);
+        return Objects.equal(this.id, other.id);
     }
 
     @Override

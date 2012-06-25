@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 
 import org.apache.log4j.Logger;
 
@@ -296,6 +297,24 @@ public final class GroupService implements IGroupService
             final GroupDAO groupDAO = groupDAOFactory.createInstance(em);
             groupToBeRenamed.setName(newName);
             groupDAO.updateGroup(groupToBeRenamed);
+        }
+        finally
+        {
+            em.close();
+        }
+    }
+
+    @Override
+    public List<Group> getGroupsWithAssociatedMetadata(final MetadataCategory metadataCategory, final MetadataValue metadataValue)
+    {
+        final EntityManager em = entityManagerFactory.createEntityManager();
+        try
+        {
+            final String queryJQL = "SELECT g FROM Group g JOIN g.metadataAssociations a WHERE a.metadataCategory = :category AND :value MEMBER OF a.metadataValues";
+            final TypedQuery<Group> query = em.createQuery(queryJQL, Group.class);
+            query.setParameter("category", metadataCategory);
+            query.setParameter("value", metadataValue);
+            return query.getResultList();
         }
         finally
         {

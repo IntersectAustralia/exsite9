@@ -36,13 +36,13 @@ public class AddMetadataCategoryWizard extends Wizard
         if (metadataCategory == null)
         {
             page1 = new AddMetadataCategoryWizardPage1("Add Metadata Category",
-                    "Please enter the details of the metadata category you wish to create", project, "",
+                    "Please enter the details of the metadata category you wish to create", project, null,
                     new ArrayList<MetadataValue>());
         }
         else
         {
             page1 = new AddMetadataCategoryWizardPage1("Edit Metadata Category",
-                    "Edit the details of the metadata category you have selected", project, metadataCategory.getName(),
+                    "Edit the details of the metadata category you have selected", project, metadataCategory,
                     metadataCategory.getValues());
         }
     }

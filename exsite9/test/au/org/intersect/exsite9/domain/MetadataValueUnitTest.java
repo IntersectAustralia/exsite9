@@ -6,7 +6,6 @@
  */
 package au.org.intersect.exsite9.domain;
 
-import static au.org.intersect.exsite9.test.Assert.*;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
@@ -38,14 +37,11 @@ public final class MetadataValueUnitTest
         final String value1 = "someValue";
         final MetadataValue toTest1 = new MetadataValue(value1);
         final MetadataValue toTest2 = new MetadataValue(value1);
-        final MetadataValue toTest3 = new MetadataValue("some other value");
 
         assertEquals(toTest1, toTest1);
         assertEquals(toTest1, toTest2);
         assertEquals(toTest2, toTest1);
         assertEquals(toTest1.hashCode(), toTest2.hashCode());
-
-        assertNotEqualsHashCode(toTest3, toTest1);
 
         assertFalse(toTest1.equals(value1));
         assertFalse(toTest1.equals(""));

@@ -13,6 +13,7 @@ import org.eclipse.core.commands.IExecutionListener;
 import org.eclipse.core.commands.NotHandledException;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.util.LocalSelectionTransfer;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
@@ -193,6 +194,11 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
     {
         this.treeViewer.refresh();
         this.treeViewer.expandAll();
+    }
+
+    public ISelection getSelection()
+    {
+        return this.treeViewer.getSelection();
     }
     
     private void displayProjectAndExpand()

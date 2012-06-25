@@ -67,4 +67,12 @@ public interface IGroupService
      * @param metadataValue The value of metadata to disassociate.
      */
     void disassociateMetadata(final Group group, final MetadataCategory metadataCategory, final MetadataValue metadataValue);
+
+    /**
+     * Determines which groups are associated with a metadata category/value pair.
+     * @param metadataCategory The metadata category.
+     * @param metadataVale The metadata value.
+     * @return A list of group associated with a metadata category/value pair.
+     */
+    List<Group> getGroupsWithAssociatedMetadata(final MetadataCategory metadataCategory, final MetadataValue metadataValue);
 }
