@@ -38,7 +38,7 @@ public final class MetadataCategory implements Serializable
 
     private String name;
 
-    @OneToMany(cascade=CascadeType.ALL)
+    @OneToMany(cascade=CascadeType.ALL, orphanRemoval=true)
     private List<MetadataValue> metadataValues = new ArrayList<MetadataValue>();
 
     public MetadataCategory()
