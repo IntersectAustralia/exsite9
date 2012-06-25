@@ -62,7 +62,7 @@ public final class ProjectXMLBuilderUnitTest
                                     "      <value>val12</value>" + NEW_LINE +
                                     "      <value>val13</value>" + NEW_LINE +
                                     "    </metadata>" + NEW_LINE +
-                                    "    <file>" + file.getAbsolutePath() + "</file>" + NEW_LINE +
+                                    "    <file>" + file.getName() + "</file>" + NEW_LINE +
                                     "  </group>" + NEW_LINE +
                                     "</project>" + NEW_LINE;
 
