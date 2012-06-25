@@ -6,6 +6,7 @@
  */
 package au.org.intersect.exsite9.service;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -139,4 +140,39 @@ public class ProjectService implements IProjectService
             em.close();
         }        
     }
+
+    @Override
+    public void removeFoldersFromProject(Project project, List<String> folders)
+    {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        try
+        {
+            Iterator<Folder> iter = project.getFolders().iterator();
+            
+            boolean updated = false;
+            while(iter.hasNext())
+            {
+                Folder folder = iter.next();
+                if(folders.contains(folder.getPath()))
+                {
+                    continue;
+                }
+                else
+                {
+                    project.getFolders().remove(folder);
+                    updated = true;
+                }
+            }
+            if (updated)
+            {
+                final ProjectDAO projectDAO = this.projectDAOFactory.createInstance(em);
+                projectDAO.updateProject(project);
+            }
+        }
+        finally
+        {
+            em.close();
+        }        
+    }
+
 }

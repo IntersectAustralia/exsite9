@@ -1,5 +1,6 @@
 package au.org.intersect.exsite9.wizard.listfolders;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -111,5 +112,10 @@ public class ListFoldersWizardPage1 extends WizardPage implements SelectionListe
     {
         // TODO Auto-generated method stub
         
+    }
+    
+    public List<String> getFolderList()
+    {
+        return Arrays.asList(this.folderList.getItems());
     }
 }
