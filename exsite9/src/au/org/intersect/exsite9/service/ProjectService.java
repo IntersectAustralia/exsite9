@@ -13,25 +13,36 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 import au.org.intersect.exsite9.dao.FolderDAO;
+import au.org.intersect.exsite9.dao.GroupDAO;
 import au.org.intersect.exsite9.dao.ProjectDAO;
+import au.org.intersect.exsite9.dao.ResearchFileDAO;
 import au.org.intersect.exsite9.dao.factory.FolderDAOFactory;
+import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
+import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
 import au.org.intersect.exsite9.domain.Folder;
+import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.domain.ResearchFile;
 
 public class ProjectService implements IProjectService
 {
     private final EntityManagerFactory entityManagerFactory;
     private final ProjectDAOFactory projectDAOFactory;
     private final FolderDAOFactory folderDAOFactory;
+    private final GroupDAOFactory groupDAOFactory;
+    private final ResearchFileDAOFactory researchFileDAOFactory;
 
     public ProjectService(final EntityManagerFactory entityManagerFactory,
-            final ProjectDAOFactory projectDAOFactory, final FolderDAOFactory folderDAOFactory)
+            final ProjectDAOFactory projectDAOFactory, final FolderDAOFactory folderDAOFactory, 
+            final GroupDAOFactory groupDAOFactory, final ResearchFileDAOFactory researchFileDAOFactory)
     {
         this.entityManagerFactory = entityManagerFactory;
         this.projectDAOFactory = projectDAOFactory;
         this.folderDAOFactory = folderDAOFactory;
+        this.groupDAOFactory = groupDAOFactory;
+        this.researchFileDAOFactory = researchFileDAOFactory;
     }
 
     /**
@@ -142,32 +153,45 @@ public class ProjectService implements IProjectService
     }
 
     @Override
-    public void removeFoldersFromProject(Project project, List<String> folders)
+    public Project removeFoldersFromProject(Project project, List<String> modifiedFolderList)
     {
         EntityManager em = entityManagerFactory.createEntityManager();
         try
         {
-            Iterator<Folder> iter = project.getFolders().iterator();
+            final ProjectDAO projectDAO = this.projectDAOFactory.createInstance(em);
+            final FolderDAO folderDAO = this.folderDAOFactory.createInstance(em);
+            final GroupDAO groupDAO = this.groupDAOFactory.createInstance(em);
+            final ResearchFileDAO researchFileDAO = this.researchFileDAOFactory.createInstance(em);
             
-            boolean updated = false;
-            while(iter.hasNext())
+            project = em.merge(project);
+            
+            Iterator<Folder> folderIter = project.getFolders().iterator();
+            while(folderIter.hasNext())
             {
-                Folder folder = iter.next();
-                if(folders.contains(folder.getPath()))
+                Folder folder = folderIter.next();
+                if(modifiedFolderList.contains(folder.getPath()))
                 {
                     continue;
                 }
                 else
                 {
-                    project.getFolders().remove(folder);
-                    updated = true;
+                    em.getTransaction().begin();
+                    
+                    Iterator<ResearchFile> fileIter = folder.getFiles().iterator();
+                    while (fileIter.hasNext()){
+                        ResearchFile researchFile = fileIter.next();
+                        Group parentGroup = groupDAO.getParent(researchFile);
+                        parentGroup.getResearchFiles().remove(researchFile);
+                        fileIter.remove();
+                        researchFileDAO.removeResearchFile(researchFile);
+                    }
+                    folderIter.remove();
+                    projectDAO.updateProject(project);
+                    folderDAO.removeFolder(folder);
+                    em.getTransaction().commit();
                 }
             }
-            if (updated)
-            {
-                final ProjectDAO projectDAO = this.projectDAOFactory.createInstance(em);
-                projectDAO.updateProject(project);
-            }
+            return project;
         }
         finally
         {

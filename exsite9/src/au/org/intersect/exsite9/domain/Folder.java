@@ -8,11 +8,14 @@ package au.org.intersect.exsite9.domain;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -32,6 +35,9 @@ public final class Folder implements Serializable
     private String name;
     private String path;
     private long lastCheckTimeInMillis = 0L;
+    
+    @OneToMany
+    private List<ResearchFile> files = new ArrayList<ResearchFile>(0);
     
     public Folder()
     {
@@ -79,6 +85,16 @@ public final class Folder implements Serializable
     public String getPath()
     {
         return path;
+    }
+
+    public List<ResearchFile> getFiles()
+    {
+        return files;
+    }
+
+    public void setFiles(List<ResearchFile> files)
+    {
+        this.files = files;
     }
 
     @Override

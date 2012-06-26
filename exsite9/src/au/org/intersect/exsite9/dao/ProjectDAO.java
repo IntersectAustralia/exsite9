@@ -23,11 +23,13 @@ public class ProjectDAO
         em.getTransaction().commit();
     }
     
-    public void updateProject(Project project)
+    public Project updateProject(Project project)
     {
-        em.getTransaction().begin();
-        em.merge(project);
-        em.getTransaction().commit();
+        boolean localTransaction = (em.getTransaction().isActive()) ? false : true;
+        if (localTransaction) {em.getTransaction().begin();}
+        Project updatedProject = em.merge(project);
+        if (localTransaction) { em.getTransaction().commit(); }
+        return updatedProject;
     }
     
     public Project findById(long id)

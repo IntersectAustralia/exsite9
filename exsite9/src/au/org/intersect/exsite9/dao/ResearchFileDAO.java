@@ -36,6 +36,14 @@ public class ResearchFileDAO
         em.getTransaction().commit();
     }
     
+    public void removeResearchFile(final ResearchFile file)
+    {
+        boolean localTransaction = (em.getTransaction().isActive()) ? false : true;
+        if (localTransaction) {em.getTransaction().begin();}
+        em.remove(em.merge(file));
+        if(localTransaction){em.getTransaction().commit();}
+    }
+    
     public ResearchFile findById(long id)
     {
         return em.find(ResearchFile.class,id);
