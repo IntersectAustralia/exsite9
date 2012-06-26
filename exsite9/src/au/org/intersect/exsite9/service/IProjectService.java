@@ -31,6 +31,14 @@ public interface IProjectService
     void mapFolderToProject(final Project project, final Folder folder);
     
     /**
+     * Remove folders from a project. This will also remove all files added to the project
+     * because they were from a removed folder.
+     * @param project The current project
+     * @param folders The list of folder paths minus the ones to remove
+     */
+    public Project removeFoldersFromProject(final Project project, final List<String> folders);
+    
+    /**
      * finds all projects in the database.
      * @return list of projects
      */

@@ -57,12 +57,13 @@ public class FileService implements IFileService
             for (final File file : newFileList)
             {
                 // If there is already a research file in the database, do not insert another.
-                final ResearchFile existing = researchFileDAO.findByPath(project, file);
-                if (existing == null)
+                final ResearchFile researchFile = new ResearchFile(file);
+                
+                if(! folder.getFiles().contains(researchFile))
                 {
-                    final ResearchFile researchFile = new ResearchFile(file);
                     researchFile.setProject(project);
                     researchFileDAO.createResearchFile(researchFile);
+                    folder.getFiles().add(researchFile);
                     project.getNewFilesNode().getResearchFiles().add(researchFile);
                 }
             }

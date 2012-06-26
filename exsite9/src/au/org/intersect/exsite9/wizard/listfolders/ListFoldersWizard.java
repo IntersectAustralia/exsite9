@@ -8,10 +8,13 @@ import org.eclipse.ui.PlatformUI;
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.service.IProjectManager;
+import au.org.intersect.exsite9.service.IProjectService;
 
 public class ListFoldersWizard extends Wizard
 {
 
+    private ListFoldersWizardPage1 page1;
+    
     /**
      * @{inheritDoc}
      */
@@ -22,7 +25,7 @@ public class ListFoldersWizard extends Wizard
         final Project project = projectManager.getCurrentProject();
         final List<Folder> folders = project.getFolders();
         
-        ListFoldersWizardPage1 page1 = new ListFoldersWizardPage1(folders);
+        this.page1 = new ListFoldersWizardPage1(folders);
         
         addPage(page1);
     }
@@ -30,8 +33,17 @@ public class ListFoldersWizard extends Wizard
     @Override
     public boolean performFinish()
     {
-        // TODO Auto-generated method stub
-        return false;
+        final List<String> modifiedFolderList = this.page1.getFolderList();
+        
+        final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
+        final Project project = projectManager.getCurrentProject();
+        
+        final IProjectService projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
+        
+        Project updatedproject = projectService.removeFoldersFromProject(project, modifiedFolderList);
+        projectManager.setCurrentProject(updatedproject);
+        
+        return true;
     }
 
 }

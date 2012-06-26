@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
+import au.org.intersect.exsite9.domain.ResearchFile;
 
 public final class GroupDAO
 {
@@ -91,5 +92,20 @@ public final class GroupDAO
         query.setParameter("category", metadataCategory);
         query.setParameter("value", metadataValue);
         return query.getResultList();
+    }
+    
+    public Group getParent(final ResearchFile researchFile)
+    {
+        final TypedQuery<Group> query = em.createQuery("SELECT g FROM Group g WHERE :child MEMBER OF g.researchFiles", Group.class);
+        query.setParameter("child", researchFile);
+
+        final List<Group> results = query.getResultList();
+
+        if (results.size() != 1)
+        {
+            LOG.error("A Research File has multiple parents, or does not have a parent: " + researchFile);
+            return null;
+        }
+        return results.get(0);
     }
 }
