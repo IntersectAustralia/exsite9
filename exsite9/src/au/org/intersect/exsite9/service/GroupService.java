@@ -76,6 +76,7 @@ public final class GroupService implements IGroupService
         try
         {
             final GroupDAO groupDAO = groupDAOFactory.createInstance(em);
+            final MetadataAssociationDAO metadataDAO = metadataAssociationDAOFactory.createInstance(em);
 
             final Group parentGroup = groupDAO.getParent(groupToDelete);
 
@@ -88,6 +89,12 @@ public final class GroupService implements IGroupService
 
             groupDAO.updateGroup(parentGroup);
             groupDAO.deleteGroup(groupToDelete);
+
+            // Remove metadata associations
+            for (final MetadataAssociation metadataAssociation : groupToDelete.getMetadataAssociations())
+            {
+                metadataDAO.removeMetadataAssociation(metadataAssociation);
+            }
         }
         finally
         {
