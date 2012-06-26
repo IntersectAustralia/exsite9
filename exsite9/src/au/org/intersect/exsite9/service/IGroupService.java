@@ -75,4 +75,11 @@ public interface IGroupService
      * @return A list of group associated with a metadata category/value pair.
      */
     List<Group> getGroupsWithAssociatedMetadata(final MetadataCategory metadataCategory, final MetadataValue metadataValue);
+
+    /**
+     * Obtains a group by its ID.
+     * @param groupID The ID of the group to get.
+     * @return The group, or {@code null} if it could not be found.
+     */
+    Group findGroupByID(final Long groupID);
 }

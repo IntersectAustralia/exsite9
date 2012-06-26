@@ -321,14 +321,16 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         {
             for (final Group group : this.selectedGroups)
             {
-                groupService.associateMetadata(group, metadataCategory, metadataValue);
+                final Group updatedGroup = groupService.findGroupByID(group.getId());
+                groupService.associateMetadata(updatedGroup, metadataCategory, metadataValue);
             }
         }
         else
         {
             for (final Group group : this.selectedGroups)
             {
-                groupService.disassociateMetadata(group, metadataCategory, metadataValue);
+                final Group updatedGroup = groupService.findGroupByID(group.getId());
+                groupService.disassociateMetadata(updatedGroup, metadataCategory, metadataValue);
             }
         }
     }

@@ -14,6 +14,8 @@ import javax.persistence.TypedQuery;
 import org.apache.log4j.Logger;
 
 import au.org.intersect.exsite9.domain.Group;
+import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataValue;
 
 public final class GroupDAO
 {
@@ -80,5 +82,14 @@ public final class GroupDAO
             return null;
         }
         return results.get(0);
+    }
+
+    public List<Group> getGroupsWithAssociatedMetadata(final MetadataCategory metadataCategory, final MetadataValue metadataValue)
+    {
+        final String queryJQL = "SELECT g FROM Group g JOIN g.metadataAssociations a WHERE a.metadataCategory = :category AND :value MEMBER OF a.metadataValues";
+        final TypedQuery<Group> query = em.createQuery(queryJQL, Group.class);
+        query.setParameter("category", metadataCategory);
+        query.setParameter("value", metadataValue);
+        return query.getResultList();
     }
 }
