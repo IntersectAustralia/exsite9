@@ -24,6 +24,6 @@ public final class AlphabeticalMetadataValueComparator implements Comparator<Met
         final String value1 = mdv1.getValue();
         final String value2 = mdv2.getValue();
 
-        return value1.compareTo(value2);
+        return value1.compareToIgnoreCase(value2);
     }
 }
