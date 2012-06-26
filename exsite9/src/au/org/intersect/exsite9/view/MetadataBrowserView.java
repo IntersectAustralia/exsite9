@@ -58,6 +58,7 @@ import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.utils.AlphabeticalMetadataCategoryComparator;
+import au.org.intersect.exsite9.domain.utils.AlphabeticalMetadataValueComparator;
 import au.org.intersect.exsite9.domain.utils.GroupUtils;
 import au.org.intersect.exsite9.service.IGroupService;
 import au.org.intersect.exsite9.service.IProjectManager;
@@ -211,8 +212,12 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             buttonLayout.pack = true;
             buttonLayout.justify = false;
             buttonComposite.setLayout(buttonLayout);
-            
-            for (final MetadataValue metadataValue : metadataCategory.getValues())
+
+            // Sort the metadata values.
+            final List<MetadataValue> sortedMetadataValues = new ArrayList<MetadataValue>(metadataCategory.getValues());
+            Collections.sort(sortedMetadataValues, new AlphabeticalMetadataValueComparator());
+
+            for (final MetadataValue metadataValue : sortedMetadataValues)
             {
                 final MetadataButtonWidget mdbw = new MetadataButtonWidget(buttonComposite, SWT.TOGGLE, metadataCategory, metadataValue);
                 mdbw.setText(metadataValue.getValue());
