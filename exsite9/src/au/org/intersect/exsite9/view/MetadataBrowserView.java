@@ -146,6 +146,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             this.placeholder.dispose();
         }
 
+        this.metadataButtons.clear();
         if (metadataCategories.isEmpty())
         {
             this.placeholder = new Composite(this.parent, SWT.BORDER);
@@ -156,8 +157,6 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
 
         final List<MetadataCategory> sorted = new ArrayList<MetadataCategory>(metadataCategories);
         Collections.sort(sorted, new AlphabeticalMetadataCategoryComparator());
-
-        this.metadataButtons.clear();
 
         for (final MetadataCategory metadataCategory : sorted)
         {
