@@ -30,7 +30,7 @@ public class FileServiceUnitTest extends DAOTest
 	private final String testDirName = System.getProperty("java.io.tmpdir") + File.separator + "exsite9-FolderUnitTest";
     private File testDirFile = null;
     
-    private FileService fileService = null;
+    private ResearchFileService fileService = null;
     
     @Before
     public void setUp()
@@ -69,7 +69,7 @@ public class FileServiceUnitTest extends DAOTest
     	
     	project.getFolders().add(f);
     	
-    	fileService = new FileService(emf, projectDAOFactory,researchFileDAOFactory);
+    	fileService = new ResearchFileService(emf, projectDAOFactory,researchFileDAOFactory);
     	
     	fileService.identifyNewFilesForProject(project);
     	
@@ -95,7 +95,7 @@ public class FileServiceUnitTest extends DAOTest
     	ProjectDAO projectDAO = new ProjectDAO(createEntityManager());
     	projectDAO.createProject(project);
     	
-    	fileService = new FileService(emf, projectDAOFactory,researchFileDAOFactory);
+    	fileService = new ResearchFileService(emf, projectDAOFactory,researchFileDAOFactory);
     	
     	fileService.identifyNewFilesForProject(project);
     	
@@ -136,7 +136,7 @@ public class FileServiceUnitTest extends DAOTest
         Folder f = new Folder(testDirFile);
         project.getFolders().add(f);
         
-        fileService = new FileService(emf, projectDAOFactory,researchFileDAOFactory);
+        fileService = new ResearchFileService(emf, projectDAOFactory,researchFileDAOFactory);
         
         File.createTempFile("test-file-1", ".txt", testDirFile);
         

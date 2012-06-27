@@ -12,7 +12,7 @@ import au.org.intersect.exsite9.domain.Project;
 /**
  * 
  */
-public interface IFileService 
+public interface IResearchFileService 
 {
 	public void identifyNewFilesForProject(Project project);
 	

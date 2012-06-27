@@ -317,7 +317,7 @@
       <serviceFactory
             factoryClass="au.org.intersect.exsite9.service.factory.FileServiceFactory">
          <service
-               serviceClass="au.org.intersect.exsite9.service.IFileService"></service>
+               serviceClass="au.org.intersect.exsite9.service.IResearchFileService"></service>
       </serviceFactory>
       <serviceFactory
             factoryClass="au.org.intersect.exsite9.service.factory.GroupServiceFactory">

@@ -12,7 +12,7 @@ import org.eclipse.ui.PlatformUI;
 
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
-import au.org.intersect.exsite9.service.IFileService;
+import au.org.intersect.exsite9.service.IResearchFileService;
 import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.view.ProjectExplorerView;
 import au.org.intersect.exsite9.view.ViewUtils;
@@ -60,7 +60,7 @@ public class IdentifyAllNewFilesForProjectJob extends Job
                 return Status.CANCEL_STATUS;
             }
             
-            final IFileService fileService = (IFileService) PlatformUI.getWorkbench().getService(IFileService.class);
+            final IResearchFileService fileService = (IResearchFileService) PlatformUI.getWorkbench().getService(IResearchFileService.class);
             if (folder == null)
             {
                 fileService.identifyNewFilesForProject(project);

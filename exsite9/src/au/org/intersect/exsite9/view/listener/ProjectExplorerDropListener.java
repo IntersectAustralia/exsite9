@@ -86,15 +86,14 @@ public class ProjectExplorerDropListener extends ViewerDropAdapter
 
             moveList.add(new HierarchyMoveDTO(selectedItem, oldParent, newParent));
         }
-        
-        if(! moveList.isEmpty())
+
+        if(!moveList.isEmpty())
         {
             final IGroupService groupService = (IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class);
             groupService.performHierarchyMove(moveList);
             treeViewer.refresh();
         }
         
-        super.drop(event);
     }
     
     @Override

@@ -15,15 +15,15 @@ import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.helper.FolderHelper;
 
-public class FileService implements IFileService
+public class ResearchFileService implements IResearchFileService
 {
     private final EntityManagerFactory entityManagerFactory;
 	private final ResearchFileDAOFactory researchFileDAOFactory;
 	private final ProjectDAOFactory projectDAOFactory;
 	
-	public FileService(EntityManagerFactory entityManagerFactory,
-	                   ProjectDAOFactory projectDAOFactory,
-	                   ResearchFileDAOFactory researchFileDAOFactory)
+	public ResearchFileService(EntityManagerFactory entityManagerFactory,
+	                           ProjectDAOFactory projectDAOFactory,
+	                           ResearchFileDAOFactory researchFileDAOFactory)
 	{
 	    this.entityManagerFactory = entityManagerFactory;
 		this.researchFileDAOFactory = researchFileDAOFactory;

@@ -12,12 +12,15 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.ui.PlatformUI;
 
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.utils.AlphabeticalGroupComparator;
 import au.org.intersect.exsite9.domain.utils.AlphabeticalResearchFileComparator;
+import au.org.intersect.exsite9.service.IGroupService;
+import au.org.intersect.exsite9.service.IProjectService;
 import au.org.intersect.exsite9.view.ProjectExplorerView;
 
 /**
@@ -25,11 +28,21 @@ import au.org.intersect.exsite9.view.ProjectExplorerView;
  */
 public final class ProjectExplorerViewContentProvider implements ITreeContentProvider
 {
+    private final IGroupService groupService;
+    private final IProjectService projectService;
+
     /**
      * Constructor
      */
     public ProjectExplorerViewContentProvider()
     {
+        this((IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class), (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class));
+    }
+
+    ProjectExplorerViewContentProvider(final IGroupService groupService, final IProjectService projectService)
+    {
+        this.groupService = groupService;
+        this.projectService = projectService;
     }
 
     /**
@@ -57,7 +70,7 @@ public final class ProjectExplorerViewContentProvider implements ITreeContentPro
         if (inputElement instanceof ProjectExplorerViewInput)
         {
             final ProjectExplorerViewInput viewInput = (ProjectExplorerViewInput) inputElement;
-            return new Object[]{viewInput.getProject()};
+            return new Object[]{this.projectService.findProjectById(viewInput.getProject().getId())};
         }
         return Collections.emptyList().toArray();
     }
@@ -72,11 +85,11 @@ public final class ProjectExplorerViewContentProvider implements ITreeContentPro
         if (parentElement instanceof Project)
         {
             final Project project = (Project) parentElement;
-            rootGroup = project.getRootNode();
+            rootGroup = this.groupService.findGroupByID(project.getRootNode().getId());
         }
         else if (parentElement instanceof Group)
         {
-            rootGroup = (Group) parentElement;
+            rootGroup = this.groupService.findGroupByID(((Group) parentElement).getId());
         }
         else
         {

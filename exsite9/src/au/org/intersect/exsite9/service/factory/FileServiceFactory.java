@@ -14,10 +14,10 @@ import org.eclipse.ui.services.IServiceLocator;
 
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
-import au.org.intersect.exsite9.service.FileService;
+import au.org.intersect.exsite9.service.ResearchFileService;
 
 /**
- * Factory responsible for creating {@link FileService}
+ * Factory responsible for creating {@link ResearchFileService}
  */
 public final class FileServiceFactory extends AbstractServiceFactory
 {
@@ -34,6 +34,6 @@ public final class FileServiceFactory extends AbstractServiceFactory
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
 
-        return new FileService(emf,projectDAOFactory,researchFileDAOFactory);
+        return new ResearchFileService(emf,projectDAOFactory,researchFileDAOFactory);
     }
 }
