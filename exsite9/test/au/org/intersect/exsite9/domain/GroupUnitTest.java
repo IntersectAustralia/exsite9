@@ -47,8 +47,11 @@ public final class GroupUnitTest
         final String n2 = "group 2";
 
         final Group toTest1 = new Group(n1);
+        toTest1.setId(7l);
         final Group toTest2 = new Group(n1);
+        toTest2.setId(7l);
         final Group toTest3 = new Group(n2);
+        toTest3.setId(12l);
 
         assertEquals(toTest1, toTest1);
 
@@ -62,12 +65,12 @@ public final class GroupUnitTest
 
         // Different child nodes.
         toTest1.getGroups().add(new Group("some group"));
-        assertNotEquals(toTest1, toTest2);
+        assertEquals(toTest1, toTest2);
         assertNotEquals(toTest1, toTest3);
 
         // Different child files.
         toTest1.getResearchFiles().add(new ResearchFile(new File("some File")));
-        assertNotEquals(toTest1, toTest2);
+        assertEquals(toTest1, toTest2);
         assertNotEquals(toTest1, toTest3);
 
         assertNotEquals(toTest1, null);
@@ -78,18 +81,21 @@ public final class GroupUnitTest
     @Test
     public void testIsAncestorOf()
     {
-        Group parentOne = new Group("Parent One");
-        Group childOne = new Group("Child One");
-        Group grandChildOne = new Group("GrandChild One");
+        Group parent = new Group("Parent One");
+        parent.setId(1l);
+        Group child = new Group("Child One");
+        child.setId(2l);
+        Group grandChild = new Group("GrandChild One");
+        grandChild.setId(3l);
         
-        childOne.getGroups().add(grandChildOne);
-        parentOne.getGroups().add(childOne);
+        child.getGroups().add(grandChild);
+        parent.getGroups().add(child);
         
-        assertTrue(parentOne.isAnAncestorOf(childOne));
-        assertTrue(parentOne.isAnAncestorOf(grandChildOne));
-        assertTrue(childOne.isAnAncestorOf(grandChildOne));
+        assertTrue(parent.isAnAncestorOf(child));
+        assertTrue(parent.isAnAncestorOf(grandChild));
+        assertTrue(child.isAnAncestorOf(grandChild));
         
-        assertFalse(grandChildOne.isAnAncestorOf(parentOne));
-        assertFalse(childOne.isAnAncestorOf(parentOne));
+        assertFalse(grandChild.isAnAncestorOf(parent));
+        assertFalse(child.isAnAncestorOf(parent));
     }
 }

@@ -61,7 +61,9 @@ public final class ProjectUnitTest
         final String d2 = "Project Two";
 
         final Project toTest1 = new Project(n1,o1,d1);
+        toTest1.setId(7l);
         final Project toTest2 = new Project(n1,o1,d1);
+        toTest2.setId(7l);
         final Project toTest3 = new Project(n2,o2,d2);
 
         assertEquals(toTest1, toTest1);
@@ -76,12 +78,12 @@ public final class ProjectUnitTest
 
         // Different child nodes.
         toTest1.getRootNode().getGroups().add(new Group("some group"));
-        assertNotEquals(toTest1, toTest2);
+        assertEquals(toTest1, toTest2);
         assertNotEquals(toTest1, toTest3);
 
         // Different child files.
         toTest1.getRootNode().getResearchFiles().add(new ResearchFile(new File("some File")));
-        assertNotEquals(toTest1, toTest2);
+        assertEquals(toTest1, toTest2);
         assertNotEquals(toTest1, toTest3);
 
         assertNotEquals(toTest1, null);

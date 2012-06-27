@@ -93,7 +93,6 @@ public class ProjectExplorerDropListener extends ViewerDropAdapter
             groupService.performHierarchyMove(moveList);
             treeViewer.refresh();
         }
-        
     }
     
     @Override

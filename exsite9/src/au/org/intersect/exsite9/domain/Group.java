@@ -105,8 +105,7 @@ public class Group implements Serializable
             return false;
         }
         final Group other = (Group) obj;
-        return Objects.equal(this.name, other.name) && Objects.equal(this.groups, other.groups)
-                && Objects.equal(this.researchFiles, other.researchFiles);
+        return Objects.equal(this.id, other.id);
     }
 
     /**

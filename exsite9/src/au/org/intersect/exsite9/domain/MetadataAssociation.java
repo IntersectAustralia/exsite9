@@ -93,8 +93,7 @@ public final class MetadataAssociation implements Serializable
             return false;
         }
         final MetadataAssociation other = (MetadataAssociation) obj;
-        return Objects.equal(this.id, other.id) && Objects.equal(this.metadataCategory, other.metadataCategory) &&
-                Objects.equal(this.metadataValues, other.metadataValues);
+        return Objects.equal(this.id, other.id);
     }
 
     @Override

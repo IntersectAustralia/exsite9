@@ -169,11 +169,7 @@ public final class Project implements Serializable
             return false;
         }
         Project other = (Project) obj;
-        return Objects.equal(this.name, other.name) 
-            && Objects.equal(this.description, other.description) 
-            && Objects.equal(this.owner, other.owner)
-            && Objects.equal(this.rootNode, other.rootNode)
-            && Objects.equal(this.metadataCategories, other.metadataCategories);
+        return Objects.equal(this.id, other.id);
     }
 
     /**
