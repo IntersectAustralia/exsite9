@@ -118,7 +118,6 @@
             name="Export Project XML">
 	  </command>
 	  <command
-            defaultHandler="au.org.intersect.exsite9.commands.handlers.RenameGroupHandler"
             id="au.org.intersect.exsite9.commands.RenameGroupCommand"
             name="Rename Group">
       </command>
@@ -363,6 +362,15 @@
    <handler
          class="au.org.intersect.exsite9.commands.handlers.DeleteGroupHandler"
          commandId="au.org.intersect.exsite9.commands.DeleteGroupCommand">
+      <enabledWhen>
+         <reference
+               definitionId="au.org.intersect.exsite9.expression.OneItemSelected">
+         </reference>
+      </enabledWhen>
+   </handler>
+   <handler
+         class="au.org.intersect.exsite9.commands.handlers.RenameGroupHandler"
+         commandId="au.org.intersect.exsite9.commands.RenameGroupCommand">
       <enabledWhen>
          <reference
                definitionId="au.org.intersect.exsite9.expression.OneItemSelected">
