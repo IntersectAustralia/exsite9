@@ -57,4 +57,15 @@ public final class MetadataCategoryDAOUnitTest
         verify(em).merge(mdc);
         verify(et).commit();
     }
+
+    @Test
+    public void testFindByID()
+    {
+        final EntityManager em = Mockito.mock(EntityManager.class);
+        final MetadataCategoryDAO toTest = new MetadataCategoryDAO(em);
+
+        toTest.findById(7l);
+
+        verify(em).find(MetadataCategory.class, 7l);
+    }
 }

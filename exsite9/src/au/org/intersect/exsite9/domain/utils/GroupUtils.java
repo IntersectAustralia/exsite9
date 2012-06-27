@@ -21,6 +21,11 @@ import au.org.intersect.exsite9.util.Pair;
  */
 public final class GroupUtils
 {
+    private GroupUtils()
+    {
+        // No instances please.
+    }
+
     /**
      * Obtains the set of metadata category to metadata value mappings for the provided group by iterating through its metadata associations.
      * @param group The group.

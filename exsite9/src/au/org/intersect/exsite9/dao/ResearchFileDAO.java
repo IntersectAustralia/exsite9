@@ -38,10 +38,16 @@ public class ResearchFileDAO
     
     public void removeResearchFile(final ResearchFile file)
     {
-        boolean localTransaction = (em.getTransaction().isActive()) ? false : true;
-        if (localTransaction) {em.getTransaction().begin();}
+        final boolean transactionActive = em.getTransaction().isActive();
+        if (!transactionActive)
+        {
+            em.getTransaction().begin();
+        }
         em.remove(em.merge(file));
-        if(localTransaction){em.getTransaction().commit();}
+        if (!transactionActive)
+        {
+            em.getTransaction().commit();
+        }
     }
     
     public ResearchFile findById(long id)
