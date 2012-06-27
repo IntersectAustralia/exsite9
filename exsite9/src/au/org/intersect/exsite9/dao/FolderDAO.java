@@ -8,32 +8,44 @@ public class FolderDAO
 {
     private EntityManager em;
     
-    public FolderDAO(EntityManager em)
+    public FolderDAO(final EntityManager em)
     {
         this.em = em;
     }
     
-    public void createFolder(Folder folder)
+    public void createFolder(final Folder folder)
     {
         em.getTransaction().begin();
         em.persist(folder);
         em.getTransaction().commit();
     }
     
-    public Folder updateFolder(Folder folder)
+    public Folder updateFolder(final Folder folder)
     {
-        boolean localTransaction = (em.getTransaction().isActive()) ? false : true;
-        if (localTransaction) {em.getTransaction().begin();}
-        Folder updatedFolder = em.merge(folder);
-        if(localTransaction){em.getTransaction().commit();}
+        final boolean transactionActive = em.getTransaction().isActive();
+        if (!transactionActive)
+        {
+            em.getTransaction().begin();
+        }
+        final Folder updatedFolder = em.merge(folder);
+        if (!transactionActive)
+        {
+            em.getTransaction().commit();
+        }
         return updatedFolder;
     }
     
     public void removeFolder(final Folder folder)
     {
-        boolean localTransaction = (em.getTransaction().isActive()) ? false : true;
-        if (localTransaction) {em.getTransaction().begin();}
+        final boolean transactionActive = em.getTransaction().isActive();
+        if (!transactionActive)
+        {
+            em.getTransaction().begin();
+        }
         em.remove(em.merge(folder));
-        if(localTransaction){em.getTransaction().commit();}
+        if (!transactionActive)
+        {
+            em.getTransaction().commit();
+        }
     }
 }
