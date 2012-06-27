@@ -80,6 +80,8 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
     private Composite placeholder;
     private RowData rowData;
 
+    private final IGroupService groupService;
+
     /**
      * The list of currently selected (if any) groups on the RHS.
      */
@@ -95,6 +97,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
      */
     public MetadataBrowserView()
     {
+        this.groupService = (IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class);
     }
 
     /**
@@ -296,8 +299,6 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         final MetadataCategory metadataCategory = button.getMetadataCategory();
         final MetadataValue metadataValue = button.getMetadataValue();
 
-        final IGroupService groupService = (IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class);
-
         // You are not able to apply metadata to the New Files Group
         if (!Collections2.filter(this.selectedGroups, NewFilesGroupPredicate.INSANCE).isEmpty())
         {
@@ -321,7 +322,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         {
             for (final Group group : this.selectedGroups)
             {
-                final Group updatedGroup = groupService.findGroupByID(group.getId());
+                final Group updatedGroup = this.groupService.findGroupByID(group.getId());
                 groupService.associateMetadata(updatedGroup, metadataCategory, metadataValue);
             }
         }
@@ -329,7 +330,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         {
             for (final Group group : this.selectedGroups)
             {
-                final Group updatedGroup = groupService.findGroupByID(group.getId());
+                final Group updatedGroup = this.groupService.findGroupByID(group.getId());
                 groupService.disassociateMetadata(updatedGroup, metadataCategory, metadataValue);
             }
         }
@@ -365,7 +366,8 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         {
             if (selectedObject instanceof Group)
             {
-                this.selectedGroups.add((Group)selectedObject);
+                final Group selectedGroup = this.groupService.findGroupByID(((Group)selectedObject).getId());
+                this.selectedGroups.add(selectedGroup);
             }
         }
 
