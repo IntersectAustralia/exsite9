@@ -12,6 +12,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
+import org.apache.log4j.Logger;
+
 import au.org.intersect.exsite9.dao.FolderDAO;
 import au.org.intersect.exsite9.dao.GroupDAO;
 import au.org.intersect.exsite9.dao.ProjectDAO;
@@ -28,6 +30,8 @@ import au.org.intersect.exsite9.domain.ResearchFile;
 
 public class ProjectService implements IProjectService
 {
+    private final Logger LOG = Logger.getLogger(ProjectService.class);
+    
     private final EntityManagerFactory entityManagerFactory;
     private final ProjectDAOFactory projectDAOFactory;
     private final FolderDAOFactory folderDAOFactory;
@@ -163,7 +167,7 @@ public class ProjectService implements IProjectService
             final GroupDAO groupDAO = this.groupDAOFactory.createInstance(em);
             final ResearchFileDAO researchFileDAO = this.researchFileDAOFactory.createInstance(em);
             
-            project = em.merge(project);
+            project = projectDAO.findById(project.getId());
             
             Iterator<Folder> folderIter = project.getFolders().iterator();
             while(folderIter.hasNext())
@@ -175,6 +179,8 @@ public class ProjectService implements IProjectService
                 }
                 else
                 {
+                    LOG.info("Removing folder id= " + folder.getId());
+                    
                     em.getTransaction().begin();
                     
                     Iterator<ResearchFile> fileIter = folder.getFiles().iterator();
@@ -186,7 +192,6 @@ public class ProjectService implements IProjectService
                         researchFileDAO.removeResearchFile(researchFile);
                     }
                     folderIter.remove();
-                    projectDAO.updateProject(project);
                     folderDAO.removeFolder(folder);
                     em.getTransaction().commit();
                 }
