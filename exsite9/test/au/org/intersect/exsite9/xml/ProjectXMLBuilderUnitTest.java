@@ -57,12 +57,10 @@ public final class ProjectXMLBuilderUnitTest
                                     "<project description=\"some boring description\" name=\"projectName\" owner=\"project owner\">" + NEW_LINE +
                                     "  <group name=\"New Files\"/>" + NEW_LINE +
                                     "  <group name=\"group1\">" + NEW_LINE +
-                                    "    <metadata category=\"CategoryName\">" + NEW_LINE +
-                                    "      <value>val11</value>" + NEW_LINE +
-                                    "      <value>val12</value>" + NEW_LINE +
-                                    "      <value>val13</value>" + NEW_LINE +
-                                    "    </metadata>" + NEW_LINE +
-                                    "    <file>" + file.getName() + "</file>" + NEW_LINE +
+                                    "    <metadata category=\"CategoryName\" value=\"val11\"/>" + NEW_LINE +
+                                    "    <metadata category=\"CategoryName\" value=\"val12\"/>" + NEW_LINE +
+                                    "    <metadata category=\"CategoryName\" value=\"val13\"/>" + NEW_LINE +
+                                    "    <file name=\"" + rf.getFile().getName() + "\"/>" + NEW_LINE +
                                     "  </group>" + NEW_LINE +
                                     "</project>" + NEW_LINE;
 

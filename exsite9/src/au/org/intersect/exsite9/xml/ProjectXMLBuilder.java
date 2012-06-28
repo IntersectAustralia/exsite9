@@ -124,23 +124,19 @@ public final class ProjectXMLBuilder
     private static void appendMetadataAssociation(final Document doc, final Element parent,
             final MetadataAssociation metadataAssociation)
     {
-        final Element metadataAssociationElement = doc.createElement("metadata");
-        metadataAssociationElement.setAttribute("category", metadataAssociation.getMetadataCategory().getName());
-
         for (final MetadataValue metadataValue : metadataAssociation.getMetadataValues())
         {
-            final Element metadataValueElement = doc.createElement("value");
-            metadataValueElement.appendChild(doc.createTextNode(metadataValue.getValue()));
-            metadataAssociationElement.appendChild(metadataValueElement);
+            final Element metadataAssociationElement = doc.createElement("metadata");
+            metadataAssociationElement.setAttribute("category", metadataAssociation.getMetadataCategory().getName());
+            metadataAssociationElement.setAttribute("value", metadataValue.getValue());
+            parent.appendChild(metadataAssociationElement);
         }
-
-        parent.appendChild(metadataAssociationElement);
     }
 
     private static void appendResearchFile(final Document doc, final Element parent, final ResearchFile researchFile)
     {
         final Element researchFileElement = doc.createElement("file");
-        researchFileElement.appendChild(doc.createTextNode(researchFile.getFile().getName()));
+        researchFileElement.setAttribute("name", researchFile.getFile().getName());
         for (final MetadataAssociation metadataAssociation : researchFile.getMetadataAssociations())
         {
             appendMetadataAssociation(doc, researchFileElement, metadataAssociation);
