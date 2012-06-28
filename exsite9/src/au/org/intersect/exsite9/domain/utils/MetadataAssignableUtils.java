@@ -10,18 +10,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import au.org.intersect.exsite9.domain.Group;
+import au.org.intersect.exsite9.domain.IMetadataAssignable;
 import au.org.intersect.exsite9.domain.MetadataAssociation;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.util.Pair;
 
 /**
- * Utilities for {@link Group}
+ * Utilities for {@link IMetadataAssignable}
  */
-public final class GroupUtils
+public final class MetadataAssignableUtils
 {
-    private GroupUtils()
+    private MetadataAssignableUtils()
     {
         // No instances please.
     }
@@ -31,11 +31,11 @@ public final class GroupUtils
      * @param group The group.
      * @return the set of metadata category to metadata value mappings.
      */
-    public static Set<Pair<MetadataCategory, MetadataValue>> getCategoryToValueMapping(final Group group)
+    public static Set<Pair<MetadataCategory, MetadataValue>> getCategoryToValueMapping(final IMetadataAssignable metadataAssignable)
     {
         final Set<Pair<MetadataCategory, MetadataValue>> toReturn = new HashSet<Pair<MetadataCategory,MetadataValue>>();
 
-        final List<MetadataAssociation> metadataAssociations = group.getMetadataAssociations();
+        final List<MetadataAssociation> metadataAssociations = metadataAssignable.getMetadataAssociations();
         for (final MetadataAssociation metadataAssociation : metadataAssociations)
         {
             final MetadataCategory metadataCategory = metadataAssociation.getMetadataCategory();

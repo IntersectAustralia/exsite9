@@ -8,12 +8,15 @@ package au.org.intersect.exsite9.domain;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -30,7 +33,7 @@ import com.google.common.base.Objects;
 @Table(name="RESEARCH_FILE", uniqueConstraints=@UniqueConstraint(columnNames={"PROJECT_ID","FILE"}))
 @Converter(name="fileToStringConverter",
     converterClass=au.org.intersect.exsite9.domain.utils.FileToStringConverter.class)
-public final class ResearchFile implements Serializable
+public final class ResearchFile implements Serializable, IMetadataAssignable
 {
     private static final long serialVersionUID = 5047390909436811919L;
 
@@ -43,6 +46,9 @@ public final class ResearchFile implements Serializable
 
     @ManyToOne
     private Project project;
+    
+    @OneToMany
+    private final List<MetadataAssociation> metadataAssociations = new ArrayList<MetadataAssociation>();
 
     public ResearchFile()
     {
@@ -117,5 +123,10 @@ public final class ResearchFile implements Serializable
     public String toString()
     {
         return new ToStringBuilder(this).append("file", this.file).toString();
+    }
+    
+    public List<MetadataAssociation> getMetadataAssociations()
+    {
+        return this.metadataAssociations;
     }
 }

@@ -23,15 +23,15 @@ import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.helper.FolderHelper;
 
-public class ResearchFileService implements IResearchFileService
+public class FileService implements IFileService
 {
-    private static final Logger LOG = Logger.getLogger(ResearchFileService.class);
+    private static final Logger LOG = Logger.getLogger(FileService.class);
     private final EntityManagerFactory entityManagerFactory;
 	private final ResearchFileDAOFactory researchFileDAOFactory;
 	private final ProjectDAOFactory projectDAOFactory;
 	private final MetadataAssociationDAOFactory metadataAssociationDAOFactory;
 	
-	public ResearchFileService(final EntityManagerFactory entityManagerFactory,
+	public FileService(final EntityManagerFactory entityManagerFactory,
 	                   final ProjectDAOFactory projectDAOFactory,
 	                   final ResearchFileDAOFactory researchFileDAOFactory,
 	                   final MetadataAssociationDAOFactory metadataAssociationDAOFactory)

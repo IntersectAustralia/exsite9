@@ -80,4 +80,20 @@ public class ResearchFileDAO
         }
         return matches.get(0);
     }
+
+    public ResearchFile updateResearchFile(final ResearchFile researchFile)
+    {
+        boolean localTransaction = (em.getTransaction().isActive()) ? false : true;
+        
+        if (localTransaction)
+        {
+            em.getTransaction().begin();
+        }
+        final ResearchFile updatedResearchFile = em.merge(researchFile);
+        if(localTransaction)
+        {
+            em.getTransaction().commit();
+        }
+        return updatedResearchFile;
+    }
 }

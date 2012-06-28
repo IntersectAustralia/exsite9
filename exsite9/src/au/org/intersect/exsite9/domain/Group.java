@@ -28,7 +28,7 @@ import com.google.common.base.Objects;
 @Entity
 @Table(name="RESEARCH_GROUP")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-public class Group implements Serializable
+public class Group implements Serializable, IMetadataAssignable
 {
 	private static final long serialVersionUID = 1700329934000740424L;
 	

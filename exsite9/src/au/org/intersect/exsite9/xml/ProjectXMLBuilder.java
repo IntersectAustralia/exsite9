@@ -38,7 +38,9 @@ public final class ProjectXMLBuilder
 
     /**
      * Builds the XML for a provided {@link Project} tree.
-     * @param project The project to build XML for.
+     * 
+     * @param project
+     *            The project to build XML for.
      * @return The String with the XML, or {@code null} if XML generation was unsuccessful.
      */
     public static String buildXML(final Project project)
@@ -119,7 +121,8 @@ public final class ProjectXMLBuilder
         parent.appendChild(groupElement);
     }
 
-    private static void appendMetadataAssociation(final Document doc, final Element parent, final MetadataAssociation metadataAssociation)
+    private static void appendMetadataAssociation(final Document doc, final Element parent,
+            final MetadataAssociation metadataAssociation)
     {
         final Element metadataAssociationElement = doc.createElement("metadata");
         metadataAssociationElement.setAttribute("category", metadataAssociation.getMetadataCategory().getName());
@@ -138,6 +141,10 @@ public final class ProjectXMLBuilder
     {
         final Element researchFileElement = doc.createElement("file");
         researchFileElement.appendChild(doc.createTextNode(researchFile.getFile().getName()));
+        for (final MetadataAssociation metadataAssociation : researchFile.getMetadataAssociations())
+        {
+            appendMetadataAssociation(doc, researchFileElement, metadataAssociation);
+        }
         parent.appendChild(researchFileElement);
     }
 }

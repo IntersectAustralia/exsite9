@@ -29,7 +29,9 @@ import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.service.IGroupService;
+import au.org.intersect.exsite9.service.IResearchFileService;
 import au.org.intersect.exsite9.wizard.WizardPageErrorHandler;
 
 public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyListener, SelectionListener
@@ -268,16 +270,43 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
             {
                 final MetadataValue metadataValueToDelete = this.metadataValues.get(selectedIndex);
                 final IGroupService groupService = (IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class);
+                final IResearchFileService fileService = (IResearchFileService) PlatformUI.getWorkbench().getService(IResearchFileService.class);
 
                 final List<Group> assignedGroups = groupService.getGroupsWithAssociatedMetadata(metadataCategory, metadataValueToDelete);
-                if (!assignedGroups.isEmpty())
+                final List<ResearchFile> assignedFiles = fileService.getResearchFilesWithAssociatedMetadata(metadataCategory, metadataValueToDelete);
+                if (!assignedGroups.isEmpty() || !assignedFiles.isEmpty())
                 {
-                    final boolean deleteAssociations = MessageDialog.openConfirm(getShell(), "", "Metadata value '" + metadataValueToDelete.getValue() + "' is currently associated with "
-                       + assignedGroups.size() + " group(s). Removing this value will cause these associations to also be deleted. Are you sure you want to proceed?");
+                    String messageString = null;
+                    
+                    //when the value is associated with both groups and files then display this
+                    if(!assignedGroups.isEmpty() && !assignedFiles.isEmpty())
+                    {
+                        messageString = "Metadata value '" + metadataValueToDelete.getValue() + "' is currently associated with "
+                                + assignedGroups.size() + " group(s) and " + assignedFiles.size() + " file(s). Removing this value will cause these associations to also be deleted. Are you sure you want to proceed?";
+                    }
+                    //when the value is associated only with groups and not files then display this
+                    else if(!assignedGroups.isEmpty() && assignedFiles.isEmpty())
+                    {
+                        messageString = "Metadata value '" + metadataValueToDelete.getValue() + "' is currently associated with "
+                                + assignedGroups.size() + " group(s). Removing this value will cause these associations to also be deleted. Are you sure you want to proceed?";
+                    }
+                    //when the value is associated only with files and not groups then display this
+                    else if(assignedGroups.isEmpty() && !assignedFiles.isEmpty())
+                    {
+                        messageString = "Metadata value '" + metadataValueToDelete.getValue() + "' is currently associated with "
+                                + assignedFiles.size() + " file(s). Removing this value will cause these associations to also be deleted. Are you sure you want to proceed?";
+                    }
+                    
+                    final boolean deleteAssociations = MessageDialog.openConfirm(getShell(), "", messageString);
                     if (!deleteAssociations)
                     {
                         return;
                     }
+                    for (final ResearchFile assignedFile : assignedFiles)
+                    {
+                        fileService.disassociateMetadata(assignedFile, metadataCategory, metadataValueToDelete);
+                    }
+                    
                     for (final Group assignedGroup : assignedGroups)
                     {
                         groupService.disassociateMetadata(assignedGroup, metadataCategory, metadataValueToDelete);

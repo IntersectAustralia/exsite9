@@ -19,7 +19,7 @@ import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.util.Pair;
 
 /**
- * Tests {@link GroupUtils}
+ * Tests {@link MetadataAssignableUtils}
  */
 public final class GroupUtilsUnitTest
 {
@@ -47,7 +47,7 @@ public final class GroupUtilsUnitTest
         group.getMetadataAssociations().add(mda1);
         group.getMetadataAssociations().add(mda2);
 
-        final Set<Pair<MetadataCategory, MetadataValue>> out = GroupUtils.getCategoryToValueMapping(group);
+        final Set<Pair<MetadataCategory, MetadataValue>> out = MetadataAssignableUtils.getCategoryToValueMapping(group);
         assertNotNull(out);
         assertEquals(2, out.size());
 

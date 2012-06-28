@@ -54,14 +54,17 @@ import com.google.common.collect.Collections2;
 
 import au.org.intersect.exsite9.Activator;
 import au.org.intersect.exsite9.domain.Group;
+import au.org.intersect.exsite9.domain.IMetadataAssignable;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.utils.AlphabeticalMetadataCategoryComparator;
 import au.org.intersect.exsite9.domain.utils.AlphabeticalMetadataValueComparator;
-import au.org.intersect.exsite9.domain.utils.GroupUtils;
+import au.org.intersect.exsite9.domain.utils.MetadataAssignableUtils;
 import au.org.intersect.exsite9.service.IGroupService;
 import au.org.intersect.exsite9.service.IProjectManager;
+import au.org.intersect.exsite9.service.IResearchFileService;
 import au.org.intersect.exsite9.util.NewFilesGroupPredicate;
 import au.org.intersect.exsite9.util.Pair;
 import au.org.intersect.exsite9.view.widgets.MetadataButtonWidget;
@@ -69,7 +72,8 @@ import au.org.intersect.exsite9.view.widgets.MetadataButtonWidget;
 /**
  * View component used for browsing Metadata.
  */
-public final class MetadataBrowserView extends ViewPart implements IExecutionListener, SelectionListener, ISelectionListener
+public final class MetadataBrowserView extends ViewPart implements IExecutionListener, SelectionListener,
+        ISelectionListener
 {
     public static final String ID = MetadataBrowserView.class.getName();
 
@@ -81,16 +85,17 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
     private RowData rowData;
 
     private final IGroupService groupService;
+    private final IResearchFileService researchFileService;
 
     /**
      * The list of currently selected (if any) groups on the RHS.
      */
-    private final List<Group> selectedGroups = new ArrayList<Group>();
+    private final List<IMetadataAssignable> selectedMetadataAssignables = new ArrayList<IMetadataAssignable>();
 
     /**
      * The metadata buttons that are currently shown on the page - keyed by metadata category for easy lookup.
      */
-    private final Map<Pair<MetadataCategory, MetadataValue>, MetadataButtonWidget> metadataButtons = new HashMap<Pair<MetadataCategory,MetadataValue>, MetadataButtonWidget>();
+    private final Map<Pair<MetadataCategory, MetadataValue>, MetadataButtonWidget> metadataButtons = new HashMap<Pair<MetadataCategory, MetadataValue>, MetadataButtonWidget>();
 
     /**
      * 
@@ -98,23 +103,28 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
     public MetadataBrowserView()
     {
         this.groupService = (IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class);
+        this.researchFileService = (IResearchFileService) PlatformUI.getWorkbench().getService(IResearchFileService.class);
     }
 
     /**
-     * @{inheritDoc}
+     * @{inheritDoc
      */
     @Override
     public void createPartControl(final Composite parent)
     {
-        final ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
+        final ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(
+                ICommandService.class);
 
-        final Command newProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.NewProjectCommand");
+        final Command newProjectCommand = commandService
+                .getCommand("au.org.intersect.exsite9.commands.NewProjectCommand");
         newProjectCommand.addExecutionListener(this);
 
-        final Command openProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.OpenProjectCommand");
+        final Command openProjectCommand = commandService
+                .getCommand("au.org.intersect.exsite9.commands.OpenProjectCommand");
         openProjectCommand.addExecutionListener(this);
-        
-        final Command addMetadataCategoryCommand = commandService.getCommand("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand");
+
+        final Command addMetadataCategoryCommand = commandService
+                .getCommand("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand");
         addMetadataCategoryCommand.addExecutionListener(this);
 
         this.parent = parent;
@@ -194,7 +204,8 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             final Image editImage = Activator.getImageDescriptor("/icons/icon-metadata.png").createImage();
 
             // This is how you gain access to Eclipse's built-in icons
-            // final Image editImage = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ELCL_SYNCED);
+            // final Image editImage =
+            // PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ELCL_SYNCED);
 
             editButtonItem.setImage(editImage);
             editButtonItem.addSelectionListener(new EditMetadataCategorySelectionListener(metadataCategory));
@@ -221,10 +232,12 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
 
             for (final MetadataValue metadataValue : sortedMetadataValues)
             {
-                final MetadataButtonWidget mdbw = new MetadataButtonWidget(buttonComposite, SWT.TOGGLE, metadataCategory, metadataValue);
+                final MetadataButtonWidget mdbw = new MetadataButtonWidget(buttonComposite, SWT.TOGGLE,
+                        metadataCategory, metadataValue);
                 mdbw.setText(metadataValue.getValue());
                 mdbw.addSelectionListener(this);
-                final Pair<MetadataCategory, MetadataValue> pair = new Pair<MetadataCategory, MetadataValue>(metadataCategory, metadataValue);
+                final Pair<MetadataCategory, MetadataValue> pair = new Pair<MetadataCategory, MetadataValue>(
+                        metadataCategory, metadataValue);
                 this.metadataButtons.put(pair, mdbw);
             }
 
@@ -240,7 +253,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
     }
 
     /**
-     * @{inheritDoc}
+     * @{inheritDoc
      */
     @Override
     public void setFocus()
@@ -251,23 +264,24 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
     @Override
     public void notHandled(final String commandId, final NotHandledException exception)
     {
-        
+
     }
 
     @Override
     public void postExecuteFailure(final String commandId, final ExecutionException exception)
     {
-        
+
     }
 
     @Override
     public void postExecuteSuccess(final String commandId, final Object returnValue)
     {
-        if (commandId.equals("au.org.intersect.exsite9.commands.NewProjectCommand") ||
-            commandId.equals("au.org.intersect.exsite9.commands.OpenProjectCommand") ||
-            commandId.equals("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand"))
+        if (commandId.equals("au.org.intersect.exsite9.commands.NewProjectCommand")
+                || commandId.equals("au.org.intersect.exsite9.commands.OpenProjectCommand")
+                || commandId.equals("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand"))
         {
-            final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
+            final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(
+                    IProjectManager.class);
             final Project project = projectManager.getCurrentProject();
             if (project != null)
             {
@@ -276,7 +290,8 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                 if (!project.getMetadataCategories().isEmpty())
                 {
                     // Refresh this page according to the currently selected items in the RHS.
-                    final ProjectExplorerView projectExplorerView = (ProjectExplorerView)ViewUtils.getViewByID(PlatformUI.getWorkbench().getActiveWorkbenchWindow(), ProjectExplorerView.ID);
+                    final ProjectExplorerView projectExplorerView = (ProjectExplorerView) ViewUtils.getViewByID(
+                            PlatformUI.getWorkbench().getActiveWorkbenchWindow(), ProjectExplorerView.ID);
                     final ISelection currentSelection = projectExplorerView.getSelection();
                     selectionChanged(projectExplorerView, currentSelection);
                 }
@@ -287,30 +302,33 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
     @Override
     public void preExecute(final String commandId, final ExecutionEvent event)
     {
-        
+
     }
 
     @Override
     public void widgetSelected(final SelectionEvent e)
     {
-        // Check that the selected groups does not contain a new group OR the project node - we CANNOT assign metadata to them.
+        // Check that the selected groups does not contain a new group OR the project node - we CANNOT assign metadata
+        // to them.
 
         final MetadataButtonWidget button = (MetadataButtonWidget) e.widget;
         final MetadataCategory metadataCategory = button.getMetadataCategory();
         final MetadataValue metadataValue = button.getMetadataValue();
 
         // You are not able to apply metadata to the New Files Group
-        if (!Collections2.filter(this.selectedGroups, NewFilesGroupPredicate.INSANCE).isEmpty())
+        if (!Collections2.filter(this.selectedMetadataAssignables, NewFilesGroupPredicate.INSANCE).isEmpty())
         {
-            MessageDialog.openError(getSite().getWorkbenchWindow().getShell(), "Error", "Metadata cannot be assigned to the new files group.");
+            MessageDialog.openError(getSite().getWorkbenchWindow().getShell(), "Error",
+                    "Metadata cannot be assigned to the new files group.");
             button.setSelection(false);
             return;
         }
 
-        if (this.selectedGroups.size() > 1)
+        if (this.selectedMetadataAssignables.size() > 1)
         {
-            final boolean performOperation = MessageDialog.openConfirm(getSite().getWorkbenchWindow().getShell(), "Caution",
-                    "The metadata operation is about to be performed on all selected groups. Are you sure you wish to proceed?");
+            final boolean performOperation = MessageDialog
+                    .openConfirm(getSite().getWorkbenchWindow().getShell(), "Caution",
+                            "The metadata operation is about to be performed on all selected items. Are you sure you wish to proceed?");
             if (!performOperation)
             {
                 button.setSelection(!button.getSelection());
@@ -320,18 +338,32 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
 
         if (button.getSelection())
         {
-            for (final Group group : this.selectedGroups)
+            for (final IMetadataAssignable metadataAssignable : this.selectedMetadataAssignables)
             {
-                final Group updatedGroup = this.groupService.findGroupByID(group.getId());
-                groupService.associateMetadata(updatedGroup, metadataCategory, metadataValue);
+                if (metadataAssignable instanceof Group)
+                {
+                    // final Group updatedGroup = this.groupService.findGroupByID(((Group)metadataAssignable).getId());
+                    groupService.associateMetadata((Group) metadataAssignable, metadataCategory, metadataValue);
+                }
+                else if (metadataAssignable instanceof ResearchFile)
+                {
+                    researchFileService.associateMetadata((ResearchFile) metadataAssignable, metadataCategory, metadataValue);
+                }
             }
         }
         else
         {
-            for (final Group group : this.selectedGroups)
+            for (final IMetadataAssignable metadataAssignable : this.selectedMetadataAssignables)
             {
-                final Group updatedGroup = this.groupService.findGroupByID(group.getId());
-                groupService.disassociateMetadata(updatedGroup, metadataCategory, metadataValue);
+                if (metadataAssignable instanceof Group)
+                {
+                   // final Group updatedGroup = this.groupService.findGroupByID(group.getId());
+                    groupService.disassociateMetadata((Group) metadataAssignable, metadataCategory, metadataValue);
+                }
+                else if (metadataAssignable instanceof ResearchFile)
+                {
+                    researchFileService.disassociateMetadata((ResearchFile) metadataAssignable, metadataCategory, metadataValue);
+                }
             }
         }
     }
@@ -339,12 +371,13 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
     @Override
     public void widgetDefaultSelected(final SelectionEvent e)
     {
-        
+
     }
 
     /**
      * Listens to selection changes on the tree viewer in the project view on the RHS.
-     * @{inheritDoc}
+     * 
+     * @{inheritDoc
      */
     @Override
     public void selectionChanged(final IWorkbenchPart part, final ISelection selection)
@@ -360,26 +393,27 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         @SuppressWarnings("unchecked")
         final List<Object> selectedObjects = structuredSelection.toList();
 
-        this.selectedGroups.clear();
+        this.selectedMetadataAssignables.clear();
 
         for (final Object selectedObject : selectedObjects)
         {
-            if (selectedObject instanceof Group)
+            if (selectedObject instanceof IMetadataAssignable)
             {
-                final Group selectedGroup = this.groupService.findGroupByID(((Group)selectedObject).getId());
-                this.selectedGroups.add(selectedGroup);
+                //final Group selectedGroup = this.groupService.findGroupByID(((Group) selectedObject).getId());
+                this.selectedMetadataAssignables.add((IMetadataAssignable)selectedObject);
             }
         }
 
         resetMetadataValueButtons();
-        if (!this.selectedGroups.isEmpty())
+        if (!this.selectedMetadataAssignables.isEmpty())
         {
             // Determine a common set of buttons that should be pressed and press them.
-            final Set<Pair<MetadataCategory, MetadataValue>> intersection = new HashSet<Pair<MetadataCategory,MetadataValue>>(GroupUtils.getCategoryToValueMapping(this.selectedGroups.get(0)));
+            final Set<Pair<MetadataCategory, MetadataValue>> intersection = new HashSet<Pair<MetadataCategory, MetadataValue>>(
+                    MetadataAssignableUtils.getCategoryToValueMapping(this.selectedMetadataAssignables.get(0)));
 
-            for (int i = 1; i < this.selectedGroups.size(); i++)
+            for (int i = 1; i < this.selectedMetadataAssignables.size(); i++)
             {
-                intersection.retainAll(GroupUtils.getCategoryToValueMapping(this.selectedGroups.get(i)));
+                intersection.retainAll(MetadataAssignableUtils.getCategoryToValueMapping(this.selectedMetadataAssignables.get(i)));
             }
             setMetadataValuesButtonsPressed(intersection);
         }
@@ -387,7 +421,9 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
 
     /**
      * Sets the metadata values that are pressed according to the metadata associations provided.
-     * @param metadataButtons the metadata buttons to press.
+     * 
+     * @param metadataButtons
+     *            the metadata buttons to press.
      */
     private void setMetadataValuesButtonsPressed(final Collection<Pair<MetadataCategory, MetadataValue>> metadataButtons)
     {
@@ -427,12 +463,14 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             // Fire the command including the metadata category ID as an argument.
             final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
             final ICommandService commandService = (ICommandService) window.getService(ICommandService.class);
-            final Command command = commandService.getCommand("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand");
-             
+            final Command command = commandService
+                    .getCommand("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand");
+
             final IParameter iparam;
             try
             {
-                iparam = command.getParameter("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand.categoryParameter");
+                iparam = command
+                        .getParameter("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand.categoryParameter");
             }
             catch (final NotDefinedException e)
             {
@@ -443,10 +481,11 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             final Parameterization params = new Parameterization(iparam, metadataCategory.getId().toString());
             final ArrayList<Parameterization> parameters = new ArrayList<Parameterization>();
             parameters.add(params);
-             
+
             // Build the parameterized command
-            final ParameterizedCommand pc = new ParameterizedCommand(command, parameters.toArray(new Parameterization[parameters.size()]));
-             
+            final ParameterizedCommand pc = new ParameterizedCommand(command,
+                    parameters.toArray(new Parameterization[parameters.size()]));
+
             // Execute the command
             final IHandlerService handlerService = (IHandlerService) window.getService(IHandlerService.class);
             try
