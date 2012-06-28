@@ -62,7 +62,7 @@ public final class NewProjectHandler implements IHandler
 
         if (newProject != null)
         {
-            projectManager.setCurrentProject(newProject);
+            projectManager.setCurrentProjectID(newProject.getId());
             HandlerUtils.activateShowProjectActivity(activeWorkbenchWindow);
         }
         return newProject;

@@ -10,7 +10,6 @@ import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.service.IMetadataCategoryService;
-import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.service.IProjectService;
 
 public class AddMetadataCategoryWizard extends Wizard
@@ -75,12 +74,6 @@ public class AddMetadataCategoryWizard extends Wizard
         {
             metadataCategoryService.updateMetadataCategory(this.metadataCategory, categoryTitle,
                     page1.getMetadataCategoryValues());
-            this.project = projectService.findProjectById(this.project.getId());
-
-            // We need to do this because we do not directly update Project's object model, so we need to get a fresh object from the db.
-            final IProjectManager projectManagerService = (IProjectManager) PlatformUI.getWorkbench().getService(
-                    IProjectManager.class);
-            projectManagerService.setCurrentProject(this.project);
         }
 
         return this.project != null;

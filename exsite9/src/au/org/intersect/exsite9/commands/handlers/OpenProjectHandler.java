@@ -60,7 +60,7 @@ public class OpenProjectHandler implements IHandler
 
         if (project != null)
         {
-            projectManager.setCurrentProject(project);
+            projectManager.setCurrentProjectID(project.getId());
             Job identifyAllNewFilesForProject = new IdentifyAllNewFilesForProjectJob();
             identifyAllNewFilesForProject.schedule();
             HandlerUtils.activateShowProjectActivity(activeWorkbenchWindow);

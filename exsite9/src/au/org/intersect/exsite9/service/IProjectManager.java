@@ -17,7 +17,7 @@ public interface IProjectManager
      * Sets the currently active project.
      * @param project The currently active project.
      */
-    public void setCurrentProject(final Project project);
+    public void setCurrentProjectID(final Long projectID);
 
     /**
      * Obtains the currently active project. May be {@code null} if there is no active project.

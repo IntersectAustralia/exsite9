@@ -159,16 +159,7 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
         }
         else if (commandId.equals("au.org.intersect.exsite9.commands.EditProjectCommand"))
         {
-            final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
-            final Project project = (Project) returnValue;
-            projectManager.setCurrentProject(project);
-            
-            if (projectManager.getCurrentProject() != null)
-            {
-                final ProjectExplorerViewInput wrapper = new ProjectExplorerViewInput(projectManager.getCurrentProject());
-                this.treeViewer.setInput(wrapper);
-                this.treeViewer.expandAll();
-            }
+            displayProjectAndExpand();
         }
         else if (commandId.equals("au.org.intersect.exsite9.commands.AddFolderToProjectCommand"))
         {
@@ -225,5 +216,11 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
     @Override
     public void preExecute(final String commandId, final ExecutionEvent event)
     {
+    }
+
+    public Project getCurrentProject()
+    {
+        final ProjectExplorerViewInput wrapper = (ProjectExplorerViewInput) this.treeViewer.getInput();
+        return wrapper.getProject();
     }
 }

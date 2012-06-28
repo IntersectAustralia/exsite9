@@ -18,10 +18,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.NewFilesGroup;
-import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.service.IGroupService;
-import au.org.intersect.exsite9.service.IProjectManager;
-import au.org.intersect.exsite9.service.IProjectService;
 
 /**
  * Executed to delete a group.
@@ -69,16 +66,6 @@ public final class DeleteGroupHandler implements IHandler
         {
             final IGroupService groupService = (IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class);
             groupService.deleteGroup(groupToDelete);
-
-            // We need to do this because we do not directly update Project's object model, so we need to get a fresh object from the db.
-            final IProjectManager projectManagerService = (IProjectManager) PlatformUI.getWorkbench().getService(
-                    IProjectManager.class);
-            final Project currentProject = projectManagerService.getCurrentProject();
-
-            // Since we did not update the project object model - we need to referesh it.
-            final IProjectService projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
-            final Project updatedProject = projectService.findProjectById(currentProject.getId());
-            projectManagerService.setCurrentProject(updatedProject);
         }
 
         return null;

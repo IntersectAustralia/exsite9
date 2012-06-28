@@ -40,9 +40,7 @@ public class ListFoldersWizard extends Wizard
         
         final IProjectService projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
         
-        Project updatedproject = projectService.removeFoldersFromProject(project, modifiedFolderList);
-        projectManager.setCurrentProject(updatedproject);
-        
+        projectService.removeFoldersFromProject(project, modifiedFolderList);
         return true;
     }
 

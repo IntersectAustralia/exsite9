@@ -6,27 +6,39 @@
  */
 package au.org.intersect.exsite9.service;
 
+import org.eclipse.ui.PlatformUI;
+
 import au.org.intersect.exsite9.domain.Project;
 
 /**
- * 
+ * Provides the ability to control the currently active project.
  */
 public final class ProjectManager implements IProjectManager
 {
+    /**
+     * The ID of the current project loaded in the UI.
+     */
+    private Long currentProjectID;
 
-    private Project currentProject;
+    private IProjectService projectService;
 
     public ProjectManager()
     {
+        this((IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class));
+    }
+
+    ProjectManager(final IProjectService projectService)
+    {
+        this.projectService = projectService;
     }
 
     /**
      * @{inheritDoc}
      */
     @Override
-    public synchronized void setCurrentProject(final Project project)
+    public synchronized void setCurrentProjectID(final Long projectID)
     {
-        this.currentProject = project;
+        this.currentProjectID = projectID;
     }
 
     /**
@@ -35,7 +47,11 @@ public final class ProjectManager implements IProjectManager
     @Override
     public synchronized Project getCurrentProject()
     {
-        return this.currentProject;
+        if (this.currentProjectID == null)
+        {
+            return null;
+        }
+        return this.projectService.findProjectById(this.currentProjectID);
     }
 
 }
