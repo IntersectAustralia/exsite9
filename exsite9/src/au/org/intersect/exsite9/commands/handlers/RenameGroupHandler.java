@@ -55,17 +55,17 @@ public class RenameGroupHandler implements IHandler
                         if (contents.trim().length() >= 255)
                         {
                             return "Name is too long.";
-                        }
-
-                        // final String[] listOfValues = ((Group) selectedObject).;
-                        //
-                        // for (final String existingValue : listOfValues)
-                        // {
-                        // if (existingValue.equalsIgnoreCase(contents.trim()))
-                        // {
-                        // return "A Group with that name already exists at this level.";
-                        // }
-                        // }
+                        }                         
+                         
+                         Group parent = groupService.getParent((Group) selectedObject);
+                        
+                         for (final Group existingChildGroup : parent.getGroups())
+                         {
+                             if (existingChildGroup.getName().equalsIgnoreCase(contents.trim()))
+                             {
+                             return "A Group with that name already exists at this level.";
+                             }
+                         }
                         return null;
                     }
                 });
@@ -74,7 +74,6 @@ public class RenameGroupHandler implements IHandler
         if (userInput.getValue() != null && !userInput.getValue().trim().isEmpty())
         {
             groupService.renameGroup(((Group) selectedObject), userInput.getValue().trim());
-            //((Group) selectedObject).setName(userInput.getValue().trim());
         }
 
         return ((Group) selectedObject);

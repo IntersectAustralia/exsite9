@@ -339,4 +339,18 @@ public final class GroupService implements IGroupService
             em.close();
         }
     }
+    
+    public Group getParent(final Group child)
+    {
+        final EntityManager em = entityManagerFactory.createEntityManager();
+        try
+        {
+            final GroupDAO gropDAO = groupDAOFactory.createInstance(em);
+            return gropDAO.getParent(child);
+        }
+        finally
+        {
+            em.close();
+        }
+    }
 }

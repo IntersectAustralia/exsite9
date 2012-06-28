@@ -82,4 +82,11 @@ public interface IGroupService
      * @return The group, or {@code null} if it could not be found.
      */
     Group findGroupByID(final Long groupID);
+    
+    /**
+     * get the parent of the given group
+     * @param child Group
+     * @return parent Group
+     */
+    Group getParent(final Group child);
 }
