@@ -9,6 +9,7 @@ package au.org.intersect.exsite9.view.provider;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
@@ -73,5 +74,45 @@ public final class ProjectExplorerViewLabelProvider extends StyledCellLabelProvi
         cell.setText(text.toString());
         cell.setStyleRanges(text.getStyleRanges());
         super.update(cell);
+    }
+
+    /**
+     * @{inheritDoc}
+     */
+    @Override
+    public String getToolTipText(final Object element)
+    {
+        if (!(element instanceof ResearchFile))
+        {
+            return null;
+        }
+        final ResearchFile rf = (ResearchFile) element;
+        return rf.getFile().getAbsolutePath();
+    }
+
+    /**
+     * @{inheritDoc}
+     */
+    @Override
+    public int getToolTipTimeDisplayed(final Object object)
+    {
+        return 10 * 1000;
+    }
+
+    /**
+     * @{inheritDoc}
+     */
+    @Override
+    public int getToolTipDisplayDelayTime(final Object object)
+    {
+        return 200;
+    }
+
+    /**
+     * @{inheritDoc}
+     */
+    public Point getToolTipShift(final Object object)
+    {
+        return new Point(5, 5);
     }
 }

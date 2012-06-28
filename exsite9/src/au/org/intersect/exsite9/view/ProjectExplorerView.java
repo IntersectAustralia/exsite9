@@ -13,6 +13,7 @@ import org.eclipse.core.commands.IExecutionListener;
 import org.eclipse.core.commands.NotHandledException;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.util.LocalSelectionTransfer;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -60,6 +61,7 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
         this.treeViewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
         this.treeViewer.setContentProvider(new ProjectExplorerViewContentProvider());
         this.treeViewer.setLabelProvider(new ProjectExplorerViewLabelProvider());
+        ColumnViewerToolTipSupport.enableFor(this.treeViewer);
 
         final ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(
                 ICommandService.class);
