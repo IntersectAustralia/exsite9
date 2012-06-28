@@ -9,9 +9,11 @@ import javax.persistence.TypedQuery;
 
 import org.apache.log4j.Logger;
 
+import au.org.intersect.exsite9.dao.FolderDAO;
 import au.org.intersect.exsite9.dao.MetadataAssociationDAO;
 import au.org.intersect.exsite9.dao.ProjectDAO;
 import au.org.intersect.exsite9.dao.ResearchFileDAO;
+import au.org.intersect.exsite9.dao.factory.FolderDAOFactory;
 import au.org.intersect.exsite9.dao.factory.MetadataAssociationDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
@@ -30,16 +32,19 @@ public class ResearchFileService implements IResearchFileService
 	private final ResearchFileDAOFactory researchFileDAOFactory;
 	private final ProjectDAOFactory projectDAOFactory;
 	private final MetadataAssociationDAOFactory metadataAssociationDAOFactory;
+	private final FolderDAOFactory folderDAOFactory;
 	
 	public ResearchFileService(final EntityManagerFactory entityManagerFactory,
 	                   final ProjectDAOFactory projectDAOFactory,
 	                   final ResearchFileDAOFactory researchFileDAOFactory,
-	                   final MetadataAssociationDAOFactory metadataAssociationDAOFactory)
+	                   final MetadataAssociationDAOFactory metadataAssociationDAOFactory,
+	                   final FolderDAOFactory folderDAOFactory)
 	{
 	    this.entityManagerFactory = entityManagerFactory;
 		this.researchFileDAOFactory = researchFileDAOFactory;
 		this.projectDAOFactory = projectDAOFactory;
 		this.metadataAssociationDAOFactory = metadataAssociationDAOFactory;
+		this.folderDAOFactory = folderDAOFactory;
 	}
 	
 	@Override
@@ -64,6 +69,7 @@ public class ResearchFileService implements IResearchFileService
         {
             ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
             ResearchFileDAO researchFileDAO = researchFileDAOFactory.createInstance(em);
+            FolderDAO folderDAO = folderDAOFactory.createInstance(em);
             
             List<File> newFileList = FolderHelper.getAllFilesInFolder(folder);
             for (final File file : newFileList)
@@ -76,6 +82,7 @@ public class ResearchFileService implements IResearchFileService
                     researchFile.setProject(project);
                     researchFileDAO.createResearchFile(researchFile);
                     folder.getFiles().add(researchFile);
+                    folderDAO.updateFolder(folder);
                     project.getNewFilesNode().getResearchFiles().add(researchFile);
                 }
             }
