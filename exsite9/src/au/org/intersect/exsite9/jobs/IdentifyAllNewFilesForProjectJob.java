@@ -75,7 +75,7 @@ public class IdentifyAllNewFilesForProjectJob extends Job
                 @Override
                 public void run() {
                     final ProjectExplorerView view = (ProjectExplorerView) ViewUtils.getViewByID(PlatformUI.getWorkbench().getActiveWorkbenchWindow(), ProjectExplorerView.ID);
-                    view.refreshAndExpand();
+                    view.refresh();
                 }
             });
             
