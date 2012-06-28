@@ -73,36 +73,44 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
         ProjectExplorerDropListener dropListener = new ProjectExplorerDropListener(treeViewer);
         this.treeViewer.addDragSupport(operations, transferTypes, dragListener);
         this.treeViewer.addDropSupport(operations, transferTypes, dropListener);
-        
+
         // This command is defined in the plugin.xml
         // This is used to the view can load the project with the New Project command is executed.
-        final Command newProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.NewProjectCommand");
+        final Command newProjectCommand = commandService
+                .getCommand("au.org.intersect.exsite9.commands.NewProjectCommand");
         newProjectCommand.addExecutionListener(this);
 
-        final Command addFolderToProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.AddFolderToProjectCommand");
+        final Command addFolderToProjectCommand = commandService
+                .getCommand("au.org.intersect.exsite9.commands.AddFolderToProjectCommand");
         addFolderToProjectCommand.addExecutionListener(this);
 
         final Command addGroupCommand = commandService.getCommand("au.org.intersect.exsite9.commands.AddGroup");
         addGroupCommand.addExecutionListener(this);
 
-        final Command deleteGroupCommand = commandService.getCommand("au.org.intersect.exsite9.commands.DeleteGroupCommand");
+        final Command deleteGroupCommand = commandService
+                .getCommand("au.org.intersect.exsite9.commands.DeleteGroupCommand");
         deleteGroupCommand.addExecutionListener(this);
 
-        final Command reloadProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.ReloadProjectCommand");
+        final Command reloadProjectCommand = commandService
+                .getCommand("au.org.intersect.exsite9.commands.ReloadProjectCommand");
         reloadProjectCommand.addExecutionListener(this);
-        
-        final Command openProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.OpenProjectCommand");
+
+        final Command openProjectCommand = commandService
+                .getCommand("au.org.intersect.exsite9.commands.OpenProjectCommand");
         openProjectCommand.addExecutionListener(this);
-        
-        final Command editProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.EditProjectCommand");
+
+        final Command editProjectCommand = commandService
+                .getCommand("au.org.intersect.exsite9.commands.EditProjectCommand");
         editProjectCommand.addExecutionListener(this);
-        
-        final Command renameGroupCommand = commandService.getCommand("au.org.intersect.exsite9.commands.RenameGroupCommand");
+
+        final Command renameGroupCommand = commandService
+                .getCommand("au.org.intersect.exsite9.commands.RenameGroupCommand");
         renameGroupCommand.addExecutionListener(this);
 
-        final Command listFoldersCommand = commandService.getCommand("au.org.intersect.exsite9.commands.ListFoldersCommand");
+        final Command listFoldersCommand = commandService
+                .getCommand("au.org.intersect.exsite9.commands.ListFoldersCommand");
         listFoldersCommand.addExecutionListener(this);
-        
+
         initContextMenu();
     }
 
@@ -151,64 +159,47 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
     @Override
     public void postExecuteSuccess(final String commandId, final Object returnValue)
     {
-        if (commandId.equals("au.org.intersect.exsite9.commands.NewProjectCommand"))
+        if (commandId.equals("au.org.intersect.exsite9.commands.NewProjectCommand")
+                || commandId.equals("au.org.intersect.exsite9.commands.OpenProjectCommand"))
         {
-            displayProjectAndExpand();
+            if (returnValue != null)
+            {
+                displayProjectAndExpand();
+            }
         }
-        else if (commandId.equals("au.org.intersect.exsite9.commands.OpenProjectCommand"))
+
+        else if (commandId.equals("au.org.intersect.exsite9.commands.EditProjectCommand")
+                || commandId.equals("au.org.intersect.exsite9.commands.AddFolderToProjectCommand")
+                || commandId.equals("au.org.intersect.exsite9.commands.AddGroup")
+                || commandId.equals("au.org.intersect.exsite9.commands.RenameGroupCommand")
+                || commandId.equals("au.org.intersect.exsite9.commands.DeleteGroupCommand")
+                || commandId.equals("au.org.intersect.exsite9.commands.ReloadProjectCommand")
+                || commandId.equals("au.org.intersect.exsite9.commands.ListFoldersCommand"))
         {
-            displayProjectAndExpand();
-        }
-        else if (commandId.equals("au.org.intersect.exsite9.commands.EditProjectCommand"))
-        {
-            displayProjectAndExpand();
-        }
-        else if (commandId.equals("au.org.intersect.exsite9.commands.AddFolderToProjectCommand"))
-        {
-            refreshAndExpand();
-        }
-        else if (commandId.equals("au.org.intersect.exsite9.commands.AddGroup"))
-        {
-            refreshAndExpand();
-        }
-        else if (commandId.equals("au.org.intersect.exsite9.commands.RenameGroupCommand"))
-        {
-            refreshAndExpand();
-        }
-        else if (commandId.equals("au.org.intersect.exsite9.commands.DeleteGroupCommand"))
-        {
-            displayProjectAndExpand();
-        }
-        else if (commandId.equals("au.org.intersect.exsite9.commands.ReloadProjectCommand"))
-        {
-            refreshAndExpand();
-        }
-        else if (commandId.equals("au.org.intersect.exsite9.commands.ListFoldersCommand"))
-        {
-            displayProjectAndExpand();
+            refresh();
         }
     }
 
-    public void refreshAndExpand()
+    public void refresh()
     {
         this.treeViewer.refresh();
-        this.treeViewer.expandAll();
     }
 
     public ISelection getSelection()
     {
         return this.treeViewer.getSelection();
     }
-    
+
     private void displayProjectAndExpand()
     {
-        final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
+        final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(
+                IProjectManager.class);
         final Project project = projectManager.getCurrentProject();
         if (project != null)
         {
             final ProjectExplorerViewInput wrapper = new ProjectExplorerViewInput(project);
             this.treeViewer.setInput(wrapper);
-            this.treeViewer.expandAll();
+            this.treeViewer.expandToLevel(2);
         }
     }
 
