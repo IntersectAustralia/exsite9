@@ -292,6 +292,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                     // Refresh this page according to the currently selected items in the RHS.
                     final ProjectExplorerView projectExplorerView = (ProjectExplorerView) ViewUtils.getViewByID(
                             PlatformUI.getWorkbench().getActiveWorkbenchWindow(), ProjectExplorerView.ID);
+                    projectExplorerView.refresh();
                     final ISelection currentSelection = projectExplorerView.getSelection();
                     selectionChanged(projectExplorerView, currentSelection);
                 }
