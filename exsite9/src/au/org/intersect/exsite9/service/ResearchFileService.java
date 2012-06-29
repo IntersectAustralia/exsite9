@@ -199,4 +199,19 @@ public class ResearchFileService implements IResearchFileService
         }
     }
 
+    @Override
+    public ResearchFile findResearchFileByID(final Long id)
+    {
+        final EntityManager em = entityManagerFactory.createEntityManager();
+        try
+        {
+            final ResearchFileDAO researchFileDAO = researchFileDAOFactory.createInstance(em);
+            return researchFileDAO.findById(id);
+        }
+        finally
+        {
+            em.close();
+        }
+    }
+
 }

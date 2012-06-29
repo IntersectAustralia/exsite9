@@ -342,12 +342,15 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             {
                 if (metadataAssignable instanceof Group)
                 {
-                    // final Group updatedGroup = this.groupService.findGroupByID(((Group)metadataAssignable).getId());
-                    groupService.associateMetadata((Group) metadataAssignable, metadataCategory, metadataValue);
+                    // We need to reload the object model from the database because the user may have updated it's metadata associations
+                    // and wishes to perform another action on it (without selecting another one in between, which would force a reload from the DB)
+                    final Group freshGroup = this.groupService.findGroupByID(((Group)metadataAssignable).getId());
+                    groupService.associateMetadata(freshGroup, metadataCategory, metadataValue);
                 }
                 else if (metadataAssignable instanceof ResearchFile)
                 {
-                    researchFileService.associateMetadata((ResearchFile) metadataAssignable, metadataCategory, metadataValue);
+                    final ResearchFile freshResearchFile = this.researchFileService.findResearchFileByID(((ResearchFile)metadataAssignable).getId());
+                    researchFileService.associateMetadata(freshResearchFile, metadataCategory, metadataValue);
                 }
             }
         }
@@ -357,12 +360,13 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             {
                 if (metadataAssignable instanceof Group)
                 {
-                   // final Group updatedGroup = this.groupService.findGroupByID(group.getId());
-                    groupService.disassociateMetadata((Group) metadataAssignable, metadataCategory, metadataValue);
+                    final Group freshGroup = this.groupService.findGroupByID(((Group)metadataAssignable).getId());
+                    groupService.disassociateMetadata(freshGroup, metadataCategory, metadataValue);
                 }
                 else if (metadataAssignable instanceof ResearchFile)
                 {
-                    researchFileService.disassociateMetadata((ResearchFile) metadataAssignable, metadataCategory, metadataValue);
+                    final ResearchFile freshResearchFile = this.researchFileService.findResearchFileByID(((ResearchFile)metadataAssignable).getId());
+                    researchFileService.disassociateMetadata(freshResearchFile, metadataCategory, metadataValue);
                 }
             }
         }

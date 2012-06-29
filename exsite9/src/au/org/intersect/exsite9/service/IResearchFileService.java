@@ -28,4 +28,6 @@ public interface IResearchFileService
 	public void disassociateMetadata(final ResearchFile file, final MetadataCategory metadataCategory, final MetadataValue metadataValue);
 	
 	public List<ResearchFile> getResearchFilesWithAssociatedMetadata(final MetadataCategory metadataCategory, final MetadataValue metadataValue);
+
+	public ResearchFile findResearchFileByID(final Long id);
 }
