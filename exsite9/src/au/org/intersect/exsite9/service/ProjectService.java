@@ -16,14 +16,17 @@ import org.apache.log4j.Logger;
 
 import au.org.intersect.exsite9.dao.FolderDAO;
 import au.org.intersect.exsite9.dao.GroupDAO;
+import au.org.intersect.exsite9.dao.MetadataAssociationDAO;
 import au.org.intersect.exsite9.dao.ProjectDAO;
 import au.org.intersect.exsite9.dao.ResearchFileDAO;
 import au.org.intersect.exsite9.dao.factory.FolderDAOFactory;
 import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
+import au.org.intersect.exsite9.dao.factory.MetadataAssociationDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Group;
+import au.org.intersect.exsite9.domain.MetadataAssociation;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
@@ -37,16 +40,19 @@ public class ProjectService implements IProjectService
     private final FolderDAOFactory folderDAOFactory;
     private final GroupDAOFactory groupDAOFactory;
     private final ResearchFileDAOFactory researchFileDAOFactory;
+    private final MetadataAssociationDAOFactory metaAssociationDAOFactory;
 
     public ProjectService(final EntityManagerFactory entityManagerFactory,
             final ProjectDAOFactory projectDAOFactory, final FolderDAOFactory folderDAOFactory, 
-            final GroupDAOFactory groupDAOFactory, final ResearchFileDAOFactory researchFileDAOFactory)
+            final GroupDAOFactory groupDAOFactory, final ResearchFileDAOFactory researchFileDAOFactory,
+            final MetadataAssociationDAOFactory metadataAssociationDAOFactory)
     {
         this.entityManagerFactory = entityManagerFactory;
         this.projectDAOFactory = projectDAOFactory;
         this.folderDAOFactory = folderDAOFactory;
         this.groupDAOFactory = groupDAOFactory;
         this.researchFileDAOFactory = researchFileDAOFactory;
+        this.metaAssociationDAOFactory = metadataAssociationDAOFactory;
     }
 
     /**
@@ -166,6 +172,7 @@ public class ProjectService implements IProjectService
             final FolderDAO folderDAO = this.folderDAOFactory.createInstance(em);
             final GroupDAO groupDAO = this.groupDAOFactory.createInstance(em);
             final ResearchFileDAO researchFileDAO = this.researchFileDAOFactory.createInstance(em);
+            final MetadataAssociationDAO metadataAssociationDAO = this.metaAssociationDAOFactory.createInstance(em);
             
             project = projectDAO.findById(project.getId());
             
@@ -188,6 +195,15 @@ public class ProjectService implements IProjectService
                         ResearchFile researchFile = fileIter.next();
                         Group parentGroup = groupDAO.getParent(researchFile);
                         parentGroup.getResearchFiles().remove(researchFile);
+                        
+                        Iterator<MetadataAssociation> maIter = researchFile.getMetadataAssociations().iterator();
+                        while(maIter.hasNext())
+                        {
+                            MetadataAssociation metadataAssociation = maIter.next();
+                            metadataAssociationDAO.removeMetadataAssociation(metadataAssociation);
+                            maIter.remove();
+                        }
+                        
                         fileIter.remove();
                         researchFileDAO.removeResearchFile(researchFile);
                     }

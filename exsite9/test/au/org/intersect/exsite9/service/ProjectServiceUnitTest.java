@@ -15,6 +15,7 @@ import org.junit.Test;
 import au.org.intersect.exsite9.dao.DAOTest;
 import au.org.intersect.exsite9.dao.factory.FolderDAOFactory;
 import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
+import au.org.intersect.exsite9.dao.factory.MetadataAssociationDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
 import au.org.intersect.exsite9.domain.Folder;
@@ -35,8 +36,9 @@ public class ProjectServiceUnitTest extends DAOTest
         FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
         GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
         ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
+        MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         
-        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, groupDAOFactory, researchFileDAOFactory);
+        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, groupDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory);
         
         Project project = projectService.createProject("Project One","Owner One","This is project one.");
         
@@ -57,8 +59,9 @@ public class ProjectServiceUnitTest extends DAOTest
         FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
         GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
         ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
+        MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         
-        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, groupDAOFactory, researchFileDAOFactory);
+        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, groupDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory);
         
         Folder folder = new Folder(new File("/tmp"));
         
@@ -88,8 +91,9 @@ public class ProjectServiceUnitTest extends DAOTest
         FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
         GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
         ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
+        MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         
-        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, groupDAOFactory, researchFileDAOFactory);
+        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, groupDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory);
         
         Project project = projectService.createProject("Project One","Owner One","This is project one.");
         

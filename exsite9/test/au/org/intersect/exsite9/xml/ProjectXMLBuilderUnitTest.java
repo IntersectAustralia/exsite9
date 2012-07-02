@@ -60,7 +60,9 @@ public final class ProjectXMLBuilderUnitTest
                                     "    <metadata category=\"CategoryName\" value=\"val11\"/>" + NEW_LINE +
                                     "    <metadata category=\"CategoryName\" value=\"val12\"/>" + NEW_LINE +
                                     "    <metadata category=\"CategoryName\" value=\"val13\"/>" + NEW_LINE +
-                                    "    <file name=\"" + rf.getFile().getName() + "\"/>" + NEW_LINE +
+                                    "    <file name=\"" + rf.getFile().getName() + "\">" + NEW_LINE +
+                                    "      <path>" + rf.getFile().getAbsolutePath() + "</path>" + NEW_LINE +
+                                    "    </file>" + NEW_LINE +
                                     "  </group>" + NEW_LINE +
                                     "</project>" + NEW_LINE;
 

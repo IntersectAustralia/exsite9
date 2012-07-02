@@ -137,6 +137,9 @@ public final class ProjectXMLBuilder
     {
         final Element researchFileElement = doc.createElement("file");
         researchFileElement.setAttribute("name", researchFile.getFile().getName());
+        final Element filePathElement = doc.createElement("path");
+        filePathElement.setTextContent(researchFile.getFile().getAbsolutePath());
+        researchFileElement.appendChild(filePathElement);
         for (final MetadataAssociation metadataAssociation : researchFile.getMetadataAssociations())
         {
             appendMetadataAssociation(doc, researchFileElement, metadataAssociation);
