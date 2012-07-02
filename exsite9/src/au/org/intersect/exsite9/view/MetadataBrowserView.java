@@ -402,10 +402,15 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
 
         for (final Object selectedObject : selectedObjects)
         {
-            if (selectedObject instanceof IMetadataAssignable)
+            if (selectedObject instanceof Group)
             {
-                //final Group selectedGroup = this.groupService.findGroupByID(((Group) selectedObject).getId());
-                this.selectedMetadataAssignables.add((IMetadataAssignable)selectedObject);
+                final Group selectedGroup = this.groupService.findGroupByID(((Group) selectedObject).getId());
+                this.selectedMetadataAssignables.add(selectedGroup);
+            }
+            else if (selectedObject instanceof ResearchFile)
+            {
+                final ResearchFile selectedResearchFile = this.researchFileService.findResearchFileByID(((ResearchFile) selectedObject).getId());
+                this.selectedMetadataAssignables.add(selectedResearchFile);
             }
         }
 
