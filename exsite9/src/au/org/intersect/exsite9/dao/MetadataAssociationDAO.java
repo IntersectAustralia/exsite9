@@ -38,8 +38,9 @@ public final class MetadataAssociationDAO
 
     public void removeMetadataAssociation(final MetadataAssociation metadataAssociation)
     {
-        em.getTransaction().begin();
+        final boolean transactionActive = em.getTransaction().isActive();
+        if (!transactionActive){em.getTransaction().begin();}
         em.remove(em.merge(metadataAssociation));
-        em.getTransaction().commit();
+        if (!transactionActive){em.getTransaction().commit();}
     }
 }
