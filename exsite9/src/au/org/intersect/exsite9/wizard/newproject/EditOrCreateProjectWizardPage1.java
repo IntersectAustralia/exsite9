@@ -127,6 +127,11 @@ public final class EditOrCreateProjectWizardPage1 extends WizardPage implements 
         this.projectDescriptionText = new Text(this.container, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL);
         this.projectDescriptionText.setText(this.incomingFieldValues.getDescription());
         this.projectDescriptionText.addKeyListener(this);
+        
+     // 3 empty cells due to the description field spanning 4 rows below
+        new Label(container, SWT.NULL);
+        new Label(container, SWT.NULL);
+        new Label(container, SWT.NULL);
 
         final Label collectionTypeLabel = new Label(this.container, SWT.NULL);
         collectionTypeLabel.setText("Collection Type");
@@ -243,6 +248,7 @@ public final class EditOrCreateProjectWizardPage1 extends WizardPage implements 
 
         final GridData singleLineGridData = new GridData(GridData.FILL_HORIZONTAL);
         final GridData multiLineGridData = new GridData(GridData.FILL_BOTH);
+        multiLineGridData.verticalSpan = 4;
 
         this.projectNameField.getControl().setLayoutData(singleLineGridData);
         this.projectOwnerText.setLayoutData(singleLineGridData);
