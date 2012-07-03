@@ -19,6 +19,7 @@ import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
+import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 
 /**
  * Tests {@link ProjectXMLBuilderUnitTest}
@@ -26,6 +27,7 @@ import au.org.intersect.exsite9.domain.ResearchFile;
 public final class ProjectXMLBuilderUnitTest
 {
     private static final String NEW_LINE = System.getProperty("line.separator");
+    private static final String EMPTY_STRING = "";
 
     @Test
     public void testBuildProject()
@@ -33,8 +35,18 @@ public final class ProjectXMLBuilderUnitTest
         final String projectName = "projectName";
         final String projectOwner = "project owner";
         final String projectDescription = "some boring description";
-        final Project project = new Project(projectName, projectOwner, projectDescription);
-
+        final String projectAccessRights = "admin";
+        final String projectCollectionType = "Dataset";
+        final String projectDatesOfCapture = "next week";
+        final String projectLatLong = "up and left a little";
+        final String projectLicence = "to kill";
+        final String projectPhysicalLocation = "Sydney";
+        final String projectRelatedParty = "Intersect";
+        final String projectSubject = "random";
+        final Project project = new Project(new ProjectFieldsDTO(projectName, projectOwner, projectDescription,
+                projectCollectionType, EMPTY_STRING, projectAccessRights, projectLicence, EMPTY_STRING, projectSubject,
+                EMPTY_STRING, projectPhysicalLocation, EMPTY_STRING, projectLatLong, projectDatesOfCapture,
+                EMPTY_STRING, projectRelatedParty, EMPTY_STRING, EMPTY_STRING));
         final MetadataCategory mdc1 = new MetadataCategory("CategoryName");
         final MetadataValue mdv11 = new MetadataValue("val11");
         final MetadataValue mdv12 = new MetadataValue("val12");
@@ -54,7 +66,7 @@ public final class ProjectXMLBuilderUnitTest
         final String xml = ProjectXMLBuilder.buildXML(project);
 
         final String expectedXML =  "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" + NEW_LINE +
-                                    "<project description=\"some boring description\" name=\"projectName\" owner=\"project owner\">" + NEW_LINE +
+                "<project accessRights=\"admin\" citationInformation=\"\" collectionType=\"Dataset\" datesOfCapture=\"next week\" description=\"some boring description\" electronicLocation=\"\" identifier=\"\" latitudeLongitude=\"up and left a little\" licence=\"to kill\" name=\"projectName\" owner=\"project owner\" physicalLocation=\"Sydney\" placeOrRegionName=\"\" relatedActivity=\"\" relatedInformation=\"\" relatedParty=\"Intersect\" rightsStatement=\"\" subject=\"random\">" + NEW_LINE +
                                     "  <group name=\"New Files\"/>" + NEW_LINE +
                                     "  <group name=\"group1\">" + NEW_LINE +
                                     "    <metadata category=\"CategoryName\" value=\"val11\"/>" + NEW_LINE +

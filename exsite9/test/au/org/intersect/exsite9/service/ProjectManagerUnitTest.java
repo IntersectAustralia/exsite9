@@ -13,12 +13,15 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 
 /**
  * Tests {@link ProjectManager}
  */
 public final class ProjectManagerUnitTest
 {
+    private static final String EMPTY_STRING = "";
+
     @Test
     public void testProjectManager()
     {
@@ -29,7 +32,8 @@ public final class ProjectManagerUnitTest
         assertNull(toTest.getCurrentProject());
 
         final Long projectID = 99L;
-        final Project project = new Project("name", "owner", "desc");
+        final Project project = new Project(new ProjectFieldsDTO("name","owner","description", EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING));
+
         project.setId(projectID);
 
         toTest.setCurrentProjectID(projectID);

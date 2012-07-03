@@ -11,17 +11,16 @@ import java.util.List;
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 
 public interface IProjectService
 {
     /**
      * Creates a project.
-     * @param name The name of the project.
-     * @param owner The owner of the project.
-     * @param description The description of the project.
+     * @param projectFields the various fields that can be inputed when creating a project.
      * @return The newly created project.
      */
-    Project createProject(final String name, final String owner, final String description);
+    Project createProject(final ProjectFieldsDTO projectFields);
 
     /**
      * Maps a folder to a project.
@@ -46,13 +45,11 @@ public interface IProjectService
     
     /**
      * Edit a project.
-     * @param name The updated name of the project.
-     * @param owner The updated owner of the project.
-     * @param description The updated description of the project.
+     * @param projectFields the various fields that can be inputed when editing a project.
      * @param id of project to update 
      * @return The updated project.
      */
-    Project editProject(final String name, final String owner, final String description, final Long id);
+    Project editProject(final ProjectFieldsDTO projectFields, final Long id);
 
     void addMetadataCategoryToProject(final Project project, final MetadataCategory metadataCategory);
     

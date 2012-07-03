@@ -30,6 +30,7 @@ import au.org.intersect.exsite9.domain.MetadataAssociation;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
+import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 
 public class ProjectService implements IProjectService
 {
@@ -59,13 +60,13 @@ public class ProjectService implements IProjectService
      * {@inheritDoc}
      */
     @Override
-    public Project createProject(final String name, final String owner, final String description)
+    public Project createProject(final ProjectFieldsDTO projectFields)
     {
         EntityManager em = entityManagerFactory.createEntityManager();
         try
         {
             ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
-            Project project = new Project(name, owner, description);
+            Project project = new Project(projectFields);
             projectDAO.createProject(project);
             return project;
         }
@@ -112,16 +113,33 @@ public class ProjectService implements IProjectService
     }
 
     @Override
-    public Project editProject(String name, String owner, String description, Long id)
+    public Project editProject(final ProjectFieldsDTO projectFields, final Long id)
     {
         EntityManager em = entityManagerFactory.createEntityManager();
         try
         {
             ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
             Project project = projectDAO.findById(id);
-            project.setName(name);
-            project.setOwner(owner);
-            project.setDescription(description);
+            
+            project.setName(projectFields.getName());
+            project.setDescription(projectFields.getDescription());
+            project.setOwner(projectFields.getOwner());
+            project.setCollectionType(projectFields.getCollectionType());
+            project.setRightsStatement(projectFields.getRightsStatement());
+            project.setAccessRights(projectFields.getAccessRights());
+            project.setLicence(projectFields.getLicence());
+            project.setIdentifier(projectFields.getIdentifier());
+            project.setSubject(projectFields.getSubject());
+            project.setElectronicLocation(projectFields.getElectronicLocation());
+            project.setPhysicalLocation(projectFields.getPhysicalLocation());
+            project.setPlaceOrRegionName(projectFields.getPlaceOrRegionName());
+            project.setLatitudeLongitude(projectFields.getLatitudeLongitude());
+            project.setDatesOfCapture(projectFields.getDatesOfCapture());
+            project.setCitationInformation(projectFields.getCitationInformation());
+            project.setRelatedParty(projectFields.getRelatedParty());
+            project.setRelatedActivity(projectFields.getRelatedActivity());
+            project.setRelatedInformation(projectFields.getRelatedInformation());
+                       
             projectDAO.updateProject(project);
             return project;
         }

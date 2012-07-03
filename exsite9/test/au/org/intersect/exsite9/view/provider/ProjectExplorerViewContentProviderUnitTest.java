@@ -20,6 +20,7 @@ import org.mockito.Mockito;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
+import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 import au.org.intersect.exsite9.service.IGroupService;
 import au.org.intersect.exsite9.service.IProjectService;
 
@@ -28,6 +29,8 @@ import au.org.intersect.exsite9.service.IProjectService;
  */
 public final class ProjectExplorerViewContentProviderUnitTest
 {
+
+    private static final String EMPTY_STRING = "";
 
     @Test
     public void testGetElements()
@@ -39,7 +42,8 @@ public final class ProjectExplorerViewContentProviderUnitTest
         assertArrayEquals(Collections.emptyList().toArray(), toTest.getElements(null));
         assertArrayEquals(Collections.emptyList().toArray(), toTest.getElements(new Object()));
 
-        final Project project = new Project("[TM]","owner","description");
+        final Project project = new Project(new ProjectFieldsDTO("[TM]","owner","description", EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING));
+
         final ProjectExplorerViewInput projectExplorerViewInput = new ProjectExplorerViewInput(project);
 
         when(projectService.findProjectById(project.getId())).thenReturn(project);
@@ -60,7 +64,7 @@ public final class ProjectExplorerViewContentProviderUnitTest
         assertArrayEquals(Collections.emptyList().toArray(), toTest.getChildren(null));
         assertArrayEquals(Collections.emptyList().toArray(), toTest.getChildren(new Object()));
 
-        final Project project = new Project("SomeProject","owner","description");
+        final Project project = new Project(new ProjectFieldsDTO("name","owner","description", EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING));
         final Group group1 = new Group("group1");
         final Group group2 = new Group("group2");
         final ResearchFile rf1 = new ResearchFile(new File("someFile"));

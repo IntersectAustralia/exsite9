@@ -20,9 +20,11 @@ import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 
 public class ProjectServiceUnitTest extends DAOTest
 {
+    private static final String EMPTY_STRING = "";
     private ProjectService projectService;
     
     @Test
@@ -40,7 +42,8 @@ public class ProjectServiceUnitTest extends DAOTest
         
         projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, groupDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory);
         
-        Project project = projectService.createProject("Project One","Owner One","This is project one.");
+        Project project = projectService.createProject(new ProjectFieldsDTO("name","owner","description", EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING));
+
         
         Project newProject = projectDAOFactory.createInstance(createEntityManager()).findById(project.getId());
         
@@ -65,7 +68,8 @@ public class ProjectServiceUnitTest extends DAOTest
         
         Folder folder = new Folder(new File("/tmp"));
         
-        Project project = projectService.createProject("Project One","Owner One","This is project one.");
+        Project project = projectService.createProject(new ProjectFieldsDTO("name","owner","description", EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING));
+
         
         projectService.mapFolderToProject(project, folder);
         
@@ -95,7 +99,7 @@ public class ProjectServiceUnitTest extends DAOTest
         
         projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, groupDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory);
         
-        Project project = projectService.createProject("Project One","Owner One","This is project one.");
+        Project project = projectService.createProject(new ProjectFieldsDTO("name","owner","description", EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING));
         
         projectService.mapFolderToProject(project, folder1);
         projectService.mapFolderToProject(project, folder2);

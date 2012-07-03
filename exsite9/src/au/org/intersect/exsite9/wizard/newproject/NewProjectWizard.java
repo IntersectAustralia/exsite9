@@ -10,6 +10,7 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.PlatformUI;
 
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 import au.org.intersect.exsite9.service.IProjectService;
 
 /**
@@ -17,22 +18,27 @@ import au.org.intersect.exsite9.service.IProjectService;
  */
 public final class NewProjectWizard extends Wizard
 {
+    private static String EMPTY_STRING = "";
     private final EditOrCreateProjectWizardPage1 page1;
 
     private Project newProject;
 
     /**
-     * Constructor 
+     * Constructor
      */
     public NewProjectWizard()
     {
         super();
         setNeedsProgressMonitor(true);
-        page1 = new EditOrCreateProjectWizardPage1("New Project", "Please enter the details of your new project.", "", "", "");
+        page1 = new EditOrCreateProjectWizardPage1("New Project", "Please enter the details of your new project.",
+                new ProjectFieldsDTO(EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING,
+                        EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING,
+                        EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING,
+                        EMPTY_STRING));
     }
 
     /**
-     * @{inheritDoc}
+     * @{inheritDoc
      */
     @Override
     public void addPages()
@@ -41,17 +47,14 @@ public final class NewProjectWizard extends Wizard
     }
 
     /**
-     * @{inheritDoc}
+     * @{inheritDoc
      */
     @Override
     public boolean performFinish()
     {
-        final String projectName = page1.getProjectName();
-        final String projectOwner = page1.getProjectOwner();
-        final String projectDescription = page1.getProjectDescription();
-
-        final IProjectService projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
-        this.newProject = projectService.createProject(projectName, projectOwner, projectDescription);
+        final IProjectService projectService = (IProjectService) PlatformUI.getWorkbench().getService(
+                IProjectService.class);
+        this.newProject = projectService.createProject(page1.getProjectFields());
 
         return this.newProject != null;
     }
