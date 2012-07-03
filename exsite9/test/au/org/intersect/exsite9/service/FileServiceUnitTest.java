@@ -26,10 +26,12 @@ import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
+import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 
 public class FileServiceUnitTest extends DAOTest
 {
 	private final String testDirName = System.getProperty("java.io.tmpdir") + File.separator + "exsite9-FolderUnitTest";
+	private static String EMPTY_STRING = "";
     private File testDirFile = null;
     
     private ResearchFileService fileService = null;
@@ -65,8 +67,8 @@ public class FileServiceUnitTest extends DAOTest
         ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         final MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
-        
-    	Project project = new Project("name","owner","description");
+      
+    	Project project = new Project(new ProjectFieldsDTO("name","owner","description", EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING));
     	projectDAO.createProject(project);
 
     	Folder f = new Folder(testDirFile);
@@ -92,7 +94,7 @@ public class FileServiceUnitTest extends DAOTest
         MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
         
-    	Project project = new Project("name","owner","description");
+    	Project project = new Project(new ProjectFieldsDTO("name","owner","description", EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING));
     	Folder f = new Folder(testDirFile);
     	File.createTempFile("test-file-1", ".txt", testDirFile);
 
@@ -135,7 +137,7 @@ public class FileServiceUnitTest extends DAOTest
         MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
         
-    	Project project = new Project("name","owner","description");
+    	Project project = new Project(new ProjectFieldsDTO("name","owner","description", EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING));
     	project.setId(2L);
 
     	final ProjectDAO projectDAO = new ProjectDAO(createEntityManager());

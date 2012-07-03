@@ -11,6 +11,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 
 /**
  * Tests {@link ProjectViewInputWrapper}
@@ -18,10 +19,12 @@ import au.org.intersect.exsite9.domain.Project;
 public final class ProjectExplorerViewInputUnitTest
 {
 
+    private static final String EMPTY_STRING = "";
+
     @Test
     public void testConstruction()
     {
-        final Project project = new Project("some project name","owner","description");
+        final Project project = new Project(new ProjectFieldsDTO("name","owner","description", EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING));
         final ProjectViewInputWrapper toTest = new ProjectViewInputWrapper(project);
         assertEquals(project, toTest.getProject());
     }

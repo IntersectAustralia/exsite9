@@ -20,18 +20,20 @@ import au.org.intersect.exsite9.dao.ResearchFileDAO;
 import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
+import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 
 public class ResearchFileDAOUnitTest extends DAOTest
 {
 
     private static ResearchFileDAOFactory researchFileDAOFactory;
-    
+    private static String EMPTY_STRING = "";
+
     @BeforeClass
     public static void setupOnce()
     {
         researchFileDAOFactory = new ResearchFileDAOFactory();
     }
-    
+
     @Test
     public void testCreateNewFile()
     {
@@ -87,16 +89,19 @@ public class ResearchFileDAOUnitTest extends DAOTest
     @Test
     public void testFindByPath()
     {
+
         final EntityManager em = createEntityManager();
         final ResearchFileDAO researchFileDAO = researchFileDAOFactory.createInstance(em);
         final ProjectDAO projectDAO = new ProjectDAO(em);
         final File fileOnDisk = new File("some-file.txt");
         final ResearchFile researchFile = new ResearchFile(fileOnDisk);
-        final Project project = new Project("name", "owner", "desc");
+        final Project project = new Project(new ProjectFieldsDTO("name", "owner", "desc", EMPTY_STRING, EMPTY_STRING,
+                EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING,
+                EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING));
         researchFile.setProject(project);
 
         projectDAO.createProject(project);
-        
+
         assertNull(researchFileDAO.findByPath(project, fileOnDisk));
 
         researchFileDAO.createResearchFile(researchFile);

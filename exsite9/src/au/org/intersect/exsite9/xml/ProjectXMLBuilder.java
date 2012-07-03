@@ -58,6 +58,21 @@ public final class ProjectXMLBuilder
             rootElement.setAttribute("name", project.getName());
             rootElement.setAttribute("owner", project.getOwner());
             rootElement.setAttribute("description", project.getDescription());
+            rootElement.setAttribute("collectionType", project.getCollectionType());
+            rootElement.setAttribute("rightsStatement", project.getRightsStatement());
+            rootElement.setAttribute("accessRights", project.getAccessRights());
+            rootElement.setAttribute("licence", project.getLicence());
+            rootElement.setAttribute("identifier", project.getIdentifier());
+            rootElement.setAttribute("subject", project.getSubject());
+            rootElement.setAttribute("electronicLocation", project.getElectronicLocation());
+            rootElement.setAttribute("physicalLocation", project.getPhysicalLocation());
+            rootElement.setAttribute("placeOrRegionName", project.getPlaceOrRegionName());
+            rootElement.setAttribute("latitudeLongitude", project.getLatitudeLongitude());
+            rootElement.setAttribute("datesOfCapture", project.getDatesOfCapture());
+            rootElement.setAttribute("citationInformation", project.getCitationInformation());
+            rootElement.setAttribute("relatedParty", project.getRelatedParty());
+            rootElement.setAttribute("relatedActivity", project.getRelatedActivity());
+            rootElement.setAttribute("relatedInformation", project.getRelatedInformation());
 
             for (final Group group : project.getRootNode().getGroups())
             {
