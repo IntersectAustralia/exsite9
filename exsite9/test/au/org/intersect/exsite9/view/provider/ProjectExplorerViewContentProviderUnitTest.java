@@ -35,12 +35,12 @@ public final class ProjectExplorerViewContentProviderUnitTest
         final IGroupService groupService = Mockito.mock(IGroupService.class);
         final IProjectService projectService = Mockito.mock(IProjectService.class);
 
-        final ProjectExplorerViewContentProvider toTest = new ProjectExplorerViewContentProvider(groupService, projectService);
+        final ProjectExplorerViewContentProvider toTest = new ProjectExplorerViewContentProvider(groupService, projectService, true);
         assertArrayEquals(Collections.emptyList().toArray(), toTest.getElements(null));
         assertArrayEquals(Collections.emptyList().toArray(), toTest.getElements(new Object()));
 
         final Project project = new Project("[TM]","owner","description");
-        final ProjectExplorerViewInput projectExplorerViewInput = new ProjectExplorerViewInput(project);
+        final ProjectViewInputWrapper projectExplorerViewInput = new ProjectViewInputWrapper(project);
 
         when(projectService.findProjectById(project.getId())).thenReturn(project);
 
@@ -56,7 +56,7 @@ public final class ProjectExplorerViewContentProviderUnitTest
         final IGroupService groupService = Mockito.mock(IGroupService.class);
         final IProjectService projectService = Mockito.mock(IProjectService.class);
 
-        final ProjectExplorerViewContentProvider toTest = new ProjectExplorerViewContentProvider(groupService, projectService);
+        final ProjectExplorerViewContentProvider toTest = new ProjectExplorerViewContentProvider(groupService, projectService, true);
         assertArrayEquals(Collections.emptyList().toArray(), toTest.getChildren(null));
         assertArrayEquals(Collections.emptyList().toArray(), toTest.getChildren(new Object()));
 

@@ -37,7 +37,7 @@ public final class ProjectExplorerViewLabelProvider extends StyledCellLabelProvi
     @Override
     public void update(final ViewerCell cell)
     {
-        Object element = cell.getElement();
+        final Object element = cell.getElement();
         final StyledString text = new StyledString();
 
         if (element instanceof Project)

@@ -9,13 +9,13 @@ package au.org.intersect.exsite9.view.provider;
 import au.org.intersect.exsite9.domain.Project;
 
 /**
- * Wraps the root node of the project explorer view.
+ * Wraps the root node of the project for views.
  */
-public final class ProjectExplorerViewInput
+public final class ProjectViewInputWrapper
 {
     private final Project project;
 
-    public ProjectExplorerViewInput(final Project project)
+    public ProjectViewInputWrapper(final Project project)
     {
         this.project = project;
     }

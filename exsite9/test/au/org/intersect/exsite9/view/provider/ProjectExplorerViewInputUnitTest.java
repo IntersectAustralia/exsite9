@@ -13,7 +13,7 @@ import org.junit.Test;
 import au.org.intersect.exsite9.domain.Project;
 
 /**
- * Tests {@link ProjectExplorerViewInput}
+ * Tests {@link ProjectViewInputWrapper}
  */
 public final class ProjectExplorerViewInputUnitTest
 {
@@ -22,7 +22,7 @@ public final class ProjectExplorerViewInputUnitTest
     public void testConstruction()
     {
         final Project project = new Project("some project name","owner","description");
-        final ProjectExplorerViewInput toTest = new ProjectExplorerViewInput(project);
+        final ProjectViewInputWrapper toTest = new ProjectViewInputWrapper(project);
         assertEquals(project, toTest.getProject());
     }
 }

@@ -30,7 +30,7 @@ import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.view.listener.ProjectExplorerDragListener;
 import au.org.intersect.exsite9.view.listener.ProjectExplorerDropListener;
 import au.org.intersect.exsite9.view.provider.ProjectExplorerViewContentProvider;
-import au.org.intersect.exsite9.view.provider.ProjectExplorerViewInput;
+import au.org.intersect.exsite9.view.provider.ProjectViewInputWrapper;
 import au.org.intersect.exsite9.view.provider.ProjectExplorerViewLabelProvider;
 
 /**
@@ -59,7 +59,7 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
         this.setPartName("Project View");
 
         this.treeViewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
-        this.treeViewer.setContentProvider(new ProjectExplorerViewContentProvider());
+        this.treeViewer.setContentProvider(new ProjectExplorerViewContentProvider(true));
         this.treeViewer.setLabelProvider(new ProjectExplorerViewLabelProvider());
         ColumnViewerToolTipSupport.enableFor(this.treeViewer);
 
@@ -197,7 +197,7 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
         final Project project = projectManager.getCurrentProject();
         if (project != null)
         {
-            final ProjectExplorerViewInput wrapper = new ProjectExplorerViewInput(project);
+            final ProjectViewInputWrapper wrapper = new ProjectViewInputWrapper(project);
             this.treeViewer.setInput(wrapper);
             this.treeViewer.expandToLevel(2);
         }
@@ -209,11 +209,5 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
     @Override
     public void preExecute(final String commandId, final ExecutionEvent event)
     {
-    }
-
-    public Project getCurrentProject()
-    {
-        final ProjectExplorerViewInput wrapper = (ProjectExplorerViewInput) this.treeViewer.getInput();
-        return wrapper.getProject();
     }
 }

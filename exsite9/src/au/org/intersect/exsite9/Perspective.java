@@ -9,6 +9,7 @@ package au.org.intersect.exsite9;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 import org.eclipse.ui.IViewLayout;
@@ -17,6 +18,7 @@ import org.eclipse.ui.activities.IWorkbenchActivitySupport;
 
 import au.org.intersect.exsite9.view.MetadataBrowserView;
 import au.org.intersect.exsite9.view.ProjectExplorerView;
+import au.org.intersect.exsite9.view.SubmissionPackageBrowserView;
 
 /**
  * A Perspective holds the configuration of configuration of views.
@@ -28,14 +30,22 @@ public final class Perspective implements IPerspectiveFactory
      */
     public void createInitialLayout(final IPageLayout layout)
     {
-        // Add the Project Explorer View
-        layout.addStandaloneView(ProjectExplorerView.ID, true, IPageLayout.LEFT, 0.25f, layout.getEditorArea());
-        layout.addStandaloneView(MetadataBrowserView.ID, true, IPageLayout.RIGHT, 0.75f, layout.getEditorArea());
+        final IFolderLayout leftFolder = layout.createFolder("folder.left", IPageLayout.LEFT, 0.25f, layout.getEditorArea());
+        final IFolderLayout rightFolder = layout.createFolder("folder.right", IPageLayout.RIGHT, 0.75f, layout.getEditorArea());
+
+        leftFolder.addView(ProjectExplorerView.ID);
+        leftFolder.addView(SubmissionPackageBrowserView.ID);
+        rightFolder.addView(MetadataBrowserView.ID);
 
         // Configure the Project Explorer View
         final IViewLayout projectExplorerViewLayout = layout.getViewLayout(ProjectExplorerView.ID);
         projectExplorerViewLayout.setCloseable(false);
         projectExplorerViewLayout.setMoveable(false);
+
+        // Configure the Submission Package Browser View
+        final IViewLayout submissionPackageBrowserViewLayout = layout.getViewLayout(SubmissionPackageBrowserView.ID);
+        submissionPackageBrowserViewLayout.setCloseable(false);
+        submissionPackageBrowserViewLayout.setMoveable(false);
 
         // Configure the Metadata Browser View
         final IViewLayout metadataBrowserViewLayout = layout.getViewLayout(MetadataBrowserView.ID);

@@ -14,7 +14,11 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.PlatformUI;
 
+import com.google.common.base.Predicates;
+import com.google.common.collect.Collections2;
+
 import au.org.intersect.exsite9.domain.Group;
+import au.org.intersect.exsite9.domain.NewFilesGroup;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.utils.AlphabeticalGroupComparator;
@@ -28,21 +32,23 @@ import au.org.intersect.exsite9.view.ProjectExplorerView;
  */
 public final class ProjectExplorerViewContentProvider implements ITreeContentProvider
 {
+    private final boolean includeNewFilesGroup;
     private final IGroupService groupService;
     private final IProjectService projectService;
 
     /**
      * Constructor
      */
-    public ProjectExplorerViewContentProvider()
+    public ProjectExplorerViewContentProvider(final boolean includeNewFilesGroup)
     {
-        this((IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class), (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class));
+        this((IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class), (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class), includeNewFilesGroup);
     }
 
-    ProjectExplorerViewContentProvider(final IGroupService groupService, final IProjectService projectService)
+    ProjectExplorerViewContentProvider(final IGroupService groupService, final IProjectService projectService, final boolean includeNewFilesGroup)
     {
         this.groupService = groupService;
         this.projectService = projectService;
+        this.includeNewFilesGroup = includeNewFilesGroup;
     }
 
     /**
@@ -67,9 +73,9 @@ public final class ProjectExplorerViewContentProvider implements ITreeContentPro
     @Override
     public Object[] getElements(final Object inputElement)
     {
-        if (inputElement instanceof ProjectExplorerViewInput)
+        if (inputElement instanceof ProjectViewInputWrapper)
         {
-            final ProjectExplorerViewInput viewInput = (ProjectExplorerViewInput) inputElement;
+            final ProjectViewInputWrapper viewInput = (ProjectViewInputWrapper) inputElement;
             return new Object[]{this.projectService.findProjectById(viewInput.getProject().getId())};
         }
         return Collections.emptyList().toArray();
@@ -96,7 +102,16 @@ public final class ProjectExplorerViewContentProvider implements ITreeContentPro
             return Collections.emptyList().toArray();
         }
 
-        final List<Group> groups = new ArrayList<Group>(rootGroup.getGroups());
+        final List<Group> groups;
+        if (!this.includeNewFilesGroup)
+        {
+            groups = new ArrayList<Group>(Collections2.filter(rootGroup.getGroups(), Predicates.not(Predicates.instanceOf(NewFilesGroup.class))));
+        }
+        else
+        {
+            groups = new ArrayList<Group>(rootGroup.getGroups());
+        }
+
         final List<ResearchFile> researchFiles = new ArrayList<ResearchFile>(rootGroup.getResearchFiles());
 
         Collections.sort(groups, new AlphabeticalGroupComparator());

@@ -50,6 +50,7 @@ import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.ViewPart;
 
+import com.google.common.base.Predicates;
 import com.google.common.collect.Collections2;
 
 import au.org.intersect.exsite9.Activator;
@@ -57,6 +58,7 @@ import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.IMetadataAssignable;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
+import au.org.intersect.exsite9.domain.NewFilesGroup;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.utils.AlphabeticalMetadataCategoryComparator;
@@ -65,7 +67,6 @@ import au.org.intersect.exsite9.domain.utils.MetadataAssignableUtils;
 import au.org.intersect.exsite9.service.IGroupService;
 import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.service.IResearchFileService;
-import au.org.intersect.exsite9.util.NewFilesGroupPredicate;
 import au.org.intersect.exsite9.util.Pair;
 import au.org.intersect.exsite9.view.widgets.MetadataButtonWidget;
 
@@ -317,7 +318,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         final MetadataValue metadataValue = button.getMetadataValue();
 
         // You are not able to apply metadata to the New Files Group
-        if (!Collections2.filter(this.selectedMetadataAssignables, NewFilesGroupPredicate.INSANCE).isEmpty())
+        if (!Collections2.filter(this.selectedMetadataAssignables, Predicates.instanceOf(NewFilesGroup.class)).isEmpty())
         {
             MessageDialog.openError(getSite().getWorkbenchWindow().getShell(), "Error",
                     "Metadata cannot be assigned to the new files group.");

@@ -59,6 +59,13 @@
             name="Metadata Browser"
             restorable="false">
       </view>
+      <view
+            allowMultiple="false"
+            class="au.org.intersect.exsite9.view.SubmissionPackageBrowserView"
+            id="au.org.intersect.exsite9.view.SubmissionPackageBrowserView"
+            name="Submission Package Browser"
+            restorable="false">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
@@ -121,6 +128,16 @@
             id="au.org.intersect.exsite9.commands.RenameGroupCommand"
             name="Rename Group">
       </command>
+   <command
+         defaultHandler="au.org.intersect.exsite9.commands.handlers.CreateSubmissionPackageHandler"
+         id="au.org.intersect.exsite9.commands.CreateSubmissionPackageCommand"
+         name="Create Submission Package">
+   </command>
+   <command
+         defaultHandler="au.org.intersect.exsite9.commands.handlers.EditSubmissionPackageHandler"
+         id="au.org.intersect.exsite9.commands.EditSubmissionPackageCommand"
+         name="Edit Submission Package">
+   </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -181,6 +198,16 @@
                   label="New Category..."
                   style="push"
                   tooltip="Add Metadata Category">
+            </command>
+         </menu>
+         <menu
+               id="au.org.intersect.exsite9.menu.submissionpackage"
+               label="Submission Package">
+            <command
+                  commandId="au.org.intersect.exsite9.commands.CreateSubmissionPackageCommand"
+                  label="Create..."
+                  style="push"
+                  tooltip="Create a submission package">
             </command>
          </menu>
       </menuContribution>
@@ -306,6 +333,21 @@
             </visibleWhen>
          </command>
       </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:au.org.intersect.exsite9.view.SubmissionPackageBrowserView">
+         <command
+               commandId="au.org.intersect.exsite9.commands.EditSubmissionPackageCommand"
+               label="Edit..."
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <reference
+                     definitionId="au.org.intersect.exsite9.expression.InstanceOfSubmissionPackage">
+               </reference>
+            </visibleWhen>
+         </command>
+      </menuContribution>
    </extension>
    <extension
          point="org.eclipse.ui.services">
@@ -338,6 +380,11 @@
             factoryClass="au.org.intersect.exsite9.service.factory.EntityManagerFactoryFactory">
          <service
                serviceClass="javax.persistence.EntityManagerFactory"></service>
+      </serviceFactory>
+      <serviceFactory
+            factoryClass="au.org.intersect.exsite9.service.factory.SubmissionPackageServiceFactory">
+         <service
+               serviceClass="au.org.intersect.exsite9.service.ISubmissionPackageService"></service>
       </serviceFactory>
    </extension>
    <extension
@@ -431,6 +478,19 @@
             </iterate>
          </with>
       </definition>
+      <definition
+            id="au.org.intersect.exsite9.expression.InstanceOfSubmissionPackage">
+         <with
+               variable="selection">
+            <iterate
+                  ifEmpty="false"
+                  operator="or">
+               <instanceof
+                     value="au.org.intersect.exsite9.domain.SubmissionPackage">
+               </instanceof>
+            </iterate>
+         </with>
+      </definition>
    </extension>
    <extension
          point="org.eclipse.core.expressions.propertyTesters">
@@ -451,6 +511,10 @@
       <activityPatternBinding
             activityId="au.org.intersect.exsite9.activity.showProject"
             pattern="au.org.intersect.exsite9/au.org.intersect.exsite9.menu.metadata">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="au.org.intersect.exsite9.activity.showProject"
+            pattern="au.org.intersect.exsite9/au.org.intersect.exsite9.menu.submissionpackage">
       </activityPatternBinding>
    </extension>
    <extension

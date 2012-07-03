@@ -54,6 +54,9 @@ public final class Project implements Serializable
     
     @OneToOne(cascade = CascadeType.ALL)
     private Group newFilesNode;
+
+    @OneToMany
+    private final List<SubmissionPackage> submissionPackages = new ArrayList<SubmissionPackage>();
     
     public Project()
     {
@@ -152,6 +155,11 @@ public final class Project implements Serializable
     public void setMetadataCategories(final List<MetadataCategory> mdcs)
     {
         this.metadataCategories = mdcs;
+    }
+
+    public List<SubmissionPackage> getSubmissionPackages()
+    {
+        return this.submissionPackages;
     }
 
     /**
