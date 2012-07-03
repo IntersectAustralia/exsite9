@@ -10,6 +10,8 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -146,7 +148,21 @@ public final class EditOrCreateProjectWizardPage1 extends WizardPage implements 
                 this.projectCollectionDropDown.select(i);
             }
         }
-        this.projectCollectionDropDown.addKeyListener(this);
+        this.projectCollectionDropDown.addSelectionListener(new SelectionListener()
+        {
+            
+            @Override
+            public void widgetSelected(SelectionEvent e)
+            {
+                setPageComplete(projectNameField.isValid());                
+            }
+            
+            @Override
+            public void widgetDefaultSelected(SelectionEvent e)
+            {
+                // TODO Auto-generated method stub
+            }
+        });
 
         final Label rightsStatementLabel = new Label(this.container, SWT.NULL);
         rightsStatementLabel.setText("Rights Statement");

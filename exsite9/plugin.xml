@@ -66,6 +66,12 @@
             name="Submission Package Browser"
             restorable="false">
       </view>
+	  <view
+            class="au.org.intersect.exsite9.view.AssociatedMetadataView"
+            id="au.org.intersect.exsite9.view.AssociatedMetadataView"
+            name="Associated Metadata View"
+            restorable="false">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
