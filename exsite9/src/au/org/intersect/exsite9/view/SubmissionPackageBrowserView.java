@@ -55,6 +55,9 @@ public final class SubmissionPackageBrowserView extends ViewPart implements IExe
         
         final Command openProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.OpenProjectCommand");
         openProjectCommand.addExecutionListener(this);
+
+        final Command editProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.EditProjectCommand");
+        editProjectCommand.addExecutionListener(this);
         
         final Command newProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.NewProjectCommand");
         newProjectCommand.addExecutionListener(this);

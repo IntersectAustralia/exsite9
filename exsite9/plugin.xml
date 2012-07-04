@@ -353,6 +353,17 @@
                </reference>
             </visibleWhen>
          </command>
+         <command
+               commandId="au.org.intersect.exsite9.commands.CreateSubmissionPackageCommand"
+               label="Create Submission Package..."
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <reference
+                     definitionId="au.org.intersect.exsite9.expression.InstanceOfProject">
+               </reference>
+            </visibleWhen>
+         </command>
       </menuContribution>
    </extension>
    <extension

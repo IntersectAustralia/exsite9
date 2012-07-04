@@ -12,8 +12,11 @@ import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.wizard.createsubmissionpackage.CreateSubmissionPackageWizard;
 
 /**
@@ -28,8 +31,11 @@ public final class CreateSubmissionPackageHandler implements IHandler
     @Override
     public Object execute(final ExecutionEvent event) throws ExecutionException
     {
+        final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
+        final Project project = projectManager.getCurrentProject();
+
         final Shell shell = HandlerUtil.getActiveWorkbenchWindow(event).getShell();
-        final CreateSubmissionPackageWizard createSubmissionPackageWizard = new CreateSubmissionPackageWizard(null);
+        final CreateSubmissionPackageWizard createSubmissionPackageWizard = new CreateSubmissionPackageWizard(null, project.getSubmissionPackages(), "Create Submission Package");
         final WizardDialog wizardDialog = new WizardDialog(shell, createSubmissionPackageWizard);
         wizardDialog.open();
 

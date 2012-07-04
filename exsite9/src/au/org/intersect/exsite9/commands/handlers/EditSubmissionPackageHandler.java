@@ -13,9 +13,12 @@ import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.SubmissionPackage;
+import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.wizard.createsubmissionpackage.CreateSubmissionPackageWizard;
 
 /**
@@ -49,8 +52,11 @@ public final class EditSubmissionPackageHandler implements IHandler
 
         final SubmissionPackage toEdit = (SubmissionPackage) selectedObject;
 
+        final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
+        final Project project = projectManager.getCurrentProject();
+
         final Shell shell = HandlerUtil.getActiveWorkbenchWindow(event).getShell();
-        final CreateSubmissionPackageWizard wizard = new CreateSubmissionPackageWizard(toEdit);
+        final CreateSubmissionPackageWizard wizard = new CreateSubmissionPackageWizard(toEdit, project.getSubmissionPackages(), "Edit Submission Package");
 
         final WizardDialog wizardDialog = new WizardDialog(shell, wizard);
         wizardDialog.open();
