@@ -103,4 +103,25 @@ public final class SubmissionPackageService implements ISubmissionPackageService
             em.close();
         }
     }
+
+    @Override
+    public void deleteSubmissionPackage(final SubmissionPackage submissionPackage)
+    {
+        final EntityManager em = this.entityManagerFactory.createEntityManager();
+        try
+        {
+            final ProjectDAO projectDAO = this.projectDAOFactory.createInstance(em);
+
+            final Project project = projectDAO.findProjectWithSubmissionPackage(submissionPackage);
+            project.getSubmissionPackages().remove(submissionPackage);
+            projectDAO.updateProject(project);
+
+            final SubmissionPackageDAO submissionPackageDAO = this.submissionPackageDAOFactory.createInstance(em);
+            submissionPackageDAO.deleteSubmissionPackage(submissionPackage);
+        }
+        finally
+        {
+            em.close();
+        }
+    }
 }

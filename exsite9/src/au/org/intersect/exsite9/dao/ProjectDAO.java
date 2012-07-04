@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.domain.SubmissionPackage;
 
 public class ProjectDAO
 {
@@ -41,5 +42,12 @@ public class ProjectDAO
     {
         TypedQuery<Project> query = em.createQuery("SELECT p FROM Project p", Project.class);
         return query.getResultList();
+    }
+
+    public Project findProjectWithSubmissionPackage(final SubmissionPackage submissionPackage)
+    {
+        final TypedQuery<Project> query = em.createQuery("SELECT p FROM Project p WHERE :submissionPackage MEMBER OF p.submissionPackages", Project.class);
+        query.setParameter("submissionPackage", submissionPackage);
+        return query.getSingleResult();
     }
 }

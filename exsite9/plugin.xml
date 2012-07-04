@@ -144,6 +144,11 @@
          id="au.org.intersect.exsite9.commands.EditSubmissionPackageCommand"
          name="Edit Submission Package">
    </command>
+   <command
+         defaultHandler="au.org.intersect.exsite9.commands.handlers.DeleteSubmissionPackageHandler"
+         id="au.org.intersect.exsite9.commands.DeleteSubmissionPackageCommand"
+         name="Delete Submission Package">
+   </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -345,6 +350,17 @@
          <command
                commandId="au.org.intersect.exsite9.commands.EditSubmissionPackageCommand"
                label="Edit..."
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <reference
+                     definitionId="au.org.intersect.exsite9.expression.InstanceOfSubmissionPackage">
+               </reference>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="au.org.intersect.exsite9.commands.DeleteSubmissionPackageCommand"
+               label="Delete"
                style="push">
             <visibleWhen
                   checkEnabled="false">

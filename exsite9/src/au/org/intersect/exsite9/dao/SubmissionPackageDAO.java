@@ -33,6 +33,13 @@ public final class SubmissionPackageDAO
         em.getTransaction().commit();
     }
 
+    public void deleteSubmissionPackage(final SubmissionPackage submissionPackage)
+    {
+        em.getTransaction().begin();
+        em.remove(em.merge(submissionPackage));
+        em.getTransaction().commit();
+    }
+
     public SubmissionPackage findSubmissionPackageById(final Long id)
     {
         return em.find(SubmissionPackage.class, id);

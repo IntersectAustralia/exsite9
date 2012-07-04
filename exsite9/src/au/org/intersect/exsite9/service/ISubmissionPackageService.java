@@ -17,7 +17,6 @@ import au.org.intersect.exsite9.domain.SubmissionPackage;
  */
 public interface ISubmissionPackageService
 {
-
     /**
      * Creates a Submission Package.
      * @param project The project the submission package belongs to.
@@ -44,4 +43,10 @@ public interface ISubmissionPackageService
      * @return The updated submission package.
      */
     SubmissionPackage updateSubmissionPackage(final SubmissionPackage submissionPackage, final String name, final String description, final List<ResearchFile> researchFiles);
+
+    /**
+     * Deletes a Submission Package.
+     * @param submissionPackage The submission package to delete.
+     */
+    void deleteSubmissionPackage(final SubmissionPackage submissionPackage);
 }
