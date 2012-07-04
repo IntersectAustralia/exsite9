@@ -67,6 +67,7 @@
             restorable="false">
       </view>
 	  <view
+			allowMultiple="false"
             class="au.org.intersect.exsite9.view.AssociatedMetadataView"
             id="au.org.intersect.exsite9.view.AssociatedMetadataView"
             name="Associated Metadata View"
