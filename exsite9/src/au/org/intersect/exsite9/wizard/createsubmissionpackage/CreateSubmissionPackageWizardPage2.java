@@ -15,7 +15,10 @@ import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
 
@@ -34,6 +37,7 @@ import au.org.intersect.exsite9.view.provider.ProjectViewInputWrapper;
 public final class CreateSubmissionPackageWizardPage2 extends WizardPage implements ICheckStateListener
 {
     private ContainerCheckedTreeViewer treeViewer;
+    private Label itemsSelectedLabel;
     private final SubmissionPackage currentSubmissionPackage;
 
     /**
@@ -53,7 +57,12 @@ public final class CreateSubmissionPackageWizardPage2 extends WizardPage impleme
     @Override
     public void createControl(final Composite parent)
     {
-        this.treeViewer = new ContainerCheckedTreeViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+        final Composite composite = new Composite(parent, SWT.NONE);
+        final GridLayout layout = new GridLayout();
+        layout.numColumns = 1;
+        composite.setLayout(layout);
+
+        this.treeViewer = new ContainerCheckedTreeViewer(composite, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
         this.treeViewer.setContentProvider(new ProjectExplorerViewContentProvider(false));
         this.treeViewer.setLabelProvider(new ProjectExplorerViewLabelProvider());
         this.treeViewer.addCheckStateListener(this);
@@ -66,6 +75,9 @@ public final class CreateSubmissionPackageWizardPage2 extends WizardPage impleme
         this.treeViewer.setInput(wrapper);
         this.treeViewer.expandAll();
 
+        final GridData treeViewerGridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+        this.treeViewer.getControl().setLayoutData(treeViewerGridData);
+
         if (this.currentSubmissionPackage != null)
         {
             for (final ResearchFile researchFile : this.currentSubmissionPackage.getResearchFiles())
@@ -74,13 +86,22 @@ public final class CreateSubmissionPackageWizardPage2 extends WizardPage impleme
             }
         }
 
-        setControl(this.treeViewer.getControl());
+        this.itemsSelectedLabel = new Label(composite, SWT.BORDER);
+        setItemsSelectedLabel();
+
+        setControl(composite);
         setPageComplete(true);
+    }
+
+    private void setItemsSelectedLabel()
+    {
+        this.itemsSelectedLabel.setText("Items selected: " + getCheckedResearchFiles().size());
     }
 
     @Override
     public void checkStateChanged(final CheckStateChangedEvent event)
     {
+        setItemsSelectedLabel();
     }
 
     public List<ResearchFile> getCheckedResearchFiles()
@@ -95,7 +116,6 @@ public final class CreateSubmissionPackageWizardPage2 extends WizardPage impleme
                 toReturn.add((ResearchFile)item);
             }
         }
-
         return toReturn;
     }
 }
