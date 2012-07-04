@@ -6,6 +6,7 @@
  */
 package au.org.intersect.exsite9.wizard.createsubmissionpackage;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jface.wizard.Wizard;
@@ -31,13 +32,13 @@ public final class CreateSubmissionPackageWizard extends Wizard
      * Constructor
      * @param submissionPackage The submission package to fill in the dialogs with. May be {@code null} in which case they will be blank.
      */
-    public CreateSubmissionPackageWizard(final SubmissionPackage submissionPackage)
+    public CreateSubmissionPackageWizard(final SubmissionPackage submissionPackage, final Collection<SubmissionPackage> existingSubmissionPackages, final String wizardTitle)
     {
         super();
         setNeedsProgressMonitor(true);
         this.submissionPackage = submissionPackage;
-        this.page1 = new CreateSubmissionPackageWizardPage1(submissionPackage);
-        this.page2 = new CreateSubmissionPackageWizardPage2(submissionPackage);
+        this.page1 = new CreateSubmissionPackageWizardPage1(submissionPackage, existingSubmissionPackages, wizardTitle);
+        this.page2 = new CreateSubmissionPackageWizardPage2(submissionPackage, wizardTitle);
     }
 
     /**

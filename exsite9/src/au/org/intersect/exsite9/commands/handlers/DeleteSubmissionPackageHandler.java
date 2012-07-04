@@ -10,22 +10,28 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.SubmissionPackage;
-import au.org.intersect.exsite9.service.IProjectManager;
-import au.org.intersect.exsite9.wizard.createsubmissionpackage.CreateSubmissionPackageWizard;
+import au.org.intersect.exsite9.service.ISubmissionPackageService;
 
 /**
- * Handler to Edit a submission package.
+ * Handler used to delete a submission package.
  */
-public final class EditSubmissionPackageHandler implements IHandler
+public final class DeleteSubmissionPackageHandler implements IHandler
 {
+
+    /**
+     * @{inheritDoc}
+     */
+    @Override
+    public void addHandlerListener(final IHandlerListener handlerListener)
+    {
+    }
 
     /**
      * @{inheritDoc}
@@ -33,7 +39,6 @@ public final class EditSubmissionPackageHandler implements IHandler
     @Override
     public void dispose()
     {
-
     }
 
     /**
@@ -47,21 +52,21 @@ public final class EditSubmissionPackageHandler implements IHandler
 
         if (!(selectedObject instanceof SubmissionPackage))
         {
-            throw new IllegalArgumentException("Trying to edit an object that is not a SubmissionPackage");
+            throw new RuntimeException("Trying to delete something that is not a SubmissionPackage");
         }
 
-        final SubmissionPackage toEdit = (SubmissionPackage) selectedObject;
-
-        final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
-        final Project project = projectManager.getCurrentProject();
+        final SubmissionPackage submissionPackage = (SubmissionPackage) selectedObject;
 
         final Shell shell = HandlerUtil.getActiveWorkbenchWindow(event).getShell();
-        final CreateSubmissionPackageWizard wizard = new CreateSubmissionPackageWizard(toEdit, project.getSubmissionPackages(), "Edit Submission Package");
+        final boolean confirm = MessageDialog.openConfirm(shell, "Are you sure?", "Are you sure you want to delete submission package '" + submissionPackage.getName() + "'?");
 
-        final WizardDialog wizardDialog = new WizardDialog(shell, wizard);
-        wizardDialog.open();
-        
-        return wizard.getSubmissionPackage();
+        if (confirm)
+        {
+            final ISubmissionPackageService submissionPackageService = (ISubmissionPackageService) PlatformUI.getWorkbench().getService(ISubmissionPackageService.class);
+            submissionPackageService.deleteSubmissionPackage(submissionPackage);
+        }
+
+        return null;
     }
 
     /**
@@ -86,16 +91,7 @@ public final class EditSubmissionPackageHandler implements IHandler
      * @{inheritDoc}
      */
     @Override
-    public void addHandlerListener(final IHandlerListener handlerListener)
-    {
-    }
-
-    /**
-     * @{inheritDoc}
-     */
-    @Override
     public void removeHandlerListener(final IHandlerListener handlerListener)
     {
     }
-
 }
