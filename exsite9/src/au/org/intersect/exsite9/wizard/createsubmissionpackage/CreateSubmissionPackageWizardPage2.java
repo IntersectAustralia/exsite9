@@ -43,7 +43,7 @@ public final class CreateSubmissionPackageWizardPage2 extends WizardPage impleme
     {
         super(pageTitle);
         setTitle(pageTitle);
-        setDescription("Choose the items from your project heirarchy to include in the submission package.");
+        setDescription("Choose the items from your project hierarchy to include in the submission package.");
         this.currentSubmissionPackage = submissionPackage;
     }
 
