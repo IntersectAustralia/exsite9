@@ -383,7 +383,7 @@ public final class Project implements Serializable
     @Override
     public int hashCode()
     {
-        return Objects.hashCode(this.name, this.description, this.owner, this.rootNode, this.metadataCategories);
+        return Objects.hashCode(this.id);
     }
 
     /**
