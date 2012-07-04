@@ -19,17 +19,20 @@ import au.org.intersect.exsite9.dao.GroupDAO;
 import au.org.intersect.exsite9.dao.MetadataAssociationDAO;
 import au.org.intersect.exsite9.dao.ProjectDAO;
 import au.org.intersect.exsite9.dao.ResearchFileDAO;
+import au.org.intersect.exsite9.dao.SubmissionPackageDAO;
 import au.org.intersect.exsite9.dao.factory.FolderDAOFactory;
 import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
 import au.org.intersect.exsite9.dao.factory.MetadataAssociationDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
+import au.org.intersect.exsite9.dao.factory.SubmissionPackageDAOFactory;
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataAssociation;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
+import au.org.intersect.exsite9.domain.SubmissionPackage;
 import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 
 public class ProjectService implements IProjectService
@@ -42,11 +45,13 @@ public class ProjectService implements IProjectService
     private final GroupDAOFactory groupDAOFactory;
     private final ResearchFileDAOFactory researchFileDAOFactory;
     private final MetadataAssociationDAOFactory metaAssociationDAOFactory;
+    private final SubmissionPackageDAOFactory submissionPackageDAOFactory;
 
     public ProjectService(final EntityManagerFactory entityManagerFactory,
             final ProjectDAOFactory projectDAOFactory, final FolderDAOFactory folderDAOFactory, 
             final GroupDAOFactory groupDAOFactory, final ResearchFileDAOFactory researchFileDAOFactory,
-            final MetadataAssociationDAOFactory metadataAssociationDAOFactory)
+            final MetadataAssociationDAOFactory metadataAssociationDAOFactory,
+            final SubmissionPackageDAOFactory submissionPackageDAOFactory)
     {
         this.entityManagerFactory = entityManagerFactory;
         this.projectDAOFactory = projectDAOFactory;
@@ -54,6 +59,7 @@ public class ProjectService implements IProjectService
         this.groupDAOFactory = groupDAOFactory;
         this.researchFileDAOFactory = researchFileDAOFactory;
         this.metaAssociationDAOFactory = metadataAssociationDAOFactory;
+        this.submissionPackageDAOFactory = submissionPackageDAOFactory;
     }
 
     /**
@@ -191,6 +197,7 @@ public class ProjectService implements IProjectService
             final GroupDAO groupDAO = this.groupDAOFactory.createInstance(em);
             final ResearchFileDAO researchFileDAO = this.researchFileDAOFactory.createInstance(em);
             final MetadataAssociationDAO metadataAssociationDAO = this.metaAssociationDAOFactory.createInstance(em);
+            final SubmissionPackageDAO submissionPackageDAO = this.submissionPackageDAOFactory.createInstance(em);
             
             project = projectDAO.findById(project.getId());
             
@@ -221,7 +228,15 @@ public class ProjectService implements IProjectService
                             metadataAssociationDAO.removeMetadataAssociation(metadataAssociation);
                             maIter.remove();
                         }
-                        
+
+                        // Remove the research file from any submission packages it is part of.
+                        final List<SubmissionPackage> submissionPackages = submissionPackageDAO.getSubmissionPackagesWithResearchFiles(researchFile);
+                        for (final SubmissionPackage submissionPackage : submissionPackages)
+                        {
+                            submissionPackage.getResearchFiles().remove(researchFile);
+                            submissionPackageDAO.updateSubmissionPackage(submissionPackage);
+                        }
+
                         fileIter.remove();
                         researchFileDAO.removeResearchFile(researchFile);
                     }

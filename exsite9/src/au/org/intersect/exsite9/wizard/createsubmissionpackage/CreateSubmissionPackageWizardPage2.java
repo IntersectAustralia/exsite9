@@ -95,7 +95,7 @@ public final class CreateSubmissionPackageWizardPage2 extends WizardPage impleme
 
     private void setItemsSelectedLabel()
     {
-        this.itemsSelectedLabel.setText("Items selected: " + getCheckedResearchFiles().size());
+        this.itemsSelectedLabel.setText("Files selected: " + getCheckedResearchFiles().size());
         this.itemsSelectedLabel.pack();
     }
 

@@ -6,8 +6,12 @@
  */
 package au.org.intersect.exsite9.dao;
 
-import javax.persistence.EntityManager;
+import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+
+import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.SubmissionPackage;
 
 public final class SubmissionPackageDAO
@@ -28,9 +32,17 @@ public final class SubmissionPackageDAO
 
     public void updateSubmissionPackage(final SubmissionPackage submissionPackage)
     {
-        em.getTransaction().begin();
+        final boolean activeTransaction = em.getTransaction().isActive();
+
+        if (!activeTransaction)
+        {
+            em.getTransaction().begin();
+        }
         em.merge(submissionPackage);
-        em.getTransaction().commit();
+        if (!activeTransaction)
+        {
+            em.getTransaction().commit();
+        }
     }
 
     public void deleteSubmissionPackage(final SubmissionPackage submissionPackage)
@@ -43,5 +55,12 @@ public final class SubmissionPackageDAO
     public SubmissionPackage findSubmissionPackageById(final Long id)
     {
         return em.find(SubmissionPackage.class, id);
+    }
+
+    public List<SubmissionPackage> getSubmissionPackagesWithResearchFiles(final ResearchFile researchFile)
+    {
+        final TypedQuery<SubmissionPackage> query = em.createQuery("SELECT s FROM SubmissionPackage s WHERE :researchFile MEMBER OF s.researchFiles", SubmissionPackage.class);
+        query.setParameter("researchFile", researchFile);
+        return query.getResultList();
     }
 }

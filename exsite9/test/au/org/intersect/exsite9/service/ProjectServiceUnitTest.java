@@ -18,6 +18,7 @@ import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
 import au.org.intersect.exsite9.dao.factory.MetadataAssociationDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
+import au.org.intersect.exsite9.dao.factory.SubmissionPackageDAOFactory;
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
@@ -39,8 +40,9 @@ public class ProjectServiceUnitTest extends DAOTest
         GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
         ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
+        SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
         
-        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, groupDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory);
+        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, groupDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory, submissionPackageDAOFactory);
         
         Project project = projectService.createProject(new ProjectFieldsDTO("name","owner","description", EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING));
 
@@ -63,8 +65,9 @@ public class ProjectServiceUnitTest extends DAOTest
         GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
         ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
+        SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
         
-        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, groupDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory);
+        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, groupDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory, submissionPackageDAOFactory);
         
         Folder folder = new Folder(new File("/tmp"));
         
@@ -96,8 +99,9 @@ public class ProjectServiceUnitTest extends DAOTest
         GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
         ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
+        SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
         
-        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, groupDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory);
+        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, groupDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory, submissionPackageDAOFactory);
         
         Project project = projectService.createProject(new ProjectFieldsDTO("name","owner","description", EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING));
         
