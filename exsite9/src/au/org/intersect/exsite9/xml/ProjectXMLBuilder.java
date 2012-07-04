@@ -79,6 +79,11 @@ public final class ProjectXMLBuilder
                 appendGroup(doc, rootElement, group);
             }
 
+            for (final ResearchFile researchFile : project.getRootNode().getResearchFiles())
+            {
+                appendResearchFile(doc, rootElement, researchFile);
+            }
+
             final TransformerFactory transformerFactory = TransformerFactory.newInstance();
             final Transformer transformer = transformerFactory.newTransformer();
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");

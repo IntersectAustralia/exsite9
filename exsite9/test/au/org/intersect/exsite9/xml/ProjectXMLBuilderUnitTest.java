@@ -54,14 +54,17 @@ public final class ProjectXMLBuilderUnitTest
         final MetadataAssociation mda1 = new MetadataAssociation(mdc1);
         mda1.getMetadataValues().addAll(Arrays.asList(mdv11, mdv12, mdv13));
 
-        final File file = new File("someResearchFile.txt");
-        final ResearchFile rf = new ResearchFile(file);
+        final File file1 = new File("someResearchFile.txt");
+        final File file2 = new File("someOtherResearchFile.txt");
+        final ResearchFile rf1 = new ResearchFile(file1);
+        final ResearchFile rf2 = new ResearchFile(file2);
 
         final Group group1 = new Group("group1");
         group1.getMetadataAssociations().add(mda1);
-        group1.getResearchFiles().add(rf);
+        group1.getResearchFiles().add(rf1);
 
         project.getRootNode().getGroups().add(group1);
+        project.getRootNode().getResearchFiles().add(rf2);
 
         final String xml = ProjectXMLBuilder.buildXML(project);
 
@@ -72,10 +75,13 @@ public final class ProjectXMLBuilderUnitTest
                                     "    <metadata category=\"CategoryName\" value=\"val11\"/>" + NEW_LINE +
                                     "    <metadata category=\"CategoryName\" value=\"val12\"/>" + NEW_LINE +
                                     "    <metadata category=\"CategoryName\" value=\"val13\"/>" + NEW_LINE +
-                                    "    <file name=\"" + rf.getFile().getName() + "\">" + NEW_LINE +
-                                    "      <path>" + rf.getFile().getAbsolutePath() + "</path>" + NEW_LINE +
+                                    "    <file name=\"" + rf1.getFile().getName() + "\">" + NEW_LINE +
+                                    "      <path>" + rf1.getFile().getAbsolutePath() + "</path>" + NEW_LINE +
                                     "    </file>" + NEW_LINE +
                                     "  </group>" + NEW_LINE +
+                                    "  <file name=\"" + rf2.getFile().getName() + "\">" + NEW_LINE +
+                                    "    <path>" + rf2.getFile().getAbsolutePath() + "</path>" + NEW_LINE +
+                                    "  </file>" + NEW_LINE +
                                     "</project>" + NEW_LINE;
 
         assertEquals(expectedXML, xml);
