@@ -21,15 +21,15 @@ public class MetadataCategoryServiceUnitTest extends DAOTest
     public void createNewMetadataCategoryTest()
     {
         EntityManagerFactory emf = mock(EntityManagerFactory.class);
-        stub(emf.createEntityManager()).toReturn(createEntityManager());
+        stub(emf.createEntityManager()).toReturn(createEntityManager())
+                                       .toReturn(createEntityManager());
 
         MetadataCategoryDAOFactory metadataCategoryDAOFactory = new MetadataCategoryDAOFactory();
 
         metadataCategoryService = new MetadataCategoryService(emf, metadataCategoryDAOFactory);
 
         MetadataCategory category = metadataCategoryService.createNewMetadataCategory("Names", null);
-        MetadataCategory categoryFoundById = metadataCategoryDAOFactory.createInstance(createEntityManager())
-                .findById(category.getId());
+        MetadataCategory categoryFoundById = metadataCategoryService.findById(category.getId());
 
         assertEquals(category, categoryFoundById);
     }

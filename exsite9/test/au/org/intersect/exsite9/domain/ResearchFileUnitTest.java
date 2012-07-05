@@ -29,6 +29,10 @@ public final class ResearchFileUnitTest
         final ResearchFile toTest2 = new ResearchFile(file1);
         final ResearchFile toTest3 = new ResearchFile(file2);
 
+        final Project project1 = new Project();
+        toTest1.setProject(project1);
+        assertEquals(project1, toTest1.getProject());
+
         assertEquals(toTest1, toTest1);
         assertEquals(file1, toTest1.getFile());
 

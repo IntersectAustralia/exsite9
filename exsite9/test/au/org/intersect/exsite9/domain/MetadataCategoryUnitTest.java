@@ -7,6 +7,7 @@
 package au.org.intersect.exsite9.domain;
 
 import static org.junit.Assert.*;
+import static au.org.intersect.exsite9.test.Assert.*;
 
 import org.junit.Test;
 
@@ -36,5 +37,28 @@ public final class MetadataCategoryUnitTest
         assertEquals(newName, toTest2.getName());
 
         assertTrue(toTest1.hashCode() != toTest2.hashCode());
+    }
+
+    @Test
+    public void testEqualsHashCode()
+    {
+        final MetadataCategory toTest1 = new MetadataCategory();
+        final MetadataCategory toTest2 = new MetadataCategory();
+
+        toTest1.setId(7l);
+        toTest2.setId(7l);
+
+        assertEquals(toTest1, toTest1);
+        assertEquals(toTest1, toTest2);
+        assertEquals(toTest2, toTest1);
+
+        toTest2.setId(424l);
+        assertNotEquals(toTest1, toTest2);
+        assertNotEquals(toTest2, toTest1);
+
+        assertFalse(toTest1.equals(new Object()));
+        assertFalse(toTest1.equals(null));
+        assertFalse(toTest1.equals("some string"));
+        assertFalse(toTest1.equals(7l));
     }
 }

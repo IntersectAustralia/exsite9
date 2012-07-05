@@ -373,7 +373,7 @@ public final class Project implements Serializable
         {
             return false;
         }
-        Project other = (Project) obj;
+        final Project other = (Project) obj;
         return Objects.equal(this.id, other.id);
     }
 
@@ -395,23 +395,6 @@ public final class Project implements Serializable
         final ToStringBuilder tsb = new ToStringBuilder(this);
         tsb.append("id", this.id);
         tsb.append("name", this.name);
-        tsb.append("description", this.description);
-        tsb.append("owner", this.owner);
-        tsb.append("collection type", this.collectionType);
-        tsb.append("rights statement", this.rightsStatement);
-        tsb.append("access rights", this.accessRights);
-        tsb.append("licence", this.licence);
-        tsb.append("identifier", this.identifier);
-        tsb.append("subject", this.subject);
-        tsb.append("electronic location", this.electronicLocation);
-        tsb.append("physical location", this.physicalLocation);
-        tsb.append("place or region name", this.placeOrRegionName);
-        tsb.append("latitude/longitude", this.latitudeLongitude);
-        tsb.append("dates of capture", this.datesOfCapture);
-        tsb.append("citation information", this.citationInformation);
-        tsb.append("related party", this.relatedParty);
-        tsb.append("related activity", this.relatedActivity);
-        tsb.append("related information", this.relatedInformation);
         return tsb.toString();
     }
 }

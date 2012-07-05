@@ -83,4 +83,24 @@ public final class MetadataAssociationDAOUnitTest
         verify(em).remove(mda);
         verify(et).commit();
     }
+
+    @Test
+    public void testRemoveMetadataAssociationInTrans()
+    {
+        final EntityManager em = Mockito.mock(EntityManager.class);
+        final EntityTransaction et = Mockito.mock(EntityTransaction.class);
+
+        final MetadataAssociationDAO toTest = new MetadataAssociationDAO(em);
+
+        final MetadataCategory mdc = new MetadataCategory("mdc");
+        final MetadataAssociation mda = new MetadataAssociation(mdc);
+
+        when(em.getTransaction()).thenReturn(et);
+        when(em.merge(mda)).thenReturn(mda);
+        when(et.isActive()).thenReturn(true);
+
+        toTest.removeMetadataAssociation(mda);
+
+        verify(em).remove(mda);
+    }
 }

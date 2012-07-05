@@ -38,6 +38,10 @@ public final class GroupUnitTest
         final String toString = toTest1.toString();
         assertTrue(toString.contains("name=group 1"));
         assertTrue(toString.contains("id=7"));
+
+        final String newName = "new name";
+        toTest1.setName(newName);
+        assertEquals(newName, toTest1.getName());
     }
 
     @Test

@@ -10,6 +10,7 @@ import static au.org.intersect.exsite9.test.Assert.*;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.util.Arrays;
 
 import org.junit.Test;
 
@@ -33,6 +34,11 @@ public final class FolderUnitTest
         final long now = System.currentTimeMillis();
         toTest1.setLastCheckTimeInMillis(now);
         assertEquals(now, toTest1.getLastCheckTimeInMillis());
+
+        final ResearchFile rf = new ResearchFile();
+        toTest1.setFiles(Arrays.asList(rf));
+        assertEquals(1, toTest1.getFiles().size());
+        assertEquals(rf, toTest1.getFiles().get(0));
 
         final Folder toTest2 = new Folder("name", "path");
         assertEquals("name", toTest2.getName());

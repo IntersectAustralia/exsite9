@@ -65,9 +65,9 @@ public final class GroupDAO
         return updatedGroup;
     }
     
-    public Group findById(final long id)
+    public Group findById(final Long id)
     {
-        return em.find(Group.class,id);
+        return em.find(Group.class, id);
     }
 
     public Group getParent(final Group group)

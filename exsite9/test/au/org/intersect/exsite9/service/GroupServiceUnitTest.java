@@ -13,7 +13,10 @@ import javax.persistence.EntityManagerFactory;
 import org.junit.Test;
 
 import au.org.intersect.exsite9.dao.DAOTest;
+import au.org.intersect.exsite9.dao.GroupDAO;
+import au.org.intersect.exsite9.dao.MetadataAssociationDAO;
 import au.org.intersect.exsite9.dao.MetadataCategoryDAO;
+import au.org.intersect.exsite9.dao.ResearchFileDAO;
 import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
 import au.org.intersect.exsite9.dao.factory.MetadataAssociationDAOFactory;
 import au.org.intersect.exsite9.domain.Group;
@@ -330,5 +333,75 @@ public class GroupServiceUnitTest extends DAOTest
         groupService.disassociateMetadata(group, metadataCategory2, metadataValue3);
         metadataAssociations = group.getMetadataAssociations();
         assertEquals(0, metadataAssociations.size());
+    }
+
+    @Test
+    public void testDeleteGroup()
+    {
+        final EntityManagerFactory emf = mock(EntityManagerFactory.class);
+        stub(emf.createEntityManager()).toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager());
+
+        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final GroupDAO groupDAO = new GroupDAO(emf.createEntityManager());
+        final MetadataAssociationDAOFactory metadataAssocationDAOFactory = new MetadataAssociationDAOFactory();
+        final MetadataAssociationDAO metadataAssociationDAO = new MetadataAssociationDAO(emf.createEntityManager());
+        final MetadataCategoryDAO metadataCategoryDAO = new MetadataCategoryDAO(emf.createEntityManager());
+        final ResearchFileDAO researchFileDAO = new ResearchFileDAO(emf.createEntityManager());
+        groupService = new GroupService(emf, groupDAOFactory, metadataAssocationDAOFactory);
+
+        final Group parentGroup = groupService.createNewGroup("parent");
+        final Group childGroup = groupService.createNewGroup("child");
+        groupService.addChildGroup(parentGroup, childGroup);
+        assertTrue(parentGroup.getGroups().contains(childGroup));
+
+        final ResearchFile rf = new ResearchFile(new File("someFile.txt"));
+        researchFileDAO.createResearchFile(rf);
+        childGroup.getResearchFiles().add(rf);
+        groupDAO.updateGroup(childGroup);
+
+        final MetadataCategory mc = new MetadataCategory("name");
+        final MetadataValue mv = new MetadataValue("value");
+        final MetadataAssociation ma = new MetadataAssociation(mc);
+        mc.getValues().add(mv);
+        ma.getMetadataValues().add(mv);
+        metadataCategoryDAO.createMetadataCategory(mc);
+        metadataAssociationDAO.createMetadataAssociation(ma);
+
+        childGroup.getMetadataAssociations().add(ma);
+        groupDAO.updateGroup(childGroup);
+
+        groupService.deleteGroup(childGroup);
+
+        final Group updatedGroup = groupDAO.findById(parentGroup.getId());
+
+        assertTrue(updatedGroup.getGroups().isEmpty());
+        assertFalse(updatedGroup.getResearchFiles().isEmpty());
+    }
+
+    @Test
+    public void testRenameGroup()
+    {
+        final EntityManagerFactory emf = mock(EntityManagerFactory.class);
+        stub(emf.createEntityManager()).toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager());
+
+        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final GroupDAO groupDAO = new GroupDAO(emf.createEntityManager());
+        final MetadataAssociationDAOFactory metadataAssocationDAOFactory = new MetadataAssociationDAOFactory();
+        groupService = new GroupService(emf, groupDAOFactory, metadataAssocationDAOFactory);
+
+        final Group myGroup = groupService.createNewGroup("testRenameGroup");
+
+        groupService.renameGroup(myGroup, "myNewGroupName");
+        final Group groupOut = groupDAO.findById(myGroup.getId());
+        assertEquals("myNewGroupName", groupOut.getName());
     }
 }

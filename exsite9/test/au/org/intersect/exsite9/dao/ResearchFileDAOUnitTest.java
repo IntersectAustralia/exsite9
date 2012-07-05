@@ -109,4 +109,35 @@ public class ResearchFileDAOUnitTest extends DAOTest
 
         assertEquals(researchFile, researchFileDAO.findByPath(project, fileOnDisk));
     }
+
+    @Test
+    public void testUpdateResearchFile()
+    {
+        final EntityManager em = createEntityManager();
+        final ResearchFileDAO researchFileDAO = researchFileDAOFactory.createInstance(em);
+
+        final File file1 = new File("some file on my disk");
+        final ResearchFile rf1 = new ResearchFile(file1);
+
+        assertNull(rf1.getId());
+
+        researchFileDAO.createResearchFile(rf1);
+        assertNotNull(rf1.getId());
+
+        final File file2 = new File("some other file on my disk");
+        rf1.setFile(file2);
+
+        researchFileDAO.updateResearchFile(rf1);
+        assertEquals(file2, researchFileDAO.findById(rf1.getId()).getFile());
+
+        // in a transaction
+        final File file3 = new File("yet another file on my disk");
+        rf1.setFile(file3);
+
+        em.getTransaction().begin();
+        researchFileDAO.updateResearchFile(rf1);
+        em.getTransaction().commit();
+        assertEquals(file3, researchFileDAO.findById(rf1.getId()).getFile());
+
+    }
 }

@@ -1,7 +1,6 @@
 package au.org.intersect.exsite9.dao;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.List;
 
@@ -13,6 +12,8 @@ import org.junit.Test;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.domain.SubmissionPackage;
+import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 
 public class ProjectDAOUnitTest extends DAOTest
 {
@@ -67,5 +68,57 @@ public class ProjectDAOUnitTest extends DAOTest
         assertTrue(projectList.contains(project2));
         
         em.close();
+    }
+
+    @Test
+    public void testUpdateProject()
+    {
+        final Project project = new Project(new ProjectFieldsDTO("name", "owner", "desc",
+            "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+            "electronicLocation", "physicalLocation", "placeOrRegionName", "latitudeLongitude", "datesOfCapture",
+            "citationInformation", "relatedParty", "relatedActivity", "relatedInformation"));
+        assertNull(project.getId());
+
+        final EntityManager em = createEntityManager();
+        final ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
+
+        projectDAO.createProject(project);
+        assertNotNull(project.getId());
+
+        project.setDescription("new description");
+        projectDAO.updateProject(project);
+
+        assertEquals("new description", projectDAO.findById(project.getId()).getDescription());
+
+        // test it in a transaction
+        em.getTransaction().begin();
+        project.setDescription("a newer description");
+        projectDAO.updateProject(project);
+        em.getTransaction().commit();
+
+        assertEquals("a newer description", projectDAO.findById(project.getId()).getDescription());
+    }
+
+    @Test
+    public void testFindProjectWithSubmissionPackage()
+    {
+        final Project project = new Project(new ProjectFieldsDTO("name", "owner", "desc",
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "latitudeLongitude", "datesOfCapture",
+                "citationInformation", "relatedParty", "relatedActivity", "relatedInformation"));
+        assertNull(project.getId());
+
+        final EntityManager em = createEntityManager();
+        final ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
+        final SubmissionPackageDAO submissionPackageDAO = new SubmissionPackageDAO(em);
+
+        final SubmissionPackage sp1 = new SubmissionPackage();
+        submissionPackageDAO.createSubmissionPackage(sp1);
+        project.getSubmissionPackages().add(sp1);
+        projectDAO.createProject(project);
+
+        assertNotNull(project.getId());
+
+        assertEquals(project, projectDAO.findProjectWithSubmissionPackage(sp1));
     }
 }
