@@ -1,0 +1,14 @@
+Bundle-SymbolicName: exsite9_wintest_tests
+Bundle-Version: 1.0.0
+Require-Bundle: org.junit,
+ com.windowtester.runtime,
+ com.windowtester.swt.runtime,
+ com.windowtester.swing.runtime,
+ com.instantiations.eclipse.debug,
+ org.eclipse.jface,
+ com.instantiations.common.core,
+ org.eclipse.core.runtime,
+ com.instantiations.eclipse.util,
+ org.eclipse.swt
+Bundle-Name: Test Bundle
+Manifest-Version: 1.0
