@@ -6,6 +6,7 @@
  */
 package au.org.intersect.exsite9.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -108,4 +109,55 @@ public final class GroupDAO
         }
         return results.get(0);
     }
+    
+    /**
+     * Returns the list of groups in the hierarchy between the root group
+     * and the files in the list of selected files (ie it includes the groups that contain
+     * a selected file, and the groups that contain those groups, and the groups that
+     * contain those groups, etc)
+     * @param selectedFiles The list of selected files
+     * @return The list of groups
+     */
+    public List<Group> getGroupsContainingSelectedFiles(final List<ResearchFile> selectedFiles)
+    {
+        List<Group> groups = new ArrayList<Group>(0);
+        
+        for(final ResearchFile file : selectedFiles)
+        {
+            Group group = getParent(file);
+            
+            while(group != null)
+            {
+                if (group.getResearchFiles().contains(file))
+                {
+                    if(groups.contains(group))
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        groups.add(group);
+                        
+                        Group parentGroup = getParent(group);
+                        
+                        while(parentGroup != null)
+                        {
+                            if (groups.contains(parentGroup))
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                groups.add(parentGroup);
+                                parentGroup = getParent(parentGroup);
+                            }
+                        }
+                    }
+                }
+                group = getParent(group);
+            }
+        }
+        return groups;
+    }
+
 }

@@ -49,4 +49,13 @@ public interface ISubmissionPackageService
      * @param submissionPackage The submission package to delete.
      */
     void deleteSubmissionPackage(final SubmissionPackage submissionPackage);
+    
+    /**
+     * Builds the xml for a submission package
+     * @param project The project
+     * @param submissionPackage The submission package
+     * @return
+     */
+    String buildXMLForSubmissionPackage(Project project, SubmissionPackage submissionPackage);
+    
 }
