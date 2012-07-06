@@ -72,9 +72,9 @@ public final class ProjectXMLBuilderUnitTest
                 "<project accessRights=\"admin\" citationInformation=\"\" collectionType=\"Dataset\" datesOfCapture=\"next week\" description=\"some boring description\" electronicLocation=\"\" identifier=\"\" latitudeLongitude=\"up and left a little\" licence=\"to kill\" name=\"projectName\" owner=\"project owner\" physicalLocation=\"Sydney\" placeOrRegionName=\"\" relatedActivity=\"\" relatedInformation=\"\" relatedParty=\"Intersect\" rightsStatement=\"\" subject=\"random\">" + NEW_LINE +
                                     "  <group name=\"New Files\"/>" + NEW_LINE +
                                     "  <group name=\"group1\">" + NEW_LINE +
-                                    "    <metadata category=\"CategoryName\" value=\"val11\"/>" + NEW_LINE +
-                                    "    <metadata category=\"CategoryName\" value=\"val12\"/>" + NEW_LINE +
-                                    "    <metadata category=\"CategoryName\" value=\"val13\"/>" + NEW_LINE +
+                                    "    <CategoryName>val11</CategoryName>" + NEW_LINE +
+                                    "    <CategoryName>val12</CategoryName>" + NEW_LINE +
+                                    "    <CategoryName>val13</CategoryName>" + NEW_LINE +
                                     "    <file name=\"" + rf1.getFile().getName() + "\">" + NEW_LINE +
                                     "      <path>" + rf1.getFile().getAbsolutePath() + "</path>" + NEW_LINE +
                                     "    </file>" + NEW_LINE +
