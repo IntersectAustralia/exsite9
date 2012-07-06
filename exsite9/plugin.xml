@@ -48,6 +48,7 @@
       <view
             allowMultiple="false"
             class="au.org.intersect.exsite9.view.ProjectExplorerView"
+            icon="icons/icon_projectview_12.png"
             id="au.org.intersect.exsite9.view.ProjectExplorerView"
             name="Project Explorer View"
             restorable="false">
@@ -55,6 +56,7 @@
       <view
             allowMultiple="false"
             class="au.org.intersect.exsite9.view.MetadataBrowserView"
+            icon="icons/icon_metadata_12.png"
             id="au.org.intersect.exsite9.view.MetadataBrowserView"
             name="Metadata Browser"
             restorable="false">
@@ -195,6 +197,12 @@
                   tooltip="List the project folders">
             </command>
             <command
+                  commandId="au.org.intersect.exsite9.commands.ReloadProjectCommand"
+                  icon="icons/icon_refresh_16.png"
+                  label="Refresh"
+                  style="push">
+            </command>
+            <command
                   commandId="au.org.intersect.exsite9.commands.ExportProjectXMLCommand"
                   label="Export..."
                   style="push"
@@ -297,6 +305,7 @@
          </command>              
          <command
                commandId="au.org.intersect.exsite9.commands.ReloadProjectCommand"
+               icon="icons/icon_refresh_16.png"
                label="Refresh"
                style="push">
             <visibleWhen
