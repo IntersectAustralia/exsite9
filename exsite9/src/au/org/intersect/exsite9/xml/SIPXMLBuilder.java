@@ -1,10 +1,6 @@
-/**
- * Copyright (C) Intersect 2012.
- *
- * This module contains Proprietary Information of Intersect,
- * and should be treated as Confidential.
- */
 package au.org.intersect.exsite9.xml;
+
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
@@ -19,21 +15,12 @@ import au.org.intersect.exsite9.domain.MetadataAssociation;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 
-/**
- * Builds XML for a provided {@link Project}.
- */
-public final class ProjectXMLBuilder extends BaseXMLBuilder
+public class SIPXMLBuilder extends BaseXMLBuilder
 {
-    private static final Logger LOG = Logger.getLogger(ProjectXMLBuilder.class);
 
-    /**
-     * Builds the XML for a provided {@link Project} tree.
-     * 
-     * @param project
-     *            The project to build XML for.
-     * @return The String with the XML, or {@code null} if XML generation was unsuccessful.
-     */
-    public static String buildXML(final Project project)
+    private static final Logger LOG = Logger.getLogger(SIPXMLBuilder.class);
+    
+    public static String buildXML(Project project, List<Group> selectedGroups, List<ResearchFile> selectedFiles)
     {
         try
         {
@@ -41,15 +28,21 @@ public final class ProjectXMLBuilder extends BaseXMLBuilder
             
             final Element rootElement = createProjectRootElement(doc, project);
             doc.appendChild(rootElement);
-            
+
             for (final Group group : project.getRootNode().getGroups())
             {
-                appendGroup(doc, rootElement, group);
+                if(selectedGroups.contains(group))
+                {
+                    appendGroup(doc, selectedGroups, selectedFiles, rootElement, group);
+                }
             }
 
             for (final ResearchFile researchFile : project.getRootNode().getResearchFiles())
             {
-                appendResearchFile(doc, rootElement, researchFile);
+                if(selectedFiles.contains(researchFile))
+                {
+                    appendResearchFile(doc, rootElement, researchFile);
+                }
             }
 
             return transformDocumentToString(doc);
@@ -68,12 +61,12 @@ public final class ProjectXMLBuilder extends BaseXMLBuilder
         }
         return null;
     }
-
+    
     /**
      * @param parent
      * @param group
      */
-    private static void appendGroup(final Document doc, final Element parent, final Group group)
+    private static void appendGroup(final Document doc, final List<Group> selectedGroups, List<ResearchFile> selectedFiles, final Element parent, final Group group)
     {
         final Element groupElement = doc.createElement("group");
         groupElement.setAttribute("name", group.getName());
@@ -85,13 +78,18 @@ public final class ProjectXMLBuilder extends BaseXMLBuilder
 
         for (final Group childGroup : group.getGroups())
         {
-            // Recursion :(
-            appendGroup(doc, groupElement, childGroup);
+            if(selectedGroups.contains(group))
+            {
+                appendGroup(doc, selectedGroups, selectedFiles, groupElement, childGroup);
+            }
         }
 
         for (final ResearchFile childFile : group.getResearchFiles())
         {
-            appendResearchFile(doc, groupElement, childFile);
+            if(selectedFiles.contains(childFile))
+            {
+                appendResearchFile(doc, groupElement, childFile);
+            }
         }
 
         parent.appendChild(groupElement);

@@ -3,6 +3,7 @@ package au.org.intersect.exsite9.dao;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -238,5 +239,152 @@ public class GroupDAOUnitTest extends DAOTest
         assertNull(groupDAO.getParent(researchFile));
 
         em.close();
+    }
+    
+    @Test
+    public void testGetGroupsContainingSelectedFiles()
+    {
+        final EntityManager em = createEntityManager();
+        final GroupDAO groupDAO = groupDAOFactory.createInstance(em);
+        final ResearchFileDAO researchFileDAO = new ResearchFileDAO(em);
+        
+        // Create files
+        
+        ResearchFile file1 = new ResearchFile(new File("File1"));
+        researchFileDAO.createResearchFile(file1);
+        
+        ResearchFile file2 = new ResearchFile(new File("File2"));
+        researchFileDAO.createResearchFile(file2);
+        
+        ResearchFile file3 = new ResearchFile(new File("File3"));
+        researchFileDAO.createResearchFile(file3);
+        
+        // Create list of selected files
+        
+        List<ResearchFile> selectedFiles = new ArrayList<ResearchFile>();
+        selectedFiles.add(file1);
+        selectedFiles.add(file2);
+        selectedFiles.add(file3);
+        
+        // Create group hierarchy
+        
+        final Group rootNode = new Group("Root");
+        groupDAO.createGroup(rootNode);
+        final Group group1 = new Group("Group One");
+        groupDAO.createGroup(group1);
+        final Group group2 = new Group("Group Two");
+        groupDAO.createGroup(group2);
+        
+        rootNode.getGroups().add(group1);
+        groupDAO.updateGroup(rootNode);
+        
+        group1.getGroups().add(group2);
+        groupDAO.updateGroup(group1);
+        
+        // No files in any groups, no selected groups
+        
+        rootNode.getResearchFiles().clear();
+        groupDAO.updateGroup(rootNode);
+        
+        group1.getResearchFiles().clear();
+        groupDAO.updateGroup(group1);
+        
+        group2.getResearchFiles().clear();
+        groupDAO.updateGroup(group2);
+        
+        List<Group> selectedGroups = groupDAO.getGroupsContainingSelectedFiles(selectedFiles);
+        
+        assertEquals("No selected groups", 0, selectedGroups.size());
+        
+        // Root group has a file, 1 selected group
+        
+        rootNode.getResearchFiles().clear();
+        rootNode.getResearchFiles().add(file1);
+        groupDAO.updateGroup(rootNode);
+        
+        group1.getResearchFiles().clear();
+        groupDAO.updateGroup(group1);
+        
+        group2.getResearchFiles().clear();
+        groupDAO.updateGroup(group2);
+        
+        selectedGroups = groupDAO.getGroupsContainingSelectedFiles(selectedFiles);
+        assertEquals("One selected group", 1,selectedGroups.size());
+        assertTrue("The root group is selected",selectedGroups.contains(rootNode));
+        assertFalse("Group 1 is not selected",selectedGroups.contains(group1));
+        assertFalse("Group 2 is not selected",selectedGroups.contains(group2));
+        
+        // Root group has 2 files, 1 selected group
+        
+        rootNode.getResearchFiles().clear();
+        rootNode.getResearchFiles().add(file1);
+        rootNode.getResearchFiles().add(file2);
+        groupDAO.updateGroup(rootNode);
+        
+        group1.getResearchFiles().clear();
+        groupDAO.updateGroup(group1);
+        
+        group2.getResearchFiles().clear();
+        groupDAO.updateGroup(group2);
+        
+        selectedGroups = groupDAO.getGroupsContainingSelectedFiles(selectedFiles);
+        assertEquals("One selected group", 1,selectedGroups.size());
+        assertTrue("The root group is selected",selectedGroups.contains(rootNode));
+        assertFalse("Group 1 is not selected",selectedGroups.contains(group1));
+        assertFalse("Group 2 is not selected",selectedGroups.contains(group2));
+        
+        // Group 1 has 1 file, 2 selected groups
+        
+        rootNode.getResearchFiles().clear();
+        groupDAO.updateGroup(rootNode);
+        
+        group1.getResearchFiles().add(file1);
+        groupDAO.updateGroup(group1);
+        
+        group2.getResearchFiles().clear();
+        groupDAO.updateGroup(group2);
+        
+        selectedGroups = groupDAO.getGroupsContainingSelectedFiles(selectedFiles);
+        assertEquals("Two selected group", 2,selectedGroups.size());
+        assertTrue("The root group is selected",selectedGroups.contains(rootNode));
+        assertTrue("Group 1 is selected",selectedGroups.contains(group1));
+        assertFalse("Group 2 is not selected",selectedGroups.contains(group2));
+        
+        // Root node has 1 file, Group 1 has 1 file, 2 selected groups
+        
+        rootNode.getResearchFiles().clear();
+        rootNode.getResearchFiles().add(file1);
+        groupDAO.updateGroup(rootNode);
+        
+        group1.getResearchFiles().clear();
+        group1.getResearchFiles().add(file2);
+        groupDAO.updateGroup(group1);
+        
+        group2.getResearchFiles().clear();
+        groupDAO.updateGroup(group2);
+        
+        selectedGroups = groupDAO.getGroupsContainingSelectedFiles(selectedFiles);
+        assertEquals("Two selected group", 2,selectedGroups.size());
+        assertTrue("The root group is selected",selectedGroups.contains(rootNode));
+        assertTrue("Group 1 is selected",selectedGroups.contains(group1));
+        assertFalse("Group 2 is not selected",selectedGroups.contains(group2));
+        
+        // Group 2 has 1 file, 3 selected groups
+        
+        rootNode.getResearchFiles().clear();
+        groupDAO.updateGroup(rootNode);
+        
+        group1.getResearchFiles().clear();
+        groupDAO.updateGroup(group1);
+        
+        group2.getResearchFiles().clear();
+        group2.getResearchFiles().add(file1);
+        groupDAO.updateGroup(group2);
+        
+        selectedGroups = groupDAO.getGroupsContainingSelectedFiles(selectedFiles);
+        assertEquals("Three selected group", 3,selectedGroups.size());
+        assertTrue("The root group is selected",selectedGroups.contains(rootNode));
+        assertTrue("Group 1 is selected",selectedGroups.contains(group1));
+        assertTrue("Group 2 is selected",selectedGroups.contains(group2));
     }
 }

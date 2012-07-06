@@ -11,13 +11,16 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
+import au.org.intersect.exsite9.dao.GroupDAO;
 import au.org.intersect.exsite9.dao.ProjectDAO;
 import au.org.intersect.exsite9.dao.SubmissionPackageDAO;
+import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.dao.factory.SubmissionPackageDAOFactory;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.SubmissionPackage;
+import au.org.intersect.exsite9.xml.SIPXMLBuilder;
 
 /**
  * 
@@ -27,14 +30,17 @@ public final class SubmissionPackageService implements ISubmissionPackageService
     private final EntityManagerFactory entityManagerFactory;
     private final SubmissionPackageDAOFactory submissionPackageDAOFactory;
     private final ProjectDAOFactory projectDAOFactory;
+    private final GroupDAOFactory groupDAOFactory;
 
     public SubmissionPackageService(final EntityManagerFactory entityManagerFactory,
                                     final SubmissionPackageDAOFactory submissionPackageDAOFactory,
-                                    final ProjectDAOFactory projectDAOFactory)
+                                    final ProjectDAOFactory projectDAOFactory,
+                                    final GroupDAOFactory groupDAOFactory)
     {
         this.entityManagerFactory = entityManagerFactory;
         this.submissionPackageDAOFactory = submissionPackageDAOFactory;
         this.projectDAOFactory = projectDAOFactory;
+        this.groupDAOFactory = groupDAOFactory;
     }
 
     /**
@@ -124,4 +130,23 @@ public final class SubmissionPackageService implements ISubmissionPackageService
             em.close();
         }
     }
+
+    @Override
+    public String buildXMLForSubmissionPackage(Project project, SubmissionPackage submissionPackage)
+    {
+        final EntityManager em = this.entityManagerFactory.createEntityManager();
+        try
+        {
+            GroupDAO groupDAO = groupDAOFactory.createInstance(em);
+            return SIPXMLBuilder.buildXML(project, 
+                                          groupDAO.getGroupsContainingSelectedFiles(submissionPackage.getResearchFiles()), 
+                                          submissionPackage.getResearchFiles());
+        }
+        finally
+        {
+            em.close();
+        }
+    }
+    
+
 }

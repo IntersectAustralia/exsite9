@@ -152,6 +152,11 @@
          id="au.org.intersect.exsite9.commands.DeleteSubmissionPackageCommand"
          name="Delete Submission Package">
    </command>
+   <command
+         defaultHandler="au.org.intersect.exsite9.commands.handlers.ExportSubmissionPackageXMLHandler"
+         id="au.org.intersect.exsite9.commands.ExportSubmissionPackageXMLCommand"
+         name="Export Submission Package XML">
+   </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -387,6 +392,17 @@
                   checkEnabled="false">
                <reference
                      definitionId="au.org.intersect.exsite9.expression.InstanceOfProject">
+               </reference>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="au.org.intersect.exsite9.commands.ExportSubmissionPackageXMLCommand"
+               label="Export XML..."
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <reference
+                     definitionId="au.org.intersect.exsite9.expression.InstanceOfSubmissionPackage">
                </reference>
             </visibleWhen>
          </command>
