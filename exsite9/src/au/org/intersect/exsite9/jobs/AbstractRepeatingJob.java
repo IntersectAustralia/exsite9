@@ -32,10 +32,16 @@ public abstract class AbstractRepeatingJob extends Job
     
     public void start() {
         running = true;
+        schedule(repeatDelayMillis);
     }
     
     public void stop() {
         running = false;
+        cancel();
     }
-     
+
+    public void setDelay(final long delay)
+    {
+        this.repeatDelayMillis = delay;
+    }
 }

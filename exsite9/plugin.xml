@@ -182,14 +182,14 @@
                label="Project">
             <command
                   commandId="au.org.intersect.exsite9.commands.NewProjectCommand"
-                  icon="icons/icon-project-new.png"
+                  icon="icons/icon_new_16.png"
                   label="New..."
                   style="push"
                   tooltip="Create a new project">
             </command>
             <command
                   commandId="au.org.intersect.exsite9.commands.OpenProjectCommand"
-                  icon="icons/icon-project-open.png"
+                  icon="icons/icon_open_16.png"
                   label="Open..."
                   style="push"
                   tooltip="Open an existing project">
@@ -209,6 +209,7 @@
             </command>
             <command
                   commandId="au.org.intersect.exsite9.commands.ExportProjectXMLCommand"
+                  icon="icons/icon_export_16.png"
                   label="Export..."
                   style="push"
                   tooltip="Export the project&apos;s details to XML">
@@ -244,7 +245,7 @@
                label="ToolBar">
             <command
                   commandId="au.org.intersect.exsite9.commands.NewProjectCommand"
-                  icon="icons/icon-project-new.png"
+                  icon="icons/icon_new_16.png"
                   label="New Project"
                   style="push"
                   tooltip="Create a new project">
@@ -337,6 +338,7 @@
          </separator>
          <command
                commandId="au.org.intersect.exsite9.commands.ExportProjectXMLCommand"
+               icon="icons/icon_export_16.png"
                label="Export..."
                style="push">
                <visibleWhen
@@ -581,6 +583,23 @@
       <startup
             class="au.org.intersect.exsite9.startup.InitializeDB">
       </startup>
+      <startup
+            class="au.org.intersect.exsite9.startup.InitializeFolderRefreshJob">
+      </startup>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="au.org.intersect.exsite9.configpages.ConfigPage"
+            id="au.org.intersect.exsite9.configpages.ConfigPage"
+            name="ExSite9">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="au.org.intersect.exsite9.initialization.ConfigurationInitializer">
+      </initializer>
    </extension>
 
 </plugin>
