@@ -431,6 +431,16 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
     }
 
     /**
+     * Used to enable/disable this view from other views.
+     * @param enabled {@code true} to enable this view.
+     */
+    public void setEnabled(final boolean enabled)
+    {
+        this.parent.setEnabled(enabled);
+        this.parent.setVisible(enabled);
+    }
+
+    /**
      * Sets the metadata values that are pressed according to the metadata associations provided.
      * 
      * @param metadataButtons

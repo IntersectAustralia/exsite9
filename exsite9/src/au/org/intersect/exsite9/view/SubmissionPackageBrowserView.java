@@ -104,6 +104,9 @@ public final class SubmissionPackageBrowserView extends ViewPart implements IExe
     @Override
     public void setFocus()
     {
+        final MetadataBrowserView metadataBrowserView  = (MetadataBrowserView) ViewUtils.getViewByID(
+                PlatformUI.getWorkbench().getActiveWorkbenchWindow(), MetadataBrowserView.ID);
+        metadataBrowserView.setEnabled(false);
     }
 
     @Override

@@ -134,7 +134,9 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
     @Override
     public void setFocus()
     {
-
+        final MetadataBrowserView metadataBrowserView  = (MetadataBrowserView) ViewUtils.getViewByID(
+                PlatformUI.getWorkbench().getActiveWorkbenchWindow(), MetadataBrowserView.ID);
+        metadataBrowserView.setEnabled(true);
     }
 
     /**
