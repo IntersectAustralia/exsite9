@@ -202,7 +202,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             new ToolItem(toolBar, SWT.SEPARATOR);
             final ToolItem editButtonItem = new ToolItem(toolBar, SWT.NULL);
 
-            final Image editImage = Activator.getImageDescriptor("/icons/icon-metadata.png").createImage();
+            final Image editImage = Activator.getImageDescriptor("/icons/icon_metadata_16.png").createImage();
 
             // This is how you gain access to Eclipse's built-in icons
             // final Image editImage =
