@@ -16,6 +16,7 @@ import org.eclipse.ui.IViewLayout;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.activities.IWorkbenchActivitySupport;
 
+import au.org.intersect.exsite9.view.AssociatedMetadataView;
 import au.org.intersect.exsite9.view.MetadataBrowserView;
 import au.org.intersect.exsite9.view.ProjectExplorerView;
 import au.org.intersect.exsite9.view.SubmissionPackageBrowserView;
@@ -32,9 +33,11 @@ public final class Perspective implements IPerspectiveFactory
     {
         final IFolderLayout leftFolder = layout.createFolder("folder.left", IPageLayout.LEFT, 0.25f, layout.getEditorArea());
         final IFolderLayout rightFolder = layout.createFolder("folder.right", IPageLayout.RIGHT, 0.75f, layout.getEditorArea());
+        final IFolderLayout bottomLeftFolder = layout.createFolder("folder.leftBottom", IPageLayout.BOTTOM, 0.25f, layout.getEditorArea());
 
         leftFolder.addView(ProjectExplorerView.ID);
         leftFolder.addView(SubmissionPackageBrowserView.ID);
+        bottomLeftFolder.addView(AssociatedMetadataView.ID);
         rightFolder.addView(MetadataBrowserView.ID);
 
         // Configure the Project Explorer View
@@ -51,6 +54,11 @@ public final class Perspective implements IPerspectiveFactory
         final IViewLayout metadataBrowserViewLayout = layout.getViewLayout(MetadataBrowserView.ID);
         metadataBrowserViewLayout.setCloseable(false);
         metadataBrowserViewLayout.setMoveable(false);
+        
+        // Configure the Associated Metadata View
+        final IViewLayout associatedMetadataViewLayout = layout.getViewLayout(AssociatedMetadataView.ID);
+        associatedMetadataViewLayout.setCloseable(false);
+        associatedMetadataViewLayout.setMoveable(false);
 
         layout.setEditorAreaVisible(false);
 

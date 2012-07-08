@@ -381,7 +381,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
     }
 
     /**
-     * Listens to selection changes on the tree viewer in the project view on the RHS.
+     * Listens to selection changes on the tree viewer in the project view on the LHS.
      * 
      * @{inheritDoc
      */
