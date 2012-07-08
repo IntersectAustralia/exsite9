@@ -6,7 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -14,7 +16,6 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.ISelectionListener;
@@ -57,11 +58,15 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
 
         final TableViewerColumn nameColumn = new TableViewerColumn(this.tableViewer, SWT.NULL);
         nameColumn.getColumn().setText("Name");
-        nameColumn.getColumn().setWidth(200);
         
         final TableViewerColumn valueColumn = new TableViewerColumn(tableViewer, SWT.NULL);
         valueColumn.getColumn().setText("Value");
-        valueColumn.getColumn().setWidth(200);
+
+        // use TableColumnLayout to make the columns auto re-sizable and split to width evenly
+        TableColumnLayout layout = new TableColumnLayout();
+        parent.setLayout(layout);
+        layout.setColumnData(nameColumn.getColumn(), new ColumnWeightData(50));
+        layout.setColumnData(valueColumn.getColumn(), new ColumnWeightData(50));
 
         nameColumn.setLabelProvider(new ColumnLabelProvider()
         {
@@ -86,14 +91,6 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
 
 
         getSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(ProjectExplorerView.ID, this);
-
-        // if we wanted to let this selection be available to other windows getSite().setSelectionProvider(tableViewer);
-
-        GridData gridData = new GridData(GridData.FILL_BOTH);
-        gridData.horizontalSpan = 2;
-        gridData.grabExcessVerticalSpace = true;
-        gridData.grabExcessHorizontalSpace = true;
-        this.tableViewer.getControl().setLayoutData(gridData);
 
     }
 
@@ -126,7 +123,6 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
             this.researchFileService = (IResearchFileService) PlatformUI.getWorkbench().getService(
                     IResearchFileService.class);
             this.projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
-
         }
 
         @Override

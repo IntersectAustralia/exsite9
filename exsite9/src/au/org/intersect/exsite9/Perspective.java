@@ -31,9 +31,9 @@ public final class Perspective implements IPerspectiveFactory
      */
     public void createInitialLayout(final IPageLayout layout)
     {
-        final IFolderLayout leftFolder = layout.createFolder("folder.left", IPageLayout.LEFT, 0.25f, layout.getEditorArea());
-        final IFolderLayout rightFolder = layout.createFolder("folder.right", IPageLayout.RIGHT, 0.75f, layout.getEditorArea());
-        final IFolderLayout bottomLeftFolder = layout.createFolder("folder.leftBottom", IPageLayout.BOTTOM, 0.25f, layout.getEditorArea());
+        final IFolderLayout leftFolder = layout.createFolder("folder.left", IPageLayout.LEFT, 0.30f, layout.getEditorArea());
+        final IFolderLayout rightFolder = layout.createFolder("folder.right", IPageLayout.RIGHT, 0.70f, layout.getEditorArea());
+        final IFolderLayout bottomLeftFolder = layout.createFolder("folder.bottomLeft", IPageLayout.BOTTOM, 0.65f, "folder.left");
 
         leftFolder.addView(ProjectExplorerView.ID);
         leftFolder.addView(SubmissionPackageBrowserView.ID);
