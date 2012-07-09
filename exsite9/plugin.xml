@@ -166,6 +166,11 @@
          <menu
                id="au.org.intersect.exsite9.menu.file"
                label="File">
+            <command
+                  commandId="org.eclipse.ui.window.preferences"
+                  label="Preferences"
+                  style="push">
+            </command>
             <separator
                   name="au.org.intersect.exsite9.menu.file.separator1"
                   visible="true">
