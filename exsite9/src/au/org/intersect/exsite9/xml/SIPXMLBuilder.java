@@ -78,7 +78,7 @@ public class SIPXMLBuilder extends BaseXMLBuilder
 
         for (final Group childGroup : group.getGroups())
         {
-            if(selectedGroups.contains(group))
+            if(selectedGroups.contains(childGroup))
             {
                 appendGroup(doc, selectedGroups, selectedFiles, groupElement, childGroup);
             }
