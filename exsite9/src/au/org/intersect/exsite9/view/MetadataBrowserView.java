@@ -372,6 +372,12 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                 }
             }
         }
+        
+     // Refresh the table in the Associated Metadata View when a value button is selected or de-selected
+        final AssociatedMetadataView associatedMetadataView = (AssociatedMetadataView) ViewUtils.getViewByID(
+                PlatformUI.getWorkbench().getActiveWorkbenchWindow(), AssociatedMetadataView.ID);
+        associatedMetadataView.refresh();
+        
     }
 
     @Override

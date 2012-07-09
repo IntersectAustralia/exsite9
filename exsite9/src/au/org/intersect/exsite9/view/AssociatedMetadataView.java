@@ -6,6 +6,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.commands.Command;
+import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.IExecutionListener;
+import org.eclipse.core.commands.NotHandledException;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -21,6 +26,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.part.ViewPart;
 
 import au.org.intersect.exsite9.domain.Group;
@@ -35,7 +41,7 @@ import au.org.intersect.exsite9.service.IProjectService;
 import au.org.intersect.exsite9.service.IResearchFileService;
 import au.org.intersect.exsite9.util.Pair;
 
-public final class AssociatedMetadataView extends ViewPart implements ISelectionListener
+public final class AssociatedMetadataView extends ViewPart implements ISelectionListener, IExecutionListener
 {
     public static final String ID = AssociatedMetadataView.class.getName();
     private TableViewer tableViewer;
@@ -48,6 +54,9 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
     @Override
     public void createPartControl(final Composite parent)
     {
+        final ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(
+                ICommandService.class);
+        
         this.tableViewer = new TableViewer(parent, SWT.V_SCROLL | SWT.H_SCROLL | SWT.VIRTUAL);
 
         final Table table = this.tableViewer.getTable();
@@ -58,7 +67,7 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
 
         final TableViewerColumn nameColumn = new TableViewerColumn(this.tableViewer, SWT.NULL);
         nameColumn.getColumn().setText("Name");
-        
+
         final TableViewerColumn valueColumn = new TableViewerColumn(tableViewer, SWT.NULL);
         valueColumn.getColumn().setText("Value");
 
@@ -89,8 +98,18 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
 
         });
 
-
+        //Listen for selection changes in the treeViewer
         getSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(ProjectExplorerView.ID, this);
+        
+        //Commands on which to refresh the table.
+
+        final Command editProjectCommand = commandService
+                .getCommand("au.org.intersect.exsite9.commands.EditProjectCommand");
+        editProjectCommand.addExecutionListener(this);
+        
+        final Command addMetadataCategoryCommand = commandService
+                .getCommand("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand");
+        addMetadataCategoryCommand.addExecutionListener(this);
 
     }
 
@@ -100,8 +119,6 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
         // TODO Auto-generated method stub
 
     }
-
-  
 
     @Override
     public void selectionChanged(final IWorkbenchPart part, final ISelection selection)
@@ -173,7 +190,7 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
 
             if (!this.selectedMetadataAssignables.isEmpty())
             {
-                List<Pair<String, String>> stringsForTable = new ArrayList<Pair<String,String>>();
+                List<Pair<String, String>> stringsForTable = new ArrayList<Pair<String, String>>();
 
                 final Set<Pair<MetadataCategory, MetadataValue>> metadataToBeMapped = new HashSet<Pair<MetadataCategory, MetadataValue>>(
                         MetadataAssignableUtils.getCategoryToValueMapping(this.selectedMetadataAssignables.get(0)));
@@ -184,12 +201,27 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
                             .getCategoryToValueMapping(this.selectedMetadataAssignables.get(i)));
                 }
 
-                for (Iterator<Pair<MetadataCategory, MetadataValue>> iterator = metadataToBeMapped.iterator(); iterator.hasNext();)
+//                boolean duplicate = false;
+//                Iterator<Pair<MetadataCategory, MetadataValue>> firstIterator = metadataToBeMapped.iterator();
+//                
+//                while (firstIterator.hasNext() && !duplicate)
+//                {
+//                    if(firstIterator.next().getFirst().getName().equals())
+//                    {
+//                        
+//                    }
+//                }
+                
+                for (Iterator<Pair<MetadataCategory, MetadataValue>> iterator = metadataToBeMapped.iterator(); iterator
+                        .hasNext();)
                 {
+                   // duplicate = false;
                     Pair<MetadataCategory, MetadataValue> pair = (Pair<MetadataCategory, MetadataValue>) iterator
                             .next();
                     
-                    Pair<String, String> stringPair = new Pair<String, String>(pair.getFirst().getName(), pair.getSecond().getValue());
+
+                    Pair<String, String> stringPair = new Pair<String, String>(pair.getFirst().getName(), pair
+                            .getSecond().getValue());
                     stringsForTable.add(stringPair);
 
                 }
@@ -232,6 +264,38 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
         {
             fieldsToDisplay.add(new Pair<String, String>(fieldKey, fieldValue));
         }
+    }
+
+    @Override
+    public void notHandled(String arg0, NotHandledException arg1)
+    {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void postExecuteFailure(String arg0, ExecutionException arg1)
+    {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void postExecuteSuccess(String arg0, Object arg1)
+    {
+       refresh();        
+    }
+
+    @Override
+    public void preExecute(String arg0, ExecutionEvent arg1)
+    {
+        // TODO Auto-generated method stub
+        
+    }
+    
+    public void refresh()
+    {
+        this.tableViewer.refresh();
     }
 
 }
