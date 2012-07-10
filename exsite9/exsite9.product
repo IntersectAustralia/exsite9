@@ -13,7 +13,8 @@
    <launcher name="ExSite9">
       <macosx icon="/exsite9/icons/Ex9_Icon.icns"/>
       <solaris/>
-      <win useIco="false">
+      <win useIco="true">
+         <ico path="/exsite9/icons/Ex9_Icon.ico"/>
          <bmp/>
       </win>
    </launcher>

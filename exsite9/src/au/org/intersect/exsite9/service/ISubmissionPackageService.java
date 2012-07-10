@@ -6,6 +6,8 @@
  */
 package au.org.intersect.exsite9.service;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import au.org.intersect.exsite9.domain.Project;
@@ -13,7 +15,7 @@ import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.SubmissionPackage;
 
 /**
- * Serice to perform actions with {@link SubmissionPackage}s
+ * Service to perform actions with {@link SubmissionPackage}s
  */
 public interface ISubmissionPackageService
 {
@@ -56,6 +58,13 @@ public interface ISubmissionPackageService
      * @param submissionPackage The submission package
      * @return
      */
-    String buildXMLForSubmissionPackage(Project project, SubmissionPackage submissionPackage);
-    
+    String buildXMLForSubmissionPackage(final Project project, final SubmissionPackage submissionPackage);
+
+    /**
+     * Builds the ZIP for a submission package
+     * @param project The project
+     * @param submissionPackage The submission package
+     * @param fileToWrite The file to write the ZIP to.
+     */
+    void buildZIPForSubmissionPackage(final Project project, final SubmissionPackage submissionPackage, final File fileToWrite) throws IOException;
 }

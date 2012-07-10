@@ -157,6 +157,11 @@
          id="au.org.intersect.exsite9.commands.ExportSubmissionPackageXMLCommand"
          name="Export Submission Package XML">
    </command>
+   <command
+         defaultHandler="au.org.intersect.exsite9.commands.handlers.ExportSubmissionPackageZIPHandler"
+         id="au.org.intersect.exsite9.commands.ExportSubmissionPackageZIPCommand"
+         name="Export Submission Package ZIP">
+   </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -405,6 +410,17 @@
          <command
                commandId="au.org.intersect.exsite9.commands.ExportSubmissionPackageXMLCommand"
                label="Export XML..."
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <reference
+                     definitionId="au.org.intersect.exsite9.expression.InstanceOfSubmissionPackage">
+               </reference>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="au.org.intersect.exsite9.commands.ExportSubmissionPackageZIPCommand"
+               label="Export ZIP..."
                style="push">
             <visibleWhen
                   checkEnabled="false">
