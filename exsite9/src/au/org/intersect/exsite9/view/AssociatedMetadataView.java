@@ -1,6 +1,7 @@
 package au.org.intersect.exsite9.view;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -39,6 +40,7 @@ import au.org.intersect.exsite9.domain.utils.MetadataAssignableUtils;
 import au.org.intersect.exsite9.service.IGroupService;
 import au.org.intersect.exsite9.service.IProjectService;
 import au.org.intersect.exsite9.service.IResearchFileService;
+import au.org.intersect.exsite9.util.AlphabeticalPairComparator;
 import au.org.intersect.exsite9.util.Pair;
 
 public final class AssociatedMetadataView extends ViewPart implements ISelectionListener, IExecutionListener
@@ -58,7 +60,7 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
         this.parent = parent;
         final ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(
                 ICommandService.class);
-        
+
         this.tableViewer = new TableViewer(parent, SWT.V_SCROLL | SWT.H_SCROLL | SWT.VIRTUAL);
 
         final Table table = this.tableViewer.getTable();
@@ -100,15 +102,15 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
 
         });
 
-        //Listen for selection changes in the treeViewer
+        // Listen for selection changes in the treeViewer
         getSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(ProjectExplorerView.ID, this);
-        
-        //Commands on which to refresh the table.
+
+        // Commands on which to refresh the table.
 
         final Command editProjectCommand = commandService
                 .getCommand("au.org.intersect.exsite9.commands.EditProjectCommand");
         editProjectCommand.addExecutionListener(this);
-        
+
         final Command addMetadataCategoryCommand = commandService
                 .getCommand("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand");
         addMetadataCategoryCommand.addExecutionListener(this);
@@ -203,43 +205,20 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
                             .getCategoryToValueMapping(this.selectedMetadataAssignables.get(i)));
                 }
 
-//                boolean duplicate = false;
-//                Iterator<Pair<MetadataCategory, MetadataValue>> firstIterator = metadataToBeMapped.iterator();
-//                
-//                while (firstIterator.hasNext() && !duplicate)
-//                {
-//                    if(firstIterator.next().getFirst().getName().equals())
-//                    {
-//                        
-//                    }
-//                }
-                
-                
                 for (Iterator<Pair<MetadataCategory, MetadataValue>> iterator = metadataToBeMapped.iterator(); iterator
                         .hasNext();)
                 {
-                   // duplicate = false;
                     Pair<MetadataCategory, MetadataValue> pair = (Pair<MetadataCategory, MetadataValue>) iterator
                             .next();
-                    
 
                     Pair<String, String> stringPair = new Pair<String, String>(pair.getFirst().getName(), pair
                             .getSecond().getValue());
-                    
-//                    for (Pair<String, String> existingPairInStringsForTable : stringsForTable)
-//                    {
-//                        if (stringPair.getFirst().equals(existingPairInStringsForTable.getFirst()))
-//                        {
-//                            StringBuilder value = new StringBuilder(existingPairInStringsForTable.getSecond());
-//                            value.append(", ");
-//                            value.append(stringPair.getSecond());
-//                            existingPairInStringsForTable. //I want to setSecond();
-//                        }
-//                        
-//                    }
-                    stringsForTable.add(stringPair);
 
+                    stringsForTable.add(stringPair);
                 }
+
+                Collections.sort(stringsForTable, new AlphabeticalPairComparator());
+
                 return stringsForTable.toArray();
             }
             return new Object[0];
@@ -250,24 +229,24 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
     {
         List<Pair<String, String>> fieldsToDisplay = new ArrayList<Pair<String, String>>();
 
-        checkFieldIsNotEmpty(project.getAccessRights(), "Access Rights", fieldsToDisplay);
-        checkFieldIsNotEmpty(project.getCitationInformation(), "Citation Information", fieldsToDisplay);
-        checkFieldIsNotEmpty(project.getCollectionType(), "Collection Type", fieldsToDisplay);
-        checkFieldIsNotEmpty(project.getDatesOfCapture(), "Dates Of Capture", fieldsToDisplay);
-        checkFieldIsNotEmpty(project.getDescription(), "Description", fieldsToDisplay);
-        checkFieldIsNotEmpty(project.getElectronicLocation(), "Electronic Location", fieldsToDisplay);
-        checkFieldIsNotEmpty(project.getIdentifier(), "Identifier", fieldsToDisplay);
-        checkFieldIsNotEmpty(project.getLatitudeLongitude(), "Latitude/Longitude", fieldsToDisplay);
-        checkFieldIsNotEmpty(project.getLicence(), "Licence", fieldsToDisplay);
         checkFieldIsNotEmpty(project.getName(), "Name", fieldsToDisplay);
         checkFieldIsNotEmpty(project.getOwner(), "Owner", fieldsToDisplay);
+        checkFieldIsNotEmpty(project.getDescription(), "Description", fieldsToDisplay);
+        checkFieldIsNotEmpty(project.getCollectionType(), "Collection Type", fieldsToDisplay);
+        checkFieldIsNotEmpty(project.getRightsStatement(), "Rights Statement", fieldsToDisplay);
+        checkFieldIsNotEmpty(project.getAccessRights(), "Access Rights", fieldsToDisplay);
+        checkFieldIsNotEmpty(project.getLicence(), "Licence", fieldsToDisplay);
+        checkFieldIsNotEmpty(project.getIdentifier(), "Identifier", fieldsToDisplay);
+        checkFieldIsNotEmpty(project.getSubject(), "Subject", fieldsToDisplay);
+        checkFieldIsNotEmpty(project.getElectronicLocation(), "Electronic Location", fieldsToDisplay);
         checkFieldIsNotEmpty(project.getPhysicalLocation(), "Physical Location", fieldsToDisplay);
         checkFieldIsNotEmpty(project.getPlaceOrRegionName(), "Place Or Region Name", fieldsToDisplay);
+        checkFieldIsNotEmpty(project.getLatitudeLongitude(), "Latitude/Longitude", fieldsToDisplay);
+        checkFieldIsNotEmpty(project.getDatesOfCapture(), "Dates Of Capture", fieldsToDisplay);
+        checkFieldIsNotEmpty(project.getCitationInformation(), "Citation Information", fieldsToDisplay);
+        checkFieldIsNotEmpty(project.getRelatedParty(), "Related Party", fieldsToDisplay);
         checkFieldIsNotEmpty(project.getRelatedActivity(), "Related Activity", fieldsToDisplay);
         checkFieldIsNotEmpty(project.getRelatedInformation(), "Related Information", fieldsToDisplay);
-        checkFieldIsNotEmpty(project.getRelatedParty(), "Related Party", fieldsToDisplay);
-        checkFieldIsNotEmpty(project.getRightsStatement(), "Rights Statement", fieldsToDisplay);
-        checkFieldIsNotEmpty(project.getSubject(), "Subject", fieldsToDisplay);
 
         return fieldsToDisplay;
     }
@@ -285,37 +264,39 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
     public void notHandled(String arg0, NotHandledException arg1)
     {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void postExecuteFailure(String arg0, ExecutionException arg1)
     {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void postExecuteSuccess(String arg0, Object arg1)
     {
-       refresh();        
+        refresh();
     }
 
     @Override
     public void preExecute(String arg0, ExecutionEvent arg1)
     {
         // TODO Auto-generated method stub
-        
+
     }
-    
+
     public void refresh()
     {
         this.tableViewer.refresh();
     }
-    
+
     /**
      * Used to enable/disable this view from other views.
-     * @param enabled {@code true} to enable this view.
+     * 
+     * @param enabled
+     *            {@code true} to enable this view.
      */
     public void setEnabled(final boolean enabled)
     {
