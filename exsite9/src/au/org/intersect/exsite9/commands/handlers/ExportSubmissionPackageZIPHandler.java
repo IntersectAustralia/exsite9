@@ -62,7 +62,7 @@ public class ExportSubmissionPackageZIPHandler implements IHandler
 
         final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
         final Project currentproject = projectManager.getCurrentProject();
-        
+
         final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
         final Object selectedObject = selection.getFirstElement();
 
@@ -72,7 +72,7 @@ public class ExportSubmissionPackageZIPHandler implements IHandler
         }
 
         final SubmissionPackage submissionPackage = (SubmissionPackage) selectedObject;
-        
+
         final FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
         fileDialog.setOverwrite(true);
         fileDialog.setFileName(submissionPackage.getName() + ".zip");
@@ -124,6 +124,5 @@ public class ExportSubmissionPackageZIPHandler implements IHandler
     @Override
     public void removeHandlerListener(final IHandlerListener handlerListener)
     {
-
     }
 }
