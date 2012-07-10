@@ -43,29 +43,36 @@ public final class SubmissionPackageBrowserView extends ViewPart implements IExe
     }
 
     /**
-     * @{inheritDoc}
+     * @{inheritDoc
      */
     @Override
     public void createPartControl(final Composite parent)
     {
-        final ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
-        
-        final Command createSubmissionPackageCommand = commandService.getCommand("au.org.intersect.exsite9.commands.CreateSubmissionPackageCommand");
+        final ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(
+                ICommandService.class);
+
+        final Command createSubmissionPackageCommand = commandService
+                .getCommand("au.org.intersect.exsite9.commands.CreateSubmissionPackageCommand");
         createSubmissionPackageCommand.addExecutionListener(this);
 
-        final Command deleteSubmissionPackageCommand = commandService.getCommand("au.org.intersect.exsite9.commands.DeleteSubmissionPackageCommand");
+        final Command deleteSubmissionPackageCommand = commandService
+                .getCommand("au.org.intersect.exsite9.commands.DeleteSubmissionPackageCommand");
         deleteSubmissionPackageCommand.addExecutionListener(this);
-        
-        final Command openProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.OpenProjectCommand");
+
+        final Command openProjectCommand = commandService
+                .getCommand("au.org.intersect.exsite9.commands.OpenProjectCommand");
         openProjectCommand.addExecutionListener(this);
 
-        final Command editProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.EditProjectCommand");
+        final Command editProjectCommand = commandService
+                .getCommand("au.org.intersect.exsite9.commands.EditProjectCommand");
         editProjectCommand.addExecutionListener(this);
-        
-        final Command newProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.NewProjectCommand");
+
+        final Command newProjectCommand = commandService
+                .getCommand("au.org.intersect.exsite9.commands.NewProjectCommand");
         newProjectCommand.addExecutionListener(this);
 
-        final Command editSubmissionPackageCommand = commandService.getCommand("au.org.intersect.exsite9.commands.EditSubmissionPackageCommand");
+        final Command editSubmissionPackageCommand = commandService
+                .getCommand("au.org.intersect.exsite9.commands.EditSubmissionPackageCommand");
         editSubmissionPackageCommand.addExecutionListener(this);
 
         this.setPartName("Submission Package Browser");
@@ -88,7 +95,8 @@ public final class SubmissionPackageBrowserView extends ViewPart implements IExe
 
     private void loadCurrentProject()
     {
-        final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
+        final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(
+                IProjectManager.class);
         final Project project = projectManager.getCurrentProject();
         if (project != null)
         {
@@ -99,14 +107,18 @@ public final class SubmissionPackageBrowserView extends ViewPart implements IExe
     }
 
     /**
-     * @{inheritDoc}
+     * @{inheritDoc
      */
     @Override
     public void setFocus()
     {
-        final MetadataBrowserView metadataBrowserView  = (MetadataBrowserView) ViewUtils.getViewByID(
-                PlatformUI.getWorkbench().getActiveWorkbenchWindow(), MetadataBrowserView.ID);
+        final MetadataBrowserView metadataBrowserView = (MetadataBrowserView) ViewUtils.getViewByID(PlatformUI
+                .getWorkbench().getActiveWorkbenchWindow(), MetadataBrowserView.ID);
         metadataBrowserView.setEnabled(false);
+        
+        final AssociatedMetadataView associatedMetadataView = (AssociatedMetadataView) ViewUtils.getViewByID(PlatformUI
+                .getWorkbench().getActiveWorkbenchWindow(), AssociatedMetadataView.ID);
+        associatedMetadataView.setEnabled(false);
     }
 
     @Override
