@@ -45,6 +45,7 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
 {
     public static final String ID = AssociatedMetadataView.class.getName();
     private TableViewer tableViewer;
+    private Composite parent;
 
     public AssociatedMetadataView()
     {
@@ -54,6 +55,7 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
     @Override
     public void createPartControl(final Composite parent)
     {
+        this.parent = parent;
         final ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(
                 ICommandService.class);
         
@@ -212,6 +214,7 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
 //                    }
 //                }
                 
+                
                 for (Iterator<Pair<MetadataCategory, MetadataValue>> iterator = metadataToBeMapped.iterator(); iterator
                         .hasNext();)
                 {
@@ -222,6 +225,18 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
 
                     Pair<String, String> stringPair = new Pair<String, String>(pair.getFirst().getName(), pair
                             .getSecond().getValue());
+                    
+//                    for (Pair<String, String> existingPairInStringsForTable : stringsForTable)
+//                    {
+//                        if (stringPair.getFirst().equals(existingPairInStringsForTable.getFirst()))
+//                        {
+//                            StringBuilder value = new StringBuilder(existingPairInStringsForTable.getSecond());
+//                            value.append(", ");
+//                            value.append(stringPair.getSecond());
+//                            existingPairInStringsForTable. //I want to setSecond();
+//                        }
+//                        
+//                    }
                     stringsForTable.add(stringPair);
 
                 }
@@ -296,6 +311,16 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
     public void refresh()
     {
         this.tableViewer.refresh();
+    }
+    
+    /**
+     * Used to enable/disable this view from other views.
+     * @param enabled {@code true} to enable this view.
+     */
+    public void setEnabled(final boolean enabled)
+    {
+        this.parent.setEnabled(enabled);
+        this.parent.setVisible(enabled);
     }
 
 }

@@ -137,6 +137,10 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
         final MetadataBrowserView metadataBrowserView  = (MetadataBrowserView) ViewUtils.getViewByID(
                 PlatformUI.getWorkbench().getActiveWorkbenchWindow(), MetadataBrowserView.ID);
         metadataBrowserView.setEnabled(true);
+        
+        final AssociatedMetadataView associatedMetadataView = (AssociatedMetadataView) ViewUtils.getViewByID(PlatformUI
+                .getWorkbench().getActiveWorkbenchWindow(), AssociatedMetadataView.ID);
+        associatedMetadataView.setEnabled(true);
     }
 
     /**
