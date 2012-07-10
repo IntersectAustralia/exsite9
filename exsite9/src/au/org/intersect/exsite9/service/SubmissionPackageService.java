@@ -144,7 +144,7 @@ public final class SubmissionPackageService implements ISubmissionPackageService
             GroupDAO groupDAO = groupDAOFactory.createInstance(em);
             return SIPXMLBuilder.buildXML(project, 
                                           groupDAO.getGroupsContainingSelectedFiles(submissionPackage.getResearchFiles()), 
-                                          submissionPackage.getResearchFiles());
+                                          submissionPackage, false);
         }
         finally
         {

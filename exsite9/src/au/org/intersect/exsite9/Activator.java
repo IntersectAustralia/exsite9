@@ -56,7 +56,14 @@ public final class Activator extends AbstractUIPlugin
         rootLogger.addAppender(fileAppender);
 
         StdOutErrLog.redirect();
-        rootLogger.info("Starting ExSite9");
+        rootLogger.info(" *** Starting ExSite9 ***");
+        rootLogger.info("java.home: " + System.getProperty("java.home"));
+        rootLogger.info("java.vendor: " + System.getProperty("java.vendor"));
+        rootLogger.info("java.version: " + System.getProperty("java.version"));
+        rootLogger.info("os.arch: " + System.getProperty("os.arch"));
+        rootLogger.info("os.name: " + System.getProperty("os.name"));
+        rootLogger.info("os.version: " + System.getProperty("os.version"));
+        rootLogger.info("workspace.dir (rcp): " + workspaceDir);
 
         super.start(context);
         PLUGIN = this;

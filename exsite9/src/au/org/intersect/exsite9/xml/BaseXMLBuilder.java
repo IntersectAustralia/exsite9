@@ -89,10 +89,16 @@ public class BaseXMLBuilder
     
     protected static void appendResearchFile(final Document doc, final Element parent, final ResearchFile researchFile)
     {
+        final String researchFilePath = researchFile.getFile().getAbsolutePath();
+        appendResearchFile(doc, parent, researchFile, researchFilePath);
+    }
+
+    protected static void appendResearchFile(final Document doc, final Element parent, final ResearchFile researchFile, final String reserachFilePath)
+    {
         final Element researchFileElement = doc.createElement("file");
         researchFileElement.setAttribute("name", researchFile.getFile().getName());
         final Element filePathElement = doc.createElement("path");
-        filePathElement.setTextContent(researchFile.getFile().getAbsolutePath());
+        filePathElement.setTextContent(reserachFilePath);
         researchFileElement.appendChild(filePathElement);
         for (final MetadataAssociation metadataAssociation : researchFile.getMetadataAssociations())
         {

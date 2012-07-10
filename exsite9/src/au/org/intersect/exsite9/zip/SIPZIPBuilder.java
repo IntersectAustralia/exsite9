@@ -36,7 +36,7 @@ public final class SIPZIPBuilder
             copyResearchFiles(project.getRootNode(), zipOutputStream, "", submissionPackage);
 
             // Put the SIP XML in place.
-            final String xml = SIPXMLBuilder.buildXML(project, selectedGroups, submissionPackage.getResearchFiles());
+            final String xml = SIPXMLBuilder.buildXML(project, selectedGroups, submissionPackage, true);
             final ZipEntry sipXMLZipEntry = new ZipEntry(project.getName() + ".xml");
             zipOutputStream.putNextEntry(sipXMLZipEntry);
             final InputStream is = new ByteArrayInputStream(xml.getBytes(Charsets.UTF_8));

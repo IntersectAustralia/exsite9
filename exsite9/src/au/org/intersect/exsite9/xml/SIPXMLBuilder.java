@@ -14,14 +14,23 @@ import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataAssociation;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
+import au.org.intersect.exsite9.domain.SubmissionPackage;
 
 public class SIPXMLBuilder extends BaseXMLBuilder
 {
-
     private static final Logger LOG = Logger.getLogger(SIPXMLBuilder.class);
-    
-    public static String buildXML(Project project, List<Group> selectedGroups, List<ResearchFile> selectedFiles)
+
+    /**
+     * Builds XML for a SIP for the provided SubmissionPackage. 
+     * @param project The Project the submission package is contained within.
+     * @param selectedGroups The Groups that contain files are in the SubmissionPackage.
+     * @param submissionPackage The submission package.
+     * @param useGroupPaths {@code true} to use the path of a file relative to its group. {@code false} to use the absolute path of a file.
+     * @return The XML.
+     */
+    public static String buildXML(final Project project, final List<Group> selectedGroups, final SubmissionPackage submissionPackage, final boolean useGroupPaths)
     {
+        final List<ResearchFile> selectedFiles = submissionPackage.getResearchFiles();
         try
         {
             final Document doc = createNewDocument();
@@ -33,7 +42,7 @@ public class SIPXMLBuilder extends BaseXMLBuilder
             {
                 if(selectedGroups.contains(group))
                 {
-                    appendGroup(doc, selectedGroups, selectedFiles, rootElement, group);
+                    appendGroup(doc, selectedGroups, selectedFiles, rootElement, group, useGroupPaths, "");
                 }
             }
 
@@ -41,7 +50,14 @@ public class SIPXMLBuilder extends BaseXMLBuilder
             {
                 if(selectedFiles.contains(researchFile))
                 {
-                    appendResearchFile(doc, rootElement, researchFile);
+                    if (useGroupPaths)
+                    {
+                        appendResearchFile(doc, rootElement, researchFile, researchFile.getFile().getName());
+                    }
+                    else
+                    {
+                        appendResearchFile(doc, rootElement, researchFile);
+                    }
                 }
             }
 
@@ -66,11 +82,12 @@ public class SIPXMLBuilder extends BaseXMLBuilder
      * @param parent
      * @param group
      */
-    private static void appendGroup(final Document doc, final List<Group> selectedGroups, List<ResearchFile> selectedFiles, final Element parent, final Group group)
+    private static void appendGroup(final Document doc, final List<Group> selectedGroups, List<ResearchFile> selectedFiles, final Element parent, final Group group, final boolean useGroupPaths, final String parentGroupPath)
     {
         final Element groupElement = doc.createElement("group");
         groupElement.setAttribute("name", group.getName());
-
+        final String groupPath = parentGroupPath + group.getName() + "/";
+        
         for (final MetadataAssociation metadataAssociation : group.getMetadataAssociations())
         {
             appendMetadataAssociation(doc, groupElement, metadataAssociation);
@@ -80,7 +97,7 @@ public class SIPXMLBuilder extends BaseXMLBuilder
         {
             if(selectedGroups.contains(childGroup))
             {
-                appendGroup(doc, selectedGroups, selectedFiles, groupElement, childGroup);
+                appendGroup(doc, selectedGroups, selectedFiles, groupElement, childGroup, useGroupPaths, groupPath);
             }
         }
 
@@ -88,7 +105,14 @@ public class SIPXMLBuilder extends BaseXMLBuilder
         {
             if(selectedFiles.contains(childFile))
             {
-                appendResearchFile(doc, groupElement, childFile);
+                if (useGroupPaths)
+                {
+                    appendResearchFile(doc, groupElement, childFile, groupPath + childFile.getFile().getName());
+                }
+                else
+                {
+                    appendResearchFile(doc, groupElement, childFile);
+                }
             }
         }
 
