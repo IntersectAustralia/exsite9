@@ -3,12 +3,13 @@ package au.org.intersect.exsite9.zip;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
+
+import org.apache.commons.compress.archivers.zip.Zip64Mode;
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.ByteStreams;
@@ -23,30 +24,33 @@ public final class SIPZIPBuilder
 {
     public static void buildZIP(final Project project, final List<Group> selectedGroups, final SubmissionPackage submissionPackage, final File destinationFile) throws IOException
     {
-        final ZipOutputStream zipOutputStream = new ZipOutputStream(new FileOutputStream(destinationFile, false));
+        final ZipArchiveOutputStream zipArchiveOuputStream = new ZipArchiveOutputStream(destinationFile);
+        zipArchiveOuputStream.setUseZip64(Zip64Mode.AsNeeded);
+
         try
         {
             for (final Group group : project.getRootNode().getGroups())
             {
                 if (selectedGroups.contains(group))
                 {
-                    createDirForGroup(group, zipOutputStream, "", selectedGroups, submissionPackage);
+                    createDirForGroup(group, zipArchiveOuputStream, "", selectedGroups, submissionPackage);
                 }
             }
-            copyResearchFiles(project.getRootNode(), zipOutputStream, "", submissionPackage);
+            copyResearchFiles(project.getRootNode(), zipArchiveOuputStream, "", submissionPackage);
 
             // Put the SIP XML in place.
             final String xml = SIPXMLBuilder.buildXML(project, selectedGroups, submissionPackage, true);
-            final ZipEntry sipXMLZipEntry = new ZipEntry(project.getName() + ".xml");
-            zipOutputStream.putNextEntry(sipXMLZipEntry);
+            
+            final ZipArchiveEntry sipXMLZipEntry = new ZipArchiveEntry(project.getName() + ".xml");
+            zipArchiveOuputStream.putArchiveEntry(sipXMLZipEntry);
             final InputStream is = new ByteArrayInputStream(xml.getBytes(Charsets.UTF_8));
             try
             {
-                ByteStreams.copy(is, zipOutputStream);
+                ByteStreams.copy(is, zipArchiveOuputStream);
             }
             finally
             {
-                zipOutputStream.closeEntry();
+                zipArchiveOuputStream.closeArchiveEntry();
                 is.close();
             }
 
@@ -54,44 +58,46 @@ public final class SIPZIPBuilder
         }
         finally
         {
-            zipOutputStream.close();
+            zipArchiveOuputStream.close();
         }
     }
 
-    private static void createDirForGroup(final Group group, final ZipOutputStream zipOutputStream, final String parentPath, final List<Group> selectedGroups, final SubmissionPackage submissionPackage) throws IOException
+    private static void createDirForGroup(final Group group, final ZipArchiveOutputStream zipArchiveOuputStream, final String parentPath, final List<Group> selectedGroups, final SubmissionPackage submissionPackage) throws IOException
     {
         final String groupPath = parentPath + group.getName() + "/";
-        final ZipEntry groupDirZipEntry = new ZipEntry(groupPath);
-        zipOutputStream.putNextEntry(groupDirZipEntry);
-        zipOutputStream.closeEntry();
+        final ZipArchiveEntry groupDirZipEntry = new ZipArchiveEntry(groupPath);
+        zipArchiveOuputStream.putArchiveEntry(groupDirZipEntry);
+        zipArchiveOuputStream.closeArchiveEntry();
 
-        copyResearchFiles(group, zipOutputStream, groupPath, submissionPackage);
+        copyResearchFiles(group, zipArchiveOuputStream, groupPath, submissionPackage);
 
         for (final Group child : group.getGroups())
         {
             if (selectedGroups.contains(child))
             {
-                createDirForGroup(child, zipOutputStream, groupPath, selectedGroups, submissionPackage);
+                createDirForGroup(child, zipArchiveOuputStream, groupPath, selectedGroups, submissionPackage);
             }
         }
     }
 
-    private static void copyResearchFiles(final Group group, final ZipOutputStream zipOutputStream, final String parentPath, final SubmissionPackage submissionPackage) throws IOException
+    private static void copyResearchFiles(final Group group, final ZipArchiveOutputStream zipArchiveOuputStream, final String parentPath, final SubmissionPackage submissionPackage) throws IOException
     {
         for (final ResearchFile researchFile : group.getResearchFiles())
         {
             if (submissionPackage.getResearchFiles().contains(researchFile))
             {
-                final ZipEntry zipEntry = new ZipEntry(parentPath + researchFile.getFile().getName());
-                zipOutputStream.putNextEntry(zipEntry);
-                final InputStream is = new FileInputStream(researchFile.getFile());
+                final File theFile = researchFile.getFile();
+                final ZipArchiveEntry zipEntry = new ZipArchiveEntry(parentPath + theFile.getName());
+                zipEntry.setSize(theFile.length());
+                zipArchiveOuputStream.putArchiveEntry(zipEntry);
+                final InputStream is = new FileInputStream(theFile);
                 try
                 {
-                    ByteStreams.copy(is, zipOutputStream);
+                    ByteStreams.copy(is, zipArchiveOuputStream);
                 }
                 finally
                 {
-                    zipOutputStream.closeEntry();
+                    zipArchiveOuputStream.closeArchiveEntry();
                     is.close();
                 }
             }
