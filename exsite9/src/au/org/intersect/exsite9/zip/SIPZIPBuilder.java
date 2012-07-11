@@ -4,12 +4,15 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.WritableByteChannel;
 import java.util.List;
 
 import org.apache.commons.compress.archivers.zip.Zip64Mode;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
+import org.apache.log4j.Logger;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.ByteStreams;
@@ -22,10 +25,15 @@ import au.org.intersect.exsite9.xml.SIPXMLBuilder;
 
 public final class SIPZIPBuilder
 {
+    private static final Logger LOG = Logger.getLogger(SIPZIPBuilder.class);
+
     public static void buildZIP(final Project project, final List<Group> selectedGroups, final SubmissionPackage submissionPackage, final File destinationFile) throws IOException
     {
-        final ZipArchiveOutputStream zipArchiveOuputStream = new ZipArchiveOutputStream(destinationFile);
-        zipArchiveOuputStream.setUseZip64(Zip64Mode.AsNeeded);
+        final ZipArchiveOutputStream zipStream = new ZipArchiveOutputStream(destinationFile);
+        zipStream.setUseZip64(Zip64Mode.AsNeeded);
+        final WritableByteChannel zipByteChannel = Channels.newChannel(zipStream);
+
+        LOG.info("Writing ZIP file " + destinationFile.getAbsolutePath());
 
         try
         {
@@ -33,72 +41,76 @@ public final class SIPZIPBuilder
             {
                 if (selectedGroups.contains(group))
                 {
-                    createDirForGroup(group, zipArchiveOuputStream, "", selectedGroups, submissionPackage);
+                    createDirForGroup(group, zipStream, zipByteChannel, "", selectedGroups, submissionPackage);
                 }
             }
-            copyResearchFiles(project.getRootNode(), zipArchiveOuputStream, "", submissionPackage);
+            copyResearchFiles(project.getRootNode(), zipStream, zipByteChannel, "", submissionPackage);
 
             // Put the SIP XML in place.
             final String xml = SIPXMLBuilder.buildXML(project, selectedGroups, submissionPackage, true);
             
             final ZipArchiveEntry sipXMLZipEntry = new ZipArchiveEntry(project.getName() + ".xml");
-            zipArchiveOuputStream.putArchiveEntry(sipXMLZipEntry);
-            final InputStream is = new ByteArrayInputStream(xml.getBytes(Charsets.UTF_8));
+            zipStream.putArchiveEntry(sipXMLZipEntry);
+
+            final ReadableByteChannel sipXmlByteChannel = Channels.newChannel(new ByteArrayInputStream(xml.getBytes(Charsets.UTF_8)));
             try
             {
-                ByteStreams.copy(is, zipArchiveOuputStream);
+                ByteStreams.copy(sipXmlByteChannel, zipByteChannel);
             }
             finally
             {
-                zipArchiveOuputStream.closeArchiveEntry();
-                is.close();
+                zipStream.closeArchiveEntry();
+                sipXmlByteChannel.close();
             }
 
             // Also put the SIP Inventory in place.
         }
         finally
         {
-            zipArchiveOuputStream.close();
+            zipStream.close();
         }
+        LOG.info("Completed writing ZIP file " + destinationFile.getAbsolutePath());
     }
 
-    private static void createDirForGroup(final Group group, final ZipArchiveOutputStream zipArchiveOuputStream, final String parentPath, final List<Group> selectedGroups, final SubmissionPackage submissionPackage) throws IOException
+    private static void createDirForGroup(final Group group, final ZipArchiveOutputStream zipStream, final WritableByteChannel zipByteChannel, final String parentPath, final List<Group> selectedGroups, final SubmissionPackage submissionPackage) throws IOException
     {
         final String groupPath = parentPath + group.getName() + "/";
         final ZipArchiveEntry groupDirZipEntry = new ZipArchiveEntry(groupPath);
-        zipArchiveOuputStream.putArchiveEntry(groupDirZipEntry);
-        zipArchiveOuputStream.closeArchiveEntry();
+        zipStream.putArchiveEntry(groupDirZipEntry);
+        zipStream.closeArchiveEntry();
 
-        copyResearchFiles(group, zipArchiveOuputStream, groupPath, submissionPackage);
+        copyResearchFiles(group, zipStream, zipByteChannel, groupPath, submissionPackage);
 
         for (final Group child : group.getGroups())
         {
             if (selectedGroups.contains(child))
             {
-                createDirForGroup(child, zipArchiveOuputStream, groupPath, selectedGroups, submissionPackage);
+                createDirForGroup(child, zipStream, zipByteChannel, groupPath, selectedGroups, submissionPackage);
             }
         }
     }
 
-    private static void copyResearchFiles(final Group group, final ZipArchiveOutputStream zipArchiveOuputStream, final String parentPath, final SubmissionPackage submissionPackage) throws IOException
+    private static void copyResearchFiles(final Group group, final ZipArchiveOutputStream zipStream, final WritableByteChannel zipByteChannel, final String parentPath, final SubmissionPackage submissionPackage) throws IOException
     {
         for (final ResearchFile researchFile : group.getResearchFiles())
         {
             if (submissionPackage.getResearchFiles().contains(researchFile))
             {
                 final File theFile = researchFile.getFile();
+                
                 final ZipArchiveEntry zipEntry = new ZipArchiveEntry(parentPath + theFile.getName());
                 zipEntry.setSize(theFile.length());
-                zipArchiveOuputStream.putArchiveEntry(zipEntry);
-                final InputStream is = new FileInputStream(theFile);
+                zipStream.putArchiveEntry(zipEntry);
+
+                final ReadableByteChannel fileByteChannel = Channels.newChannel(new FileInputStream(theFile));
                 try
                 {
-                    ByteStreams.copy(is, zipArchiveOuputStream);
+                    ByteStreams.copy(fileByteChannel, zipByteChannel);
                 }
                 finally
                 {
-                    zipArchiveOuputStream.closeArchiveEntry();
-                    is.close();
+                    zipStream.closeArchiveEntry();
+                    fileByteChannel.close();
                 }
             }
         }

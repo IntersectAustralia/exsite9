@@ -404,4 +404,82 @@ public class GroupServiceUnitTest extends DAOTest
         final Group groupOut = groupDAO.findById(myGroup.getId());
         assertEquals("myNewGroupName", groupOut.getName());
     }
+
+    @Test
+    public void testGetGroupsWithAssociatedMetadata()
+    {
+        final EntityManagerFactory emf = mock(EntityManagerFactory.class);
+        stub(emf.createEntityManager()).toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager());
+
+        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
+        final MetadataCategoryDAO metadataCategoryDAO = new MetadataCategoryDAO(emf.createEntityManager());
+        groupService = new GroupService(emf, groupDAOFactory, metadataAssociationDAOFactory);
+
+        final Group myGroup = groupService.createNewGroup("testGetGroupsWithAssociatedMetadata");
+
+        final MetadataCategory mdc = new MetadataCategory("mdc-testGetGroupsWithAssociatedMetadata");
+        final MetadataValue mdv = new MetadataValue("mdv-testGetGroupsWithAssociatedMetadata");
+        mdc.getValues().add(mdv);
+        metadataCategoryDAO.createMetadataCategory(mdc);
+
+        groupService.associateMetadata(myGroup, mdc, mdv);
+
+        final List<Group> out = groupService.getGroupsWithAssociatedMetadata(mdc, mdv);
+        assertEquals(1, out.size());
+        assertEquals(myGroup, out.get(0));
+    }
+
+    @Test
+    public void testFindGroupById()
+    {
+        final EntityManagerFactory emf = mock(EntityManagerFactory.class);
+        stub(emf.createEntityManager()).toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager());
+
+        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
+        groupService = new GroupService(emf, groupDAOFactory, metadataAssociationDAOFactory);
+
+        final Group myGroup = groupService.createNewGroup("testGetGroupsWithAssociatedMetadata");
+        assertNotNull(myGroup.getId());
+
+        assertNull(groupService.findGroupByID(myGroup.getId() + 1000l));
+        assertEquals(myGroup, groupService.findGroupByID(myGroup.getId()));
+    }
+
+    @Test
+    public void testGetParent()
+    {
+        final EntityManagerFactory emf = mock(EntityManagerFactory.class);
+        stub(emf.createEntityManager()).toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager());
+
+        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final MetadataAssociationDAOFactory metadataAssocationDAOFactory = new MetadataAssociationDAOFactory();
+
+        groupService = new GroupService(emf, groupDAOFactory, metadataAssocationDAOFactory);
+
+        final Group parentGroup = groupService.createNewGroup("testGetParent-Parent");
+        final Group childGroup = groupService.createNewGroup("testGetParent-Child");
+        assertEquals(parentGroup.getGroups().size(), 0);
+
+        groupService.addChildGroup(parentGroup, childGroup);
+        assertEquals(parentGroup.getGroups().size(), 1);
+
+        assertEquals(parentGroup, groupService.getParent(childGroup));
+        assertNull(groupService.getParent(parentGroup));
+    }
 }
