@@ -21,13 +21,30 @@ import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.SubmissionPackage;
+import au.org.intersect.exsite9.util.ProgressRunnableWithError;
 import au.org.intersect.exsite9.xml.SIPXMLBuilder;
 
-public final class SIPZIPBuilder
+public final class SIPZIPBuilder extends ProgressRunnableWithError
 {
     private static final Logger LOG = Logger.getLogger(SIPZIPBuilder.class);
 
-    public static void buildZIP(final Project project, final List<Group> selectedGroups, final SubmissionPackage submissionPackage, final File destinationFile) throws IOException
+    private final Project project;
+    private final List<Group> selectedGroups;
+    private final SubmissionPackage submissionPackage;
+    private final File destinationFile;
+    private Throwable error;
+
+    public SIPZIPBuilder(final Project project, final List<Group> selectedGroups, final SubmissionPackage submissionPackage, final File destinationFile)
+    {
+        super("Building ZIP file. This can take some time.");
+        this.project = project;
+        this.selectedGroups = selectedGroups;
+        this.submissionPackage = submissionPackage;
+        this.destinationFile = destinationFile;
+    }
+
+    @Override
+    public void doRun() throws IOException
     {
         final ZipArchiveOutputStream zipStream = new ZipArchiveOutputStream(destinationFile);
         zipStream.setUseZip64(Zip64Mode.AsNeeded);
@@ -70,6 +87,15 @@ public final class SIPZIPBuilder
             zipStream.close();
         }
         LOG.info("Completed writing ZIP file " + destinationFile.getAbsolutePath());
+    }
+
+    /**
+     * Obtains the error. {@code null} if there was no error.
+     * @return The error.
+     */
+    public Throwable getError()
+    {
+        return this.error;
     }
 
     private static void createDirForGroup(final Group group, final ZipArchiveOutputStream zipStream, final WritableByteChannel zipByteChannel, final String parentPath, final List<Group> selectedGroups, final SubmissionPackage submissionPackage) throws IOException

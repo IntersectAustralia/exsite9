@@ -7,7 +7,6 @@
 package au.org.intersect.exsite9.service;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -23,6 +22,7 @@ import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.SubmissionPackage;
+import au.org.intersect.exsite9.util.ProgressRunnableWithError;
 import au.org.intersect.exsite9.xml.SIPXMLBuilder;
 import au.org.intersect.exsite9.zip.SIPZIPBuilder;
 
@@ -153,7 +153,7 @@ public final class SubmissionPackageService implements ISubmissionPackageService
     }
 
     @Override
-    public void buildZIPForSubmissionPackage(final Project project, final SubmissionPackage submissionPackage, final File fileToWrite) throws IOException
+    public ProgressRunnableWithError buildZIPForSubmissionPackage(final Project project, final SubmissionPackage submissionPackage, final File fileToWrite)
     {
         final EntityManager em = this.entityManagerFactory.createEntityManager();
 
@@ -162,7 +162,7 @@ public final class SubmissionPackageService implements ISubmissionPackageService
             final GroupDAO groupDAO = groupDAOFactory.createInstance(em);
 
             final List<Group> selectedGroups = groupDAO.getGroupsContainingSelectedFiles(submissionPackage.getResearchFiles());
-            SIPZIPBuilder.buildZIP(project, selectedGroups, submissionPackage, fileToWrite);
+            return new SIPZIPBuilder(project, selectedGroups, submissionPackage, fileToWrite);
         }
         finally
         {

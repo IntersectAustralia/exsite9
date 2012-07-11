@@ -7,12 +7,12 @@
 package au.org.intersect.exsite9.service;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.SubmissionPackage;
+import au.org.intersect.exsite9.util.ProgressRunnableWithError;
 
 /**
  * Service to perform actions with {@link SubmissionPackage}s
@@ -61,10 +61,11 @@ public interface ISubmissionPackageService
     String buildXMLForSubmissionPackage(final Project project, final SubmissionPackage submissionPackage);
 
     /**
-     * Builds the ZIP for a submission package
+     * Get job to build the ZIP for a submission package
      * @param project The project
      * @param submissionPackage The submission package
      * @param fileToWrite The file to write the ZIP to.
+     * @return The RunnableWithError - so we can execute it in the UI thread wrapped by a progress dialog.
      */
-    void buildZIPForSubmissionPackage(final Project project, final SubmissionPackage submissionPackage, final File fileToWrite) throws IOException;
+    ProgressRunnableWithError buildZIPForSubmissionPackage(final Project project, final SubmissionPackage submissionPackage, final File fileToWrite);
 }
