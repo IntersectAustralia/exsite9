@@ -11,7 +11,6 @@ import java.util.List;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
-import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.dto.HierarchyMoveDTO;
 
 /**
@@ -83,18 +82,4 @@ public interface IGroupService
      * @return The group, or {@code null} if it could not be found.
      */
     Group findGroupByID(final Long groupID);
-    
-    /**
-     * get the parent of the given group
-     * @param child Group
-     * @return parent Group
-     */
-    Group getParent(final Group child);
-    
-    /**
-     * get the parent group of a ResearchFile
-     * @param child ResearchFile
-     * @return parent Group
-     */
-    Group getGroupThatIsParentOfFile(final ResearchFile child);
 }

@@ -129,6 +129,16 @@ public final class ProjectExplorerViewContentProvider implements ITreeContentPro
     @Override
     public Object getParent(final Object element)
     {
+        if (element instanceof Group)
+        {
+            final Group group = (Group) element;
+            return group.getParentGroup();
+        }
+        if (element instanceof ResearchFile)
+        {
+            final ResearchFile researchFile = (ResearchFile) element;
+            return researchFile.getParentGroup();
+        }
         return null;
     }
 

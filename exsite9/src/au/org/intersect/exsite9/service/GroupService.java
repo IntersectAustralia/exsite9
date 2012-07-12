@@ -15,8 +15,10 @@ import org.apache.log4j.Logger;
 
 import au.org.intersect.exsite9.dao.GroupDAO;
 import au.org.intersect.exsite9.dao.MetadataAssociationDAO;
+import au.org.intersect.exsite9.dao.ResearchFileDAO;
 import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
 import au.org.intersect.exsite9.dao.factory.MetadataAssociationDAOFactory;
+import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataAssociation;
 import au.org.intersect.exsite9.domain.MetadataCategory;
@@ -35,14 +37,17 @@ public final class GroupService implements IGroupService
     private final EntityManagerFactory entityManagerFactory;
     private final GroupDAOFactory groupDAOFactory;
     private final MetadataAssociationDAOFactory metadataAssociationDAOFactory;
+    private final ResearchFileDAOFactory researchFileDAOFactory;
 
     public GroupService(final EntityManagerFactory entityManagerFactory,
                         final GroupDAOFactory groupDAOFactory,
-                        final MetadataAssociationDAOFactory metadataAssociationDAOFactory)
+                        final MetadataAssociationDAOFactory metadataAssociationDAOFactory,
+                        final ResearchFileDAOFactory researchFileDAOFactory)
     {
         this.entityManagerFactory = entityManagerFactory;
         this.groupDAOFactory = groupDAOFactory;
         this.metadataAssociationDAOFactory = metadataAssociationDAOFactory;
+        this.researchFileDAOFactory = researchFileDAOFactory;
     }
 
     /**
@@ -76,15 +81,22 @@ public final class GroupService implements IGroupService
         {
             final GroupDAO groupDAO = groupDAOFactory.createInstance(em);
             final MetadataAssociationDAO metadataDAO = metadataAssociationDAOFactory.createInstance(em);
+            final ResearchFileDAO researchFileDAO = researchFileDAOFactory.createInstance(em);
 
-            final Group parentGroup = groupDAO.getParent(groupToDelete);
+            final Group parentGroup = groupToDelete.getParentGroup();
 
             parentGroup.getGroups().remove(groupToDelete);
             parentGroup.getGroups().addAll(groupToDelete.getGroups());
-            parentGroup.getResearchFiles().addAll(groupToDelete.getResearchFiles());
+            final List<ResearchFile> childResearchFiles = groupToDelete.getResearchFiles();
+            for (final ResearchFile researchFile : childResearchFiles)
+            {
+                researchFile.setParentGroup(parentGroup);
+                researchFileDAO.updateResearchFile(researchFile);
+            }
+            parentGroup.getResearchFiles().addAll(childResearchFiles);
 
             groupToDelete.getGroups().clear();
-            groupToDelete.getResearchFiles().clear();
+            childResearchFiles.clear();
 
             groupDAO.updateGroup(parentGroup);
             groupDAO.deleteGroup(groupToDelete);
@@ -112,6 +124,8 @@ public final class GroupService implements IGroupService
         {
             GroupDAO groupDAO = groupDAOFactory.createInstance(em);
             parentGroup.getGroups().add(childGroup);
+            childGroup.setParentGroup(parentGroup);
+            groupDAO.updateGroup(childGroup);
             groupDAO.updateGroup(parentGroup);
         }
         finally
@@ -126,8 +140,9 @@ public final class GroupService implements IGroupService
     @Override
     public void performHierarchyMove(List<HierarchyMoveDTO> moveList)
     {
-        EntityManager em = entityManagerFactory.createEntityManager();
-        GroupDAO groupDAO = groupDAOFactory.createInstance(em);
+        final EntityManager em = entityManagerFactory.createEntityManager();
+        final GroupDAO groupDAO = groupDAOFactory.createInstance(em);
+        final ResearchFileDAO researchFileDAO = researchFileDAOFactory.createInstance(em);
         try
         {
             for(HierarchyMoveDTO moveDTO : moveList)
@@ -158,11 +173,15 @@ public final class GroupService implements IGroupService
                 
                 if (childObj instanceof Group)
                 {
+                    final Group group = (Group) childObj;
                     movedOK = moveGroupToNewGroup((Group) childObj,oldParent,newParent);
+                    groupDAO.updateGroup(group);
                 }
                 else if (childObj instanceof ResearchFile)
                 {
-                    movedOK = moveFileToNewGroup((ResearchFile) childObj,oldParent,newParent);
+                    final ResearchFile rf = (ResearchFile) childObj;
+                    movedOK = moveFileToNewGroup(rf, oldParent, newParent);
+                    researchFileDAO.updateResearchFile(rf);
                 }
                 else
                 {
@@ -276,6 +295,7 @@ public final class GroupService implements IGroupService
         {
             if(newParent.getGroups().add(child))
             {
+                child.setParentGroup(newParent);
                 return true;
             }
         }
@@ -288,6 +308,7 @@ public final class GroupService implements IGroupService
         {
             if(newParent.getResearchFiles().add(child))
             {
+                child.setParentGroup(newParent);
                 return true;
             }
         }
@@ -333,34 +354,6 @@ public final class GroupService implements IGroupService
         {
             final GroupDAO gropDAO = groupDAOFactory.createInstance(em);
             return gropDAO.findById(groupID);
-        }
-        finally
-        {
-            em.close();
-        }
-    }
-    
-    public Group getParent(final Group child)
-    {
-        final EntityManager em = entityManagerFactory.createEntityManager();
-        try
-        {
-            final GroupDAO gropDAO = groupDAOFactory.createInstance(em);
-            return gropDAO.getParent(child);
-        }
-        finally
-        {
-            em.close();
-        }
-    }
-    
-    public Group getGroupThatIsParentOfFile(final ResearchFile child)
-    {
-        final EntityManager em = entityManagerFactory.createEntityManager();
-        try
-        {
-            final GroupDAO gropDAO = groupDAOFactory.createInstance(em);
-            return gropDAO.getParent(child);
         }
         finally
         {

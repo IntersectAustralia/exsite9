@@ -103,28 +103,6 @@ public class GroupDAOUnitTest extends DAOTest
     }
 
     @Test
-    public void testGetParentGroup()
-    {
-        final EntityManager em = createEntityManager();
-        final GroupDAO groupDAO = groupDAOFactory.createInstance(em);
-
-        final Group parentGroup = new Group("parent");
-        final Group childGroup = new Group("child");
-
-        groupDAO.createGroup(parentGroup);
-        groupDAO.createGroup(childGroup);
-        parentGroup.getGroups().add(childGroup);
-        groupDAO.updateGroup(parentGroup);
-
-        assertNotNull(parentGroup.getId());
-        assertNotNull(childGroup.getId());
-
-        assertEquals(parentGroup, groupDAO.getParent(childGroup));
-
-        em.close();
-    }
-
-    @Test
     public void testGetMultipleParentGroup()
     {
         final EntityManager em = createEntityManager();
@@ -146,7 +124,7 @@ public class GroupDAOUnitTest extends DAOTest
         assertNotNull(parent2Group.getId());
         assertNotNull(childGroup.getId());
 
-        assertNull(groupDAO.getParent(childGroup));
+        assertNull(childGroup.getParentGroup());
 
         em.close();
     }
@@ -190,30 +168,6 @@ public class GroupDAOUnitTest extends DAOTest
     }
 
     @Test
-    public void testGetParentResearchFile()
-    {
-        final EntityManager em = createEntityManager();
-        final GroupDAO groupDAO = groupDAOFactory.createInstance(em);
-        final ResearchFileDAO researchFileDAO = new ResearchFileDAO(em);
-
-        final Group parentGroup = new Group("parent");
-        final ResearchFile researchFile = new ResearchFile(new File("some File.txt"));
-        
-
-        groupDAO.createGroup(parentGroup);
-        researchFileDAO.createResearchFile(researchFile);
-        assertNotNull(parentGroup.getId());
-        assertNotNull(researchFile.getId());
-
-        parentGroup.getResearchFiles().add(researchFile);
-        groupDAO.updateGroup(parentGroup);
-
-        assertEquals(parentGroup, groupDAO.getParent(researchFile));
-
-        em.close();
-    }
-
-    @Test
     public void testGetMultipleParentResearchFile()
     {
         final EntityManager em = createEntityManager();
@@ -236,7 +190,7 @@ public class GroupDAOUnitTest extends DAOTest
         groupDAO.updateGroup(parentGroup1);
         groupDAO.updateGroup(parentGroup2);
 
-        assertNull(groupDAO.getParent(researchFile));
+        assertNull(researchFile.getParentGroup());
 
         em.close();
     }
@@ -276,10 +230,14 @@ public class GroupDAOUnitTest extends DAOTest
         groupDAO.createGroup(group2);
         
         rootNode.getGroups().add(group1);
-        groupDAO.updateGroup(rootNode);
+        group1.setParentGroup(rootNode);
         
         group1.getGroups().add(group2);
+        group2.setParentGroup(group1);
+
+        groupDAO.updateGroup(rootNode);
         groupDAO.updateGroup(group1);
+        groupDAO.updateGroup(group2);
         
         // No files in any groups, no selected groups
         
@@ -300,13 +258,17 @@ public class GroupDAOUnitTest extends DAOTest
         
         rootNode.getResearchFiles().clear();
         rootNode.getResearchFiles().add(file1);
-        groupDAO.updateGroup(rootNode);
+        file1.setParentGroup(rootNode);
         
         group1.getResearchFiles().clear();
-        groupDAO.updateGroup(group1);
-        
         group2.getResearchFiles().clear();
+
+        groupDAO.updateGroup(rootNode);
+        groupDAO.updateGroup(group1);
         groupDAO.updateGroup(group2);
+        researchFileDAO.updateResearchFile(file1);
+        researchFileDAO.updateResearchFile(file2);
+        researchFileDAO.updateResearchFile(file3);
         
         selectedGroups = groupDAO.getGroupsContainingSelectedFiles(selectedFiles);
         assertEquals("One selected group", 1,selectedGroups.size());
@@ -318,14 +280,19 @@ public class GroupDAOUnitTest extends DAOTest
         
         rootNode.getResearchFiles().clear();
         rootNode.getResearchFiles().add(file1);
+        file1.setParentGroup(rootNode);
         rootNode.getResearchFiles().add(file2);
-        groupDAO.updateGroup(rootNode);
-        
+        file2.setParentGroup(rootNode);
+
         group1.getResearchFiles().clear();
-        groupDAO.updateGroup(group1);
-        
         group2.getResearchFiles().clear();
+
+        groupDAO.updateGroup(rootNode);
+        groupDAO.updateGroup(group1);
         groupDAO.updateGroup(group2);
+        researchFileDAO.updateResearchFile(file1);
+        researchFileDAO.updateResearchFile(file2);
+        researchFileDAO.updateResearchFile(file3);
         
         selectedGroups = groupDAO.getGroupsContainingSelectedFiles(selectedFiles);
         assertEquals("One selected group", 1,selectedGroups.size());
@@ -334,15 +301,17 @@ public class GroupDAOUnitTest extends DAOTest
         assertFalse("Group 2 is not selected",selectedGroups.contains(group2));
         
         // Group 1 has 1 file, 2 selected groups
-        
         rootNode.getResearchFiles().clear();
-        groupDAO.updateGroup(rootNode);
-        
         group1.getResearchFiles().add(file1);
-        groupDAO.updateGroup(group1);
-        
+        file1.setParentGroup(group1);
         group2.getResearchFiles().clear();
+        
+        groupDAO.updateGroup(rootNode);
+        groupDAO.updateGroup(group1);
         groupDAO.updateGroup(group2);
+        researchFileDAO.updateResearchFile(file1);
+        researchFileDAO.updateResearchFile(file2);
+        researchFileDAO.updateResearchFile(file3);
         
         selectedGroups = groupDAO.getGroupsContainingSelectedFiles(selectedFiles);
         assertEquals("Two selected group", 2,selectedGroups.size());
@@ -354,14 +323,19 @@ public class GroupDAOUnitTest extends DAOTest
         
         rootNode.getResearchFiles().clear();
         rootNode.getResearchFiles().add(file1);
-        groupDAO.updateGroup(rootNode);
-        
+        file1.setParentGroup(rootNode);
+
         group1.getResearchFiles().clear();
         group1.getResearchFiles().add(file2);
-        groupDAO.updateGroup(group1);
-        
+        file2.setParentGroup(group1);
         group2.getResearchFiles().clear();
+        
+        groupDAO.updateGroup(rootNode);
+        groupDAO.updateGroup(group1);
         groupDAO.updateGroup(group2);
+        researchFileDAO.updateResearchFile(file1);
+        researchFileDAO.updateResearchFile(file2);
+        researchFileDAO.updateResearchFile(file3);
         
         selectedGroups = groupDAO.getGroupsContainingSelectedFiles(selectedFiles);
         assertEquals("Two selected group", 2,selectedGroups.size());
@@ -370,16 +344,19 @@ public class GroupDAOUnitTest extends DAOTest
         assertFalse("Group 2 is not selected",selectedGroups.contains(group2));
         
         // Group 2 has 1 file, 3 selected groups
-        
         rootNode.getResearchFiles().clear();
-        groupDAO.updateGroup(rootNode);
         
         group1.getResearchFiles().clear();
-        groupDAO.updateGroup(group1);
-        
         group2.getResearchFiles().clear();
         group2.getResearchFiles().add(file1);
+        file1.setParentGroup(group2);
+
+        groupDAO.updateGroup(rootNode);
+        groupDAO.updateGroup(group1);
         groupDAO.updateGroup(group2);
+        researchFileDAO.updateResearchFile(file1);
+        researchFileDAO.updateResearchFile(file2);
+        researchFileDAO.updateResearchFile(file3);
         
         selectedGroups = groupDAO.getGroupsContainingSelectedFiles(selectedFiles);
         assertEquals("Three selected group", 3,selectedGroups.size());

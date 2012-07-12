@@ -14,7 +14,6 @@ import org.junit.Test;
 
 import au.org.intersect.exsite9.dao.DAOTest;
 import au.org.intersect.exsite9.dao.factory.FolderDAOFactory;
-import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
 import au.org.intersect.exsite9.dao.factory.MetadataAssociationDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
@@ -36,12 +35,11 @@ public final class ProjectServiceUnitTest extends DAOTest
         
         ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
-        GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
         ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
         
-        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, groupDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory, submissionPackageDAOFactory);
+        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory, submissionPackageDAOFactory);
         
         Project project = projectService.createProject(new ProjectFieldsDTO("name","owner","description", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
 
@@ -61,12 +59,11 @@ public final class ProjectServiceUnitTest extends DAOTest
         
         ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
-        GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
         ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
         
-        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, groupDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory, submissionPackageDAOFactory);
+        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory, submissionPackageDAOFactory);
         
         Folder folder = new Folder(new File("/tmp"));
         
@@ -95,12 +92,11 @@ public final class ProjectServiceUnitTest extends DAOTest
         
         ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
-        GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
         ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
         
-        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, groupDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory, submissionPackageDAOFactory);
+        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory, submissionPackageDAOFactory);
         
         Project project = projectService.createProject(new ProjectFieldsDTO("name","owner","description", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
         
@@ -131,11 +127,10 @@ public final class ProjectServiceUnitTest extends DAOTest
 
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         final FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
-        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
         final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         final MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         final SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
-        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, groupDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory, submissionPackageDAOFactory);
+        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory, submissionPackageDAOFactory);
 
         assertEquals(0, projectService.getAllProjects().size());
 
@@ -169,11 +164,10 @@ public final class ProjectServiceUnitTest extends DAOTest
 
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         final FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
-        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
         final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         final MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         final SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
-        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, groupDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory, submissionPackageDAOFactory);
+        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory, submissionPackageDAOFactory);
 
         assertEquals(0, projectService.getAllProjects().size());
 
@@ -225,26 +219,5 @@ public final class ProjectServiceUnitTest extends DAOTest
         assertEquals(relatedParty, editedProject.getRelatedParty());
         assertEquals(relatedActivity, editedProject.getRelatedActivity());
         assertEquals(relatedInfo, editedProject.getRelatedInformation());
-    }
-
-    @Test
-    public void testAddMetadataCategoryToProject()
-    {
-        final EntityManagerFactory emf = mock(EntityManagerFactory.class);
-        stub(emf.createEntityManager()).toReturn(createEntityManager())
-                                       .toReturn(createEntityManager())
-                                       .toReturn(createEntityManager())
-                                       .toReturn(createEntityManager())
-                                       .toReturn(createEntityManager());
-
-        final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
-        final FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
-        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
-        final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
-        final MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
-        final SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
-        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, groupDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory, submissionPackageDAOFactory);
-
-        
     }
 }

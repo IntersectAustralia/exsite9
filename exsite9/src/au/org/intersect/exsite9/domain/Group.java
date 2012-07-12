@@ -16,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -40,6 +41,9 @@ public class Group implements Serializable, IMetadataAssignable
 
 	@OneToMany
 	private final List<Group> groups = new ArrayList<Group>();
+
+	@ManyToOne
+	private Group parentGroup;
 
 	@OneToMany
 	private final List<ResearchFile> researchFiles = new ArrayList<ResearchFile>();
@@ -88,6 +92,16 @@ public class Group implements Serializable, IMetadataAssignable
     public List<MetadataAssociation> getMetadataAssociations()
     {
         return this.metadataAssociations;
+    }
+
+    public Group getParentGroup()
+    {
+        return this.parentGroup;
+    }
+
+    public void setParentGroup(final Group parentGroup)
+    {
+        this.parentGroup = parentGroup;
     }
 
     /**

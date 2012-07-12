@@ -13,7 +13,6 @@ import org.eclipse.ui.services.AbstractServiceFactory;
 import org.eclipse.ui.services.IServiceLocator;
 
 import au.org.intersect.exsite9.dao.factory.FolderDAOFactory;
-import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
 import au.org.intersect.exsite9.dao.factory.MetadataAssociationDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
@@ -40,10 +39,9 @@ public final class ProjectServiceFactory extends AbstractServiceFactory
         final EntityManagerFactory emf = (EntityManagerFactory) PlatformUI.getWorkbench().getService(EntityManagerFactory.class);
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         final FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
-        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
         final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         final MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         final SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
-        return new ProjectService(emf, projectDAOFactory, folderDAOFactory, groupDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory, submissionPackageDAOFactory);
+        return new ProjectService(emf, projectDAOFactory, folderDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory, submissionPackageDAOFactory);
     }
 }

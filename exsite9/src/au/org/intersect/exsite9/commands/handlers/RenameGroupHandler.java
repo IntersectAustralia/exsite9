@@ -57,13 +57,13 @@ public class RenameGroupHandler implements IHandler
                             return "Name is too long.";
                         }                         
                          
-                         Group parent = groupService.getParent((Group) selectedObject);
+                         Group parent = ((Group) selectedObject).getParentGroup();
                         
                          for (final Group existingChildGroup : parent.getGroups())
                          {
                              if (existingChildGroup.getName().equalsIgnoreCase(contents.trim()))
                              {
-                             return "A Group with that name already exists at this level.";
+                                 return "A Group with that name already exists at this level.";
                              }
                          }
                         return null;

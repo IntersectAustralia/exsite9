@@ -46,6 +46,9 @@ public final class ResearchFile implements Serializable, IMetadataAssignable
 
     @ManyToOne
     private Project project;
+
+    @ManyToOne
+    private Group parentGroup;
     
     @OneToMany
     private final List<MetadataAssociation> metadataAssociations = new ArrayList<MetadataAssociation>();
@@ -87,6 +90,16 @@ public final class ResearchFile implements Serializable, IMetadataAssignable
     public void setFile(final File file)
     {
         this.file = file;
+    }
+
+    public void setParentGroup(final Group parentGroup)
+    {
+        this.parentGroup = parentGroup;
+    }
+
+    public Group getParentGroup()
+    {
+        return this.parentGroup;
     }
 
     /**

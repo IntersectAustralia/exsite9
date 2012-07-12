@@ -12,8 +12,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import org.apache.log4j.Logger;
-
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
@@ -22,7 +20,6 @@ import au.org.intersect.exsite9.domain.ResearchFile;
 public final class GroupDAO
 {
     private EntityManager em;
-    private static final Logger LOG = Logger.getLogger(GroupDAO.class);
 
     public GroupDAO(final EntityManager entityManager)
     {
@@ -71,21 +68,6 @@ public final class GroupDAO
         return em.find(Group.class, id);
     }
 
-    public Group getParent(final Group group)
-    {
-        final TypedQuery<Group> query = em.createQuery("SELECT g FROM Group g WHERE :child MEMBER OF g.groups", Group.class);
-        query.setParameter("child", group);
-
-        final List<Group> results = query.getResultList();
-
-        if (results.size() != 1)
-        {
-            LOG.error("A Group has multiple parents, or does not have a parent.");
-            return null;
-        }
-        return results.get(0);
-    }
-
     public List<Group> getGroupsWithAssociatedMetadata(final MetadataCategory metadataCategory, final MetadataValue metadataValue)
     {
         final String queryJQL = "SELECT g FROM Group g JOIN g.metadataAssociations a WHERE a.metadataCategory = :category AND :value MEMBER OF a.metadataValues";
@@ -93,21 +75,6 @@ public final class GroupDAO
         query.setParameter("category", metadataCategory);
         query.setParameter("value", metadataValue);
         return query.getResultList();
-    }
-    
-    public Group getParent(final ResearchFile researchFile)
-    {
-        final TypedQuery<Group> query = em.createQuery("SELECT g FROM Group g WHERE :child MEMBER OF g.researchFiles", Group.class);
-        query.setParameter("child", researchFile);
-
-        final List<Group> results = query.getResultList();
-
-        if (results.size() != 1)
-        {
-            LOG.error("A Research File has multiple parents, or does not have a parent: " + researchFile);
-            return null;
-        }
-        return results.get(0);
     }
     
     /**
@@ -124,7 +91,7 @@ public final class GroupDAO
         
         for(final ResearchFile file : selectedFiles)
         {
-            Group group = getParent(file);
+            Group group = file.getParentGroup();
             
             while(group != null)
             {
@@ -138,7 +105,7 @@ public final class GroupDAO
                     {
                         groups.add(group);
                         
-                        Group parentGroup = getParent(group);
+                        Group parentGroup = group.getParentGroup();
                         
                         while(parentGroup != null)
                         {
@@ -149,12 +116,12 @@ public final class GroupDAO
                             else
                             {
                                 groups.add(parentGroup);
-                                parentGroup = getParent(parentGroup);
+                                parentGroup = parentGroup.getParentGroup();
                             }
                         }
                     }
                 }
-                group = getParent(group);
+                group = group.getParentGroup();
             }
         }
         return groups;

@@ -8,13 +8,12 @@ import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.SubmissionPackage;
-import au.org.intersect.exsite9.service.IGroupService;
 
 public class SIPZIPInventoryFileBuilder
 {
     
     
-    public static String buildInventoryFile(final Project project, final SubmissionPackage submissionPackage, final IGroupService groupService)
+    public static String buildInventoryFile(final Project project, final SubmissionPackage submissionPackage)
     {        
         StringBuffer result = new StringBuffer();
         final List<ResearchFile> selectedFiles = submissionPackage.getResearchFiles();
@@ -23,14 +22,14 @@ public class SIPZIPInventoryFileBuilder
         {
             StringBuffer fileDetails = new StringBuffer();
             
-            Group parent = groupService.getGroupThatIsParentOfFile(researchFile);
+            Group parent = researchFile.getParentGroup();
             
             fileDetails.append(parent.getName() + "/");
             fileDetails.append(researchFile.getFile().getName());
             
             while(!parent.equals(project.getRootNode()))
             {
-                parent = groupService.getParent(parent);
+                parent = parent.getParentGroup();
                 //insert parent name at the front of the path.
                 fileDetails.insert(0, parent.getName() + "/");              
             }

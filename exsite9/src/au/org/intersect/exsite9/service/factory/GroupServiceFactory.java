@@ -14,6 +14,7 @@ import org.eclipse.ui.services.IServiceLocator;
 
 import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
 import au.org.intersect.exsite9.dao.factory.MetadataAssociationDAOFactory;
+import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
 import au.org.intersect.exsite9.service.GroupService;
 
 /**
@@ -36,7 +37,8 @@ public final class GroupServiceFactory extends AbstractServiceFactory
         final EntityManagerFactory emf = (EntityManagerFactory) PlatformUI.getWorkbench().getService(EntityManagerFactory.class);
         final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
         final MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
-        
-        return new GroupService(emf, groupDAOFactory, metadataAssociationDAOFactory);
+        final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
+
+        return new GroupService(emf, groupDAOFactory, metadataAssociationDAOFactory, researchFileDAOFactory);
     }
 }

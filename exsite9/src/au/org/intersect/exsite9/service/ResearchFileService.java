@@ -80,6 +80,7 @@ public class ResearchFileService implements IResearchFileService
                 if(! folder.getFiles().contains(researchFile))
                 {
                     researchFile.setProject(project);
+                    researchFile.setParentGroup(project.getNewFilesNode());
                     researchFileDAO.createResearchFile(researchFile);
                     folder.getFiles().add(researchFile);
                     folderDAO.updateFolder(folder);
