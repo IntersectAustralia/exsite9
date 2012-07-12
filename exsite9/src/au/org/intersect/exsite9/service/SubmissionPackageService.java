@@ -12,6 +12,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
+import org.eclipse.jface.operation.IRunnableWithProgress;
+
 import au.org.intersect.exsite9.dao.GroupDAO;
 import au.org.intersect.exsite9.dao.ProjectDAO;
 import au.org.intersect.exsite9.dao.SubmissionPackageDAO;
@@ -22,9 +24,8 @@ import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.SubmissionPackage;
-import au.org.intersect.exsite9.util.ProgressRunnableWithError;
 import au.org.intersect.exsite9.xml.SIPXMLBuilder;
-import au.org.intersect.exsite9.zip.SIPZIPBuilder;
+import au.org.intersect.exsite9.zip.SIPZIPBuilderRunnable;
 
 /**
  * 
@@ -153,7 +154,7 @@ public final class SubmissionPackageService implements ISubmissionPackageService
     }
 
     @Override
-    public ProgressRunnableWithError buildZIPForSubmissionPackage(final Project project, final SubmissionPackage submissionPackage, final File fileToWrite)
+    public IRunnableWithProgress buildZIPForSubmissionPackage(final Project project, final SubmissionPackage submissionPackage, final File fileToWrite)
     {
         final EntityManager em = this.entityManagerFactory.createEntityManager();
 
@@ -162,7 +163,7 @@ public final class SubmissionPackageService implements ISubmissionPackageService
             final GroupDAO groupDAO = groupDAOFactory.createInstance(em);
 
             final List<Group> selectedGroups = groupDAO.getGroupsContainingSelectedFiles(submissionPackage.getResearchFiles());
-            return new SIPZIPBuilder(project, selectedGroups, submissionPackage, fileToWrite);
+            return new SIPZIPBuilderRunnable(project, selectedGroups, submissionPackage, fileToWrite);
         }
         finally
         {

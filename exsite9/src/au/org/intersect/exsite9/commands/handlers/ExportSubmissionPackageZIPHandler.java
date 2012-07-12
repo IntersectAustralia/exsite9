@@ -16,6 +16,7 @@ import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
@@ -27,7 +28,6 @@ import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.SubmissionPackage;
 import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.service.ISubmissionPackageService;
-import au.org.intersect.exsite9.util.ProgressRunnableWithError;
 
 /**
  * Responsible for exporting a submission package to a ZIP file.
@@ -88,29 +88,23 @@ public class ExportSubmissionPackageZIPHandler implements IHandler
         // TODO Before we generate the output ZIP, we should ensure that all files selected for this SubmissionPackage are still where we think they are.
 
         final ISubmissionPackageService submissionPackageService = (ISubmissionPackageService) PlatformUI.getWorkbench().getService(ISubmissionPackageService.class);
-        final ProgressRunnableWithError zipBuilderRunnable = submissionPackageService.buildZIPForSubmissionPackage(currentproject, submissionPackage, new File(filePath));
+        final IRunnableWithProgress zipBuilderRunnable = submissionPackageService.buildZIPForSubmissionPackage(currentproject, submissionPackage, new File(filePath));
 
         final ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(shell);
         try
         {
-            progressDialog.run(false, false, zipBuilderRunnable);
+            progressDialog.run(true, true, zipBuilderRunnable);
         }
         catch (final InvocationTargetException e)
         {
+            final Throwable cause = e.getCause();
+            MessageDialog.openError(shell, "Could not generate submission package ZIP file", "Could not generate submission package ZIP file. " + cause.getMessage());
             LOG.error("Could not create submission package ZIP file. ", e);
             return null;
         }
         catch (final InterruptedException e)
         {
-            // This should never be thrown since the job is not cancelable.
-            LOG.error("Could not create submission package ZIP file. ", e);
-        }
-
-        final Exception exception = zipBuilderRunnable.getException();
-        if (exception != null)
-        {
-            MessageDialog.openError(shell, "Could not generate submission package ZIP file", "Could not generate submission package ZIP file. " + exception.getMessage());
-            LOG.error("Could not create submission package ZIP file. ", exception);
+            LOG.info("User cancelled generation of ZIP file ");
         }
 
         return null;

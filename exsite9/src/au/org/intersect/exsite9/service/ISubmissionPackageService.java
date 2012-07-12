@@ -9,10 +9,11 @@ package au.org.intersect.exsite9.service;
 import java.io.File;
 import java.util.List;
 
+import org.eclipse.jface.operation.IRunnableWithProgress;
+
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.SubmissionPackage;
-import au.org.intersect.exsite9.util.ProgressRunnableWithError;
 
 /**
  * Service to perform actions with {@link SubmissionPackage}s
@@ -67,5 +68,5 @@ public interface ISubmissionPackageService
      * @param fileToWrite The file to write the ZIP to.
      * @return The RunnableWithError - so we can execute it in the UI thread wrapped by a progress dialog.
      */
-    ProgressRunnableWithError buildZIPForSubmissionPackage(final Project project, final SubmissionPackage submissionPackage, final File fileToWrite);
+    IRunnableWithProgress buildZIPForSubmissionPackage(final Project project, final SubmissionPackage submissionPackage, final File fileToWrite);
 }
