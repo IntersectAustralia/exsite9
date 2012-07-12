@@ -17,6 +17,7 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.ui.PlatformUI;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.ByteStreams;
@@ -25,6 +26,7 @@ import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.SubmissionPackage;
+import au.org.intersect.exsite9.service.IGroupService;
 import au.org.intersect.exsite9.xml.SIPXMLBuilder;
 
 public final class SIPZIPBuilderRunnable implements IRunnableWithProgress
@@ -39,6 +41,7 @@ public final class SIPZIPBuilderRunnable implements IRunnableWithProgress
     private final SubmissionPackage submissionPackage;
     private final File destinationFile;
     private IProgressMonitor progressMonitor;
+    private IGroupService groupService = (IGroupService)PlatformUI.getWorkbench().getService(IGroupService.class);
 
     public SIPZIPBuilderRunnable(final Project project, final List<Group> selectedGroups, final SubmissionPackage submissionPackage, final File destinationFile)
     {
@@ -102,6 +105,20 @@ public final class SIPZIPBuilderRunnable implements IRunnableWithProgress
                 }
     
                 // Also put the SIP Inventory in place.
+                final String inventoryInput = SIPZIPInventoryFileBuilder.buildInventoryFile(project, submissionPackage, groupService);
+                final ZipArchiveEntry inventoryFileZipEntry = new ZipArchiveEntry(submissionPackage.getName() + "-Inventory.txt");
+                zipStream.putArchiveEntry(inventoryFileZipEntry);
+                final ReadableByteChannel inventoryChannel = Channels.newChannel(new ByteArrayInputStream(inventoryInput.getBytes(Charsets.UTF_8)));
+
+                try
+                {
+                    ByteStreams.copy(inventoryChannel, zipByteChannel);
+                }
+                finally
+                {
+                    zipStream.closeArchiveEntry();
+                    inventoryChannel.close();
+                }
             }
             catch (final InterruptedException e)
             {

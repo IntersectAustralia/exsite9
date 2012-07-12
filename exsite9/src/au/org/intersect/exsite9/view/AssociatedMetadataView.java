@@ -106,7 +106,6 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
         getSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(ProjectExplorerView.ID, this);
 
         // Commands on which to refresh the table.
-
         final Command editProjectCommand = commandService
                 .getCommand("au.org.intersect.exsite9.commands.EditProjectCommand");
         editProjectCommand.addExecutionListener(this);
@@ -130,7 +129,7 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
         this.tableViewer.setInput(selection);
     }
 
-    static class AssociatedMetadataContentProvider implements IStructuredContentProvider // maybe ILazyContentProvider
+    static class AssociatedMetadataContentProvider implements IStructuredContentProvider
     {
         private IGroupService groupService;
         private IResearchFileService researchFileService;

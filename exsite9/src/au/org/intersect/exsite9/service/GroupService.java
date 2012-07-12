@@ -353,4 +353,18 @@ public final class GroupService implements IGroupService
             em.close();
         }
     }
+    
+    public Group getGroupThatIsParentOfFile(final ResearchFile child)
+    {
+        final EntityManager em = entityManagerFactory.createEntityManager();
+        try
+        {
+            final GroupDAO gropDAO = groupDAOFactory.createInstance(em);
+            return gropDAO.getParent(child);
+        }
+        finally
+        {
+            em.close();
+        }
+    }
 }
