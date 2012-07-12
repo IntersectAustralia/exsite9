@@ -95,7 +95,7 @@ public class ProjectExplorerDropListener extends ViewerDropAdapter
             final String error = groupService.performHierarchyMove(moveList);
             if (error != null)
             {
-                MessageDialog.openError(Display.getCurrent().getActiveShell(), "Could not complete move operation", error);
+                MessageDialog.openWarning(Display.getCurrent().getActiveShell(), "Could not complete move operation", error);
             }
             treeViewer.refresh();
         }
