@@ -10,6 +10,7 @@ package au.org.intersect.exsite9.view.listener;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.TreePath;
@@ -17,6 +18,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerDropAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.TransferData;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
 import au.org.intersect.exsite9.domain.Group;
@@ -90,7 +92,11 @@ public class ProjectExplorerDropListener extends ViewerDropAdapter
         if(!moveList.isEmpty())
         {
             final IGroupService groupService = (IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class);
-            groupService.performHierarchyMove(moveList);
+            final String error = groupService.performHierarchyMove(moveList);
+            if (error != null)
+            {
+                MessageDialog.openError(Display.getCurrent().getActiveShell(), "Could not complete move operation", error);
+            }
             treeViewer.refresh();
         }
     }

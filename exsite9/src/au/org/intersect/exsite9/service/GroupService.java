@@ -32,6 +32,8 @@ import au.org.intersect.exsite9.dto.HierarchyMoveDTO;
  */
 public final class GroupService implements IGroupService
 {
+    private static final String NEW_LINE = System.getProperty("line.separator");
+
     private static final Logger LOG = Logger.getLogger(GroupService.class);
 
     private final EntityManagerFactory entityManagerFactory;
@@ -147,16 +149,19 @@ public final class GroupService implements IGroupService
      * {@inheritDoc}
      */
     @Override
-    public void performHierarchyMove(List<HierarchyMoveDTO> moveList)
+    public String performHierarchyMove(final List<HierarchyMoveDTO> moveList)
     {
         final EntityManager em = entityManagerFactory.createEntityManager();
         final GroupDAO groupDAO = groupDAOFactory.createInstance(em);
         final ResearchFileDAO researchFileDAO = researchFileDAOFactory.createInstance(em);
+
+        final StringBuilder sb = new StringBuilder();
+
         try
         {
-            for(HierarchyMoveDTO moveDTO : moveList)
+            for (final HierarchyMoveDTO moveDTO : moveList)
             {
-                Group oldParent;
+                final Group oldParent;
                 if (moveDTO.getOldParent() instanceof Project)
                 {
                     oldParent = ((Project)moveDTO.getOldParent()).getRootNode();
@@ -166,7 +171,7 @@ public final class GroupService implements IGroupService
                     oldParent = (Group) moveDTO.getOldParent();
                 }
                 
-                Group newParent;
+                final Group newParent;
                 if(moveDTO.getNewParent() instanceof Project)
                 {
                     newParent = ((Project)moveDTO.getNewParent()).getRootNode();
@@ -176,13 +181,31 @@ public final class GroupService implements IGroupService
                     newParent = (Group) moveDTO.getNewParent();
                 }
                 
-                Object childObj = moveDTO.getChild();
+                final Object childObj = moveDTO.getChild();
                 
                 boolean movedOK = false;
                 
                 if (childObj instanceof Group)
                 {
                     final Group group = (Group) childObj;
+                    boolean toContinue = false;
+
+                    // Ensure there are no groups with the same name as the one being dropped into the destination.
+                    for (final Group siblingGroup : newParent.getGroups())
+                    {
+                        if (siblingGroup.getName().equalsIgnoreCase(group.getName()))
+                        {
+                            sb.append("A group named " + group.getName() + " already exists in the destination group.").append(NEW_LINE);
+                            toContinue = true;
+                            break;
+                        }
+                    }
+
+                    if (toContinue)
+                    {
+                        continue;
+                    }
+
                     movedOK = moveGroupToNewGroup((Group) childObj,oldParent,newParent);
                     groupDAO.updateGroup(group);
                 }
@@ -198,7 +221,7 @@ public final class GroupService implements IGroupService
                     continue;
                 }
                 
-                if(movedOK)
+                if (movedOK)
                 {
                     em.getTransaction().begin();
                     groupDAO.updateGroup(oldParent);
@@ -211,6 +234,12 @@ public final class GroupService implements IGroupService
         {
             em.close();
         }
+
+        if (sb.length() == 0)
+        {
+            return null;
+        }
+        return sb.toString();
     }
 
     @Override

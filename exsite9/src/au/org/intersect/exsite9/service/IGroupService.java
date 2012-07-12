@@ -49,8 +49,9 @@ public interface IGroupService
     /**
      * Moves selected group members to a new group
      * @param moveList The list of items to move
+     * @return {@code null} if successful, or a reason why the move was not successful.
      */
-    void performHierarchyMove(final List<HierarchyMoveDTO> moveList);
+    String performHierarchyMove(final List<HierarchyMoveDTO> moveList);
 
     /**
      * Associates a metadata category and value to a Group.
