@@ -86,16 +86,25 @@ public final class GroupService implements IGroupService
             final Group parentGroup = groupToDelete.getParentGroup();
 
             parentGroup.getGroups().remove(groupToDelete);
-            parentGroup.getGroups().addAll(groupToDelete.getGroups());
-            final List<ResearchFile> childResearchFiles = groupToDelete.getResearchFiles();
-            for (final ResearchFile researchFile : childResearchFiles)
+
+            final List<Group> childGroups = groupToDelete.getGroups();
+            for (final Group childGroup : childGroups)
             {
-                researchFile.setParentGroup(parentGroup);
-                researchFileDAO.updateResearchFile(researchFile);
+                childGroup.setParentGroup(parentGroup);
+                groupDAO.updateGroup(childGroup);
+            }
+            parentGroup.getGroups().addAll(childGroups);
+
+            final List<ResearchFile> childResearchFiles = groupToDelete.getResearchFiles();
+            for (final ResearchFile childResearchFile : childResearchFiles)
+            {
+                childResearchFile.setParentGroup(parentGroup);
+                researchFileDAO.updateResearchFile(childResearchFile);
             }
             parentGroup.getResearchFiles().addAll(childResearchFiles);
 
             groupToDelete.getGroups().clear();
+            groupToDelete.setParentGroup(null);
             childResearchFiles.clear();
 
             groupDAO.updateGroup(parentGroup);
