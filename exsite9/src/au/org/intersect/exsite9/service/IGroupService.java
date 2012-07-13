@@ -31,6 +31,13 @@ public interface IGroupService
      * @param groupToDelete The group to delete.
      */
     void deleteGroup(final Group groupToDelete);
+
+    /**
+     * Checks if it is safe to delete a group. Should be called before {@link IGroupService#deleteGroup(Group)}.
+     * @param groupToDelete The group to check.
+     * @return {@code null} if the provided group can be safely deleted, or an error message indicating why it cannot be safely deleted.
+     */
+    String deleteGroupCheck(final Group groupToDelete);
     
     /**
      * Renames a group.

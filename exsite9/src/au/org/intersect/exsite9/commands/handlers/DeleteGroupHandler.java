@@ -65,7 +65,16 @@ public final class DeleteGroupHandler implements IHandler
         if (confirm)
         {
             final IGroupService groupService = (IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class);
-            groupService.deleteGroup(groupToDelete);
+
+            final String error = groupService.deleteGroupCheck(groupToDelete);
+            if (error != null)
+            {
+                MessageDialog.openError(shell, "Cannot delete group " + groupToDelete.getName(), error);
+            }
+            else
+            {
+                groupService.deleteGroup(groupToDelete);
+            }
         }
 
         return null;

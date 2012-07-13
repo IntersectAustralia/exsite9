@@ -76,6 +76,37 @@ public final class GroupService implements IGroupService
      * @{inheritDoc}
      */
     @Override
+    public String deleteGroupCheck(final Group groupToDelete)
+    {
+        final Group parent = groupToDelete.getParentGroup();
+        final List<Group> siblings = parent.getGroups();
+
+        final StringBuilder sb = new StringBuilder();
+
+        // All children of the group to be deleted will become children of the parent. Ensure the deletion will not cause duplicate group names.
+        for (final Group group : groupToDelete.getGroups())
+        {
+            final String groupName = group.getName();
+            for (final Group sibling : siblings)
+            {
+                if (sibling.getName().equalsIgnoreCase(groupName))
+                {
+                    sb.append(NEW_LINE + "Duplicate of group " + groupName + " under " + parent.getName());
+                }
+            }
+        }
+
+        if (sb.length() > 0)
+        {
+            return "Deleting group " + groupToDelete.getName() + " will cause: " + sb.toString();
+        }
+        return null;
+    }
+
+    /**
+     * @{inheritDoc}
+     */
+    @Override
     public void deleteGroup(final Group groupToDelete)
     {
         final EntityManager em = entityManagerFactory.createEntityManager();
