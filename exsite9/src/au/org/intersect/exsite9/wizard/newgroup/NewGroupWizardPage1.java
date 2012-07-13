@@ -22,6 +22,7 @@ import com.richclientgui.toolbox.validation.string.StringValidationToolkit;
 import com.richclientgui.toolbox.validation.validator.IFieldValidator;
 
 import au.org.intersect.exsite9.domain.Group;
+import au.org.intersect.exsite9.util.DirectoryUtils;
 import au.org.intersect.exsite9.wizard.WizardPageErrorHandler;
 
 /**
@@ -85,6 +86,12 @@ public final class NewGroupWizardPage1 extends WizardPage implements KeyListener
                 if (contents.trim().length() >= 255)
                 {
                     this.errorMessage = "Group name is too long.";
+                    return false;
+                }
+
+                if (!DirectoryUtils.isValidDirectoryName(contents.trim()))
+                {
+                    this.errorMessage = "Name must contain alpha-numeric characters only";
                     return false;
                 }
 

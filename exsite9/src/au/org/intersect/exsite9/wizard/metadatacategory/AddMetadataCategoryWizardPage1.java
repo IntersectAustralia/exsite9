@@ -33,7 +33,7 @@ import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.service.IGroupService;
 import au.org.intersect.exsite9.service.IResearchFileService;
 import au.org.intersect.exsite9.wizard.WizardPageErrorHandler;
-import au.org.intersect.exsite9.xml.ExSite9XMLHelper;
+import au.org.intersect.exsite9.xml.XMLUtils;
 
 public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyListener, SelectionListener
 {
@@ -103,7 +103,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                     return false;
                 }
 
-                if (!ExSite9XMLHelper.isValidElementName(contents.trim()))
+                if (!XMLUtils.isValidElementName(contents.trim()))
                 {
                     this.errorMessage = "Category title is not a valid XML element name.";
                     return false;

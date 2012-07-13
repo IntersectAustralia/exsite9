@@ -1,6 +1,6 @@
 package au.org.intersect.exsite9.xml;
 
-public class ExSite9XMLHelper
+public class XMLUtils
 {
 
     /**

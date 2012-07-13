@@ -12,6 +12,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.service.IGroupService;
+import au.org.intersect.exsite9.util.DirectoryUtils;
 
 public class RenameGroupHandler implements IHandler
 {
@@ -55,17 +56,22 @@ public class RenameGroupHandler implements IHandler
                         if (contents.trim().length() >= 255)
                         {
                             return "Name is too long.";
-                        }                         
-                         
-                         Group parent = ((Group) selectedObject).getParentGroup();
+                        }
+
+                        if (!DirectoryUtils.isValidDirectoryName(contents.trim()))
+                        {
+                            return "Name must contain alpha-numeric characters only";
+                        }
                         
-                         for (final Group existingChildGroup : parent.getGroups())
-                         {
-                             if (existingChildGroup.getName().equalsIgnoreCase(contents.trim()))
-                             {
-                                 return "A Group with that name already exists at this level.";
-                             }
-                         }
+                        final Group parent = ((Group) selectedObject).getParentGroup();
+                        
+                        for (final Group existingChildGroup : parent.getGroups())
+                        {
+                            if (existingChildGroup.getName().equalsIgnoreCase(contents.trim()))
+                            {
+                                return "A Group with that name already exists at this level.";
+                            }
+                        }
                         return null;
                     }
                 });
