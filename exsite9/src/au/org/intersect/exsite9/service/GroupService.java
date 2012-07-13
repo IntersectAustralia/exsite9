@@ -79,7 +79,8 @@ public final class GroupService implements IGroupService
     public String deleteGroupCheck(final Group groupToDelete)
     {
         final Group parent = groupToDelete.getParentGroup();
-        final List<Group> siblings = parent.getGroups();
+        final List<Group> siblingGroups = parent.getGroups();
+        final List<ResearchFile> parentResearchFiles = parent.getResearchFiles();
 
         final StringBuilder sb = new StringBuilder();
 
@@ -87,18 +88,31 @@ public final class GroupService implements IGroupService
         for (final Group group : groupToDelete.getGroups())
         {
             final String groupName = group.getName();
-            for (final Group sibling : siblings)
+            for (final Group sibling : siblingGroups)
             {
                 if (sibling.getName().equalsIgnoreCase(groupName))
                 {
-                    sb.append(NEW_LINE + "Duplicate of group " + groupName + " under " + parent.getName());
+                    sb.append(NEW_LINE + "Duplicate group " + groupName + " under " + parent.getName());
+                }
+            }
+        }
+
+        // All research files of the group to be deleted will become children of the parent. Ensure the deletion will not cause duplicate file names.
+        for (final ResearchFile researchFile : groupToDelete.getResearchFiles())
+        {
+            final String researchFileName = researchFile.getFile().getName();
+            for (final ResearchFile parentResearchFile : parentResearchFiles)
+            {
+                if (parentResearchFile.getFile().getName().equalsIgnoreCase(researchFileName))
+                {
+                    sb.append(NEW_LINE + "Duplicate file named " + researchFileName + " under group " + parent.getName());
                 }
             }
         }
 
         if (sb.length() > 0)
         {
-            return "Deleting group " + groupToDelete.getName() + " will cause: " + sb.toString();
+            return "Unable to delete group " + groupToDelete.getName() + "." + sb.toString();
         }
         return null;
     }
@@ -242,9 +256,27 @@ public final class GroupService implements IGroupService
                 }
                 else if (childObj instanceof ResearchFile)
                 {
-                    final ResearchFile rf = (ResearchFile) childObj;
-                    movedOK = moveFileToNewGroup(rf, oldParent, newParent);
-                    researchFileDAO.updateResearchFile(rf);
+                    final ResearchFile researchFile = (ResearchFile) childObj;
+                    boolean toContinue = false;
+
+                    // Ensure there are no research files with the same name as the one being dropped into the destination.
+                    for (final ResearchFile siblingResearchFile : newParent.getResearchFiles())
+                    {
+                        if (siblingResearchFile.getFile().getName().equalsIgnoreCase(researchFile.getFile().getName()))
+                        {
+                            sb.append("A file named " + researchFile.getFile().getName() + " already exists in the destination group.").append(NEW_LINE);
+                            toContinue = true;
+                            break;
+                        }
+                    }
+
+                    if (toContinue)
+                    {
+                        continue;
+                    }
+
+                    movedOK = moveFileToNewGroup(researchFile, oldParent, newParent);
+                    researchFileDAO.updateResearchFile(researchFile);
                 }
                 else
                 {
