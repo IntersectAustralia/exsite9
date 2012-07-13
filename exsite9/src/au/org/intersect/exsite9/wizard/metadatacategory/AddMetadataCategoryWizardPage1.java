@@ -267,6 +267,8 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         {
             if (this.metadataValuesListWidget.getSelectionCount() == 0)
             {
+                removeButton.setEnabled(metadataValuesListWidget.getSelectionCount() > 0);
+                editButton.setEnabled(metadataValuesListWidget.getSelectionCount() > 0);
                 return;
             }
 
@@ -324,11 +326,17 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
 
             this.metadataValues.remove(selectedIndex);
             this.metadataValuesListWidget.remove(selectedIndex);
+            
+            //disable remove and edit buttons as the value is no longer there for selection
+            removeButton.setEnabled(metadataValuesListWidget.getSelectionCount() > 0);
+            editButton.setEnabled(metadataValuesListWidget.getSelectionCount() > 0);
         }
         else if (e.widget.equals(editButton))
         {
             if(this.metadataValuesListWidget.getSelectionCount() == 0)
             {
+                removeButton.setEnabled(metadataValuesListWidget.getSelectionCount() > 0);
+                editButton.setEnabled(metadataValuesListWidget.getSelectionCount() > 0);
                 return;
             }
             
