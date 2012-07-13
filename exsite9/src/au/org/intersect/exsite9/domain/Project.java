@@ -118,7 +118,7 @@ public final class Project implements Serializable
         this.relatedInformation = projectFields.getRelatedInformation();
 
         this.folders = new ArrayList<Folder>(0);
-        this.rootNode = new Group(this.name);
+        this.rootNode = new RootGroup(this.name);
         this.newFilesNode = new NewFilesGroup();
         this.rootNode.getGroups().add(newFilesNode);
         this.metadataCategories = new ArrayList<MetadataCategory>();

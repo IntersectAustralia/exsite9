@@ -61,6 +61,7 @@ import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.NewFilesGroup;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
+import au.org.intersect.exsite9.domain.RootGroup;
 import au.org.intersect.exsite9.domain.utils.AlphabeticalMetadataCategoryComparator;
 import au.org.intersect.exsite9.domain.utils.AlphabeticalMetadataValueComparator;
 import au.org.intersect.exsite9.domain.utils.MetadataAssignableUtils;
@@ -325,6 +326,13 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             button.setSelection(false);
             return;
         }
+        else if (!Collections2.filter(this.selectedMetadataAssignables, Predicates.instanceOf(RootGroup.class)).isEmpty())
+        {
+            MessageDialog.openError(getSite().getWorkbenchWindow().getShell(), "Error",
+                    "Metadata cannot be assigned to a project.");
+            button.setSelection(false);
+            return;
+        }
 
         if (this.selectedMetadataAssignables.size() > 1)
         {
@@ -418,6 +426,12 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             {
                 final ResearchFile selectedResearchFile = this.researchFileService.findResearchFileByID(((ResearchFile) selectedObject).getId());
                 this.selectedMetadataAssignables.add(selectedResearchFile);
+            }
+            else if (selectedObject instanceof Project)
+            {
+                Project project = ((Project) selectedObject);
+                final Group selectedGroup = this.groupService.findGroupByID(project.getRootNode().getId());
+                this.selectedMetadataAssignables.add(selectedGroup);
             }
         }
 
