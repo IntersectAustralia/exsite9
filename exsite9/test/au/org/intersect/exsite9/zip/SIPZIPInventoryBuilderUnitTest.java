@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 
 import org.junit.Test;
 
@@ -29,9 +28,6 @@ public class SIPZIPInventoryBuilderUnitTest
         
         final File file1 = new File("someResearchFile.txt");
         final File file2 = new File("someOtherResearchFile.txt");
-        RandomAccessFile giveFile2SomeSize = new RandomAccessFile(file2, "rw");
-        giveFile2SomeSize.setLength(4 * 1024 * 1024);
-        file2.setLastModified(1000000000000L);
         final File file3 = new File("yetAnotherResearchFile.txt");
         
         final ResearchFile rf1 = new ResearchFile(file1);
@@ -63,12 +59,10 @@ public class SIPZIPInventoryBuilderUnitTest
         
         final String resultString = SIPZIPInventoryFileBuilder.buildInventoryFile(project, subPack);
         
-        final String expectedString = "proj1/group1/someResearchFile.txt | 0 B | 01/01/1970 10:00:00" + NEW_LINE + NEW_LINE +
-                "proj1/group1/subGroup1/someOtherResearchFile.txt | 4.2 MB | 09/09/2001 11:46:40" + NEW_LINE + NEW_LINE;
+        final String expectedString = "proj1/group1/someResearchFile.txt | 0 Bytes | 01/01/1970 10:00:00" + NEW_LINE + NEW_LINE +
+                "proj1/group1/subGroup1/someOtherResearchFile.txt | 0 Bytes | 01/01/1970 10:00:00" + NEW_LINE + NEW_LINE;
         
         assertEquals(expectedString, resultString);
-        giveFile2SomeSize.close();
-        file2.deleteOnExit();
     }
 
 }

@@ -34,9 +34,8 @@ public class SIPZIPInventoryFileBuilder
                 fileDetails.insert(0, parent.getName() + "/");              
             }
             
-            fileDetails.append(" | ");            
-            long fileSize = researchFile.getFile().length();            
-            fileDetails.append(formatByteSize(fileSize));
+            fileDetails.append(" | ");                      
+            fileDetails.append(Long.toString(researchFile.getFile().length()) + " Bytes");
            
             fileDetails.append(" | ");
             long lastModifiedStamp = researchFile.getFile().lastModified();
@@ -53,18 +52,18 @@ public class SIPZIPInventoryFileBuilder
         return result.toString();
     }
     
-    private static String formatByteSize(long bytes)
-    {
-        int units = 1000;
-        
-        if (bytes < units)
-        {
-            return bytes + " B";
-        }
-        
-        int unitResult = (int) (Math.log(bytes) / Math.log(units));
-        String size = "KMGT".charAt(unitResult-1) + "B";
-        return String.format("%.1f %s", bytes / Math.pow(units, unitResult), size);        
-    }
+//    private static String formatByteSize(long bytes)
+//    {
+//        int units = 1000;
+//        
+//        if (bytes < units)
+//        {
+//            return bytes + " B";
+//        }
+//        
+//        int unitResult = (int) (Math.log(bytes) / Math.log(units));
+//        String size = "KMGT".charAt(unitResult-1) + "B";
+//        return String.format("%.1f %s", bytes / Math.pow(units, unitResult), size);        
+//    }
 
 }
