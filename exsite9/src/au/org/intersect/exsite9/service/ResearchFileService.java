@@ -74,11 +74,11 @@ public class ResearchFileService implements IResearchFileService
             List<File> newFileList = FolderHelper.getAllFilesInFolder(folder);
             for (final File file : newFileList)
             {
-                // If there is already a research file in the database, do not insert another.
-                final ResearchFile researchFile = new ResearchFile(file);
                 
-                if(! folder.getFiles().contains(researchFile))
+                if(researchFileDAO.findByPath(project, file) == null) //! folder.getFiles().contains(researchFile)
                 {
+                    // If there is already a research file in the database, do not insert another.
+                    final ResearchFile researchFile = new ResearchFile(file);
                     researchFile.setProject(project);
                     researchFile.setParentGroup(project.getNewFilesNode());
                     researchFileDAO.createResearchFile(researchFile);
