@@ -1,5 +1,6 @@
 package au.org.intersect.exsite9.wizard.metadatacategory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.IInputValidator;
@@ -51,6 +52,10 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     private Project project;
     private List<MetadataValue> metadataValues;
     private MetadataCategory metadataCategory;
+    
+    public List<Group> assignedGroups = new ArrayList<Group>();
+    public List<ResearchFile> assignedFiles = new ArrayList<ResearchFile>();
+    public List<MetadataValue> valuesToBeDisassociated = new ArrayList<MetadataValue>();
 
     protected AddMetadataCategoryWizardPage1(final String pageTitle, final String pageDescription, final Project project, final MetadataCategory metadataCategory,
             final List<MetadataValue> metadataValues)
@@ -281,8 +286,9 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                 final IGroupService groupService = (IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class);
                 final IResearchFileService fileService = (IResearchFileService) PlatformUI.getWorkbench().getService(IResearchFileService.class);
 
-                final List<Group> assignedGroups = groupService.getGroupsWithAssociatedMetadata(metadataCategory, metadataValueToDelete);
-                final List<ResearchFile> assignedFiles = fileService.getResearchFilesWithAssociatedMetadata(metadataCategory, metadataValueToDelete);
+                assignedGroups = groupService.getGroupsWithAssociatedMetadata(metadataCategory, metadataValueToDelete);
+                assignedFiles = fileService.getResearchFilesWithAssociatedMetadata(metadataCategory, metadataValueToDelete);
+                
                 if (!assignedGroups.isEmpty() || !assignedFiles.isEmpty())
                 {
                     String messageString = null;
@@ -311,14 +317,9 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                     {
                         return;
                     }
-                    for (final ResearchFile assignedFile : assignedFiles)
+                    else if (deleteAssociations)
                     {
-                        fileService.disassociateMetadata(assignedFile, metadataCategory, metadataValueToDelete);
-                    }
-                    
-                    for (final Group assignedGroup : assignedGroups)
-                    {
-                        groupService.disassociateMetadata(assignedGroup, metadataCategory, metadataValueToDelete);
+                        this.valuesToBeDisassociated.add(metadataValueToDelete);
                     }
                 }
             }

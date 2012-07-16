@@ -6,11 +6,15 @@ import java.util.List;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.PlatformUI;
 
+import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.domain.ResearchFile;
+import au.org.intersect.exsite9.service.IGroupService;
 import au.org.intersect.exsite9.service.IMetadataCategoryService;
 import au.org.intersect.exsite9.service.IProjectService;
+import au.org.intersect.exsite9.service.IResearchFileService;
 
 public class AddMetadataCategoryWizard extends Wizard
 {
@@ -63,7 +67,20 @@ public class AddMetadataCategoryWizard extends Wizard
                 .getService(IMetadataCategoryService.class);
         final IProjectService projectService = (IProjectService) PlatformUI.getWorkbench().getService(
                 IProjectService.class);
+        final IGroupService groupService = (IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class);
+        final IResearchFileService fileService = (IResearchFileService) PlatformUI.getWorkbench().getService(
+                IResearchFileService.class);
 
+        for (final ResearchFile assignedFile : page1.assignedFiles)
+        {
+            fileService.disassociateMultipleMetadataValues(assignedFile, metadataCategory, page1.valuesToBeDisassociated);
+        }
+        
+        for (final Group assignedGroup : page1.assignedGroups)
+        {
+            groupService.disassociateMultipleMetadataValues(assignedGroup, metadataCategory, page1.valuesToBeDisassociated);
+        }
+        
         if (this.metadataCategory == null)
         {
             final MetadataCategory newCategory = metadataCategoryService.createNewMetadataCategory(categoryTitle,

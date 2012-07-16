@@ -461,4 +461,14 @@ public final class GroupService implements IGroupService
             em.close();
         }
     }
+
+    @Override
+    public void disassociateMultipleMetadataValues(Group group, MetadataCategory metadataCategory,
+            List<MetadataValue> metadataValues)
+    {
+        for(MetadataValue metadataValue : metadataValues)
+        {
+            disassociateMetadata(group, metadataCategory, metadataValue);
+        }
+    }
 }

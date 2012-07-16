@@ -215,4 +215,14 @@ public class ResearchFileService implements IResearchFileService
         }
     }
 
+    @Override
+    public void disassociateMultipleMetadataValues(ResearchFile file, MetadataCategory metadataCategory,
+            List<MetadataValue> metadataValues)
+    {
+        for (MetadataValue metadataValue : metadataValues)
+        {
+            disassociateMetadata(file, metadataCategory, metadataValue);
+        }
+    }
+
 }
