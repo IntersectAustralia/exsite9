@@ -75,19 +75,13 @@ public final class SIPZIPBuilderRunnable implements IRunnableWithProgress
 
             try
             {
-                for (final Group group : project.getRootNode().getGroups())
-                {
-                    if (selectedGroups.contains(group))
-                    {
-                        createDirForGroup(group, zipStream, zipByteChannel, "", selectedGroups, submissionPackage);
-                    }
-                }
-                copyResearchFiles(project.getRootNode(), zipStream, zipByteChannel, "", submissionPackage);
-    
+                // Add the groups and files to the zip
+                createDirForGroup(project.getRootNode(), zipStream, zipByteChannel, "", selectedGroups, submissionPackage);
+
                 // Put the SIP XML in place.
                 final String xml = SIPXMLBuilder.buildXML(project, selectedGroups, submissionPackage, true);
                 
-                final ZipArchiveEntry sipXMLZipEntry = new ZipArchiveEntry(project.getName() + ".xml");
+                final ZipArchiveEntry sipXMLZipEntry = new ZipArchiveEntry(project.getRootNode().getName() + "/" + project.getName() + ".xml");
                 zipStream.putArchiveEntry(sipXMLZipEntry);
     
                 final ReadableByteChannel sipXmlByteChannel = Channels.newChannel(new ByteArrayInputStream(xml.getBytes(Charsets.UTF_8)));
@@ -103,7 +97,7 @@ public final class SIPZIPBuilderRunnable implements IRunnableWithProgress
     
                 // Also put the SIP Inventory in place.
                 final String inventoryInput = SIPZIPInventoryFileBuilder.buildInventoryFile(project, submissionPackage);
-                final ZipArchiveEntry inventoryFileZipEntry = new ZipArchiveEntry(submissionPackage.getName() + "-Inventory.txt");
+                final ZipArchiveEntry inventoryFileZipEntry = new ZipArchiveEntry(project.getRootNode().getName() + "/inventory.txt");
                 zipStream.putArchiveEntry(inventoryFileZipEntry);
                 final ReadableByteChannel inventoryChannel = Channels.newChannel(new ByteArrayInputStream(inventoryInput.getBytes(Charsets.UTF_8)));
 
