@@ -386,6 +386,10 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                 PlatformUI.getWorkbench().getActiveWorkbenchWindow(), AssociatedMetadataView.ID);
         associatedMetadataView.refresh();
         
+     // Refresh the Project Explorer View according to the currently selected items in the RHS.
+        final ProjectExplorerView projectExplorerView = (ProjectExplorerView) ViewUtils.getViewByID(
+                PlatformUI.getWorkbench().getActiveWorkbenchWindow(), ProjectExplorerView.ID);
+        projectExplorerView.refresh();        
     }
 
     @Override

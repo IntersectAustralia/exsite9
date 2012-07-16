@@ -9,10 +9,12 @@ package au.org.intersect.exsite9.view.provider;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
+import au.org.intersect.exsite9.Activator;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.NewFilesGroup;
 import au.org.intersect.exsite9.domain.Project;
@@ -32,7 +34,7 @@ public final class ProjectExplorerViewLabelProvider extends StyledCellLabelProvi
     }
 
     /**
-     * @{inheritDoc}
+     * @{inheritDoc
      */
     @Override
     public void update(final ViewerCell cell)
@@ -58,13 +60,22 @@ public final class ProjectExplorerViewLabelProvider extends StyledCellLabelProvi
                 text.append(group.getName());
             }
             cell.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FOLDER));
-            text.append(" (" + (group.getGroups().size() + group.getResearchFiles().size()) + ")", StyledString.COUNTER_STYLER);
+            text.append(" (" + (group.getGroups().size() + group.getResearchFiles().size()) + ")",
+                    StyledString.COUNTER_STYLER);
         }
         else if (element instanceof ResearchFile)
         {
             final ResearchFile rf = (ResearchFile) element;
             text.append(rf.getFile().getName());
-            cell.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE));
+            if (rf.getMetadataAssociations().isEmpty())
+            {
+                final Image editImage = Activator.getImageDescriptor("/icons/icon_warning_12.png").createImage();
+                cell.setImage(editImage);
+            }
+            else
+            {
+                cell.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE));
+            }
         }
         else
         {
@@ -77,7 +88,7 @@ public final class ProjectExplorerViewLabelProvider extends StyledCellLabelProvi
     }
 
     /**
-     * @{inheritDoc}
+     * @{inheritDoc
      */
     @Override
     public String getToolTipText(final Object element)
@@ -87,11 +98,12 @@ public final class ProjectExplorerViewLabelProvider extends StyledCellLabelProvi
             return null;
         }
         final ResearchFile rf = (ResearchFile) element;
-        return rf.getFile().getAbsolutePath();
+        return rf.getMetadataAssociations().isEmpty() ? "(THIS FILE HAS NO METADATA ASSOCIATIONS) - "
+                + rf.getFile().getAbsolutePath() : rf.getFile().getAbsolutePath();
     }
 
     /**
-     * @{inheritDoc}
+     * @{inheritDoc
      */
     @Override
     public int getToolTipTimeDisplayed(final Object object)
@@ -100,7 +112,7 @@ public final class ProjectExplorerViewLabelProvider extends StyledCellLabelProvi
     }
 
     /**
-     * @{inheritDoc}
+     * @{inheritDoc
      */
     @Override
     public int getToolTipDisplayDelayTime(final Object object)
@@ -109,7 +121,7 @@ public final class ProjectExplorerViewLabelProvider extends StyledCellLabelProvi
     }
 
     /**
-     * @{inheritDoc}
+     * @{inheritDoc
      */
     public Point getToolTipShift(final Object object)
     {

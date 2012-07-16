@@ -14,7 +14,7 @@ import org.eclipse.ui.activities.IActivityManager;
 import org.eclipse.ui.activities.IWorkbenchActivitySupport;
 
 /**
- * Utillities used by the Handlers
+ * Utilities used by the Handlers
  */
 public final class HandlerUtils
 {
