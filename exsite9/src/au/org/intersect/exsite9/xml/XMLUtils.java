@@ -30,8 +30,10 @@ public class XMLUtils
         }
         
         // Can't contain spaces, ampersands, greater than or less than, fwd or back slash
-        // semi-colon, asterisk, open and close (), open and close {}
-        if(name.matches("^[a-zA-Z].*[\\s&<>/\\\\|;*(){}].*"))
+        // semi-colon, asterisk, open and close (), open and close {}, open and close []
+        // plus sign, single quote, double quote, question mark, exclamation mark, back tick
+        // tilde, at sign, dollar sign, percent sign, caret, equals, comma
+        if(name.matches("^[a-zA-Z].*[\\s&<>/\\\\|;\\*\\(\\)\\{\\}\\[\\]\\+'\"\\?\\!`~@\\$\\%\\^=,].*"))
         {
             return false;
         }

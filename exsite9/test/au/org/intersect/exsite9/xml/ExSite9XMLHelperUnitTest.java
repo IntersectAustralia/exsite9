@@ -61,9 +61,50 @@ public class ExSite9XMLHelperUnitTest
         name = "fwd{brace";
         assertFalse("Name includes {",XMLUtils.isValidElementName(name));
         
-        name = "close}brace";
-        assertFalse("Name includes }",XMLUtils.isValidElementName(name));
+        name = "open[sb";
+        assertFalse("Name includes [",XMLUtils.isValidElementName(name));
         
+        name = "close]sb";
+        assertFalse("Name includes ]",XMLUtils.isValidElementName(name));
+        
+        name = "plus+sign";
+        assertFalse("Name includes +",XMLUtils.isValidElementName(name));
+        
+        name = "single'quote";
+        assertFalse("Name includes '",XMLUtils.isValidElementName(name));
+        
+        name = "double\"quote";
+        assertFalse("Name includes \"",XMLUtils.isValidElementName(name));
+        
+        name = "question?mark";
+        assertFalse("Name includes ?",XMLUtils.isValidElementName(name));
+        
+        name = "exclamation!mark";
+        assertFalse("Name includes !",XMLUtils.isValidElementName(name));
+        
+        name = "back`quote";
+        assertFalse("Name includes `",XMLUtils.isValidElementName(name));
+        
+        name = "til~de";
+        assertFalse("Name includes ~",XMLUtils.isValidElementName(name));
+        
+        name = "at@sign";
+        assertFalse("Name includes @",XMLUtils.isValidElementName(name));
+        
+        name = "dollar$sign";
+        assertFalse("Name includes $",XMLUtils.isValidElementName(name));
+        
+        name = "percent%sign";
+        assertFalse("Name includes %",XMLUtils.isValidElementName(name));
+
+        name = "h^at";
+        assertFalse("Name includes ^",XMLUtils.isValidElementName(name));
+
+        name = "equals=sign";
+        assertFalse("Name includes =",XMLUtils.isValidElementName(name));
+        
+        name = "com,ma";
+        assertFalse("Name includes ,",XMLUtils.isValidElementName(name));
         
         name = "element";
         assertTrue("Name is all letters",XMLUtils.isValidElementName(name));
