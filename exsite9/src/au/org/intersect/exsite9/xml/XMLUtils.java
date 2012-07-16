@@ -29,8 +29,9 @@ public class XMLUtils
             return false;
         }
         
-        // Can't contain spaces, ampersands, greater than or less than
-        if(name.matches("^[a-zA-Z].*[\\s&<>].*"))
+        // Can't contain spaces, ampersands, greater than or less than, fwd or back slash
+        // semi-colon, asterisk, open and close (), open and close {}
+        if(name.matches("^[a-zA-Z].*[\\s&<>/\\\\|;*(){}].*"))
         {
             return false;
         }

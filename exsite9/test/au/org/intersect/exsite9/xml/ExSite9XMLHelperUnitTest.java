@@ -37,6 +37,34 @@ public class ExSite9XMLHelperUnitTest
         name = "less<than";
         assertFalse("Name includes less than",XMLUtils.isValidElementName(name));
         
+        name = "fwd/slash";
+        assertFalse("Name includes fwd slash",XMLUtils.isValidElementName(name));
+        
+        name = "back\\slash";
+        assertFalse("Name includes back slash",XMLUtils.isValidElementName(name));
+        
+        name = "pipe|symbol";
+        assertFalse("Name includes pipe symbol",XMLUtils.isValidElementName(name));
+        
+        name = "aster*isk";
+        assertFalse("Name includes asterisk",XMLUtils.isValidElementName(name));
+        
+        name = "semi;colon";
+        assertFalse("Name includes semi colon",XMLUtils.isValidElementName(name));
+        
+        name = "fwd(paren";
+        assertFalse("Name includes (",XMLUtils.isValidElementName(name));
+        
+        name = "close)paren";
+        assertFalse("Name includes )",XMLUtils.isValidElementName(name));
+        
+        name = "fwd{brace";
+        assertFalse("Name includes {",XMLUtils.isValidElementName(name));
+        
+        name = "close}brace";
+        assertFalse("Name includes }",XMLUtils.isValidElementName(name));
+        
+        
         name = "element";
         assertTrue("Name is all letters",XMLUtils.isValidElementName(name));
     }
