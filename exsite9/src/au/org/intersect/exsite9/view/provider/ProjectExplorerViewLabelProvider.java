@@ -98,8 +98,9 @@ public final class ProjectExplorerViewLabelProvider extends StyledCellLabelProvi
             return null;
         }
         final ResearchFile rf = (ResearchFile) element;
-        return rf.getMetadataAssociations().isEmpty() ? "(THIS FILE HAS NO METADATA ASSOCIATIONS) - "
-                + rf.getFile().getAbsolutePath() : rf.getFile().getAbsolutePath();
+        return rf.getMetadataAssociations().isEmpty() ? "(THIS FILE HAS NO METADATA ASSOCIATIONS)"
+                + System.getProperty("line.separator") + rf.getFile().getAbsolutePath() : rf.getFile()
+                .getAbsolutePath();
     }
 
     /**
