@@ -24,14 +24,13 @@ public class SIPZIPInventoryFileBuilder
             
             Group parent = researchFile.getParentGroup();
             
-            fileDetails.append(parent.getName() + "/");
             fileDetails.append(researchFile.getFile().getName());
             
             while(!parent.equals(project.getRootNode()))
             {
-                parent = parent.getParentGroup();
                 //insert parent name at the front of the path.
                 fileDetails.insert(0, parent.getName() + "/");              
+                parent = parent.getParentGroup();
             }
             
             fileDetails.append(" | ");                      
