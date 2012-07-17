@@ -11,11 +11,17 @@
    </launcherArgs>
 
    <launcher name="ExSite9">
+      <linux icon="/exsite9/icons/ex9logo.xpm"/>
       <macosx icon="/exsite9/icons/Ex9_Icon.icns"/>
       <solaris/>
-      <win useIco="true">
-         <ico path="/exsite9/icons/Ex9_Icon.ico"/>
-         <bmp/>
+      <win useIco="false">
+         <bmp
+            winSmallHigh="/exsite9/icons/ex9logo_16.bmp"
+            winSmallLow="/exsite9/icons/ex9logo_16_8.bmp"
+            winMediumHigh="/exsite9/icons/ex9logo_32.bmp"
+            winMediumLow="/exsite9/icons/ex9logo_32_8.bmp"
+            winLargeHigh="/exsite9/icons/ex9logo_48.bmp"
+            winLargeLow="/exsite9/icons/ex9logo_48_8.bmp"/>
       </win>
    </launcher>
 
