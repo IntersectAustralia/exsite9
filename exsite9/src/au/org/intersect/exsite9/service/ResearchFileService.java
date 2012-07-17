@@ -23,7 +23,7 @@ import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
-import au.org.intersect.exsite9.helper.FolderHelper;
+import au.org.intersect.exsite9.util.FolderUtils;
 
 public class ResearchFileService implements IResearchFileService
 {
@@ -71,13 +71,12 @@ public class ResearchFileService implements IResearchFileService
             ResearchFileDAO researchFileDAO = researchFileDAOFactory.createInstance(em);
             FolderDAO folderDAO = folderDAOFactory.createInstance(em);
             
-            List<File> newFileList = FolderHelper.getAllFilesInFolder(folder);
+            List<File> newFileList = FolderUtils.getAllFilesInFolder(folder);
             for (final File file : newFileList)
             {
-                
-                if(researchFileDAO.findByPath(project, file) == null) //! folder.getFiles().contains(researchFile)
+                // If there is already a research file in the database, do not insert another.
+                if(researchFileDAO.findByPath(project, file) == null)
                 {
-                    // If there is already a research file in the database, do not insert another.
                     final ResearchFile researchFile = new ResearchFile(file);
                     researchFile.setProject(project);
                     researchFile.setParentGroup(project.getNewFilesNode());

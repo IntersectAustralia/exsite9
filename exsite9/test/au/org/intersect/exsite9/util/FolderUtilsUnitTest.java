@@ -4,13 +4,14 @@
  * This module contains Proprietary Information of Intersect,
  * and should be treated as Confidential.
  */
-package au.org.intersect.exsite9.helper;
+package au.org.intersect.exsite9.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.After;
@@ -18,9 +19,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import au.org.intersect.exsite9.domain.Folder;
-import au.org.intersect.exsite9.helper.FolderHelper;
+import au.org.intersect.exsite9.util.FolderUtils;
 
-public class FolderHelperUnitTest
+/**
+ * Tests {@link FolderUtils}
+ */
+public final class FolderUtilsUnitTest
 {
     
     private final String testDirName = System.getProperty("java.io.tmpdir") + File.separator + "exsite9-FolderUnitTest";
@@ -49,24 +53,15 @@ public class FolderHelperUnitTest
     @Test
     public void constructorTest()
     {
-    	FolderHelper fh = new FolderHelper();
-    	assertTrue(fh instanceof FolderHelper);
-    }
-    
-    @Test
-    public void testIdentifyNewFilesInvalidFolder()
-    {
-        String folderName = testDirName + File.separator + "DoesNotExist";
-        Folder f = new Folder(new File(folderName));
-        List<File> newFiles = FolderHelper.identifyNewFiles(f);
-        assertTrue("List is empty",newFiles.isEmpty());
+    	FolderUtils fh = new FolderUtils();
+    	assertTrue(fh instanceof FolderUtils);
     }
     
     @Test
     public void testIdentifyNewFilesEmptyFolder()
     {
         Folder f = new Folder(testDirFile);
-        List<File> newFiles = FolderHelper.identifyNewFiles(f);
+        List<File> newFiles = FolderUtils.identifyNewFiles(f);
         assertTrue("List is empty",newFiles.isEmpty());
     }
     
@@ -78,7 +73,7 @@ public class FolderHelperUnitTest
             Folder f = new Folder(testDirFile);
             File.createTempFile("test-file-1", ".txt", testDirFile);
             
-            List<File> newFiles = FolderHelper.identifyNewFiles(f);
+            List<File> newFiles = FolderUtils.identifyNewFiles(f);
             assertEquals("List has 1 entry",1,newFiles.size());
         }
         catch(Exception e)
@@ -89,34 +84,26 @@ public class FolderHelperUnitTest
     }
     
     @Test
-    public void testIdentifyNewFiles()
+    public void testIdentifyNewFiles() throws InterruptedException, IOException
     {
-        try
-        {
-            Folder f = new Folder(testDirFile);
-            File.createTempFile("test-file-1", ".txt", testDirFile);
-            
-            try{Thread.sleep(1000);}catch(Exception e){}
-            
-            List<File> newFiles = FolderHelper.identifyNewFiles(f);
-            assertEquals("List has one entry",1,newFiles.size());
-            
-            try{Thread.sleep(1000);}catch(Exception e){}
-            
-            newFiles = FolderHelper.identifyNewFiles(f);
-            assertTrue("List is empty",newFiles.isEmpty());
-            
-            File.createTempFile("test-file-2", ".txt", testDirFile);
-            
-            try{Thread.sleep(1000);}catch(Exception e){}
-            
-            newFiles = FolderHelper.identifyNewFiles(f);
-            assertEquals("List has one entry",1,newFiles.size());
-        }
-        catch(Exception e)
-        {
-            fail("Unexpected exception: " + e.getMessage());
-            e.printStackTrace();
-        }
+        Folder f = new Folder(testDirFile);
+        File.createTempFile("test-file-1", ".txt", testDirFile);
+        
+        Thread.sleep(1000);
+        
+        List<File> newFiles = FolderUtils.identifyNewFiles(f);
+        assertEquals("List has one entry",1,newFiles.size());
+        
+        Thread.sleep(1000);
+        
+        newFiles = FolderUtils.identifyNewFiles(f);
+        assertTrue("List is empty",newFiles.isEmpty());
+        
+        Thread.sleep(1100);
+
+        File.createTempFile("test-file-2", ".txt", testDirFile);
+        
+        newFiles = FolderUtils.identifyNewFiles(f);
+        assertEquals("List has one entry",1,newFiles.size());
     }
 }
