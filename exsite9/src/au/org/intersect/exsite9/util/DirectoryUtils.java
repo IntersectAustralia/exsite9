@@ -7,6 +7,11 @@ import java.util.regex.Pattern;
  */
 public final class DirectoryUtils
 {
+    private DirectoryUtils()
+    {
+        // No instances please!
+    }
+
     /**
      * Regex to check for illegal characters in directory names.
      * Illegal characters are: \ / : * " ? < > |

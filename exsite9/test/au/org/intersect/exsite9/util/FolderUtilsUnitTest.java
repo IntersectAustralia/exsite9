@@ -51,13 +51,6 @@ public final class FolderUtilsUnitTest
     }
     
     @Test
-    public void constructorTest()
-    {
-    	FolderUtils fh = new FolderUtils();
-    	assertTrue(fh instanceof FolderUtils);
-    }
-    
-    @Test
     public void testIdentifyNewFilesEmptyFolder()
     {
         Folder f = new Folder(testDirFile);

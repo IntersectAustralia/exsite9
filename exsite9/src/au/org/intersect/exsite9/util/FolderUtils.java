@@ -14,6 +14,11 @@ import au.org.intersect.exsite9.domain.Folder;
 
 public final class FolderUtils
 {
+    private FolderUtils()
+    {
+        // No instances please!
+    }
+
     /**
      * Recursively looks for files in the folder & it's sub folders that are new since the last time
      * it checked.
