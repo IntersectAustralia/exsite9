@@ -6,10 +6,11 @@
  */
 package au.org.intersect.exsite9.view.provider;
 
+import java.io.File;
+
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.ViewerCell;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
@@ -26,6 +27,8 @@ import au.org.intersect.exsite9.view.ProjectExplorerView;
  */
 public final class ProjectExplorerViewLabelProvider extends StyledCellLabelProvider
 {
+    private static final String NEW_LINE = System.getProperty("line.separator");
+
     /**
      * Constructor
      */
@@ -66,11 +69,16 @@ public final class ProjectExplorerViewLabelProvider extends StyledCellLabelProvi
         else if (element instanceof ResearchFile)
         {
             final ResearchFile rf = (ResearchFile) element;
-            text.append(rf.getFile().getName());
-            if (rf.getMetadataAssociations().isEmpty())
+            final File file = rf.getFile();
+            text.append(file.getName());
+
+            if (!file.exists())
             {
-                final Image editImage = Activator.getImageDescriptor("/icons/icon_warning_12.png").createImage();
-                cell.setImage(editImage);
+                cell.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
+            }
+            else if (rf.getMetadataAssociations().isEmpty())
+            {
+                cell.setImage(Activator.getImageDescriptor("/icons/icon_warning_12.png").createImage());
             }
             else
             {
@@ -97,10 +105,22 @@ public final class ProjectExplorerViewLabelProvider extends StyledCellLabelProvi
         {
             return null;
         }
+
         final ResearchFile rf = (ResearchFile) element;
-        return rf.getMetadataAssociations().isEmpty() ? "(THIS FILE HAS NO METADATA ASSOCIATIONS)"
-                + System.getProperty("line.separator") + rf.getFile().getAbsolutePath() : rf.getFile()
-                .getAbsolutePath();
+        final File file = rf.getFile();
+
+        final StringBuilder sb = new StringBuilder();
+
+        if (!file.exists())
+        {
+            sb.append("THIS FILE DOES NOT EXIST").append(NEW_LINE);
+        }
+        if (rf.getMetadataAssociations().isEmpty())
+        {
+            sb.append("THIS FILE HAS NO METADATA ASSOCIATIONS").append(NEW_LINE);
+        }
+        sb.append(rf.getFile().getAbsolutePath());
+        return sb.toString();
     }
 
     /**

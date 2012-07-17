@@ -8,6 +8,8 @@ package au.org.intersect.exsite9.commands.handlers;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
+import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -24,7 +26,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.SubmissionPackage;
 import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.service.ISubmissionPackageService;
@@ -35,6 +41,8 @@ import au.org.intersect.exsite9.service.ISubmissionPackageService;
 public class ExportSubmissionPackageZIPHandler implements IHandler
 {
     private static final Logger LOG = Logger.getLogger(ExportSubmissionPackageZIPHandler.class);
+
+    private static final String NEW_LINE = System.getProperty("line.separator");
 
     /**
      * @{inheritDoc}
@@ -85,7 +93,31 @@ public class ExportSubmissionPackageZIPHandler implements IHandler
             return null;
         }
 
-        // TODO Before we generate the output ZIP, we should ensure that all files selected for this SubmissionPackage are still where we think they are.
+        // Before we generate the output ZIP, we should ensure that all files selected for this SubmissionPackage are still where we think they are.
+        final Collection<ResearchFile> missingFiles = Collections2.filter(submissionPackage.getResearchFiles(), new Predicate<ResearchFile>()
+        {
+            @Override
+            public boolean apply(final ResearchFile input)
+            {
+                return !input.getFile().exists();
+            }
+        });
+
+        if (!missingFiles.isEmpty())
+        {
+            final StringBuilder sb = new StringBuilder();
+            for (final Iterator<ResearchFile> iter = missingFiles.iterator(); iter.hasNext(); )
+            {
+                sb.append(iter.next().getFile().getAbsolutePath());
+                if (iter.hasNext())
+                {
+                    sb.append(NEW_LINE);
+                }
+            }
+            MessageDialog.openError(shell, "Could not generate submission package ZIP file", "The following files are missing:" + NEW_LINE + sb.toString());
+            LOG.error("Could not create submission package ZIP file because files are missing.");
+            return null;
+        }
 
         final ISubmissionPackageService submissionPackageService = (ISubmissionPackageService) PlatformUI.getWorkbench().getService(ISubmissionPackageService.class);
         final IRunnableWithProgress zipBuilderRunnable = submissionPackageService.buildZIPForSubmissionPackage(currentproject, submissionPackage, new File(filePath));
