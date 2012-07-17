@@ -19,10 +19,12 @@ import au.org.intersect.exsite9.dao.ResearchFileDAO;
 import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
 import au.org.intersect.exsite9.dao.factory.MetadataAssociationDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
+import au.org.intersect.exsite9.domain.ExcludedFilesGroup;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataAssociation;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
+import au.org.intersect.exsite9.domain.NewFilesGroup;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.dto.HierarchyMoveDTO;
@@ -260,13 +262,17 @@ public final class GroupService implements IGroupService
                     boolean toContinue = false;
 
                     // Ensure there are no research files with the same name as the one being dropped into the destination.
-                    for (final ResearchFile siblingResearchFile : newParent.getResearchFiles())
+                    // It is OK to have research files with the same name in the NewFilesGroup or the ExcludedFilesGroup - since they never make it into SIPs.
+                    if (!(newParent instanceof NewFilesGroup || newParent instanceof ExcludedFilesGroup))
                     {
-                        if (siblingResearchFile.getFile().getName().equalsIgnoreCase(researchFile.getFile().getName()))
+                        for (final ResearchFile siblingResearchFile : newParent.getResearchFiles())
                         {
-                            sb.append("A file named " + researchFile.getFile().getName() + " already exists in the destination group.").append(NEW_LINE);
-                            toContinue = true;
-                            break;
+                            if (siblingResearchFile.getFile().getName().equalsIgnoreCase(researchFile.getFile().getName()))
+                            {
+                                sb.append("A file named " + researchFile.getFile().getName() + " already exists in the destination group.").append(NEW_LINE);
+                                toContinue = true;
+                                break;
+                            }
                         }
                     }
 

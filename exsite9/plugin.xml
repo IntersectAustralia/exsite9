@@ -162,6 +162,11 @@
          id="au.org.intersect.exsite9.commands.ExportSubmissionPackageZIPCommand"
          name="Export Submission Package ZIP">
    </command>
+   <command
+         defaultHandler="au.org.intersect.exsite9.commands.handlers.ExcludeResearchFilesHandler"
+         id="au.org.intersect.exsite9.commands.ExcludeResearchFiles"
+         name="Exclude Research Files">
+   </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -370,6 +375,17 @@
                </reference>
             </visibleWhen>
          </command>
+         <command
+               commandId="au.org.intersect.exsite9.commands.ExcludeResearchFiles"
+               label="Exclude"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <reference
+                     definitionId="au.org.intersect.exsite9.expression.InstanceOfResearchFile">
+               </reference>
+            </visibleWhen>
+         </command>
       </menuContribution>
       <menuContribution
             allPopups="false"
@@ -569,6 +585,19 @@
                   operator="or">
                <instanceof
                      value="au.org.intersect.exsite9.domain.SubmissionPackage">
+               </instanceof>
+            </iterate>
+         </with>
+      </definition>
+      <definition
+            id="au.org.intersect.exsite9.expression.InstanceOfResearchFile">
+         <with
+               variable="selection">
+            <iterate
+                  ifEmpty="false"
+                  operator="and">
+               <instanceof
+                     value="au.org.intersect.exsite9.domain.ResearchFile">
                </instanceof>
             </iterate>
          </with>

@@ -111,6 +111,10 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
                 .getCommand("au.org.intersect.exsite9.commands.ListFoldersCommand");
         listFoldersCommand.addExecutionListener(this);
 
+        final Command excludeResearchFilesCommand = commandService
+                .getCommand("au.org.intersect.exsite9.commands.ExcludeResearchFiles");
+        excludeResearchFilesCommand.addExecutionListener(this);
+
         initContextMenu();
     }
 
@@ -180,7 +184,8 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
                 || commandId.equals("au.org.intersect.exsite9.commands.RenameGroupCommand")
                 || commandId.equals("au.org.intersect.exsite9.commands.DeleteGroupCommand")
                 || commandId.equals("au.org.intersect.exsite9.commands.ReloadProjectCommand")
-                || commandId.equals("au.org.intersect.exsite9.commands.ListFoldersCommand"))
+                || commandId.equals("au.org.intersect.exsite9.commands.ListFoldersCommand")
+                || commandId.equals("au.org.intersect.exsite9.commands.ExcludeResearchFiles"))
         {
             refresh();
         }

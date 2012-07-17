@@ -71,6 +71,9 @@ public final class Project implements Serializable
     @OneToOne(cascade = CascadeType.ALL)
     private Group newFilesNode;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private Group excludedFilesNode;
+
     @OneToMany
     private final List<SubmissionPackage> submissionPackages = new ArrayList<SubmissionPackage>();
     
@@ -120,6 +123,7 @@ public final class Project implements Serializable
         this.folders = new ArrayList<Folder>(0);
         this.rootNode = new RootGroup(this.name);
         this.newFilesNode = new NewFilesGroup();
+        this.excludedFilesNode = new ExcludedFilesGroup();
         this.rootNode.getGroups().add(newFilesNode);
         this.metadataCategories = new ArrayList<MetadataCategory>();
     }
@@ -332,6 +336,16 @@ public final class Project implements Serializable
     public void setNewFilesNode(Group newFilesNode)
     {
         this.newFilesNode = newFilesNode;
+    }
+
+    public Group getExcludedFilesNode()
+    {
+        return excludedFilesNode;
+    }
+
+    public void setExcludedFilesNode(Group excludedFilesNode)
+    {
+        this.excludedFilesNode = excludedFilesNode;
     }
 
     public List<Folder> getFolders()
