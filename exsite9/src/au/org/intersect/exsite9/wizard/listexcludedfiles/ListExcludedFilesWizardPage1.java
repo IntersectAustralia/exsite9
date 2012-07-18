@@ -32,6 +32,8 @@ public final class ListExcludedFilesWizardPage1 extends WizardPage implements Se
 
     private org.eclipse.swt.widgets.List excludedFilesList;
 
+    private Button removeButton;
+
     /**
      * Constructor
      * @param excludedFiles The list of currently excluded files.
@@ -73,10 +75,10 @@ public final class ListExcludedFilesWizardPage1 extends WizardPage implements Se
         rowLayout.justify = true;
         rowComp.setLayout(rowLayout);
 
-        final Button removeButton = new Button(rowComp, SWT.PUSH);
-        removeButton.setText("Remove");
-        removeButton.addSelectionListener(this);
-        removeButton.setEnabled(false);
+        this.removeButton = new Button(rowComp, SWT.PUSH);
+        this.removeButton.setText("Reinclude");
+        this.removeButton.addSelectionListener(this);
+        this.removeButton.setEnabled(false);
 
         this.excludedFilesList.addSelectionListener(new SelectionListener()
         {
@@ -108,6 +110,7 @@ public final class ListExcludedFilesWizardPage1 extends WizardPage implements Se
         this.excludedFilesList.remove(selectedIndex);
         this.excludedFilesToInclude.add(this.excludedFiles.get(selectedIndex));
         this.setPageComplete(true);
+        this.removeButton.setEnabled(excludedFilesList.getSelectionCount() > 0);
     }
 
     @Override
