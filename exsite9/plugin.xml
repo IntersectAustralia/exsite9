@@ -167,6 +167,11 @@
          id="au.org.intersect.exsite9.commands.ExcludeResearchFiles"
          name="Exclude Research Files">
    </command>
+   <command
+         defaultHandler="au.org.intersect.exsite9.commands.handlers.ListExcludedFilesHandler"
+         id="au.org.intersect.exsite9.commands.ListExcludedFilesCommand"
+         name="List Excluded Files">
+   </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -217,10 +222,17 @@
                   tooltip="List the project folders">
             </command>
             <command
+                  commandId="au.org.intersect.exsite9.commands.ListExcludedFilesCommand"
+                  label="Excluded Files..."
+                  style="push"
+                  tooltip="Lists the files that have been excluded from this project">
+            </command>
+            <command
                   commandId="au.org.intersect.exsite9.commands.ReloadProjectCommand"
                   icon="icons/icon_refresh_16.png"
                   label="Refresh"
-                  style="push">
+                  style="push"
+                  tooltip="Refresh the project&apos;s folders">
             </command>
             <command
                   commandId="au.org.intersect.exsite9.commands.ExportProjectXMLCommand"
@@ -317,6 +329,18 @@
                label="Folders..."
                style="push"
                tooltip="List the project folders">
+            <visibleWhen
+                  checkEnabled="false">
+               <reference
+                     definitionId="au.org.intersect.exsite9.expression.InstanceOfProject">
+               </reference>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="au.org.intersect.exsite9.commands.ListExcludedFilesCommand"
+               label="Excluded Files..."
+               style="push"
+               tooltip="Lists the files that have been excluded from this project">
             <visibleWhen
                   checkEnabled="false">
                <reference

@@ -91,7 +91,7 @@ public final class ExcludeResearchFilesHandler implements IHandler
         if (out != null)
         {
             final Shell shell = HandlerUtil.getActiveWorkbenchWindow(event).getShell();
-            MessageDialog.openError(shell, "Could not exclude Research Files", out); 
+            MessageDialog.openError(shell, "Could not exclude files", out); 
         }
         return null;
     }
