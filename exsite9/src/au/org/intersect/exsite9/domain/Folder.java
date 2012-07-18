@@ -107,13 +107,13 @@ public final class Folder implements Serializable
             return false;
         }
         final Folder other = (Folder) obj;
-        return Objects.equal(this.folder.getName(), other.folder.getName()) && Objects.equal(this.folder.getAbsolutePath(), other.folder.getAbsolutePath());
+        return Objects.equal(this.id, other.id);
     }
 
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.folder.getName()).append(this.folder.getAbsolutePath()).toHashCode();
+        return new HashCodeBuilder().append(this.id).toHashCode();
     }
 
 }

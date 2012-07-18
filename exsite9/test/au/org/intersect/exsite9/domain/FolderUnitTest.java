@@ -54,7 +54,9 @@ public final class FolderUnitTest
         final File fileWithoutPath = new File("file.txt");
 
         final Folder toTest1 = new Folder(file);
+        toTest1.setId(1L);
         final Folder toTest2 = new Folder(fileWithoutPath);
+        toTest2.setId(2L);
    
         assertNotEqualsHashCode(toTest1, toTest2);
         assertFalse(toTest1.equals(null));
