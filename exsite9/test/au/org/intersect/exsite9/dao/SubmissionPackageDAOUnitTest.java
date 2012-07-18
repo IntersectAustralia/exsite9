@@ -45,7 +45,7 @@ public final class SubmissionPackageDAOUnitTest extends DAOTest
         toTest.updateSubmissionPackage(sp);
 
         assertEquals(rf, toTest.findSubmissionPackageById(sp.getId()).getResearchFiles().get(0));
-        assertEquals(sp, toTest.getSubmissionPackagesWithResearchFiles(rf).get(0));
+        assertEquals(sp, toTest.findSubmissionPackagesWithResearchFile(rf).get(0));
 
         sp.getResearchFiles().clear();
         // perform update inside a transaction
@@ -54,7 +54,7 @@ public final class SubmissionPackageDAOUnitTest extends DAOTest
         em.getTransaction().commit();
 
         assertTrue(toTest.findSubmissionPackageById(sp.getId()).getResearchFiles().isEmpty());
-        assertTrue(toTest.getSubmissionPackagesWithResearchFiles(rf).isEmpty());
+        assertTrue(toTest.findSubmissionPackagesWithResearchFile(rf).isEmpty());
 
         toTest.deleteSubmissionPackage(sp);
         assertNull(toTest.findSubmissionPackageById(sp.getId()));

@@ -48,6 +48,14 @@ public interface ISubmissionPackageService
     SubmissionPackage updateSubmissionPackage(final SubmissionPackage submissionPackage, final String name, final String description, final List<ResearchFile> researchFiles);
 
     /**
+     * Updates a submission Package.
+     * @param submissionPackage The submission package to update.
+     * @param researchFiles The new set of research files for the submission package.
+     * @return The updates submission package.
+     */
+    SubmissionPackage updateSubmissionPackage(final SubmissionPackage submissionPackage, final List<ResearchFile> researchFiles);
+
+    /**
      * Deletes a Submission Package.
      * @param submissionPackage The submission package to delete.
      */
@@ -69,4 +77,11 @@ public interface ISubmissionPackageService
      * @return The RunnableWithError - so we can execute it in the UI thread wrapped by a progress dialog.
      */
     IRunnableWithProgress buildZIPForSubmissionPackage(final Project project, final SubmissionPackage submissionPackage, final File fileToWrite);
+
+    /**
+     * Obtains any submission packages that contain the provided research file.
+     * @param researchFile The research file.
+     * @return The submission packages that contain the research file.
+     */
+    List<SubmissionPackage> findSubmissionPackagesWithResearchFile(final ResearchFile researchFile);
 }

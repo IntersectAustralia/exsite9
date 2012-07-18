@@ -57,7 +57,7 @@ public final class SubmissionPackageDAO
         return em.find(SubmissionPackage.class, id);
     }
 
-    public List<SubmissionPackage> getSubmissionPackagesWithResearchFiles(final ResearchFile researchFile)
+    public List<SubmissionPackage> findSubmissionPackagesWithResearchFile(final ResearchFile researchFile)
     {
         final TypedQuery<SubmissionPackage> query = em.createQuery("SELECT s FROM SubmissionPackage s WHERE :researchFile MEMBER OF s.researchFiles", SubmissionPackage.class);
         query.setParameter("researchFile", researchFile);

@@ -78,6 +78,9 @@ public final class SubmissionPackageService implements ISubmissionPackageService
         }
     }
 
+    /**
+     * @{inheritDoc}
+     */
     @Override
     public SubmissionPackage updateSubmissionPackage(final SubmissionPackage submissionPackage, final String name, final String description, final List<ResearchFile> researchFiles)
     {
@@ -100,6 +103,18 @@ public final class SubmissionPackageService implements ISubmissionPackageService
         }
     }
 
+    /**
+     * @{inheritDoc}
+     */
+    @Override
+    public SubmissionPackage updateSubmissionPackage(final SubmissionPackage submissionPackage, final List<ResearchFile> researchFiles)
+    {
+        return updateSubmissionPackage(submissionPackage, submissionPackage.getName(), submissionPackage.getDescription(), researchFiles);
+    }
+
+    /**
+     * @{inheritDoc}
+     */
     @Override
     public SubmissionPackage findSubmissionPackageById(final Long id)
     {
@@ -115,6 +130,9 @@ public final class SubmissionPackageService implements ISubmissionPackageService
         }
     }
 
+    /**
+     * @{inheritDoc}
+     */
     @Override
     public void deleteSubmissionPackage(final SubmissionPackage submissionPackage)
     {
@@ -136,6 +154,9 @@ public final class SubmissionPackageService implements ISubmissionPackageService
         }
     }
 
+    /**
+     * @{inheritDoc}
+     */
     @Override
     public String buildXMLForSubmissionPackage(Project project, SubmissionPackage submissionPackage)
     {
@@ -153,6 +174,9 @@ public final class SubmissionPackageService implements ISubmissionPackageService
         }
     }
 
+    /**
+     * @{inheritDoc}
+     */
     @Override
     public IRunnableWithProgress buildZIPForSubmissionPackage(final Project project, final SubmissionPackage submissionPackage, final File fileToWrite)
     {
@@ -172,4 +196,21 @@ public final class SubmissionPackageService implements ISubmissionPackageService
 
     }
 
+    /**
+     * @{inheritDoc}
+     */
+    @Override
+    public List<SubmissionPackage> findSubmissionPackagesWithResearchFile(final ResearchFile researchFile)
+    {
+        final EntityManager em = this.entityManagerFactory.createEntityManager();
+        try
+        {
+            final SubmissionPackageDAO submissionPackageDAO = submissionPackageDAOFactory.createInstance(em);
+            return submissionPackageDAO.findSubmissionPackagesWithResearchFile(researchFile);
+        }
+        finally
+        {
+            em.close();
+        }
+    }
 }

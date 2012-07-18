@@ -227,7 +227,7 @@ public class ProjectService implements IProjectService
 
                         // Remove the research file from any submission packages it is part of.
                         final List<SubmissionPackage> submissionPackages = submissionPackageDAO
-                                .getSubmissionPackagesWithResearchFiles(researchFile);
+                                .findSubmissionPackagesWithResearchFile(researchFile);
                         for (final SubmissionPackage submissionPackage : submissionPackages)
                         {
                             submissionPackage.getResearchFiles().remove(researchFile);

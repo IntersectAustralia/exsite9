@@ -23,9 +23,11 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
+import au.org.intersect.exsite9.domain.SubmissionPackage;
 import au.org.intersect.exsite9.dto.HierarchyMoveDTO;
 import au.org.intersect.exsite9.service.IGroupService;
 import au.org.intersect.exsite9.service.IProjectManager;
+import au.org.intersect.exsite9.service.ISubmissionPackageService;
 
 /**
  * Handles excluding of Research Files.
@@ -76,6 +78,9 @@ public final class ExcludeResearchFilesHandler implements IHandler
         // Setup the hierarchical move DTO Objects.
         final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
         final IGroupService groupService = (IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class);
+        final ISubmissionPackageService submissionPackageService = (ISubmissionPackageService) PlatformUI.getWorkbench().getService(ISubmissionPackageService.class);
+
+        final Shell shell = HandlerUtil.getActiveWorkbenchWindow(event).getShell();
 
         final Project project = projectManager.getCurrentProject();
         final Group destGroup = project.getExcludedFilesNode();
@@ -84,13 +89,30 @@ public final class ExcludeResearchFilesHandler implements IHandler
 
         for (final ResearchFile rf : toExclude)
         {
+            // If a selected research file is included in submission packages
+            // display a confirmation first, and remove it from the submission packages if the user wishes to proceed
+            final List<SubmissionPackage> submissionPackages = submissionPackageService.findSubmissionPackagesWithResearchFile(rf);
+            if (!submissionPackages.isEmpty())
+            {
+                final boolean confirm = MessageDialog.openQuestion(shell, "Are you sure?", "Are you sure you wish to exclude file " + rf.getFile().getName() + "? It is part of a submission package.");
+                if (!confirm)
+                {
+                    continue;
+                }
+
+                for (final SubmissionPackage submissionPackage : submissionPackages)
+                {
+                    final List<ResearchFile> spResearchFiles = new ArrayList<ResearchFile>(submissionPackage.getResearchFiles());
+                    spResearchFiles.remove(rf);
+                    submissionPackageService.updateSubmissionPackage(submissionPackage, spResearchFiles);
+                }
+            }
             moveObjects.add(new HierarchyMoveDTO(rf, rf.getParentGroup(), destGroup));
         }
 
         final String out = groupService.performHierarchyMove(moveObjects);
         if (out != null)
         {
-            final Shell shell = HandlerUtil.getActiveWorkbenchWindow(event).getShell();
             MessageDialog.openError(shell, "Could not exclude files", out); 
         }
         return null;
