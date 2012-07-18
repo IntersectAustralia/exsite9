@@ -37,7 +37,7 @@ public class ListFoldersWizard extends Wizard
     @Override
     public boolean performFinish()
     {
-        final List<String> modifiedFolderList = this.page1.getFolderList();
+        final List<Folder> deletedFolderList = this.page1.getDeletedFolderList();
         final Map<Folder, String> foldersThatNeedToBeUpdated = page1.getFoldersAndTheirUpdatedPaths();
 
         final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(
@@ -80,9 +80,9 @@ public class ListFoldersWizard extends Wizard
         //need to update the files in the folder but probably in the service
 
         //remove any existing folders that have been chosen to be removed
-        if (!modifiedFolderList.isEmpty())
+        if (!deletedFolderList.isEmpty())
         {
-            projectService.removeFoldersFromProject(project, modifiedFolderList);
+            projectService.removeFoldersFromProject(project, deletedFolderList);
         }
 
         return true;

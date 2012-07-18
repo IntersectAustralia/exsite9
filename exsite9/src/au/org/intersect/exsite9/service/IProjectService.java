@@ -34,9 +34,9 @@ public interface IProjectService
      * Remove folders from a project. This will also remove all files added to the project
      * because they were from a removed folder.
      * @param project The current project
-     * @param folders The list of folder paths minus the ones to remove
+     * @param deletedFolderList The list of folders to be removed
      */
-    public Project removeFoldersFromProject(final Project project, final List<String> folders);
+    public Project removeFoldersFromProject(final Project project, final List<Folder> deletedFolderList);
     
     /**
      * finds all projects in the database.

@@ -1,5 +1,6 @@
 package au.org.intersect.exsite9.wizard.listfolders;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +29,7 @@ public class ListFoldersWizardPage1 extends WizardPage implements SelectionListe
     private Button editButton;
     
     private List<Folder> folders;
+    private List<Folder> deletedFolderList = new ArrayList<Folder>();
     private Map<Folder, String> foldersAndNewPaths = new HashMap<Folder, String>();
 
     public ListFoldersWizardPage1(final List<Folder> folders)
@@ -112,6 +114,7 @@ public class ListFoldersWizardPage1 extends WizardPage implements SelectionListe
             
             if(result == 0)
             {
+                this.deletedFolderList.add(this.folders.get(this.folderList.getSelectionIndex()));
                 this.folderList.remove(this.folderList.getSelectionIndex());
                 setPageComplete(true);
             }
@@ -131,6 +134,7 @@ public class ListFoldersWizardPage1 extends WizardPage implements SelectionListe
             if (path != null)
             {
                 this.foldersAndNewPaths.put(this.folders.get(this.folderList.getSelectionIndex()), path);
+                //TODO: edit path in UI
                 setPageComplete(true);
             }
         }
@@ -142,8 +146,7 @@ public class ListFoldersWizardPage1 extends WizardPage implements SelectionListe
     @Override
     public void widgetDefaultSelected(SelectionEvent e)
     {
-        // TODO Auto-generated method stub
-        
+      
     }
     
     public List<String> getFolderList()
@@ -160,5 +163,10 @@ public class ListFoldersWizardPage1 extends WizardPage implements SelectionListe
     {
         removeButton.setEnabled(folderList.getSelectionCount() > 0);
         editButton.setEnabled(folderList.getSelectionCount() == 1);        
+    }
+
+    public List<Folder> getDeletedFolderList()
+    {
+        return this.deletedFolderList;
     }
 }
