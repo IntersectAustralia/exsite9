@@ -1,6 +1,8 @@
 package au.org.intersect.exsite9.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
 
@@ -25,116 +27,116 @@ import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 public final class ProjectServiceUnitTest extends DAOTest
 {
     private ProjectService projectService;
-    
+
     @Test
     public void createNewProjectTest()
     {
         EntityManagerFactory emf = mock(EntityManagerFactory.class);
 
         stub(emf.createEntityManager()).toReturn(createEntityManager());
-        
+
         ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
         ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
-        
-        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory, submissionPackageDAOFactory);
-        
-        Project project = projectService.createProject(new ProjectFieldsDTO("name","owner","description", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
 
-        
+        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, researchFileDAOFactory,
+                metadataAssociationDAOFactory, submissionPackageDAOFactory);
+
+        Project project = projectService.createProject(new ProjectFieldsDTO("name", "owner", "description", "", "", "",
+                "", "", "", "", "", "", "", "", "", "", "", ""));
+
         Project newProject = projectDAOFactory.createInstance(createEntityManager()).findById(project.getId());
-        
+
         assertEquals(project, newProject);
     }
-    
+
     @Test
     public void mapFolderToProjectTest()
     {
         EntityManagerFactory emf = mock(EntityManagerFactory.class);
-        
-        stub(emf.createEntityManager()).toReturn(createEntityManager())
-                                    .toReturn(createEntityManager());
-        
+
+        stub(emf.createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager());
+
         ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
         ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
-        
-        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory, submissionPackageDAOFactory);
-        
-        Folder folder = new Folder(new File("/tmp"));
-        
-        Project project = projectService.createProject(new ProjectFieldsDTO("name","owner","description", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
 
-        
+        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, researchFileDAOFactory,
+                metadataAssociationDAOFactory, submissionPackageDAOFactory);
+
+        Folder folder = new Folder(new File("/tmp"));
+
+        Project project = projectService.createProject(new ProjectFieldsDTO("name", "owner", "description", "", "", "",
+                "", "", "", "", "", "", "", "", "", "", "", ""));
+
         projectService.mapFolderToProject(project, folder);
-        
+
         Project newProject = projectDAOFactory.createInstance(createEntityManager()).findById(project.getId());
-        
+
         assertEquals(project, newProject);
     }
-    
+
     @Test
     public void removeFoldersFromprojectTest()
     {
         EntityManagerFactory emf = mock(EntityManagerFactory.class);
-        
-        stub(emf.createEntityManager()).toReturn(createEntityManager())
-                                       .toReturn(createEntityManager())
-                                       .toReturn(createEntityManager())
-                                       .toReturn(createEntityManager());
-        
+
+        stub(emf.createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager())
+                .toReturn(createEntityManager()).toReturn(createEntityManager());
+
         Folder folder1 = new Folder(new File("/tmp1"));
         Folder folder2 = new Folder(new File("/tmp2"));
-        
+
         ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
         ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
-        
-        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory, submissionPackageDAOFactory);
-        
-        Project project = projectService.createProject(new ProjectFieldsDTO("name","owner","description", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
-        
+
+        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, researchFileDAOFactory,
+                metadataAssociationDAOFactory, submissionPackageDAOFactory);
+
+        Project project = projectService.createProject(new ProjectFieldsDTO("name", "owner", "description", "", "", "",
+                "", "", "", "", "", "", "", "", "", "", "", ""));
+
         projectService.mapFolderToProject(project, folder1);
         projectService.mapFolderToProject(project, folder2);
-        
-        List<String> modifiedFolderList = new ArrayList<String>(0);
-        
-        modifiedFolderList.add(folder2.getFolder().getPath());
-        
-        projectService.removeFoldersFromProject(project, modifiedFolderList);
-        
+
+        List<Folder> deletedFolderList = new ArrayList<Folder>(0);
+
+        deletedFolderList.add(folder2);
+
+        projectService.removeFoldersFromProject(project, deletedFolderList);
+
         Project newProject = projectDAOFactory.createInstance(createEntityManager()).findById(project.getId());
-        
-        assertEquals(1,newProject.getFolders().size());
-        assertEquals(folder2.getFolder().getPath(),newProject.getFolders().get(0).getFolder().getPath());
+
+        assertEquals(1, newProject.getFolders().size());
+        assertEquals(folder1.getFolder().getPath(), newProject.getFolders().get(0).getFolder().getPath());
     }
 
     @Test
     public void testGetAllProjects()
     {
         final EntityManagerFactory emf = mock(EntityManagerFactory.class);
-        stub(emf.createEntityManager()).toReturn(createEntityManager())
-                                       .toReturn(createEntityManager())
-                                       .toReturn(createEntityManager())
-                                       .toReturn(createEntityManager())
-                                       .toReturn(createEntityManager());
+        stub(emf.createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager())
+                .toReturn(createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager());
 
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         final FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
         final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         final MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         final SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
-        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory, submissionPackageDAOFactory);
+        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, researchFileDAOFactory,
+                metadataAssociationDAOFactory, submissionPackageDAOFactory);
 
         assertEquals(0, projectService.getAllProjects().size());
 
-        final ProjectFieldsDTO p1dto = new ProjectFieldsDTO("p1", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+        final ProjectFieldsDTO p1dto = new ProjectFieldsDTO("p1", "", "", "", "", "", "", "", "", "", "", "", "", "",
+                "", "", "", "");
         final Project p1 = projectService.createProject(p1dto);
         assertNotNull(p1.getId());
 
@@ -142,7 +144,8 @@ public final class ProjectServiceUnitTest extends DAOTest
         assertEquals(1, out.size());
         assertEquals(p1, out.get(0));
 
-        final ProjectFieldsDTO p2dto = new ProjectFieldsDTO("p2", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+        final ProjectFieldsDTO p2dto = new ProjectFieldsDTO("p2", "", "", "", "", "", "", "", "", "", "", "", "", "",
+                "", "", "", "");
         final Project p2 = projectService.createProject(p2dto);
         assertNotNull(p2.getId());
 
@@ -156,22 +159,21 @@ public final class ProjectServiceUnitTest extends DAOTest
     public void testEditProject()
     {
         final EntityManagerFactory emf = mock(EntityManagerFactory.class);
-        stub(emf.createEntityManager()).toReturn(createEntityManager())
-                                       .toReturn(createEntityManager())
-                                       .toReturn(createEntityManager())
-                                       .toReturn(createEntityManager())
-                                       .toReturn(createEntityManager());
+        stub(emf.createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager())
+                .toReturn(createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager());
 
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         final FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
         final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         final MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         final SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
-        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory, submissionPackageDAOFactory);
+        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, researchFileDAOFactory,
+                metadataAssociationDAOFactory, submissionPackageDAOFactory);
 
         assertEquals(0, projectService.getAllProjects().size());
 
-        final ProjectFieldsDTO p1dto = new ProjectFieldsDTO("p1", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+        final ProjectFieldsDTO p1dto = new ProjectFieldsDTO("p1", "", "", "", "", "", "", "", "", "", "", "", "", "",
+                "", "", "", "");
         final Project p1 = projectService.createProject(p1dto);
         assertNotNull(p1.getId());
 
@@ -193,8 +195,10 @@ public final class ProjectServiceUnitTest extends DAOTest
         final String relatedParty = "relatedParty";
         final String relatedActivity = "relatedActivity";
         final String relatedInfo = "relatedInfo";
-        final ProjectFieldsDTO updatedFields = new ProjectFieldsDTO(name, owner, description, collectionType, rightsStatement, accessRights, license, identifier, subject, electronicLocation,
-                physicalLocation, placeOrRegionName, latitudeLongitude, datesOfCapture, citationInfo, relatedParty, relatedActivity, relatedInfo);
+        final ProjectFieldsDTO updatedFields = new ProjectFieldsDTO(name, owner, description, collectionType,
+                rightsStatement, accessRights, license, identifier, subject, electronicLocation, physicalLocation,
+                placeOrRegionName, latitudeLongitude, datesOfCapture, citationInfo, relatedParty, relatedActivity,
+                relatedInfo);
 
         projectService.editProject(updatedFields, p1.getId());
 
@@ -219,5 +223,39 @@ public final class ProjectServiceUnitTest extends DAOTest
         assertEquals(relatedParty, editedProject.getRelatedParty());
         assertEquals(relatedActivity, editedProject.getRelatedActivity());
         assertEquals(relatedInfo, editedProject.getRelatedInformation());
+    }
+
+    @Test
+    public void updateFolderPathTest()
+    {
+        EntityManagerFactory emf = mock(EntityManagerFactory.class);
+
+        stub(emf.createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager())
+                .toReturn(createEntityManager()).toReturn(createEntityManager());
+
+        ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
+        FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
+        ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
+        MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
+        SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
+
+        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, researchFileDAOFactory,
+                metadataAssociationDAOFactory, submissionPackageDAOFactory);
+
+        Folder folder = new Folder(new File("/tmp"));
+
+        Project project = projectService.createProject(new ProjectFieldsDTO("name", "owner", "description", "", "", "",
+                "", "", "", "", "", "", "", "", "", "", "", ""));
+
+        projectService.mapFolderToProject(project, folder);
+
+        File updatedFileObject = new File("/new/location");
+
+        projectService.updateFolderPath(folder.getId(), updatedFileObject);
+
+        Folder folderFromDB = folderDAOFactory.createInstance(emf.createEntityManager()).findById(folder.getId());
+
+        assertTrue(folderFromDB.getFolder().getPath().equals(updatedFileObject.getPath()));
+
     }
 }
