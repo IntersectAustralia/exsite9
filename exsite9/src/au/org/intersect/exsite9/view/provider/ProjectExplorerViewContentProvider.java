@@ -102,16 +102,8 @@ public final class ProjectExplorerViewContentProvider implements ITreeContentPro
             return Collections.emptyList().toArray();
         }
 
-        final List<Group> groups;
-        if (!this.includeNewFilesGroup)
-        {
-            groups = new ArrayList<Group>(Collections2.filter(rootGroup.getGroups(), Predicates.not(Predicates.instanceOf(NewFilesGroup.class))));
-        }
-        else
-        {
-            groups = new ArrayList<Group>(rootGroup.getGroups());
-        }
-
+        // We include the NewFilesGroup below (if needed)
+        final List<Group> groups = new ArrayList<Group>(Collections2.filter(rootGroup.getGroups(), Predicates.not(Predicates.instanceOf(NewFilesGroup.class))));
         final List<ResearchFile> researchFiles = new ArrayList<ResearchFile>(rootGroup.getResearchFiles());
 
         Collections.sort(groups, new AlphabeticalGroupComparator());
@@ -120,6 +112,13 @@ public final class ProjectExplorerViewContentProvider implements ITreeContentPro
         final List<Object> toReturn = new ArrayList<Object>();
         toReturn.addAll(groups);
         toReturn.addAll(researchFiles);
+
+        // Add the new files group last
+        if (this.includeNewFilesGroup)
+        {
+            toReturn.addAll(Collections2.filter(rootGroup.getGroups(), Predicates.instanceOf(NewFilesGroup.class)));
+        }
+
         return toReturn.toArray();
     }
 
