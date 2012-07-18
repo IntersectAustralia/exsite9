@@ -53,9 +53,10 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     private List<MetadataValue> metadataValues;
     private MetadataCategory metadataCategory;
     
-    public List<Group> assignedGroups = new ArrayList<Group>();
-    public List<ResearchFile> assignedFiles = new ArrayList<ResearchFile>();
-    public List<MetadataValue> valuesToBeDisassociated = new ArrayList<MetadataValue>();
+    private final List<Group> assignedGroups = new ArrayList<Group>();
+
+    private final List<ResearchFile> assignedFiles = new ArrayList<ResearchFile>();
+    private final List<MetadataValue> valuesToBeDisassociated = new ArrayList<MetadataValue>();
 
     protected AddMetadataCategoryWizardPage1(final String pageTitle, final String pageDescription, final Project project, final MetadataCategory metadataCategory,
             final List<MetadataValue> metadataValues)
@@ -276,7 +277,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                 editButton.setEnabled(metadataValuesListWidget.getSelectionCount() > 0);
                 return;
             }
-
+          
             final int selectedIndex = this.metadataValuesListWidget.getSelectionIndex();
 
             // Check to see if the metadata value is assigned to anything - and throw a warning if it is being deleted!
@@ -286,8 +287,10 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                 final IGroupService groupService = (IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class);
                 final IResearchFileService fileService = (IResearchFileService) PlatformUI.getWorkbench().getService(IResearchFileService.class);
 
-                assignedGroups = groupService.getGroupsWithAssociatedMetadata(metadataCategory, metadataValueToDelete);
-                assignedFiles = fileService.getResearchFilesWithAssociatedMetadata(metadataCategory, metadataValueToDelete);
+                assignedGroups.clear();
+                assignedFiles.clear();
+                assignedGroups.addAll(groupService.getGroupsWithAssociatedMetadata(metadataCategory, metadataValueToDelete));
+                assignedFiles.addAll(fileService.getResearchFilesWithAssociatedMetadata(metadataCategory, metadataValueToDelete));
                 
                 if (!assignedGroups.isEmpty() || !assignedFiles.isEmpty())
                 {
@@ -398,5 +401,20 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     public List<MetadataValue> getMetadataCategoryValues()
     {
         return this.metadataValues;
+    }
+    
+    public List<Group> getAssignedGroups()
+    {
+        return assignedGroups;
+    }
+
+    public List<ResearchFile> getAssignedFiles()
+    {
+        return assignedFiles;
+    }
+
+    public List<MetadataValue> getValuesToBeDisassociated()
+    {
+        return valuesToBeDisassociated;
     }
 }

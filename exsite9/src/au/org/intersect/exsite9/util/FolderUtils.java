@@ -46,7 +46,7 @@ public final class FolderUtils
 
     private static List<File> listFiles(final Folder folder, final IOFileFilter fileFilter, final IOFileFilter dirFilter)
     {
-        final List<File> newFileList = new ArrayList<File>(FileUtils.listFiles(new File(folder.getPath()), fileFilter, dirFilter));
+        final List<File> newFileList = new ArrayList<File>(FileUtils.listFiles(folder.getFolder(), fileFilter, dirFilter));
         folder.setLastCheckTimeInMillis(System.currentTimeMillis());
         return newFileList;
     }

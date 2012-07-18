@@ -71,14 +71,14 @@ public class AddMetadataCategoryWizard extends Wizard
         final IResearchFileService fileService = (IResearchFileService) PlatformUI.getWorkbench().getService(
                 IResearchFileService.class);
 
-        for (final ResearchFile assignedFile : page1.assignedFiles)
+        for (final ResearchFile assignedFile : page1.getAssignedFiles())
         {
-            fileService.disassociateMultipleMetadataValues(assignedFile, metadataCategory, page1.valuesToBeDisassociated);
+            fileService.disassociateMultipleMetadataValues(assignedFile, metadataCategory, page1.getValuesToBeDisassociated());
         }
         
-        for (final Group assignedGroup : page1.assignedGroups)
+        for (final Group assignedGroup : page1.getAssignedGroups())
         {
-            groupService.disassociateMultipleMetadataValues(assignedGroup, metadataCategory, page1.valuesToBeDisassociated);
+            groupService.disassociateMultipleMetadataValues(assignedGroup, metadataCategory, page1.getValuesToBeDisassociated());
         }
         
         if (this.metadataCategory == null)
