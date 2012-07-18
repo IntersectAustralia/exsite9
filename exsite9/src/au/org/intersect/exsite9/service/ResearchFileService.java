@@ -67,11 +67,16 @@ public class ResearchFileService implements IResearchFileService
         EntityManager em = entityManagerFactory.createEntityManager();
         try
         {
-            ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
-            ResearchFileDAO researchFileDAO = researchFileDAOFactory.createInstance(em);
-            FolderDAO folderDAO = folderDAOFactory.createInstance(em);
-            
-            List<File> newFileList = FolderUtils.getAllFilesInFolder(folder);
+            if (!folder.getFolder().exists())
+            {
+                LOG.info("Cannot identify new files in folder '" + folder.getFolder().getAbsolutePath() + "'. It does not exist.");
+                return;
+            }
+
+            final List<File> newFileList = FolderUtils.getAllFilesInFolder(folder);
+            final ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
+            final ResearchFileDAO researchFileDAO = researchFileDAOFactory.createInstance(em);
+            final FolderDAO folderDAO = folderDAOFactory.createInstance(em);
             for (final File file : newFileList)
             {
                 // If there is already a research file in the database, do not insert another.

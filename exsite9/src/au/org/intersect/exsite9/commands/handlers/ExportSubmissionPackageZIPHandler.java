@@ -83,16 +83,6 @@ public class ExportSubmissionPackageZIPHandler implements IHandler
 
         final SubmissionPackage submissionPackage = (SubmissionPackage) selectedObject;
 
-        final FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
-        fileDialog.setOverwrite(true);
-        fileDialog.setFileName(submissionPackage.getName() + ".zip");
-        final String filePath = fileDialog.open();
-
-        if (filePath == null)
-        {
-            return null;
-        }
-
         // Before we generate the output ZIP, we should ensure that all files selected for this SubmissionPackage are still where we think they are.
         final Collection<ResearchFile> missingFiles = Collections2.filter(submissionPackage.getResearchFiles(), new Predicate<ResearchFile>()
         {
@@ -119,6 +109,16 @@ public class ExportSubmissionPackageZIPHandler implements IHandler
             return null;
         }
 
+        final FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
+        fileDialog.setOverwrite(true);
+        fileDialog.setFileName(submissionPackage.getName() + ".zip");
+        final String filePath = fileDialog.open();
+
+        if (filePath == null)
+        {
+            return null;
+        }
+
         final ISubmissionPackageService submissionPackageService = (ISubmissionPackageService) PlatformUI.getWorkbench().getService(ISubmissionPackageService.class);
         final IRunnableWithProgress zipBuilderRunnable = submissionPackageService.buildZIPForSubmissionPackage(currentproject, submissionPackage, new File(filePath));
 
@@ -131,12 +131,12 @@ public class ExportSubmissionPackageZIPHandler implements IHandler
         {
             final Throwable cause = e.getCause();
             MessageDialog.openError(shell, "Could not generate submission package ZIP file", "Could not generate submission package ZIP file. " + cause.getMessage());
-            LOG.error("Could not create submission package ZIP file. ", e);
+            LOG.error("Could not create submission package ZIP file.", e);
             return null;
         }
         catch (final InterruptedException e)
         {
-            LOG.info("User cancelled generation of ZIP file ");
+            LOG.info("User cancelled generation of ZIP file.");
         }
 
         return null;
