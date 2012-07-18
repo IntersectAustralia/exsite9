@@ -18,6 +18,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.eclipse.persistence.annotations.Convert;
+import org.eclipse.persistence.annotations.Converter;
 
 import com.google.common.base.Objects;
 
@@ -25,6 +27,8 @@ import com.google.common.base.Objects;
  * Represents a folder on the researcher's desktop that contains research data files
  */
 @Entity
+@Converter(name="fileToStringConverter",
+converterClass=au.org.intersect.exsite9.domain.utils.FileToStringConverter.class)
 public final class Folder implements Serializable
 {
     private static final long serialVersionUID = 8420843643147102477L;
@@ -32,8 +36,10 @@ public final class Folder implements Serializable
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String path;
+    
+    @Convert("fileToStringConverter")
+    private File folder;
+    
     private long lastCheckTimeInMillis = 0L;
     
     @OneToMany
@@ -41,20 +47,11 @@ public final class Folder implements Serializable
     
     public Folder()
     {
-        name = "";
-        path = "";
-    }
-    
-    public Folder(String name, String path)
-    {
-        this.name = name;
-        this.path = path;
     }
 
-    public Folder(File fileOnDisk)
+    public Folder(File folder)
     {
-        this.name = fileOnDisk.getName();
-        this.path = fileOnDisk.getAbsolutePath();
+        this.folder = folder;
     }
     
     public Long getId()
@@ -77,14 +74,15 @@ public final class Folder implements Serializable
         this.lastCheckTimeInMillis = lastCheckTimeInMillis;
     }
 
-    public String getName()
+    public File getFolder()
     {
-        return name;
+        return this.folder;
     }
-
-    public String getPath()
+    
+    public void setFolder(File folder)
     {
-        return path;
+        this.folder = folder;
+        
     }
 
     public List<ResearchFile> getFiles()
@@ -109,12 +107,13 @@ public final class Folder implements Serializable
             return false;
         }
         final Folder other = (Folder) obj;
-        return Objects.equal(this.name, other.name) && Objects.equal(this.path, other.path);
+        return Objects.equal(this.folder.getName(), other.folder.getName()) && Objects.equal(this.folder.getAbsolutePath(), other.folder.getAbsolutePath());
     }
 
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.name).append(this.path).toHashCode();
+        return new HashCodeBuilder().append(this.folder.getName()).append(this.folder.getAbsolutePath()).toHashCode();
     }
+
 }

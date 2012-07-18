@@ -6,6 +6,7 @@
  */
 package au.org.intersect.exsite9.service;
 
+import java.io.File;
 import java.util.List;
 
 import au.org.intersect.exsite9.domain.Folder;
@@ -54,4 +55,11 @@ public interface IProjectService
     void addMetadataCategoryToProject(final Project project, final MetadataCategory metadataCategory);
     
     Project findProjectById(Long id);
+    
+    /**
+     * Updates the path of a folder within the given project.
+     * @param folderId
+     * @param newFileForFolder
+     */
+    void updateFolderPath(long folderId, File newFileForFolder);
 }

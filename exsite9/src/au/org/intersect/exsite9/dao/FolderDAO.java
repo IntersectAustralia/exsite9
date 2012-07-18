@@ -48,4 +48,9 @@ public class FolderDAO
             em.getTransaction().commit();
         }
     }
+    
+    public Folder findById(final long id)
+    {
+        return em.find(Folder.class, id);
+    }
 }

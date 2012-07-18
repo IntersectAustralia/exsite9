@@ -105,14 +105,14 @@ public final class ProjectServiceUnitTest extends DAOTest
         
         List<String> modifiedFolderList = new ArrayList<String>(0);
         
-        modifiedFolderList.add(folder2.getPath());
+        modifiedFolderList.add(folder2.getFolder().getPath());
         
         projectService.removeFoldersFromProject(project, modifiedFolderList);
         
         Project newProject = projectDAOFactory.createInstance(createEntityManager()).findById(project.getId());
         
         assertEquals(1,newProject.getFolders().size());
-        assertEquals(folder2.getPath(),newProject.getFolders().get(0).getPath());
+        assertEquals(folder2.getFolder().getPath(),newProject.getFolders().get(0).getFolder().getPath());
     }
 
     @Test

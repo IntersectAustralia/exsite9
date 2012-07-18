@@ -6,6 +6,7 @@
  */
 package au.org.intersect.exsite9.service;
 
+import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 
@@ -36,7 +37,7 @@ import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 public class ProjectService implements IProjectService
 {
     private final Logger LOG = Logger.getLogger(ProjectService.class);
-    
+
     private final EntityManagerFactory entityManagerFactory;
     private final ProjectDAOFactory projectDAOFactory;
     private final FolderDAOFactory folderDAOFactory;
@@ -44,9 +45,8 @@ public class ProjectService implements IProjectService
     private final MetadataAssociationDAOFactory metaAssociationDAOFactory;
     private final SubmissionPackageDAOFactory submissionPackageDAOFactory;
 
-    public ProjectService(final EntityManagerFactory entityManagerFactory,
-            final ProjectDAOFactory projectDAOFactory, final FolderDAOFactory folderDAOFactory, 
-            final ResearchFileDAOFactory researchFileDAOFactory,
+    public ProjectService(final EntityManagerFactory entityManagerFactory, final ProjectDAOFactory projectDAOFactory,
+            final FolderDAOFactory folderDAOFactory, final ResearchFileDAOFactory researchFileDAOFactory,
             final MetadataAssociationDAOFactory metadataAssociationDAOFactory,
             final SubmissionPackageDAOFactory submissionPackageDAOFactory)
     {
@@ -122,7 +122,7 @@ public class ProjectService implements IProjectService
         {
             ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
             Project project = projectDAO.findById(id);
-            
+
             project.setName(projectFields.getName());
             project.setDescription(projectFields.getDescription());
             project.setOwner(projectFields.getOwner());
@@ -141,7 +141,7 @@ public class ProjectService implements IProjectService
             project.setRelatedParty(projectFields.getRelatedParty());
             project.setRelatedActivity(projectFields.getRelatedActivity());
             project.setRelatedInformation(projectFields.getRelatedInformation());
-                       
+
             projectDAO.updateProject(project);
             return project;
         }
@@ -174,12 +174,12 @@ public class ProjectService implements IProjectService
         try
         {
             final ProjectDAO projectDAO = this.projectDAOFactory.createInstance(em);
-            return projectDAO.findById(id);            
+            return projectDAO.findById(id);
         }
         finally
         {
             em.close();
-        }        
+        }
     }
 
     @Override
@@ -193,31 +193,32 @@ public class ProjectService implements IProjectService
             final ResearchFileDAO researchFileDAO = this.researchFileDAOFactory.createInstance(em);
             final MetadataAssociationDAO metadataAssociationDAO = this.metaAssociationDAOFactory.createInstance(em);
             final SubmissionPackageDAO submissionPackageDAO = this.submissionPackageDAOFactory.createInstance(em);
-            
+
             project = projectDAO.findById(project.getId());
-            
+
             Iterator<Folder> folderIter = project.getFolders().iterator();
-            while(folderIter.hasNext())
+            while (folderIter.hasNext())
             {
                 Folder folder = folderIter.next();
-                if(modifiedFolderList.contains(folder.getPath()))
+                if (modifiedFolderList.contains(folder.getFolder().getAbsolutePath()))
                 {
                     continue;
                 }
                 else
                 {
                     LOG.info("Removing folder id= " + folder.getId());
-                    
+
                     em.getTransaction().begin();
-                    
+
                     Iterator<ResearchFile> fileIter = folder.getFiles().iterator();
-                    while (fileIter.hasNext()){
+                    while (fileIter.hasNext())
+                    {
                         ResearchFile researchFile = fileIter.next();
                         Group parentGroup = researchFile.getParentGroup();
                         parentGroup.getResearchFiles().remove(researchFile);
-                        
+
                         Iterator<MetadataAssociation> maIter = researchFile.getMetadataAssociations().iterator();
-                        while(maIter.hasNext())
+                        while (maIter.hasNext())
                         {
                             MetadataAssociation metadataAssociation = maIter.next();
                             metadataAssociationDAO.removeMetadataAssociation(metadataAssociation);
@@ -225,7 +226,8 @@ public class ProjectService implements IProjectService
                         }
 
                         // Remove the research file from any submission packages it is part of.
-                        final List<SubmissionPackage> submissionPackages = submissionPackageDAO.getSubmissionPackagesWithResearchFiles(researchFile);
+                        final List<SubmissionPackage> submissionPackages = submissionPackageDAO
+                                .getSubmissionPackagesWithResearchFiles(researchFile);
                         for (final SubmissionPackage submissionPackage : submissionPackages)
                         {
                             submissionPackage.getResearchFiles().remove(researchFile);
@@ -245,7 +247,25 @@ public class ProjectService implements IProjectService
         finally
         {
             em.close();
-        }        
+        }
     }
 
+    @Override
+    public void updateFolderPath(long folderId, File newFileForFolder)
+    {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        try
+        {
+            final FolderDAO folderDAO = this.folderDAOFactory.createInstance(em);
+           
+            Folder folder = folderDAO.findById(folderId);
+            
+            folder.setFolder(newFileForFolder);
+            folderDAO.updateFolder(folder);           
+        }
+        finally
+        {
+            em.close();
+        }
+    }
 }

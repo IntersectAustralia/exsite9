@@ -1,7 +1,9 @@
 package au.org.intersect.exsite9.wizard.listfolders;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.WizardPage;
@@ -13,6 +15,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DirectoryDialog;
+
 import au.org.intersect.exsite9.domain.Folder;
 
 public class ListFoldersWizardPage1 extends WizardPage implements SelectionListener
@@ -21,8 +25,10 @@ public class ListFoldersWizardPage1 extends WizardPage implements SelectionListe
 
     private Composite container;
     private Button removeButton;
+    private Button editButton;
     
     private List<Folder> folders;
+    private Map<Folder, String> foldersAndNewPaths = new HashMap<Folder, String>();
 
     public ListFoldersWizardPage1(final List<Folder> folders)
     {
@@ -46,7 +52,7 @@ public class ListFoldersWizardPage1 extends WizardPage implements SelectionListe
 
         for (final Folder folder : this.folders)
         {
-            this.folderList.add(folder.getPath());
+            this.folderList.add(folder.getFolder().getAbsolutePath());
         }
 
         final GridData multiLineGridData = new GridData(GridData.FILL_BOTH);
@@ -65,13 +71,18 @@ public class ListFoldersWizardPage1 extends WizardPage implements SelectionListe
         removeButton.setText("Remove");
         removeButton.addSelectionListener(this);
         removeButton.setEnabled(false);
+        
+        this.editButton = new Button(rowComp, SWT.PUSH);
+        this.editButton.setText("Edit Path");
+        this.editButton.addSelectionListener(this);
+        this.editButton.setEnabled(false);
 
         this.folderList.addSelectionListener(new SelectionListener()
         {
             @Override
             public void widgetSelected(final SelectionEvent e)
             {
-                removeButton.setEnabled(folderList.getSelectionCount() > 0);
+                enableOrDisableTheButtons();
             }
 
             @Override
@@ -90,7 +101,7 @@ public class ListFoldersWizardPage1 extends WizardPage implements SelectionListe
         if (e.widget.equals(removeButton))
         {
             if (this.folderList.getSelectionCount() == 0)
-            {
+            {   enableOrDisableTheButtons();
                 return;
             }
 
@@ -105,6 +116,27 @@ public class ListFoldersWizardPage1 extends WizardPage implements SelectionListe
                 setPageComplete(true);
             }
         }
+        else if (e.widget.equals(editButton))
+        {
+            if (this.folderList.getSelectionCount() == 0)
+            {   enableOrDisableTheButtons();
+                return;
+            }
+
+            final DirectoryDialog directoryDialog = new DirectoryDialog(this.container.getShell(), SWT.OPEN);
+            directoryDialog.setMessage("Choose the new path for this folder");
+            directoryDialog.setText("Choose a folder");
+
+            final String path = directoryDialog.open();
+            if (path != null)
+            {
+                this.foldersAndNewPaths.put(this.folders.get(this.folderList.getSelectionIndex()), path);
+                setPageComplete(true);
+            }
+        }
+                
+                
+                
     }
 
     @Override
@@ -117,5 +149,16 @@ public class ListFoldersWizardPage1 extends WizardPage implements SelectionListe
     public List<String> getFolderList()
     {
         return Arrays.asList(this.folderList.getItems());
+    }
+    
+    public Map<Folder, String> getFoldersAndTheirUpdatedPaths()
+    {
+        return this.foldersAndNewPaths;
+    }
+    
+    private void enableOrDisableTheButtons()
+    {
+        removeButton.setEnabled(folderList.getSelectionCount() > 0);
+        editButton.setEnabled(folderList.getSelectionCount() == 1);        
     }
 }
