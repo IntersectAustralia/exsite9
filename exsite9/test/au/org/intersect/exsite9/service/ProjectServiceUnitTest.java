@@ -15,6 +15,7 @@ import javax.persistence.EntityManagerFactory;
 import org.junit.Test;
 
 import au.org.intersect.exsite9.dao.DAOTest;
+import au.org.intersect.exsite9.dao.ResearchFileDAO;
 import au.org.intersect.exsite9.dao.factory.FolderDAOFactory;
 import au.org.intersect.exsite9.dao.factory.MetadataAssociationDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
@@ -23,6 +24,7 @@ import au.org.intersect.exsite9.dao.factory.SchemaDAOFactory;
 import au.org.intersect.exsite9.dao.factory.SubmissionPackageDAOFactory;
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 
 public final class ProjectServiceUnitTest extends DAOTest
@@ -237,7 +239,7 @@ public final class ProjectServiceUnitTest extends DAOTest
         EntityManagerFactory emf = mock(EntityManagerFactory.class);
 
         stub(emf.createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager())
-                .toReturn(createEntityManager()).toReturn(createEntityManager());
+                .toReturn(createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager());
 
         ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
@@ -249,7 +251,16 @@ public final class ProjectServiceUnitTest extends DAOTest
         projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, researchFileDAOFactory,
                 metadataAssociationDAOFactory, submissionPackageDAOFactory, schemaDAOFactory);
 
+        ResearchFileDAO researchFileDAO = researchFileDAOFactory.createInstance(emf.createEntityManager());
+
         Folder folder = new Folder(new File("/tmp"));
+        ResearchFile file1 = new ResearchFile(new File("/tmp/file1.txt"));
+        ResearchFile file2 = new ResearchFile(new File("/tmp/file2.txt"));
+        researchFileDAO.createResearchFile(file1);
+        researchFileDAO.createResearchFile(file2);
+
+        folder.getFiles().add(file1);
+        folder.getFiles().add(file2);
 
         Project project = projectService.createProject(new ProjectFieldsDTO("name", "owner", "description", "", "", "",
                 "", "", "", "", "", "", "", "", "", "", "", ""), "", "", "", true);
@@ -263,6 +274,11 @@ public final class ProjectServiceUnitTest extends DAOTest
         Folder folderFromDB = folderDAOFactory.createInstance(emf.createEntityManager()).findById(folder.getId());
 
         assertTrue(folderFromDB.getFolder().getPath().equals(updatedFileObject.getPath()));
+        
+        for (ResearchFile file : folderFromDB.getFiles())
+        {
+            assertEquals("/new/location/" + file.getFile().getName(), file.getFile().getAbsolutePath());
+        }
 
     }
 }
