@@ -19,18 +19,20 @@ import au.org.intersect.exsite9.dao.FolderDAO;
 import au.org.intersect.exsite9.dao.MetadataAssociationDAO;
 import au.org.intersect.exsite9.dao.ProjectDAO;
 import au.org.intersect.exsite9.dao.ResearchFileDAO;
+import au.org.intersect.exsite9.dao.SchemaDAO;
 import au.org.intersect.exsite9.dao.SubmissionPackageDAO;
 import au.org.intersect.exsite9.dao.factory.FolderDAOFactory;
 import au.org.intersect.exsite9.dao.factory.MetadataAssociationDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
+import au.org.intersect.exsite9.dao.factory.SchemaDAOFactory;
 import au.org.intersect.exsite9.dao.factory.SubmissionPackageDAOFactory;
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataAssociation;
-import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
+import au.org.intersect.exsite9.domain.Schema;
 import au.org.intersect.exsite9.domain.SubmissionPackage;
 import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 
@@ -44,11 +46,12 @@ public class ProjectService implements IProjectService
     private final ResearchFileDAOFactory researchFileDAOFactory;
     private final MetadataAssociationDAOFactory metaAssociationDAOFactory;
     private final SubmissionPackageDAOFactory submissionPackageDAOFactory;
+    private final SchemaDAOFactory schemaDAOFactory;
 
     public ProjectService(final EntityManagerFactory entityManagerFactory, final ProjectDAOFactory projectDAOFactory,
             final FolderDAOFactory folderDAOFactory, final ResearchFileDAOFactory researchFileDAOFactory,
             final MetadataAssociationDAOFactory metadataAssociationDAOFactory,
-            final SubmissionPackageDAOFactory submissionPackageDAOFactory)
+            final SubmissionPackageDAOFactory submissionPackageDAOFactory, final SchemaDAOFactory schemaDAOFactory)
     {
         this.entityManagerFactory = entityManagerFactory;
         this.projectDAOFactory = projectDAOFactory;
@@ -56,19 +59,26 @@ public class ProjectService implements IProjectService
         this.researchFileDAOFactory = researchFileDAOFactory;
         this.metaAssociationDAOFactory = metadataAssociationDAOFactory;
         this.submissionPackageDAOFactory = submissionPackageDAOFactory;
+        this.schemaDAOFactory = schemaDAOFactory;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Project createProject(final ProjectFieldsDTO projectFields)
+    public Project createProject(final ProjectFieldsDTO projectFields, final String schemaName, final String schemaDescription, final String schemaNamespaceURL, final boolean schemaLocal)
     {
         EntityManager em = entityManagerFactory.createEntityManager();
         try
         {
-            ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
-            Project project = new Project(projectFields);
+            final Project project = new Project(projectFields);
+            final Schema schema = new Schema(schemaName, schemaDescription, schemaNamespaceURL, Boolean.valueOf(schemaLocal));
+
+            final ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
+            final SchemaDAO schemaDAO = schemaDAOFactory.createInstance(em);
+
+            schemaDAO.createSchema(schema);
+            project.setSchema(schema);
             projectDAO.createProject(project);
             return project;
         }
@@ -144,22 +154,6 @@ public class ProjectService implements IProjectService
 
             projectDAO.updateProject(project);
             return project;
-        }
-        finally
-        {
-            em.close();
-        }
-    }
-
-    @Override
-    public void addMetadataCategoryToProject(final Project project, final MetadataCategory metadataCategory)
-    {
-        final EntityManager em = this.entityManagerFactory.createEntityManager();
-        try
-        {
-            final ProjectDAO projectDAO = this.projectDAOFactory.createInstance(em);
-            project.getMetadataCategories().add(metadataCategory);
-            projectDAO.updateProject(project);
         }
         finally
         {

@@ -6,6 +6,7 @@
     <persistence-unit name="jpa" transaction-type="RESOURCE_LOCAL">
 
         <class>au.org.intersect.exsite9.domain.Project</class>
+        <class>au.org.intersect.exsite9.domain.Schema</class>
         <class>au.org.intersect.exsite9.domain.Folder</class>
         <class>au.org.intersect.exsite9.domain.Group</class>
         <class>au.org.intersect.exsite9.domain.ResearchFile</class>

@@ -62,9 +62,6 @@ public final class Project implements Serializable
                inverseJoinColumns={@JoinColumn(name="folder_id", referencedColumnName="id")})
     private List<Folder> folders;
 
-    @OneToMany
-    private List<MetadataCategory> metadataCategories;
-
     @OneToOne(cascade = CascadeType.ALL)
     private Group rootNode;
 
@@ -76,6 +73,9 @@ public final class Project implements Serializable
 
     @OneToMany
     private final List<SubmissionPackage> submissionPackages = new ArrayList<SubmissionPackage>();
+
+    @OneToOne
+    private Schema schema;
     
     public Project()
     {
@@ -125,7 +125,6 @@ public final class Project implements Serializable
         this.newFilesNode = new NewFilesGroup();
         this.excludedFilesNode = new ExcludedFilesGroup();
         this.rootNode.getGroups().add(newFilesNode);
-        this.metadataCategories = new ArrayList<MetadataCategory>();
     }
 
     public Long getId()
@@ -358,19 +357,19 @@ public final class Project implements Serializable
         this.folders = folders;
     }
 
-    public List<MetadataCategory> getMetadataCategories()
-    {
-        return this.metadataCategories;
-    }
-
-    public void setMetadataCategories(final List<MetadataCategory> mdcs)
-    {
-        this.metadataCategories = mdcs;
-    }
-
     public List<SubmissionPackage> getSubmissionPackages()
     {
         return this.submissionPackages;
+    }
+
+    public Schema getSchema()
+    {
+        return this.schema;
+    }
+
+    public void setSchema(final Schema schema)
+    {
+        this.schema = schema;
     }
 
     /**

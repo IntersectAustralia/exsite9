@@ -10,7 +10,6 @@ import java.io.File;
 import java.util.List;
 
 import au.org.intersect.exsite9.domain.Folder;
-import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 
@@ -21,7 +20,7 @@ public interface IProjectService
      * @param projectFields the various fields that can be inputed when creating a project.
      * @return The newly created project.
      */
-    Project createProject(final ProjectFieldsDTO projectFields);
+    Project createProject(final ProjectFieldsDTO projectFields, final String schemaName, final String schemaDescription, final String schemaNamespaceURL, final boolean schemaLocal);
 
     /**
      * Maps a folder to a project.
@@ -52,7 +51,6 @@ public interface IProjectService
      */
     Project editProject(final ProjectFieldsDTO projectFields, final Long id);
 
-    void addMetadataCategoryToProject(final Project project, final MetadataCategory metadataCategory);
     
     Project findProjectById(Long id);
     

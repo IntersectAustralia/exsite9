@@ -38,15 +38,12 @@ public final class ProjectUnitTest
         assertEquals(projectFields.getLicence(), toTest1.getLicence());
         assertEquals(projectFields.getRelatedParty(), toTest1.getRelatedParty());
         assertEquals(projectFields.getRelatedInformation(), toTest1.getRelatedInformation());
-        assertTrue(toTest1.getMetadataCategories().isEmpty());
 
         final String toString = toTest1.toString();
         assertFalse(toString.isEmpty());
 
         toTest1.setFolders(null);
-        toTest1.setMetadataCategories(null);
         assertNull(toTest1.getFolders());
-        assertNull(toTest1.getMetadataCategories());
 
         final String collectionType = "some collection type";
         toTest1.setCollectionType(collectionType);

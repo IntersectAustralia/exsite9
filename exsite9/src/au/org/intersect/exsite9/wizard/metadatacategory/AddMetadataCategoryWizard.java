@@ -13,8 +13,8 @@ import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.service.IGroupService;
 import au.org.intersect.exsite9.service.IMetadataCategoryService;
-import au.org.intersect.exsite9.service.IProjectService;
 import au.org.intersect.exsite9.service.IResearchFileService;
+import au.org.intersect.exsite9.service.ISchemaService;
 
 public class AddMetadataCategoryWizard extends Wizard
 {
@@ -65,11 +65,10 @@ public class AddMetadataCategoryWizard extends Wizard
         // Persist the new metadata category.
         final IMetadataCategoryService metadataCategoryService = (IMetadataCategoryService) PlatformUI.getWorkbench()
                 .getService(IMetadataCategoryService.class);
-        final IProjectService projectService = (IProjectService) PlatformUI.getWorkbench().getService(
-                IProjectService.class);
         final IGroupService groupService = (IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class);
         final IResearchFileService fileService = (IResearchFileService) PlatformUI.getWorkbench().getService(
                 IResearchFileService.class);
+        final ISchemaService schemaService = (ISchemaService) PlatformUI.getWorkbench().getService(ISchemaService.class);
 
         for (final ResearchFile assignedFile : page1.getAssignedFiles())
         {
@@ -85,7 +84,7 @@ public class AddMetadataCategoryWizard extends Wizard
         {
             final MetadataCategory newCategory = metadataCategoryService.createNewMetadataCategory(categoryTitle,
                     values);
-            projectService.addMetadataCategoryToProject(this.project, newCategory);
+            schemaService.addMetadataCategoryToSchema(this.project.getSchema(), newCategory);
         }
         else
         {

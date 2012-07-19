@@ -115,7 +115,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                     return false;
                 }
                 
-                final List<MetadataCategory> existingCategories = project.getMetadataCategories();
+                final List<MetadataCategory> existingCategories = project.getSchema().getMetadataCategories();
 
                 for (final MetadataCategory existingCategory : existingCategories)
                 {

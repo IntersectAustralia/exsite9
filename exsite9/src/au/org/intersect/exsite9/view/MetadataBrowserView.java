@@ -287,9 +287,9 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             final Project project = projectManager.getCurrentProject();
             if (project != null)
             {
-                initLayout(project.getMetadataCategories());
+                initLayout(project.getSchema().getMetadataCategories());
 
-                if (!project.getMetadataCategories().isEmpty())
+                if (!project.getSchema().getMetadataCategories().isEmpty())
                 {
                     // Refresh this page according to the currently selected items in the RHS.
                     final ProjectExplorerView projectExplorerView = (ProjectExplorerView) ViewUtils.getViewByID(
