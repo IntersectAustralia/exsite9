@@ -172,6 +172,14 @@
          id="au.org.intersect.exsite9.commands.ListExcludedFilesCommand"
          name="List Excluded Files">
    </command>
+   <command
+         id="au.org.intersect.exsite9.commands.ImportMetadataSchemaCommand"
+         name="Import metadata schema">
+   </command>
+   <command
+         id="au.org.intersect.exsite9.commands.ExportMetadataSchemaCommand"
+         name="Export metadata command">
+   </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -245,6 +253,21 @@
          <menu
                id="au.org.intersect.exsite9.menu.metadata"
                label="Metadata">
+            <menu
+                  label="Schema">
+               <command
+                     commandId="au.org.intersect.exsite9.commands.ImportMetadataSchemaCommand"
+                     label="Import..."
+                     style="push"
+                     tooltip="Import metadata schema">
+               </command>
+               <command
+                     commandId="au.org.intersect.exsite9.commands.ExportMetadataSchemaCommand"
+                     label="Export..."
+                     style="push"
+                     tooltip="Export metadata schema">
+               </command>
+            </menu>
             <command
                   commandId="au.org.intersect.exsite9.commands.AddMetadataCategoryCommand"
                   icon="icons/icon-metadata.png"
