@@ -253,8 +253,23 @@ public class ProjectService implements IProjectService
         try
         {
             final FolderDAO folderDAO = this.folderDAOFactory.createInstance(em);
+            final ResearchFileDAO researchFileDAO = this.researchFileDAOFactory.createInstance(em);
            
             Folder folder = folderDAO.findById(folderId);
+            
+            //modify the path in each of the research files
+            List<ResearchFile> researchFiles = folder.getFiles();
+            
+            for (ResearchFile researchFile : researchFiles)
+            {
+                String originalPath = researchFile.getFile().getAbsolutePath();
+                
+                String newPath = originalPath.replace(folder.getFolder().getAbsolutePath(), newFileForFolder.getAbsolutePath());
+                File replacementFile = new File(newPath);
+                researchFile.setFile(replacementFile);
+                researchFileDAO.updateResearchFile(researchFile);
+            }
+            
             
             folder.setFolder(newFileForFolder);
             folderDAO.updateFolder(folder);           

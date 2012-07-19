@@ -29,8 +29,8 @@ public class ListFoldersWizardPage1 extends WizardPage implements SelectionListe
     private Button editButton;
     
     private List<Folder> folders;
-    private List<Folder> deletedFolderList = new ArrayList<Folder>();
-    private Map<Folder, String> foldersAndNewPaths = new HashMap<Folder, String>();
+    private final List<Folder> deletedFolderList = new ArrayList<Folder>();
+    private final Map<Folder, String> foldersAndNewPaths = new HashMap<Folder, String>();
 
     public ListFoldersWizardPage1(final List<Folder> folders)
     {
@@ -133,8 +133,8 @@ public class ListFoldersWizardPage1 extends WizardPage implements SelectionListe
             final String path = directoryDialog.open();
             if (path != null)
             {
-                this.foldersAndNewPaths.put(this.folders.get(this.folderList.getSelectionIndex()), path);
-                //TODO: edit path in UI
+                this.foldersAndNewPaths.put(this.folders.get(this.folderList.getSelectionIndex()), path);                
+                this.folderList.setItem(this.folderList.getSelectionIndex(), path);     //edit path in UI
                 setPageComplete(true);
             }
         }
