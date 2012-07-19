@@ -188,11 +188,15 @@
             locationURI="menu:org.eclipse.ui.main.menu">
          <menu
                id="au.org.intersect.exsite9.menu.file"
-               label="File">
+               label="File"
+               mnemonic="F"
+               tooltip="The File menu">
             <command
                   commandId="org.eclipse.ui.window.preferences"
                   label="Preferences"
-                  style="push">
+                  mnemonic="P"
+                  style="push"
+                  tooltip="ExSite9 Preferences">
             </command>
             <separator
                   name="au.org.intersect.exsite9.menu.file.separator1"
@@ -201,6 +205,7 @@
             <command
                   commandId="au.org.intersect.exsite9.commands.ExitCommand"
                   label="Exit"
+                  mnemonic="x"
                   style="push"
                   tooltip="Exits the application">
             </command>
