@@ -262,8 +262,7 @@ public class ProjectService implements IProjectService
             
             for (ResearchFile researchFile : researchFiles)
             {
-                String originalPath = researchFile.getFile().getAbsolutePath();
-                
+                String originalPath = researchFile.getFile().getAbsolutePath();                
                 String newPath = originalPath.replace(folder.getFolder().getAbsolutePath(), newFileForFolder.getAbsolutePath());
                 File replacementFile = new File(newPath);
                 researchFile.setFile(replacementFile);
