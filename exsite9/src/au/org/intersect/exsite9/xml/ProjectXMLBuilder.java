@@ -49,7 +49,7 @@ public final class ProjectXMLBuilder extends BaseXMLBuilder
 
             for (final ResearchFile researchFile : project.getRootNode().getResearchFiles())
             {
-                appendResearchFile(doc, rootElement, researchFile);
+                appendResearchFile(doc, rootElement, researchFile, false);
             }
 
             return transformDocumentToString(doc);
@@ -91,7 +91,7 @@ public final class ProjectXMLBuilder extends BaseXMLBuilder
 
         for (final ResearchFile childFile : group.getResearchFiles())
         {
-            appendResearchFile(doc, groupElement, childFile);
+            appendResearchFile(doc, groupElement, childFile, false);
         }
 
         parent.appendChild(groupElement);

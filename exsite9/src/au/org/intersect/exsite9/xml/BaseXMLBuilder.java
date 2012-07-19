@@ -1,5 +1,6 @@
 package au.org.intersect.exsite9.xml;
 
+import java.io.File;
 import java.io.StringWriter;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -87,18 +88,24 @@ public class BaseXMLBuilder
         }
     }
     
-    protected static void appendResearchFile(final Document doc, final Element parent, final ResearchFile researchFile)
+    protected static void appendResearchFile(final Document doc, final Element parent, final ResearchFile researchFile, final boolean excludeMissingFiles)
     {
         final String researchFilePath = researchFile.getFile().getAbsolutePath();
-        appendResearchFile(doc, parent, researchFile, researchFilePath);
+        appendResearchFile(doc, parent, researchFile, researchFilePath, excludeMissingFiles);
     }
 
-    protected static void appendResearchFile(final Document doc, final Element parent, final ResearchFile researchFile, final String reserachFilePath)
+    protected static void appendResearchFile(final Document doc, final Element parent, final ResearchFile researchFile, final String researchFilePath, final boolean excludeMissingFiles)
     {
+        final File file = researchFile.getFile();
+        if (excludeMissingFiles && !file.exists())
+        {
+            return;
+        }
+
         final Element researchFileElement = doc.createElement("file");
-        researchFileElement.setAttribute("name", researchFile.getFile().getName());
+        researchFileElement.setAttribute("name", file.getName());
         final Element filePathElement = doc.createElement("path");
-        filePathElement.setTextContent(reserachFilePath);
+        filePathElement.setTextContent(researchFilePath);
         researchFileElement.appendChild(filePathElement);
         for (final MetadataAssociation metadataAssociation : researchFile.getMetadataAssociations())
         {

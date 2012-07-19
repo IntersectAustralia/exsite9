@@ -52,11 +52,11 @@ public class SIPXMLBuilder extends BaseXMLBuilder
                 {
                     if (useGroupPaths)
                     {
-                        appendResearchFile(doc, rootElement, researchFile, researchFile.getFile().getName());
+                        appendResearchFile(doc, rootElement, researchFile, researchFile.getFile().getName(), true);
                     }
                     else
                     {
-                        appendResearchFile(doc, rootElement, researchFile);
+                        appendResearchFile(doc, rootElement, researchFile, true);
                     }
                 }
             }
@@ -107,11 +107,11 @@ public class SIPXMLBuilder extends BaseXMLBuilder
             {
                 if (useGroupPaths)
                 {
-                    appendResearchFile(doc, groupElement, childFile, groupPath + childFile.getFile().getName());
+                    appendResearchFile(doc, groupElement, childFile, groupPath + childFile.getFile().getName(), true);
                 }
                 else
                 {
-                    appendResearchFile(doc, groupElement, childFile);
+                    appendResearchFile(doc, groupElement, childFile, true);
                 }
             }
         }

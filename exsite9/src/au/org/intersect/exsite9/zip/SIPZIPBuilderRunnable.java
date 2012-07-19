@@ -60,7 +60,11 @@ public final class SIPZIPBuilderRunnable implements IRunnableWithProgress
         long totalSizeBytes = 0;
         for (final ResearchFile researchFile : this.submissionPackage.getResearchFiles())
         {
-            totalSizeBytes += researchFile.getFile().length();
+            final File file = researchFile.getFile();
+            if (file.exists())
+            {
+                totalSizeBytes += file.length();
+            }
         }
         final int totalSizeKiloBytes = (int) (totalSizeBytes / 1024);
         this.progressMonitor.beginTask(PROGRESS_MESSAGE, totalSizeKiloBytes);
@@ -160,7 +164,11 @@ public final class SIPZIPBuilderRunnable implements IRunnableWithProgress
             if (submissionPackage.getResearchFiles().contains(researchFile))
             {
                 final File theFile = researchFile.getFile();
-                
+                if (!theFile.exists())
+                {
+                    continue;
+                }
+
                 final ZipArchiveEntry zipEntry = new ZipArchiveEntry(parentPath + theFile.getName());
                 zipEntry.setSize(theFile.length());
                 zipStream.putArchiveEntry(zipEntry);

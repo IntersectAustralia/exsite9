@@ -104,9 +104,8 @@ public class ExportSubmissionPackageZIPHandler implements IHandler
                     sb.append(NEW_LINE);
                 }
             }
-            MessageDialog.openError(shell, "Could not generate submission package ZIP file", "The following files are missing:" + NEW_LINE + sb.toString());
-            LOG.error("Could not create submission package ZIP file because files are missing.");
-            return null;
+            MessageDialog.openWarning(shell, "Files missing", "The following files are missing. They will not be included in the submission package ZIP file."
+                + NEW_LINE + sb.toString());
         }
 
         final FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);

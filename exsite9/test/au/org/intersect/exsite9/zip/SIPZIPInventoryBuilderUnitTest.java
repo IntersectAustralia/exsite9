@@ -59,8 +59,8 @@ public class SIPZIPInventoryBuilderUnitTest
         
         final String resultString = SIPZIPInventoryFileBuilder.buildInventoryFile(project, subPack);
         
-        final String expectedString = "group1/someResearchFile.txt | 0 Bytes | 01/01/1970 10:00:00" + NEW_LINE + NEW_LINE +
-                "group1/subGroup1/someOtherResearchFile.txt | 0 Bytes | 01/01/1970 10:00:00" + NEW_LINE + NEW_LINE;
+        final String expectedString = "group1/someResearchFile.txt | 0 Bytes (MISSING) | 01/01/1970 10:00:00" + NEW_LINE + NEW_LINE +
+                "group1/subGroup1/someOtherResearchFile.txt | 0 Bytes (MISSING) | 01/01/1970 10:00:00" + NEW_LINE + NEW_LINE;
         
         assertEquals(expectedString, resultString);
     }
