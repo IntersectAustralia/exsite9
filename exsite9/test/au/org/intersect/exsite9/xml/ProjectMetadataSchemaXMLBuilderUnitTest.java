@@ -32,7 +32,7 @@ public class ProjectMetadataSchemaXMLBuilderUnitTest
         
         String expectedXML = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" + NEW_LINE 
                            + "<schema description=\"" + EMPTY_STRING + "\" name=\"project-schema\" namespace_url=\"" + EMPTY_STRING + "\">" + NEW_LINE
-                           + "  <metadata_category name=\"cat1\">" + NEW_LINE
+                           + "  <metadata_category name=\"cat1\" use=\"optional\">" + NEW_LINE
                            + "    <value>value one</value>" + NEW_LINE
                            + "  </metadata_category>" + NEW_LINE
                            + "</schema>" + NEW_LINE;

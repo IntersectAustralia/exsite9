@@ -66,6 +66,7 @@ public class ProjectMetadataSchemaXMLBuilder extends BaseXMLBuilder
         {
             final Element catElement = doc.createElement("metadata_category");
             catElement.setAttribute("name",category.getName());
+            catElement.setAttribute("use",category.getUse().toString());
             
             for(final MetadataValue value : category.getValues())
             {
