@@ -84,7 +84,7 @@ public class AddMetadataCategoryWizard extends Wizard
         
         if (this.metadataCategory == null)
         {
-            final MetadataCategory newCategory = metadataCategoryService.createNewMetadataCategory(categoryTitle,
+            final MetadataCategory newCategory = metadataCategoryService.createNewMetadataCategory(categoryTitle, categoryUse,
                     values);
             schemaService.addMetadataCategoryToSchema(this.project.getSchema(), newCategory);
         }

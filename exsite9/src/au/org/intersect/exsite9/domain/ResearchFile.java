@@ -142,4 +142,25 @@ public final class ResearchFile implements Serializable, IMetadataAssignable
     {
         return this.metadataAssociations;
     }
+    
+    public boolean isMissingRequiredMetadata()
+    {
+        boolean missing = false;
+        
+        category: 
+        for(final MetadataCategory category : getProject().getSchema().getRequiredMetadataCategories())
+        {
+            for(final MetadataAssociation association : getMetadataAssociations())
+            {
+                if(association.getMetadataCategory().equals(category))
+                {
+                    continue category;
+                }
+            }
+            missing = true;
+            break;
+        }
+        
+        return missing;
+    }
 }

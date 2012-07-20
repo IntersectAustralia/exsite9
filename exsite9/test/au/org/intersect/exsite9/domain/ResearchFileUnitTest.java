@@ -54,4 +54,55 @@ public final class ResearchFileUnitTest
         final String toString = toTest1.toString();
         assertTrue(toString.contains("file=" + file1));
     }
+    
+    @Test
+    public void testIsMissingRequiredMetadata()
+    {
+        Project project = new Project();
+        project.setName("My project");
+        
+        Schema schema = new Schema();
+        schema.setName("schema");
+        project.setSchema(schema);
+        
+        MetadataCategory cat1 = new MetadataCategory("cat1");
+        cat1.setId(1L);
+        schema.getMetadataCategories().add(cat1);
+        
+        MetadataCategory cat2 = new MetadataCategory("cat2");
+        cat2.setId(2L);
+        schema.getMetadataCategories().add(cat2);
+        
+        ResearchFile file = new ResearchFile(new File("test1"));
+        file.setId(1L);
+        file.setProject(project);
+        
+        assertFalse("No required metadata missing", file.isMissingRequiredMetadata());
+        
+        MetadataAssociation assoc1 = new MetadataAssociation();
+        assoc1.setId(1L);
+        assoc1.setMetadataCategory(cat1);
+        file.getMetadataAssociations().add(assoc1);
+
+        MetadataAssociation assoc2 = new MetadataAssociation();
+        assoc2.setId(2L);
+        assoc2.setMetadataCategory(cat2);
+        file.getMetadataAssociations().add(assoc2);
+
+        assertFalse("No required metadata missing", file.isMissingRequiredMetadata());
+        
+        cat1.setUse(MetadataCategoryUse.recommended);
+        cat2.setUse(MetadataCategoryUse.recommended);
+        
+        assertFalse("No required metadata missing", file.isMissingRequiredMetadata());
+
+        cat1.setUse(MetadataCategoryUse.required);
+        cat2.setUse(MetadataCategoryUse.required);
+
+        assertFalse("No required metadata missing", file.isMissingRequiredMetadata());
+
+        file.getMetadataAssociations().remove(assoc2);
+        
+        assertTrue("Required metadata missing", file.isMissingRequiredMetadata());
+    }
 }

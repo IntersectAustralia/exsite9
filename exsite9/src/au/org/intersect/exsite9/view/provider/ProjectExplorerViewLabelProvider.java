@@ -80,6 +80,10 @@ public final class ProjectExplorerViewLabelProvider extends StyledCellLabelProvi
             {
                 cell.setImage(Activator.getImageDescriptor("/icons/icon_warning_12.png").createImage());
             }
+            else if (rf.isMissingRequiredMetadata())
+            {
+                cell.setImage(Activator.getImageDescriptor("/icons/icon_warning_12.png").createImage());
+            }
             else
             {
                 cell.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE));
@@ -118,6 +122,10 @@ public final class ProjectExplorerViewLabelProvider extends StyledCellLabelProvi
         if (rf.getMetadataAssociations().isEmpty())
         {
             sb.append("THIS FILE HAS NO METADATA ASSOCIATIONS").append(NEW_LINE);
+        }
+        else if (rf.isMissingRequiredMetadata())
+        {
+            sb.append("THIS FILE IS MISSING REQUIRED METADATA").append(NEW_LINE);
         }
         sb.append(rf.getFile().getAbsolutePath());
         return sb.toString();
