@@ -60,4 +60,11 @@ public interface IProjectService
      * @param newFileForFolder
      */
     void updateFolderPath(long folderId, File newFileForFolder);
+    
+    /**
+     * Builds the xml for the project's metadata schema
+     * @param project The project
+     * @return the xml
+     */
+    String buildMetadataSchemaXML(final Project project);
 }
