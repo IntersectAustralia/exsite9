@@ -269,10 +269,6 @@
                   style="push"
                   tooltip="Export the project&apos;s details to XML">
             </command>
-            <command
-                  commandId="exsite9.command3"
-                  style="push">
-            </command>
          </menu>
          <menu
                id="au.org.intersect.exsite9.menu.metadata"
