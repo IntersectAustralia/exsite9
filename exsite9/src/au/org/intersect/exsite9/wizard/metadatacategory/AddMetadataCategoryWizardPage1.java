@@ -251,7 +251,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         this.editButton.setLayoutData(editButtonGridData);
 
         setControl(this.container);
-        setPageComplete(this.categoryNameField.isValid());
+        setPageComplete(false);
 
     }
 
