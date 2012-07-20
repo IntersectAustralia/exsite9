@@ -16,15 +16,16 @@ import org.junit.Test;
 
 import au.org.intersect.exsite9.dao.DAOTest;
 import au.org.intersect.exsite9.dao.ResearchFileDAO;
+import au.org.intersect.exsite9.dao.SchemaDAO;
 import au.org.intersect.exsite9.dao.factory.FolderDAOFactory;
 import au.org.intersect.exsite9.dao.factory.MetadataAssociationDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
-import au.org.intersect.exsite9.dao.factory.SchemaDAOFactory;
 import au.org.intersect.exsite9.dao.factory.SubmissionPackageDAOFactory;
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
+import au.org.intersect.exsite9.domain.Schema;
 import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 
 public final class ProjectServiceUnitTest extends DAOTest
@@ -43,13 +44,15 @@ public final class ProjectServiceUnitTest extends DAOTest
         ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
-        SchemaDAOFactory schemaDAOFactory = new SchemaDAOFactory();
+        SchemaDAO schemaDAO = new SchemaDAO(emf.createEntityManager());
 
         projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, researchFileDAOFactory,
-                metadataAssociationDAOFactory, submissionPackageDAOFactory, schemaDAOFactory);
+                metadataAssociationDAOFactory, submissionPackageDAOFactory);
 
+        final Schema schema = new Schema("", "", "", Boolean.TRUE);
+        schemaDAO.createSchema(schema);
         Project project = projectService.createProject(new ProjectFieldsDTO("name", "owner", "description", "", "", "",
-                "", "", "", "", "", "", "", "", "", "", "", ""), "", "", "", true);
+                "", "", "", "", "", "", "", "", "", "", "", ""), schema);
 
         Project newProject = projectDAOFactory.createInstance(createEntityManager()).findById(project.getId());
 
@@ -61,22 +64,25 @@ public final class ProjectServiceUnitTest extends DAOTest
     {
         EntityManagerFactory emf = mock(EntityManagerFactory.class);
 
-        stub(emf.createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager());
+        stub(emf.createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager());
 
         ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
         ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
-        SchemaDAOFactory schemaDAOFactory = new SchemaDAOFactory();
+        SchemaDAO schemaDAO = new SchemaDAO(emf.createEntityManager());
 
         projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, researchFileDAOFactory,
-                metadataAssociationDAOFactory, submissionPackageDAOFactory, schemaDAOFactory);
+                metadataAssociationDAOFactory, submissionPackageDAOFactory);
 
         Folder folder = new Folder(new File("/tmp"));
 
+        final Schema schema = new Schema("", "", "", Boolean.TRUE);
+        schemaDAO.createSchema(schema);
+
         Project project = projectService.createProject(new ProjectFieldsDTO("name", "owner", "description", "", "", "",
-                "", "", "", "", "", "", "", "", "", "", "", ""), "", "", "", true);
+                "", "", "", "", "", "", "", "", "", "", "", ""), schema);
 
         projectService.mapFolderToProject(project, folder);
 
@@ -91,7 +97,7 @@ public final class ProjectServiceUnitTest extends DAOTest
         EntityManagerFactory emf = mock(EntityManagerFactory.class);
 
         stub(emf.createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager())
-                .toReturn(createEntityManager()).toReturn(createEntityManager());
+                .toReturn(createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager());
 
         Folder folder1 = new Folder(new File("/tmp1"));
         Folder folder2 = new Folder(new File("/tmp2"));
@@ -101,13 +107,16 @@ public final class ProjectServiceUnitTest extends DAOTest
         ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
-        SchemaDAOFactory schemaDAOFactory = new SchemaDAOFactory();
+        SchemaDAO schemaDAO = new SchemaDAO(emf.createEntityManager());
 
         projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, researchFileDAOFactory,
-                metadataAssociationDAOFactory, submissionPackageDAOFactory, schemaDAOFactory);
+                metadataAssociationDAOFactory, submissionPackageDAOFactory);
+
+        final Schema schema = new Schema("", "", "", Boolean.TRUE);
+        schemaDAO.createSchema(schema);
 
         Project project = projectService.createProject(new ProjectFieldsDTO("name", "owner", "description", "", "", "",
-                "", "", "", "", "", "", "", "", "", "", "", ""), "", "", "", true);
+                "", "", "", "", "", "", "", "", "", "", "", ""), schema);
 
         projectService.mapFolderToProject(project, folder1);
         projectService.mapFolderToProject(project, folder2);
@@ -129,22 +138,25 @@ public final class ProjectServiceUnitTest extends DAOTest
     {
         final EntityManagerFactory emf = mock(EntityManagerFactory.class);
         stub(emf.createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager())
-                .toReturn(createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager());
+                .toReturn(createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager());
 
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         final FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
         final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         final MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         final SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
-        final SchemaDAOFactory schemaDAOFactory = new SchemaDAOFactory();
+        final SchemaDAO schemaDAO = new SchemaDAO(emf.createEntityManager());
         projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, researchFileDAOFactory,
-                metadataAssociationDAOFactory, submissionPackageDAOFactory, schemaDAOFactory);
+                metadataAssociationDAOFactory, submissionPackageDAOFactory);
 
         assertEquals(0, projectService.getAllProjects().size());
 
+        final Schema schema = new Schema("", "", "", Boolean.TRUE);
+        schemaDAO.createSchema(schema);
+
         final ProjectFieldsDTO p1dto = new ProjectFieldsDTO("p1", "", "", "", "", "", "", "", "", "", "", "", "", "",
                 "", "", "", "");
-        final Project p1 = projectService.createProject(p1dto, "", "", "", true);
+        final Project p1 = projectService.createProject(p1dto, schema);
         assertNotNull(p1.getId());
 
         List<Project> out = projectService.getAllProjects();
@@ -153,7 +165,7 @@ public final class ProjectServiceUnitTest extends DAOTest
 
         final ProjectFieldsDTO p2dto = new ProjectFieldsDTO("p2", "", "", "", "", "", "", "", "", "", "", "", "", "",
                 "", "", "", "");
-        final Project p2 = projectService.createProject(p2dto, "", "", "", true);
+        final Project p2 = projectService.createProject(p2dto, schema);
         assertNotNull(p2.getId());
 
         out = projectService.getAllProjects();
@@ -167,22 +179,26 @@ public final class ProjectServiceUnitTest extends DAOTest
     {
         final EntityManagerFactory emf = mock(EntityManagerFactory.class);
         stub(emf.createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager())
-                .toReturn(createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager());
+                .toReturn(createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager());
 
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         final FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
         final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         final MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         final SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
-        final SchemaDAOFactory schemaDAOFactory = new SchemaDAOFactory();
+        final SchemaDAO schemaDAO = new SchemaDAO(emf.createEntityManager());
         projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, researchFileDAOFactory,
-                metadataAssociationDAOFactory, submissionPackageDAOFactory, schemaDAOFactory);
+                metadataAssociationDAOFactory, submissionPackageDAOFactory);
 
         assertEquals(0, projectService.getAllProjects().size());
 
+        final Schema schema = new Schema("", "", "", Boolean.TRUE);
+        schemaDAO.createSchema(schema);
+
         final ProjectFieldsDTO p1dto = new ProjectFieldsDTO("p1", "", "", "", "", "", "", "", "", "", "", "", "", "",
                 "", "", "", "");
-        final Project p1 = projectService.createProject(p1dto, "", "", "", true);
+        
+        final Project p1 = projectService.createProject(p1dto, schema);
         assertNotNull(p1.getId());
 
         final String name = "newName";
@@ -239,17 +255,17 @@ public final class ProjectServiceUnitTest extends DAOTest
         EntityManagerFactory emf = mock(EntityManagerFactory.class);
 
         stub(emf.createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager())
-                .toReturn(createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager());
+                .toReturn(createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager());
 
         ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
         ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
-        SchemaDAOFactory schemaDAOFactory = new SchemaDAOFactory();
+        SchemaDAO schemaDAO = new SchemaDAO(emf.createEntityManager());
 
         projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, researchFileDAOFactory,
-                metadataAssociationDAOFactory, submissionPackageDAOFactory, schemaDAOFactory);
+                metadataAssociationDAOFactory, submissionPackageDAOFactory);
 
         ResearchFileDAO researchFileDAO = researchFileDAOFactory.createInstance(emf.createEntityManager());
 
@@ -262,8 +278,11 @@ public final class ProjectServiceUnitTest extends DAOTest
         folder.getFiles().add(file1);
         folder.getFiles().add(file2);
 
+        final Schema schema = new Schema("", "", "", Boolean.TRUE);
+        schemaDAO.createSchema(schema);
+
         Project project = projectService.createProject(new ProjectFieldsDTO("name", "owner", "description", "", "", "",
-                "", "", "", "", "", "", "", "", "", "", "", ""), "", "", "", true);
+                "", "", "", "", "", "", "", "", "", "", "", ""), schema);
 
         projectService.mapFolderToProject(project, folder);
 

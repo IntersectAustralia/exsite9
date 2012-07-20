@@ -11,6 +11,7 @@ import java.util.List;
 
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.domain.Schema;
 import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 
 public interface IProjectService
@@ -18,9 +19,10 @@ public interface IProjectService
     /**
      * Creates a project.
      * @param projectFields the various fields that can be inputed when creating a project.
+     * @param schema the schema to use for the project.
      * @return The newly created project.
      */
-    Project createProject(final ProjectFieldsDTO projectFields, final String schemaName, final String schemaDescription, final String schemaNamespaceURL, final boolean schemaLocal);
+    Project createProject(final ProjectFieldsDTO projectFields, final Schema schema);
 
     /**
      * Maps a folder to a project.

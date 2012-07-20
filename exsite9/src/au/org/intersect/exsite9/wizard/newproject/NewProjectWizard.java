@@ -10,8 +10,10 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.PlatformUI;
 
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.domain.Schema;
 import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 import au.org.intersect.exsite9.service.IProjectService;
+import au.org.intersect.exsite9.service.ISchemaService;
 
 /**
  * The Wizard used to create a new project
@@ -51,9 +53,11 @@ public final class NewProjectWizard extends Wizard
     @Override
     public boolean performFinish()
     {
-        final IProjectService projectService = (IProjectService) PlatformUI.getWorkbench().getService(
-                IProjectService.class);
-        this.newProject = projectService.createProject(page1.getProjectFields(), "", "", "", true);
+        final IProjectService projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
+        final ISchemaService schemaService = (ISchemaService) PlatformUI.getWorkbench().getService(ISchemaService.class);
+
+        final Schema schema = schemaService.createLocalSchema("", "", "");
+        this.newProject = projectService.createProject(page1.getProjectFields(), schema);
 
         return this.newProject != null;
     }

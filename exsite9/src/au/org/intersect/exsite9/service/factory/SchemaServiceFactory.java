@@ -6,8 +6,11 @@
  */
 package au.org.intersect.exsite9.service.factory;
 
+import java.io.File;
+
 import javax.persistence.EntityManagerFactory;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.services.AbstractServiceFactory;
 import org.eclipse.ui.services.IServiceLocator;
@@ -35,9 +38,23 @@ public final class SchemaServiceFactory extends AbstractServiceFactory
     @SuppressWarnings("rawtypes")
     public Object create(final Class serviceInterface, final IServiceLocator parentLocator, final IServiceLocator locator)
     {
+        // Lookup the default schema directory (which is under the workspace directory).
+        final String workspaceDir = Platform.getInstallLocation().getURL().getPath();
+        final File schemaDir = new File(workspaceDir, "schemas");
+
+        final File schemaDirToUse;
+        if (schemaDir.exists() && schemaDir.isDirectory())
+        {
+            schemaDirToUse = schemaDir;
+        }
+        else
+        {
+            schemaDirToUse = null;
+        }
+
         final EntityManagerFactory emf = (EntityManagerFactory) PlatformUI.getWorkbench().getService(EntityManagerFactory.class);
         final SchemaDAOFactory schemaDAOFactory = new SchemaDAOFactory();
-        final SchemaService schemaService = new SchemaService(emf, schemaDAOFactory);
+        final SchemaService schemaService = new SchemaService(schemaDirToUse, emf, schemaDAOFactory);
         return schemaService;
     }
 }

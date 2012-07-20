@@ -16,7 +16,6 @@ import au.org.intersect.exsite9.dao.factory.FolderDAOFactory;
 import au.org.intersect.exsite9.dao.factory.MetadataAssociationDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
-import au.org.intersect.exsite9.dao.factory.SchemaDAOFactory;
 import au.org.intersect.exsite9.dao.factory.SubmissionPackageDAOFactory;
 import au.org.intersect.exsite9.service.ProjectService;
 
@@ -43,7 +42,6 @@ public final class ProjectServiceFactory extends AbstractServiceFactory
         final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         final MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         final SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
-        final SchemaDAOFactory schemaDAOFactory = new SchemaDAOFactory();
-        return new ProjectService(emf, projectDAOFactory, folderDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory, submissionPackageDAOFactory, schemaDAOFactory);
+        return new ProjectService(emf, projectDAOFactory, folderDAOFactory, researchFileDAOFactory, metadataAssociationDAOFactory, submissionPackageDAOFactory);
     }
 }
