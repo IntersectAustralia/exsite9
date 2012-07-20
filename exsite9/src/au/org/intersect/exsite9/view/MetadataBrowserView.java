@@ -186,7 +186,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             final Composite buttonComposite = new Composite(expandBarComposite, SWT.NONE);
 
             final ExpandItem expandItem = new ExpandItem(this.expandBar, SWT.NONE);
-            expandItem.setText(metadataCategory.getName());
+            expandItem.setText(metadataCategory.getName() + " (" + metadataCategory.getUse() + ")");
             expandItem.setControl(expandBarComposite);
             expandItem.setHeight(expandBarComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
             expandBarComposite.addControlListener(new ControlAdapter()
