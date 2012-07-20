@@ -177,6 +177,7 @@
          name="Import metadata schema">
    </command>
    <command
+         defaultHandler="au.org.intersect.exsite9.commands.handlers.ExportProjectMetadataSchemaHandler"
          id="au.org.intersect.exsite9.commands.ExportMetadataSchemaCommand"
          name="Export metadata command">
    </command>

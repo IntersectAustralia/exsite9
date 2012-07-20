@@ -46,6 +46,9 @@ public final class Schema implements Serializable
 
     public Schema()
     {
+        this.name = "";
+        this.description = "";
+        this.namespaceURL = "";
         this.metadataCategories = new ArrayList<MetadataCategory>();
     }
 
