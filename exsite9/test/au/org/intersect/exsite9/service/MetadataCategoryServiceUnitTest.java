@@ -29,7 +29,7 @@ public class MetadataCategoryServiceUnitTest extends DAOTest
 
         metadataCategoryService = new MetadataCategoryService(emf, metadataCategoryDAOFactory);
 
-        MetadataCategory category = metadataCategoryService.createNewMetadataCategory("Names", null);
+        MetadataCategory category = metadataCategoryService.createNewMetadataCategory("Names", MetadataCategoryUse.optional, null);
         MetadataCategory categoryFoundById = metadataCategoryService.findById(category.getId());
 
         assertEquals(category, categoryFoundById);
@@ -46,7 +46,7 @@ public class MetadataCategoryServiceUnitTest extends DAOTest
 
         metadataCategoryService = new MetadataCategoryService(emf, metadataCategoryDAOFactory);
 
-        MetadataCategory category = metadataCategoryService.createNewMetadataCategory("Names", null);
+        MetadataCategory category = metadataCategoryService.createNewMetadataCategory("Names", MetadataCategoryUse.optional, null);
         
         metadataCategoryService.updateMetadataCategory(category, "NameUpdated", MetadataCategoryUse.required, null);
         
