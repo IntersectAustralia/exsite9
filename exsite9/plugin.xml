@@ -272,18 +272,22 @@
          </menu>
          <menu
                id="au.org.intersect.exsite9.menu.metadata"
-               label="Metadata">
+               label="Metadata"
+               mnemonic="M">
             <menu
-                  label="Schema">
+                  label="Schema"
+                  mnemonic="S">
                <command
                      commandId="au.org.intersect.exsite9.commands.ImportMetadataSchemaCommand"
                      label="Import..."
+                     mnemonic="I"
                      style="push"
                      tooltip="Import metadata schema">
                </command>
                <command
                      commandId="au.org.intersect.exsite9.commands.ExportMetadataSchemaCommand"
                      label="Export..."
+                     mnemonic="x"
                      style="push"
                      tooltip="Export metadata schema">
                </command>
@@ -292,16 +296,19 @@
                   commandId="au.org.intersect.exsite9.commands.AddMetadataCategoryCommand"
                   icon="icons/icon-metadata.png"
                   label="New Category..."
+                  mnemonic="N"
                   style="push"
                   tooltip="Add Metadata Category">
             </command>
          </menu>
          <menu
                id="au.org.intersect.exsite9.menu.submissionpackage"
-               label="Submission Package">
+               label="Submission Package"
+               mnemonic="S">
             <command
                   commandId="au.org.intersect.exsite9.commands.CreateSubmissionPackageCommand"
                   label="Create..."
+                  mnemonic="C"
                   style="push"
                   tooltip="Create a submission package">
             </command>
