@@ -9,6 +9,7 @@ package au.org.intersect.exsite9.service;
 import java.util.List;
 
 import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataCategoryUse;
 import au.org.intersect.exsite9.domain.MetadataValue;
 
 /**
@@ -18,7 +19,7 @@ public interface IMetadataCategoryService
 {
     MetadataCategory createNewMetadataCategory(final String name, final List<MetadataValue> values);
     
-    void updateMetadataCategory(MetadataCategory existingMetadataCategoryToUpdate, final String name, final List<MetadataValue> values);
+    void updateMetadataCategory(MetadataCategory existingMetadataCategoryToUpdate, final String name, final MetadataCategoryUse use, final List<MetadataValue> values);
     
     MetadataCategory findById(final Long id);
 }

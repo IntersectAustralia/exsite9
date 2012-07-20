@@ -8,6 +8,7 @@ import org.eclipse.ui.PlatformUI;
 
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataCategoryUse;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
@@ -60,6 +61,7 @@ public class AddMetadataCategoryWizard extends Wizard
     public boolean performFinish()
     {
         final String categoryTitle = page1.getMetadataCategoryName();
+        final MetadataCategoryUse categoryUse = page1.getMetadataCategoryUse();
         final List<MetadataValue> values = page1.getMetadataCategoryValues();
 
         // Persist the new metadata category.
@@ -88,7 +90,7 @@ public class AddMetadataCategoryWizard extends Wizard
         }
         else
         {
-            metadataCategoryService.updateMetadataCategory(this.metadataCategory, categoryTitle,
+            metadataCategoryService.updateMetadataCategory(this.metadataCategory, categoryTitle, categoryUse,
                     page1.getMetadataCategoryValues());
         }
 

@@ -14,6 +14,7 @@ import javax.persistence.EntityManagerFactory;
 import au.org.intersect.exsite9.dao.MetadataCategoryDAO;
 import au.org.intersect.exsite9.dao.factory.MetadataCategoryDAOFactory;
 import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataCategoryUse;
 import au.org.intersect.exsite9.domain.MetadataValue;
 
 public final class MetadataCategoryService implements IMetadataCategoryService
@@ -65,7 +66,7 @@ public final class MetadataCategoryService implements IMetadataCategoryService
 
     @Override
     public void updateMetadataCategory(MetadataCategory existingMetadataCategoryToUpdate, String name,
-            List<MetadataValue> values)
+            MetadataCategoryUse use, List<MetadataValue> values)
     {
         final EntityManager em = this.emf.createEntityManager();
         try
@@ -73,6 +74,7 @@ public final class MetadataCategoryService implements IMetadataCategoryService
             final MetadataCategoryDAO mdcDAO = this.metadataCategoryDAOFactory.createInstance(em);
 
             existingMetadataCategoryToUpdate.setName(name);
+            existingMetadataCategoryToUpdate.setUse(use);
             existingMetadataCategoryToUpdate.setValues(values);
            
             mdcDAO.updateMetadataCategory(existingMetadataCategoryToUpdate);

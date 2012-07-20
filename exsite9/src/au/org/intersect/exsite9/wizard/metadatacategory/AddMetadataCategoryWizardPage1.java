@@ -17,6 +17,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
@@ -28,6 +29,7 @@ import com.richclientgui.toolbox.validation.validator.IFieldValidator;
 
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataCategoryUse;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
@@ -44,6 +46,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     private Composite container;
 
     private ValidatingField<String> categoryNameField;
+    private Combo useDropDown;
     private org.eclipse.swt.widgets.List metadataValuesListWidget;
     private Button removeButton;
     private Button addButton;
@@ -146,7 +149,46 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
 
         // empty cell due to having 3 columns below
         new Label(container, SWT.NULL);
+        
+        final Label useLabel = new Label(this.container, SWT.NULL);
+        useLabel.setText("Use");
 
+        this.useDropDown = new Combo(this.container, SWT.DROP_DOWN | SWT.READ_ONLY | SWT.SINGLE);
+        this.useDropDown.setItems(MetadataCategoryUse.asArray());
+        this.useDropDown.select(MetadataCategoryUse.Optional.ordinal());
+        
+        if (this.metadataCategory != null)
+        {
+            for (int i = 0; i < this.useDropDown.getItemCount(); i++)
+            {
+                if (this.useDropDown.getItem(i).equals(this.metadataCategory.getUse().toString()))
+                {
+                    this.useDropDown.select(i);
+                }
+            }
+        }
+        
+        this.useDropDown.addSelectionListener(new SelectionListener()
+        
+        {
+            
+            @Override
+            public void widgetSelected(SelectionEvent e)
+            {
+                setPageComplete(categoryNameField.isValid()); 
+            }
+            
+            @Override
+            public void widgetDefaultSelected(SelectionEvent e)
+            {
+      
+            }
+        });
+
+        // empty cell due to having 3 columns below
+        new Label(container, SWT.NULL);
+
+        
         final Label metadataValuesLabel = new Label(this.container, SWT.NULL);
         metadataValuesLabel.setText("Metadata Values");
 
@@ -209,7 +251,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         this.editButton.setLayoutData(editButtonGridData);
 
         setControl(this.container);
-        setPageComplete(false);
+        setPageComplete(this.categoryNameField.isValid());
 
     }
 
@@ -398,6 +440,11 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         return this.categoryNameField.getContents().trim();
     }
 
+    public MetadataCategoryUse getMetadataCategoryUse()
+    {
+        return MetadataCategoryUse.values()[this.useDropDown.getSelectionIndex()];
+    }
+    
     public List<MetadataValue> getMetadataCategoryValues()
     {
         return this.metadataValues;

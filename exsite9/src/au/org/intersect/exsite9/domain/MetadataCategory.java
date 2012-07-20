@@ -37,6 +37,8 @@ public final class MetadataCategory implements Serializable
     private Long id;
 
     private String name;
+    
+    private MetadataCategoryUse use; 
 
     @OneToMany(cascade=CascadeType.ALL, orphanRemoval=true)
     private List<MetadataValue> metadataValues = new ArrayList<MetadataValue>();
@@ -48,8 +50,15 @@ public final class MetadataCategory implements Serializable
     public MetadataCategory(final String name)
     {
         this.name = name;
+        this.use = MetadataCategoryUse.Optional;
     }
 
+    public MetadataCategory(final String name, final MetadataCategoryUse use)
+    {
+        this.name = name;
+        this.use = use;
+    }
+    
     public Long getId()
     {
         return this.id;
@@ -80,6 +89,16 @@ public final class MetadataCategory implements Serializable
         this.metadataValues = values;
     }
 
+    public MetadataCategoryUse getUse()
+    {
+        return use;
+    }
+
+    public void setUse(MetadataCategoryUse use)
+    {
+        this.use = use;
+    }
+
     @Override
     public int hashCode()
     {
@@ -104,6 +123,6 @@ public final class MetadataCategory implements Serializable
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this).append("id", this.id).append("name", this.name).toString();
+        return new ToStringBuilder(this).append("id", this.id).append("name", this.name).append("use",this.use).toString();
     }
 }

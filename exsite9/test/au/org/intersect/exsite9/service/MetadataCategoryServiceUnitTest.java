@@ -12,6 +12,7 @@ import org.junit.Test;
 import au.org.intersect.exsite9.dao.DAOTest;
 import au.org.intersect.exsite9.dao.factory.MetadataCategoryDAOFactory;
 import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataCategoryUse;
 
 public class MetadataCategoryServiceUnitTest extends DAOTest
 {
@@ -47,13 +48,13 @@ public class MetadataCategoryServiceUnitTest extends DAOTest
 
         MetadataCategory category = metadataCategoryService.createNewMetadataCategory("Names", null);
         
-        metadataCategoryService.updateMetadataCategory(category, "NameUpdated", null);
+        metadataCategoryService.updateMetadataCategory(category, "NameUpdated", MetadataCategoryUse.Required, null);
         
         MetadataCategory updatedCategoryFoundById = metadataCategoryDAOFactory.createInstance(createEntityManager())
                 .findById(category.getId());
 
         assertTrue(updatedCategoryFoundById.getName().equals("NameUpdated"));
         
-        
+        assertTrue(updatedCategoryFoundById.getUse().equals(MetadataCategoryUse.Required));
     }
 }
