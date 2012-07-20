@@ -63,8 +63,10 @@ public class EditProjectHandler implements IHandler
     @Override
     public boolean isEnabled()
     {
-        // TODO Auto-generated method stub
-        return true;
+        final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
+        final Project currentProject = projectManager.getCurrentProject();
+       
+        return (currentProject == null) ? false : true;
     }
 
     @Override

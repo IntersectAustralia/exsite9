@@ -213,18 +213,28 @@
          </menu>
          <menu
                id="au.org.intersect.exsite9.menu.project"
-               label="Project">
+               label="Project"
+               mnemonic="P">
             <command
                   commandId="au.org.intersect.exsite9.commands.NewProjectCommand"
                   icon="icons/icon_new_16.png"
                   label="New..."
+                  mnemonic="N"
                   style="push"
                   tooltip="Create a new project">
+            </command>
+            <command
+                  commandId="au.org.intersect.exsite9.commands.EditProjectCommand"
+                  label="Edit..."
+                  mnemonic="d"
+                  style="push"
+                  tooltip="Edit the current project">
             </command>
             <command
                   commandId="au.org.intersect.exsite9.commands.OpenProjectCommand"
                   icon="icons/icon_open_16.png"
                   label="Open..."
+                  mnemonic="O"
                   style="push"
                   tooltip="Open an existing project">
             </command>
@@ -232,12 +242,14 @@
                   commandId="au.org.intersect.exsite9.commands.ListFoldersCommand"
                   icon="icons/icon-folder.png"
                   label="Folders..."
+                  mnemonic="F"
                   style="push"
                   tooltip="List the project folders">
             </command>
             <command
                   commandId="au.org.intersect.exsite9.commands.ListExcludedFilesCommand"
                   label="Excluded Files..."
+                  mnemonic="x"
                   style="push"
                   tooltip="Lists the files that have been excluded from this project">
             </command>
@@ -245,6 +257,7 @@
                   commandId="au.org.intersect.exsite9.commands.ReloadProjectCommand"
                   icon="icons/icon_refresh_16.png"
                   label="Refresh"
+                  mnemonic="R"
                   style="push"
                   tooltip="Refresh the project&apos;s folders">
             </command>
@@ -252,8 +265,13 @@
                   commandId="au.org.intersect.exsite9.commands.ExportProjectXMLCommand"
                   icon="icons/icon_export_16.png"
                   label="Export..."
+                  mnemonic="x"
                   style="push"
                   tooltip="Export the project&apos;s details to XML">
+            </command>
+            <command
+                  commandId="exsite9.command3"
+                  style="push">
             </command>
          </menu>
          <menu
