@@ -249,7 +249,7 @@
             <command
                   commandId="au.org.intersect.exsite9.commands.ListExcludedFilesCommand"
                   label="Excluded Files..."
-                  mnemonic="x"
+                  mnemonic="E"
                   style="push"
                   tooltip="Lists the files that have been excluded from this project">
             </command>
