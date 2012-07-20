@@ -57,7 +57,7 @@ public final class ListExcludedFilesWizardPage1 extends WizardPage implements Se
         layout.numColumns = 2;
         container.setLayout(layout);
         
-        this.excludedFilesList = new org.eclipse.swt.widgets.List(container, SWT.BORDER | SWT.SINGLE | SWT.WRAP | SWT.V_SCROLL);
+        this.excludedFilesList = new org.eclipse.swt.widgets.List(container, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL);
 
         for (final ResearchFile rf : this.excludedFiles)
         {
@@ -106,9 +106,14 @@ public final class ListExcludedFilesWizardPage1 extends WizardPage implements Se
             return;
         }
 
-        final int selectedIndex = this.excludedFilesList.getSelectionIndex();
-        this.excludedFilesList.remove(selectedIndex);
-        this.excludedFilesToInclude.add(this.excludedFiles.get(selectedIndex));
+        while (this.excludedFilesList.getSelectionCount() > 0)
+        {
+            final int selectedIndex = this.excludedFilesList.getSelectionIndex();
+            final ResearchFile selectedResearchFile = this.excludedFiles.remove(selectedIndex);
+            this.excludedFilesToInclude.add(selectedResearchFile);
+            this.excludedFilesList.remove(selectedIndex);
+        }
+
         this.setPageComplete(true);
         this.removeButton.setEnabled(excludedFilesList.getSelectionCount() > 0);
     }
