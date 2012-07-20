@@ -155,7 +155,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
 
         this.useDropDown = new Combo(this.container, SWT.DROP_DOWN | SWT.READ_ONLY | SWT.SINGLE);
         this.useDropDown.setItems(MetadataCategoryUse.asArray());
-        this.useDropDown.select(MetadataCategoryUse.Optional.ordinal());
+        this.useDropDown.select(MetadataCategoryUse.optional.ordinal());
         
         if (this.metadataCategory != null)
         {

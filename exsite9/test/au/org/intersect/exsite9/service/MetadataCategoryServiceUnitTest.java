@@ -48,13 +48,13 @@ public class MetadataCategoryServiceUnitTest extends DAOTest
 
         MetadataCategory category = metadataCategoryService.createNewMetadataCategory("Names", null);
         
-        metadataCategoryService.updateMetadataCategory(category, "NameUpdated", MetadataCategoryUse.Required, null);
+        metadataCategoryService.updateMetadataCategory(category, "NameUpdated", MetadataCategoryUse.required, null);
         
         MetadataCategory updatedCategoryFoundById = metadataCategoryDAOFactory.createInstance(createEntityManager())
                 .findById(category.getId());
 
         assertTrue(updatedCategoryFoundById.getName().equals("NameUpdated"));
         
-        assertTrue(updatedCategoryFoundById.getUse().equals(MetadataCategoryUse.Required));
+        assertTrue(updatedCategoryFoundById.getUse().equals(MetadataCategoryUse.required));
     }
 }

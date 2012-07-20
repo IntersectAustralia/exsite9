@@ -2,7 +2,7 @@ package au.org.intersect.exsite9.domain;
 
 public enum MetadataCategoryUse
 {
-    Required, Recommended, Optional;
+    required, recommended, optional;
     
     public static String[] asArray()
     {

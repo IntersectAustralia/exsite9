@@ -50,7 +50,7 @@ public final class MetadataCategory implements Serializable
     public MetadataCategory(final String name)
     {
         this.name = name;
-        this.use = MetadataCategoryUse.Optional;
+        this.use = MetadataCategoryUse.optional;
     }
 
     public MetadataCategory(final String name, final MetadataCategoryUse use)
