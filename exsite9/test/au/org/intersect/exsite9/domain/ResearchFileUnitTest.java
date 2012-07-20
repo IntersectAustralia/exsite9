@@ -28,6 +28,7 @@ public final class ResearchFileUnitTest
         final ResearchFile toTest1 = new ResearchFile(file1);
         final ResearchFile toTest2 = new ResearchFile(file1);
         final ResearchFile toTest3 = new ResearchFile(file2);
+        toTest3.setId(3L);
 
         final Project project1 = new Project();
         toTest1.setProject(project1);

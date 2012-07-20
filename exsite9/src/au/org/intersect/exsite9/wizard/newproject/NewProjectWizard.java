@@ -18,8 +18,8 @@ import au.org.intersect.exsite9.service.IProjectService;
  */
 public final class NewProjectWizard extends Wizard
 {
-    private static String EMPTY_STRING = "";
     private final EditOrCreateProjectWizardPage1 page1;
+    private final EditOrCreateProjectWizardPage2 page2;
 
     private Project newProject;
 
@@ -31,10 +31,8 @@ public final class NewProjectWizard extends Wizard
         super();
         setNeedsProgressMonitor(true);
         page1 = new EditOrCreateProjectWizardPage1("New Project", "Please enter the details of your new project.",
-                new ProjectFieldsDTO(EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING,
-                        EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING,
-                        EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING,
-                        EMPTY_STRING));
+                new ProjectFieldsDTO("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
+        page2 = new EditOrCreateProjectWizardPage2("New Project", "Please enter the schema details to be used in your new project.");
     }
 
     /**
@@ -44,6 +42,7 @@ public final class NewProjectWizard extends Wizard
     public void addPages()
     {
         addPage(this.page1);
+        addPage(this.page2);
     }
 
     /**

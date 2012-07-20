@@ -117,7 +117,7 @@ public final class ResearchFile implements Serializable, IMetadataAssignable
             return false;
         }
         final ResearchFile other = (ResearchFile) obj;
-        return Objects.equal(this.file, other.file);
+        return Objects.equal(this.id, other.id);
     }
 
     /**
@@ -126,7 +126,7 @@ public final class ResearchFile implements Serializable, IMetadataAssignable
     @Override
     public int hashCode()
     {
-        return Objects.hashCode(this.file);
+        return Objects.hashCode(this.id);
     }
 
     /**
@@ -135,7 +135,7 @@ public final class ResearchFile implements Serializable, IMetadataAssignable
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this).append("file", this.file).toString();
+        return new ToStringBuilder(this).append("id", this.id).append("file", this.file).toString();
     }
     
     public List<MetadataAssociation> getMetadataAssociations()

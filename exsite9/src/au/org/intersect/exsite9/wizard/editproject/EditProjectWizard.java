@@ -7,10 +7,12 @@ import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 import au.org.intersect.exsite9.service.IProjectService;
 import au.org.intersect.exsite9.wizard.newproject.EditOrCreateProjectWizardPage1;
+import au.org.intersect.exsite9.wizard.newproject.EditOrCreateProjectWizardPage2;
 
 public class EditProjectWizard extends Wizard
 {
     private final EditOrCreateProjectWizardPage1 page1;
+    private final EditOrCreateProjectWizardPage2 page2;
 
     private Project currentProject;
 
@@ -34,6 +36,7 @@ public class EditProjectWizard extends Wizard
                         selectedProject.getDatesOfCapture(), selectedProject.getCitationInformation(),
                         selectedProject.getRelatedParty(), selectedProject.getRelatedActivity(),
                         selectedProject.getRelatedInformation()));
+        this.page2 = new EditOrCreateProjectWizardPage2("Edit Project", "Please amend the schema details to be used with your project");
     }
 
     /**
@@ -43,6 +46,7 @@ public class EditProjectWizard extends Wizard
     public void addPages()
     {
         addPage(this.page1);
+        addPage(this.page2);
     }
 
     @Override
