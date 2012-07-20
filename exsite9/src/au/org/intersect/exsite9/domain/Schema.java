@@ -156,4 +156,19 @@ public final class Schema implements Serializable
     {
         return new ToStringBuilder(this).append("id", this.id).append("name", this.name).toString();
     }
+    
+    public List<MetadataCategory> getRequiredMetadataCategories()
+    {
+        List<MetadataCategory> requiredCategories = new ArrayList<MetadataCategory>();
+        
+        for(final MetadataCategory category : getMetadataCategories())
+        {
+            if (category.isRequired())
+            {
+                requiredCategories.add(category);
+            }
+        }
+        
+        return requiredCategories;
+    }
 }
