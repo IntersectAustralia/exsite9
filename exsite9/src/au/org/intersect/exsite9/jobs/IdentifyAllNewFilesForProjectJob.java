@@ -60,6 +60,8 @@ public class IdentifyAllNewFilesForProjectJob extends Job
                 return Status.CANCEL_STATUS;
             }
             
+            monitor.beginTask("Indentify files...", IProgressMonitor.UNKNOWN);
+            
             final IResearchFileService fileService = (IResearchFileService) PlatformUI.getWorkbench().getService(IResearchFileService.class);
             if (folder == null)
             {
@@ -83,6 +85,7 @@ public class IdentifyAllNewFilesForProjectJob extends Job
         }
         finally
         {
+            monitor.done();
             semaphore.release();
         }
     }
