@@ -7,29 +7,56 @@
 package au.org.intersect.exsite9.service;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
+import au.org.intersect.exsite9.dao.MetadataCategoryDAO;
 import au.org.intersect.exsite9.dao.SchemaDAO;
+import au.org.intersect.exsite9.dao.factory.MetadataCategoryDAOFactory;
 import au.org.intersect.exsite9.dao.factory.SchemaDAOFactory;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.Schema;
+import au.org.intersect.exsite9.xml.MetadataSchemaXMLReader;
 
 /**
- * 
+ * Handles working with Metadata Schemas.
  */
 public final class SchemaService implements ISchemaService
 {
     private final EntityManagerFactory emf;
     private final SchemaDAOFactory schemaDAOFactory;
+    private final MetadataCategoryDAOFactory metadataCategoryDAOFactory;
     private final File defaultSchemaDirectory;
+    private final File metadataSchemaSchema;
 
-    public SchemaService(final File defaultSchemaDirectory, final EntityManagerFactory emf, final SchemaDAOFactory schemaDAOFactory)
+    /**
+     * @param defaultSchemaDirectory The default directory that metadata schema's will lie in.
+     * @param metadataSchemaSchema The RELAX-NG format schema, used to validate metadata schemas.
+     * @param emf
+     * @param schemaDAOFactory
+     */
+    public SchemaService(final File defaultSchemaDirectory, final File metadataSchemaSchema, final EntityManagerFactory emf,
+                         final SchemaDAOFactory schemaDAOFactory, final MetadataCategoryDAOFactory metadataCategoryDAOFactory)
     {
         this.emf = emf;
         this.schemaDAOFactory = schemaDAOFactory;
+        this.metadataCategoryDAOFactory = metadataCategoryDAOFactory;
         this.defaultSchemaDirectory = defaultSchemaDirectory;
+        this.metadataSchemaSchema = metadataSchemaSchema;
     }
 
     /**
@@ -78,5 +105,51 @@ public final class SchemaService implements ISchemaService
     public File getDefaultSchemaDirectory()
     {
         return this.defaultSchemaDirectory;
+    }
+
+    /**
+     * @{inheritDoc}
+     */
+    @Override
+    public Schema importSchema(final File xmlFile) throws SAXException, IOException, ParserConfigurationException
+    {
+        // Configure validator for RELAX NG Schema Support
+        System.setProperty(SchemaFactory.class.getName() + ":" + XMLConstants.RELAXNG_NS_URI, "com.thaiopensource.relaxng.jaxp.XMLSyntaxSchemaFactory");
+        final SchemaFactory validationSchemaFactory = SchemaFactory.newInstance(XMLConstants.RELAXNG_NS_URI);
+
+        final Source validationSchemaFile = new StreamSource(this.metadataSchemaSchema);
+        final javax.xml.validation.Schema validationSchema = validationSchemaFactory.newSchema(validationSchemaFile);
+        final Validator validator = validationSchema.newValidator();
+
+        // Throws SAXException if the schema is not valid.
+        // This needs to be a Stream Source, as validating a String isn't implemented :(
+        validator.validate(new StreamSource(xmlFile));
+
+        final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        final DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        final Document document = documentBuilder.parse(new FileInputStream(xmlFile));
+
+        // Schema is valid, continue the parse - parse it.
+        final Schema schema = MetadataSchemaXMLReader.readXML(document);
+
+        // Persist the Schema to the database.
+        final EntityManager em = this.emf.createEntityManager();
+        try
+        {
+            final MetadataCategoryDAO metadataCategoryDAO = this.metadataCategoryDAOFactory.createInstance(em);
+            for (final MetadataCategory metadataCategory : schema.getMetadataCategories())
+            {
+                metadataCategoryDAO.createMetadataCategory(metadataCategory);
+            }
+
+            final SchemaDAO schemaDAO = this.schemaDAOFactory.createInstance(em);
+            schemaDAO.createSchema(schema);
+        }
+        finally
+        {
+            em.close();
+        }
+
+        return schema;
     }
 }

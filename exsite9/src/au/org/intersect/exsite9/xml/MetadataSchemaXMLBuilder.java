@@ -13,10 +13,11 @@ import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.Schema;
 
-public class ProjectMetadataSchemaXMLBuilder extends BaseXMLBuilder
-{
+import static au.org.intersect.exsite9.xml.MetadataSchemaXMLUtils.*;
 
-    private static final Logger LOG = Logger.getLogger(ProjectMetadataSchemaXMLBuilder.class);
+public final class MetadataSchemaXMLBuilder extends BaseXMLBuilder
+{
+    private static final Logger LOG = Logger.getLogger(MetadataSchemaXMLBuilder.class);
     
     public static String buildXML(Project project)
     {
@@ -53,10 +54,10 @@ public class ProjectMetadataSchemaXMLBuilder extends BaseXMLBuilder
     private static void appendSchema(Document doc, Project project)
     {
         final Schema schema = project.getSchema();
-        final Element schemaElement = doc.createElement("schema");
-        schemaElement.setAttribute("description", schema.getDescription());
-        schemaElement.setAttribute("name", schema.getName());
-        schemaElement.setAttribute("namespace_url", schema.getNamespaceURL());
+        final Element schemaElement = doc.createElement(ELEMENT_SCHEMA);
+        schemaElement.setAttribute(ATTRIBUTE_DESCRIPTION, schema.getDescription());
+        schemaElement.setAttribute(ATTRIBUTE_NAME, schema.getName());
+        schemaElement.setAttribute(ATTRIBUTE_NAMESPACEURL, schema.getNamespaceURL());
         doc.appendChild(schemaElement);
     }
     
@@ -64,13 +65,13 @@ public class ProjectMetadataSchemaXMLBuilder extends BaseXMLBuilder
     {
         for(final MetadataCategory category : project.getSchema().getMetadataCategories())
         {
-            final Element catElement = doc.createElement("metadata_category");
-            catElement.setAttribute("name",category.getName());
-            catElement.setAttribute("use",category.getUse().toString());
+            final Element catElement = doc.createElement(ELEMENT_METADATACATEGORY);
+            catElement.setAttribute(ATTRIBUTE_NAME, category.getName());
+            catElement.setAttribute(ATTRIBUTE_USE ,category.getUse().toString());
             
             for(final MetadataValue value : category.getValues())
             {
-                final Element valElement = doc.createElement("value");
+                final Element valElement = doc.createElement(ELEMENT_VALUE);
                 valElement.setTextContent(value.getValue());
                 catElement.appendChild(valElement);
             }

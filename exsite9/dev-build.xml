@@ -103,6 +103,7 @@
 		<pathelement location="${exsite9-libs.dir}/commons-logging-1.1.1.jar" />
 		<pathelement location="${exsite9-libs.dir}/log4j-1.2.17.jar" />
 		<pathelement location="${exsite9-libs.dir}/commons-compress-1.4.1.jar" />
+		<pathelement location="${exsite9-libs.dir}/jing.jar" />
 	</path>
 
 	<path id="test.classpath">

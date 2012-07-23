@@ -7,12 +7,17 @@
 package au.org.intersect.exsite9.service;
 
 import java.io.File;
+import java.io.IOException;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
 
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.Schema;
 
 /**
- * Provides services for manipulating {@link Schema}s
+ * Provides services for manipulating Metadata {@link Schema}s
  */
 public interface ISchemaService
 {
@@ -37,4 +42,11 @@ public interface ISchemaService
      * @return The default directory on the file system that contains the pre-defined Schemas. May be {@code null} if there is no default schema directory.
      */
     public File getDefaultSchemaDirectory();
+
+    /**
+     * Imports a provided metadata schema.
+     * @param xmlFile The XML File to import.
+     * @return The imported Schema.
+     */
+    public Schema importSchema(final File xmlFile) throws SAXException, IOException, ParserConfigurationException;
 }

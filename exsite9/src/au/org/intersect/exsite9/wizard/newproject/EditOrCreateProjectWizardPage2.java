@@ -7,7 +7,12 @@
 package au.org.intersect.exsite9.wizard.newproject;
 
 import java.io.File;
+import java.io.IOException;
 
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.apache.log4j.Logger;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
@@ -24,12 +29,14 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
+import org.xml.sax.SAXException;
 
 import com.richclientgui.toolbox.validation.IFieldErrorMessageHandler;
 import com.richclientgui.toolbox.validation.ValidatingField;
 import com.richclientgui.toolbox.validation.string.StringValidationToolkit;
 import com.richclientgui.toolbox.validation.validator.IFieldValidator;
 
+import au.org.intersect.exsite9.domain.Schema;
 import au.org.intersect.exsite9.service.ISchemaService;
 import au.org.intersect.exsite9.wizard.MaximumFieldLengthValidator;
 import au.org.intersect.exsite9.wizard.WizardFieldUtils;
@@ -40,6 +47,8 @@ import au.org.intersect.exsite9.wizard.WizardPageErrorHandler;
  */
 public final class EditOrCreateProjectWizardPage2 extends WizardPage implements KeyListener, SelectionListener
 {
+    private static final Logger LOG = Logger.getLogger(EditOrCreateProjectWizardPage2.class);
+
     private Composite container;
 
     private StringValidationToolkit stringValidatorToolkit;
@@ -53,6 +62,8 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
     private Button localSchemaRadioButton;
     private Button importSchemaRadioButton;
     private Button importSchemaBrowseButton;
+
+    private Schema importedSchema;
 
     private final ISchemaService schemaService;
 
@@ -217,7 +228,7 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         this.importSchemaBrowseButton.addSelectionListener(new SelectionListener()
         {
             @Override
-            public void widgetSelected(final SelectionEvent e)
+            public void widgetSelected(final SelectionEvent event)
             {
                 final FileDialog fileDialog = new FileDialog(parent.getShell(), SWT.OPEN);
                 fileDialog.setFilterExtensions(new String[]{"*.xml"});
@@ -231,8 +242,27 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
                 final String filePath = fileDialog.open();
                 if (filePath != null)
                 {
-                    importedSchemaLocationField.setContents(filePath);
-                    setPageComplete(allFieldsAreValid());
+                    try
+                    {
+                        importedSchema = schemaService.importSchema(new File(filePath));
+                        importedSchemaLocationField.setContents(filePath);
+                        setPageComplete(allFieldsAreValid());
+                    }
+                    catch (final SAXException e)
+                    {
+                        MessageDialog.openError(getShell(), "Could not import Schema", e.getMessage());
+                        LOG.error(e);
+                    }
+                    catch (final IOException e)
+                    {
+                        MessageDialog.openError(getShell(), "Could not import Schema", e.getMessage());
+                        LOG.error(e);
+                    }
+                    catch (final ParserConfigurationException e)
+                    {
+                        MessageDialog.openError(getShell(), "Could not import Schema", e.getMessage());
+                        LOG.error(e);
+                    }
                 }
             }
 
@@ -357,8 +387,8 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         return this.schemaNamespaceURLField.getContents().trim();
     }
 
-    public File getImportedSchemaLocation()
+    public Schema getImportedSchema()
     {
-        return new File(this.importedSchemaLocationField.getContents());
+        return this.importedSchema;
     }
 }

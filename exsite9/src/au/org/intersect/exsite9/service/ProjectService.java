@@ -33,7 +33,7 @@ import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.Schema;
 import au.org.intersect.exsite9.domain.SubmissionPackage;
 import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
-import au.org.intersect.exsite9.xml.ProjectMetadataSchemaXMLBuilder;
+import au.org.intersect.exsite9.xml.MetadataSchemaXMLBuilder;
 
 public class ProjectService implements IProjectService
 {
@@ -268,6 +268,6 @@ public class ProjectService implements IProjectService
     @Override
     public String buildMetadataSchemaXML(Project project)
     {
-        return ProjectMetadataSchemaXMLBuilder.buildXML(project);
+        return MetadataSchemaXMLBuilder.buildXML(project);
     }
 }

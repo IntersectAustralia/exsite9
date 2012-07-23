@@ -9,7 +9,10 @@ import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.Schema;
 
-public class ProjectMetadataSchemaXMLBuilderUnitTest
+/**
+ * Tests {@link MetadataSchemaXMLBuilder}
+ */
+public class MetadataSchemaXMLBuilderUnitTest
 {
     private static final String NEW_LINE = System.getProperty("line.separator");
     private static final String EMPTY_STRING = "";
@@ -37,7 +40,7 @@ public class ProjectMetadataSchemaXMLBuilderUnitTest
                            + "  </metadata_category>" + NEW_LINE
                            + "</schema>" + NEW_LINE;
         
-        String actualXML = ProjectMetadataSchemaXMLBuilder.buildXML(project);
+        String actualXML = MetadataSchemaXMLBuilder.buildXML(project);
         
         assertEquals("XML matches", expectedXML, actualXML);
     }

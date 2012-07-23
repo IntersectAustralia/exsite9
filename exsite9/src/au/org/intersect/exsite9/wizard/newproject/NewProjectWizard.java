@@ -56,9 +56,20 @@ public final class NewProjectWizard extends Wizard
         final IProjectService projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
         final ISchemaService schemaService = (ISchemaService) PlatformUI.getWorkbench().getService(ISchemaService.class);
 
-        final Schema schema = schemaService.createLocalSchema("", "", "");
-        this.newProject = projectService.createProject(page1.getProjectFields(), schema);
+        final Schema schema;
+        if (page2.getUseLocalSchema())
+        {
+            final String schemaName = page2.getLocalSchemaName();
+            final String schemaDescription = page2.getLocalSchemaDescription();
+            final String schemaNamespaceURL = page2.getLocalSchemaNamespaceURL();
+            schema = schemaService.createLocalSchema(schemaName, schemaDescription, schemaNamespaceURL);
+        }
+        else
+        {
+            schema = page2.getImportedSchema();
+        }
 
+        this.newProject = projectService.createProject(page1.getProjectFields(), schema);
         return this.newProject != null;
     }
 
