@@ -229,4 +229,19 @@ public class ResearchFileService implements IResearchFileService
         }
     }
 
+    @Override
+    public void updateResearchFile(ResearchFile selectionObject)
+    {
+        final EntityManager em = entityManagerFactory.createEntityManager();
+        try
+        {
+            final ResearchFileDAO researchFileDAO = researchFileDAOFactory.createInstance(em);
+            researchFileDAO.updateResearchFile(selectionObject);
+        }
+        finally
+        {
+            em.close();
+        }
+    }
+
 }

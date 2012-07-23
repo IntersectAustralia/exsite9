@@ -77,8 +77,6 @@ public class ListFoldersWizard extends Wizard
             }
         }
 
-        //need to update the files in the folder but probably in the service
-
         //remove any existing folders that have been chosen to be removed
         if (!deletedFolderList.isEmpty())
         {
