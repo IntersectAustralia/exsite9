@@ -173,11 +173,12 @@
          name="List Excluded Files">
    </command>
    <command
+         defaultHandler="au.org.intersect.exsite9.commands.handlers.ImportMetadataSchemaHandler"
          id="au.org.intersect.exsite9.commands.ImportMetadataSchemaCommand"
          name="Import metadata schema">
    </command>
    <command
-         defaultHandler="au.org.intersect.exsite9.commands.handlers.ExportProjectMetadataSchemaHandler"
+         defaultHandler="au.org.intersect.exsite9.commands.handlers.ExportMetadataSchemaHandler"
          id="au.org.intersect.exsite9.commands.ExportMetadataSchemaCommand"
          name="Export metadata command">
 	</command>

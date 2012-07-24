@@ -132,6 +132,9 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         final Command editProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.EditProjectCommand");
         editProjectCommand.addExecutionListener(this);
 
+        final Command importMetadataSchemaCommand = commandService.getCommand("au.org.intersect.exsite9.commands.ImportMetadataSchemaCommand");
+        importMetadataSchemaCommand.addExecutionListener(this);
+
         this.parent = parent;
 
         // So wrapping of the buttons in the rows will work
@@ -284,7 +287,8 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         if (commandId.equals("au.org.intersect.exsite9.commands.NewProjectCommand")
                 || commandId.equals("au.org.intersect.exsite9.commands.OpenProjectCommand")
                 || commandId.equals("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand")
-                || commandId.equals("au.org.intersect.exsite9.commands.EditProjectCommand"))
+                || commandId.equals("au.org.intersect.exsite9.commands.EditProjectCommand")
+                || commandId.equals("au.org.intersect.exsite9.commands.ImportMetadataSchemaCommand"))
         {
             final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(
                     IProjectManager.class);

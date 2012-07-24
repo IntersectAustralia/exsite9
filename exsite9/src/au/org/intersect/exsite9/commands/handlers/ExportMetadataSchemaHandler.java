@@ -24,7 +24,7 @@ import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.service.IProjectService;
 
-public class ExportProjectMetadataSchemaHandler implements IHandler
+public class ExportMetadataSchemaHandler implements IHandler
 {
 
     @Override
