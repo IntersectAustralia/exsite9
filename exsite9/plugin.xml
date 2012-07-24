@@ -187,6 +187,11 @@
          id="au.org.intersect.exsite9.commands.FindResearchFile"
          name="Find File">
    </command>
+ <command
+       defaultHandler="au.org.intersect.exsite9.commands.handlers.ShowInFileSystemHandler"
+       id="au.org.intersect.exsite9.commands.ShowInFileSystem"
+       name="Show In File System">
+ </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -469,6 +474,17 @@
          <command
                commandId="au.org.intersect.exsite9.commands.FindResearchFile"
                label="Find File"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <reference
+                     definitionId="au.org.intersect.exsite9.expression.InstanceOfResearchFile">
+               </reference>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="au.org.intersect.exsite9.commands.ShowInFileSystem"
+               label="Show In File System"
                style="push">
             <visibleWhen
                   checkEnabled="false">
