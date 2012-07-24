@@ -7,6 +7,7 @@
 package au.org.intersect.exsite9.commands.handlers;
 
 import java.io.File;
+import java.util.List;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -83,14 +84,20 @@ public final class AddFolderToProjectHandler implements IHandler
 
             final Folder folder = new Folder(directory);
 
-            // Check if this folder has already been assigned to the project.
-            // TODO : We need to deal with the case that a parent directory of this one has already been added.
-            // OR this is a parent directory which contains directories that have already been added.
-
-            if (project.getFolders().contains(folder))
+            // Check if we are already watching the folder, or if the folder is a descendant of a folder we are already watching.
+            final List<Folder> watchedFolders = project.getFolders();
+            for(final Folder watched : watchedFolders)
             {
-                MessageDialog.openError(shell, "Error", "The folder is already assigned to the project.");
-                return null;
+                if(folder.getFolder().getAbsolutePath().equals(watched.getFolder().getAbsolutePath()))
+                {
+                    MessageDialog.openError(shell, "Error", "The folder is already being watched.");
+                    return null;
+                }
+                else if(folder.getFolder().getAbsolutePath().startsWith(watched.getFolder().getAbsolutePath()))
+                {
+                    MessageDialog.openError(shell, "Error", "The folder is already being watched as it is a sub-folder of a watched folder.");
+                    return null;
+                }
             }
 
             final IProjectService projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
