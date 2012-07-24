@@ -6,10 +6,10 @@
  */
 package au.org.intersect.exsite9;
 
-import org.apache.log4j.ConsoleAppender;
+import java.io.File;
+
 import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
-import org.apache.log4j.RollingFileAppender;
+import org.apache.log4j.xml.DOMConfigurator;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -22,14 +22,11 @@ import au.org.intersect.exsite9.logging.StdOutErrLog;
  */
 public final class Activator extends AbstractUIPlugin
 {
-    private static final String LOG4J_PATTERN = "%p [%d{yyyy-MM-dd HH:mm:ss,SSS}] %C - %m%n";
-
     // The plug-in ID
     public static final String PLUGIN_ID = "au.org.intersect.exsite9"; //$NON-NLS-1$
 
     // The shared instance
     private static Activator PLUGIN;
-
 
     /**
      * The constructor
@@ -44,17 +41,15 @@ public final class Activator extends AbstractUIPlugin
     public void start(final BundleContext context) throws Exception
     {
         // Configure log4j
-        final Logger rootLogger = Logger.getRootLogger();
-        rootLogger.addAppender(new ConsoleAppender(new PatternLayout(LOG4J_PATTERN)));
-
         final String workspaceDir = Platform.getInstallLocation().getURL().getPath();
-        final String logFile = workspaceDir + "/log/exsite9.log";
-        final RollingFileAppender fileAppender = new RollingFileAppender(new PatternLayout(LOG4J_PATTERN), logFile, true);
-        fileAppender.setImmediateFlush(true);
-        fileAppender.setMaxBackupIndex(10);
-        fileAppender.setMaxFileSize("10MB");
-        rootLogger.addAppender(fileAppender);
+        final File configurationDir = new File(workspaceDir, "configuration");
+        final File log4jxmlFile = new File(configurationDir, "log4j.xml");
 
+        // Because the log4j.xml refers to workspace.dir
+        System.setProperty("workspace.dir", workspaceDir);
+        DOMConfigurator.configure(log4jxmlFile.getAbsolutePath());
+
+        final Logger rootLogger = Logger.getRootLogger();
         StdOutErrLog.redirect();
         rootLogger.info(" *** Starting ExSite9 ***");
         rootLogger.info("java.home: " + System.getProperty("java.home"));
@@ -63,7 +58,7 @@ public final class Activator extends AbstractUIPlugin
         rootLogger.info("os.arch: " + System.getProperty("os.arch"));
         rootLogger.info("os.name: " + System.getProperty("os.name"));
         rootLogger.info("os.version: " + System.getProperty("os.version"));
-        rootLogger.info("workspace.dir (rcp): " + workspaceDir);
+        rootLogger.info("workspace.dir: " + System.getProperty("workspace.dir"));
 
         super.start(context);
         PLUGIN = this;
