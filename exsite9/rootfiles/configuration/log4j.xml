@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+  <appender name="stdout" class="org.apache.log4j.ConsoleAppender">
+    <param name="Target" value="System.out"/>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%p [%d{yyyy-MM-dd HH:mm:ss,SSS}] %C - %m%n"/>
+    </layout>
+  </appender>
+
+  <appender name="file" class="org.apache.log4j.RollingFileAppender">
+    <param name="file" value="${workspace.dir}/log/exsite9.log"/>
+    <param name="MaxFileSize" value="10MB"/>
+    <param name="MaxBackupIndex" value="10"/>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%p [%d{yyyy-MM-dd HH:mm:ss,SSS}] %C - %m%n"/>
+    </layout>
+  </appender> 
+
+  <root> 
+    <priority value="debug" /> 
+    <appender-ref ref="stdout" /> 
+    <appender-ref ref="file" /> 
+  </root>
+
+</log4j:configuration>
