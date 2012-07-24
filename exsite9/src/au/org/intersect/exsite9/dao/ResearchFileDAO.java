@@ -15,6 +15,7 @@ import javax.persistence.TypedQuery;
 
 import org.apache.log4j.Logger;
 
+import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 
@@ -95,5 +96,12 @@ public class ResearchFileDAO
             em.getTransaction().commit();
         }
         return updatedResearchFile;
+    }
+    
+    public Folder getParentFolder(final ResearchFile researchFile)
+    {
+        final TypedQuery<Folder> query = em.createQuery("SELECT f FROM Folder f WHERE :researchFile MEMBER OF f.files", Folder.class);
+        query.setParameter("researchFile", researchFile);
+        return query.getSingleResult();
     }
 }

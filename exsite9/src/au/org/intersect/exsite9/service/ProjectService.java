@@ -280,6 +280,7 @@ public class ProjectService implements IProjectService
             final ResearchFileDAO researchFileDAO = this.researchFileDAOFactory.createInstance(em);
             final MetadataAssociationDAO metadataAssociationDAO = this.metaAssociationDAOFactory.createInstance(em);
             final SubmissionPackageDAO submissionPackageDAO = this.submissionPackageDAOFactory.createInstance(em);
+            final FolderDAO folderDAO = this.folderDAOFactory.createInstance(em);
 
             ResearchFile fileToBeReplacedAndDeleted = researchFileDAO.findById(fileToBeReplacedId);
             ResearchFile fileToBeUsed = researchFileDAO.findById(fileToBeUsedId);
@@ -306,6 +307,10 @@ public class ProjectService implements IProjectService
                 submissionPackage.getResearchFiles().add(fileToBeUsed);
                 submissionPackageDAO.updateSubmissionPackage(submissionPackage);
             }
+            
+            Folder folder = researchFileDAO.getParentFolder(fileToBeReplacedAndDeleted);
+            folder.getFiles().remove(fileToBeReplacedAndDeleted);
+            folderDAO.updateFolder(folder);
 
             researchFileDAO.removeResearchFile(fileToBeReplacedAndDeleted);
             em.getTransaction().commit();
