@@ -258,24 +258,24 @@ public class ProjectService implements IProjectService
         {
             final FolderDAO folderDAO = this.folderDAOFactory.createInstance(em);
             final ResearchFileDAO researchFileDAO = this.researchFileDAOFactory.createInstance(em);
-           
+
             Folder folder = folderDAO.findById(folderId);
-            
-            //modify the path in each of the research files
+
+            // modify the path in each of the research files
             List<ResearchFile> researchFiles = folder.getFiles();
-            
+
             for (ResearchFile researchFile : researchFiles)
             {
-                String originalPath = researchFile.getFile().getAbsolutePath();                
-                String newPath = originalPath.replace(folder.getFolder().getAbsolutePath(), newFileForFolder.getAbsolutePath());
+                String originalPath = researchFile.getFile().getAbsolutePath();
+                String newPath = originalPath.replace(folder.getFolder().getAbsolutePath(),
+                        newFileForFolder.getAbsolutePath());
                 File replacementFile = new File(newPath);
                 researchFile.setFile(replacementFile);
                 researchFileDAO.updateResearchFile(researchFile);
             }
-            
-            
+
             folder.setFolder(newFileForFolder);
-            folderDAO.updateFolder(folder);           
+            folderDAO.updateFolder(folder);
         }
         finally
         {
@@ -288,4 +288,54 @@ public class ProjectService implements IProjectService
     {
         return MetadataSchemaXMLBuilder.buildXML(project);
     }
+
+    @Override
+    public void replaceResearchFileInSubmissionPackageAndDeleteReplacedFile(long fileToBeReplacedId, long fileToBeUsedId)
+    {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        try
+        {
+            final ResearchFileDAO researchFileDAO = this.researchFileDAOFactory.createInstance(em);
+            final MetadataAssociationDAO metadataAssociationDAO = this.metaAssociationDAOFactory.createInstance(em);
+            final SubmissionPackageDAO submissionPackageDAO = this.submissionPackageDAOFactory.createInstance(em);
+            final FolderDAO folderDAO = this.folderDAOFactory.createInstance(em);
+
+            ResearchFile fileToBeReplacedAndDeleted = researchFileDAO.findById(fileToBeReplacedId);
+            ResearchFile fileToBeUsed = researchFileDAO.findById(fileToBeUsedId);
+            
+            em.getTransaction().begin();
+
+            Group parentGroup = fileToBeReplacedAndDeleted.getParentGroup();
+            parentGroup.getResearchFiles().remove(fileToBeReplacedAndDeleted);
+
+            Iterator<MetadataAssociation> maIter = fileToBeReplacedAndDeleted.getMetadataAssociations().iterator();
+            while (maIter.hasNext())
+            {
+                MetadataAssociation metadataAssociation = maIter.next();
+                metadataAssociationDAO.removeMetadataAssociation(metadataAssociation);
+                maIter.remove();
+            }
+
+            // Remove the research file from any submission packages it is part of.
+            final List<SubmissionPackage> submissionPackages = submissionPackageDAO
+                    .findSubmissionPackagesWithResearchFile(fileToBeReplacedAndDeleted);
+            for (final SubmissionPackage submissionPackage : submissionPackages)
+            {
+                submissionPackage.getResearchFiles().remove(fileToBeReplacedAndDeleted);
+                submissionPackage.getResearchFiles().add(fileToBeUsed);
+                submissionPackageDAO.updateSubmissionPackage(submissionPackage);
+            }
+            
+            Folder folder = researchFileDAO.getParentFolder(fileToBeReplacedAndDeleted);
+            folder.getFiles().remove(fileToBeReplacedAndDeleted);
+            folderDAO.updateFolder(folder);
+
+            researchFileDAO.removeResearchFile(fileToBeReplacedAndDeleted);
+            em.getTransaction().commit();
+        }
+        finally
+        {
+            em.close();
+        }
+    }   
 }

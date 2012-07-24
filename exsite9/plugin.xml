@@ -180,6 +180,11 @@
          defaultHandler="au.org.intersect.exsite9.commands.handlers.ExportProjectMetadataSchemaHandler"
          id="au.org.intersect.exsite9.commands.ExportMetadataSchemaCommand"
          name="Export metadata command">
+	</command>
+	<command
+         defaultHandler="au.org.intersect.exsite9.commands.handlers.FindResearchFileHandler"
+         id="au.org.intersect.exsite9.commands.FindResearchFile"
+         name="Find File">
    </command>
    </extension>
    <extension
@@ -452,6 +457,17 @@
          <command
                commandId="au.org.intersect.exsite9.commands.ExcludeResearchFiles"
                label="Exclude"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <reference
+                     definitionId="au.org.intersect.exsite9.expression.InstanceOfResearchFile">
+               </reference>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="au.org.intersect.exsite9.commands.FindResearchFile"
+               label="Find File"
                style="push">
             <visibleWhen
                   checkEnabled="false">

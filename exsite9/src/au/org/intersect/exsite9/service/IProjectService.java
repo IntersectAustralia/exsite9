@@ -77,4 +77,10 @@ public interface IProjectService
      * @return the xml
      */
     String buildMetadataSchemaXML(final Project project);
+
+     /** Updates any submission packages that a specified research file is in when the file is replaced with another file
+     * @param fileToBeReplacedId
+     * @param fileToBeUsedId
+     */
+    void replaceResearchFileInSubmissionPackageAndDeleteReplacedFile(long fileToBeReplacedId, long fileToBeUsedId);
 }

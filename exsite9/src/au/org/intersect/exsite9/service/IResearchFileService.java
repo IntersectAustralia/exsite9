@@ -32,4 +32,6 @@ public interface IResearchFileService
 	public List<ResearchFile> getResearchFilesWithAssociatedMetadata(final MetadataCategory metadataCategory, final MetadataValue metadataValue);
 
 	public ResearchFile findResearchFileByID(final Long id);
+
+    public void updateResearchFile(ResearchFile selectionObject);
 }
