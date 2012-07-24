@@ -62,6 +62,9 @@ public final class EntityManagerFactoryFactory extends AbstractServiceFactory
         properties.put(PersistenceUnitProperties.JDBC_PASSWORD, "");
         properties.put(PersistenceUnitProperties.DDL_GENERATION, "create-tables");
         
+        // Turn off shared cache - EXSITE-167
+        properties.put("eclipselink.cache.shared.default", "false");
+        
         // Rewire eclipselink to log via log4j
         properties.put("eclipselink.logging.logger", "org.eclipse.persistence.logging.CommonsLoggingSessionLog");
         properties.put("eclipselink.logging.level", "FINE");
