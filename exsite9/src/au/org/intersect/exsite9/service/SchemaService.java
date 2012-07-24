@@ -9,6 +9,8 @@ package au.org.intersect.exsite9.service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -60,7 +62,7 @@ public final class SchemaService implements ISchemaService
     }
 
     /**
-     * @{inheritDoc}
+     * {@inheritDoc}
      */
     @Override
     public Schema createLocalSchema(final String schemaName, final String schemaDescription, final String schemaNamespaceURL)
@@ -72,6 +74,73 @@ public final class SchemaService implements ISchemaService
             final Schema schema = new Schema(schemaName, schemaDescription, schemaNamespaceURL, Boolean.TRUE);
             schemaDAO.createSchema(schema);
             return schema;
+        }
+        finally
+        {
+            em.close();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void createImportedSchema(final Schema schema)
+    {
+        final EntityManager em = this.emf.createEntityManager();
+        try
+        {
+            final MetadataCategoryDAO metadataCategoryDAO = this.metadataCategoryDAOFactory.createInstance(em);
+            for (final MetadataCategory metadataCategory : schema.getMetadataCategories())
+            {
+                metadataCategoryDAO.createMetadataCategory(metadataCategory);
+            }
+
+            final SchemaDAO schemaDAO = this.schemaDAOFactory.createInstance(em);
+            schemaDAO.createSchema(schema);
+        }
+        finally
+        {
+            em.close();
+        }
+    }
+
+    @Override
+    public void updateSchema(final Schema schema, final String schemaName, final String schemaDescription, final String schemaNamespaceURL)
+    {
+        schema.setName(schemaName);
+        schema.setDescription(schemaDescription);
+        schema.setNamespaceURL(schemaNamespaceURL);
+
+        final EntityManager em = this.emf.createEntityManager();
+        try
+        {
+            final SchemaDAO schemaDAO = this.schemaDAOFactory.createInstance(em);
+            schemaDAO.updateSchema(schema);
+        }
+        finally
+        {
+            em.close();
+        }
+    }
+
+    @Override
+    public void removeSchema(final Schema schema)
+    {
+        final EntityManager em = this.emf.createEntityManager();
+
+        try
+        {
+            final List<MetadataCategory> mdcsToDelete = new ArrayList<MetadataCategory>(schema.getMetadataCategories());
+
+            final SchemaDAO schemaDAO = this.schemaDAOFactory.createInstance(em);
+            schema.getMetadataCategories().clear();
+            schemaDAO.delete(schema);
+
+            final MetadataCategoryDAO metadataCategoryDAO = this.metadataCategoryDAOFactory.createInstance(em);
+            for (final MetadataCategory mdc : mdcsToDelete)
+            {
+                metadataCategoryDAO.delete(mdc);
+            }
         }
         finally
         {
@@ -111,7 +180,7 @@ public final class SchemaService implements ISchemaService
      * @{inheritDoc}
      */
     @Override
-    public Schema importSchema(final File xmlFile) throws SAXException, IOException, ParserConfigurationException
+    public Schema parseSchema(final File xmlFile) throws SAXException, IOException, ParserConfigurationException
     {
         // Configure validator for RELAX NG Schema Support
         System.setProperty(SchemaFactory.class.getName() + ":" + XMLConstants.RELAXNG_NS_URI, "com.thaiopensource.relaxng.jaxp.XMLSyntaxSchemaFactory");
@@ -129,27 +198,8 @@ public final class SchemaService implements ISchemaService
         final DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         final Document document = documentBuilder.parse(new FileInputStream(xmlFile));
 
-        // Schema is valid, continue the parse - parse it.
+        // Schema is valid, continue the parse.
         final Schema schema = MetadataSchemaXMLReader.readXML(document);
-
-        // Persist the Schema to the database.
-        final EntityManager em = this.emf.createEntityManager();
-        try
-        {
-            final MetadataCategoryDAO metadataCategoryDAO = this.metadataCategoryDAOFactory.createInstance(em);
-            for (final MetadataCategory metadataCategory : schema.getMetadataCategories())
-            {
-                metadataCategoryDAO.createMetadataCategory(metadataCategory);
-            }
-
-            final SchemaDAO schemaDAO = this.schemaDAOFactory.createInstance(em);
-            schemaDAO.createSchema(schema);
-        }
-        finally
-        {
-            em.close();
-        }
-
         return schema;
     }
 }

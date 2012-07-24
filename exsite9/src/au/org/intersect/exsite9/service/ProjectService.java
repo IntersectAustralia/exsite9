@@ -154,6 +154,24 @@ public class ProjectService implements IProjectService
     }
 
     @Override
+    public Project editProject(final Schema schema, final Long id)
+    {
+        final EntityManager em = entityManagerFactory.createEntityManager();
+        try
+        {
+            final ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
+            final Project project = projectDAO.findById(id);
+            project.setSchema(schema);
+            projectDAO.updateProject(project);
+            return project;
+        }
+        finally
+        {
+            em.close();
+        }
+    }
+
+    @Override
     public Project findProjectById(Long id)
     {
         final EntityManager em = this.entityManagerFactory.createEntityManager();

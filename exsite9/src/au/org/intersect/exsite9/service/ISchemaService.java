@@ -31,6 +31,27 @@ public interface ISchemaService
     public Schema createLocalSchema(final String schemaName, final String schemaDescription, final String schemaNamespaceURL);
 
     /**
+     * Persists an Imported Schema
+     * @param schema The schema to persist.
+     */
+    public void createImportedSchema(final Schema schema);
+
+    /**
+     * Updates the details of the provided schema.
+     * @param schema The schema to update.
+     * @param schemaName The new name of the schema.
+     * @param schemaDescription The new description of the schema.
+     * @param schemaNamespaceURL The new namespace URL of the schema.
+     */
+    public void updateSchema(final Schema schema, final String schemaName, final String schemaDescription, final String schemaNamespaceURL);
+
+    /**
+     * Removes a schema, its association to a project, and its association to files/groups.
+     * @param schema The schema to delete.
+     */
+    public void removeSchema(final Schema schema);
+
+    /**
      * Adds a metadata category to a schema.
      * @param schema The schema.
      * @param metadataCategory The metadata category to add.
@@ -44,9 +65,9 @@ public interface ISchemaService
     public File getDefaultSchemaDirectory();
 
     /**
-     * Imports a provided metadata schema.
+     * Parses the provides schema XML file to a schema object. <em>Does not persist the Schema to the database.</em>
      * @param xmlFile The XML File to import.
      * @return The imported Schema.
      */
-    public Schema importSchema(final File xmlFile) throws SAXException, IOException, ParserConfigurationException;
+    public Schema parseSchema(final File xmlFile) throws SAXException, IOException, ParserConfigurationException;
 }

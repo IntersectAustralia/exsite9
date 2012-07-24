@@ -35,4 +35,11 @@ public final class SchemaDAO
         em.merge(schema);
         em.getTransaction().commit();
     }
+
+    public void delete(final Schema schema)
+    {
+        em.getTransaction().begin();
+        em.remove(em.merge(schema));
+        em.getTransaction().commit();
+    }
 }

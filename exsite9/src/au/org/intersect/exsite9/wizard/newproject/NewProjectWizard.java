@@ -34,7 +34,7 @@ public final class NewProjectWizard extends Wizard
         setNeedsProgressMonitor(true);
         page1 = new EditOrCreateProjectWizardPage1("New Project", "Please enter the details of your new project.",
                 new ProjectFieldsDTO("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
-        page2 = new EditOrCreateProjectWizardPage2("New Project", "Please enter the schema details to be used in your new project.");
+        page2 = new EditOrCreateProjectWizardPage2("New Project", "Please enter the schema details to be used in your new project.", null);
     }
 
     /**
@@ -67,6 +67,7 @@ public final class NewProjectWizard extends Wizard
         else
         {
             schema = page2.getImportedSchema();
+            schemaService.createImportedSchema(schema);
         }
 
         this.newProject = projectService.createProject(page1.getProjectFields(), schema);

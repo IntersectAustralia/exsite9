@@ -24,6 +24,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
@@ -31,6 +32,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.xml.sax.SAXException;
 
+import com.google.common.base.Objects;
 import com.richclientgui.toolbox.validation.IFieldErrorMessageHandler;
 import com.richclientgui.toolbox.validation.ValidatingField;
 import com.richclientgui.toolbox.validation.string.StringValidationToolkit;
@@ -49,32 +51,36 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
 {
     private static final Logger LOG = Logger.getLogger(EditOrCreateProjectWizardPage2.class);
 
+    private static final String FORCED_EVENT = "FORCED EVENT";
+
     private Composite container;
 
     private StringValidationToolkit stringValidatorToolkit;
     private final IFieldErrorMessageHandler errorMessageHandler = new WizardPageErrorHandler(this);
 
-    private ValidatingField<String> schemaNameField;
-    private ValidatingField<String> schemaDescriptionField;
-    private ValidatingField<String> schemaNamespaceURLField;
-    private ValidatingField<String> importedSchemaLocationField;
+    private ValidatingField<String> localSchemaNameField;
+    private ValidatingField<String> localSchemaDescriptionField;
+    private ValidatingField<String> localSchemaNamespaceURLField;
 
     private Button localSchemaRadioButton;
     private Button importSchemaRadioButton;
     private Button importSchemaBrowseButton;
 
     private Schema importedSchema;
+    private final Schema currentSchema;
 
     private final ISchemaService schemaService;
 
     /**
      * Constructor
      */
-    public EditOrCreateProjectWizardPage2(final String pageTitle, final String pageDescription)
+    public EditOrCreateProjectWizardPage2(final String pageTitle, final String pageDescription, final Schema currentSchema)
     {
         super(pageTitle);
         setTitle(pageTitle);
         setDescription(pageDescription);
+        this.currentSchema = currentSchema;
+        this.importedSchema = currentSchema;
         this.schemaService = (ISchemaService) PlatformUI.getWorkbench().getService(ISchemaService.class);
     }
 
@@ -115,10 +121,10 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         this.stringValidatorToolkit = new StringValidationToolkit(SWT.TOP | SWT.LEFT, 1, true);
         this.stringValidatorToolkit.setDefaultErrorMessageHandler(this.errorMessageHandler);
 
-        final Label schemaNameLabel = new Label(localGroup, SWT.NULL);
-        schemaNameLabel.setText("Schema Name");
+        final Label localSchemaNameLabel = new Label(localGroup, SWT.NULL);
+        localSchemaNameLabel.setText("Schema Name");
 
-        schemaNameField = this.stringValidatorToolkit.createTextField(localGroup, new IFieldValidator<String>()
+        localSchemaNameField = this.stringValidatorToolkit.createTextField(localGroup, new IFieldValidator<String>()
         {
             private String errorMessage;
             
@@ -158,25 +164,25 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
                 return this.errorMessage;
             }
         }, true, "");
-        this.schemaNameField.getControl().addKeyListener(this);
+        this.localSchemaNameField.getControl().addKeyListener(this);
 
-        final Label schemaDescriptionLabel = new Label(localGroup, SWT.NULL);
-        schemaDescriptionLabel.setText("Schema Description");
+        final Label localSchemaDescriptionLabel = new Label(localGroup, SWT.NULL);
+        localSchemaDescriptionLabel.setText("Schema Description");
 
-        this.schemaDescriptionField = stringValidatorToolkit.createField(new Text(localGroup, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL),
+        this.localSchemaDescriptionField = stringValidatorToolkit.createField(new Text(localGroup, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL),
                 new MaximumFieldLengthValidator("Description", 255), false, "");
-        this.schemaDescriptionField.getControl().addKeyListener(this);
+        this.localSchemaDescriptionField.getControl().addKeyListener(this);
 
         // 3 empty cells due to the description field spanning 4 rows below
         new Label(localGroup, SWT.NULL);
         new Label(localGroup, SWT.NULL);
         new Label(localGroup, SWT.NULL);
 
-        final Label schemaNamespaceURLLabel = new Label(localGroup, SWT.NULL);
-        schemaNamespaceURLLabel.setText("Schema Namespace URL");
+        final Label localSchemaNamespaceURLLabel = new Label(localGroup, SWT.NULL);
+        localSchemaNamespaceURLLabel.setText("Schema Namespace URL");
 
-        this.schemaNamespaceURLField = WizardFieldUtils.createOptional255TextField(stringValidatorToolkit, localGroup, "Namespace URL", "");
-        this.schemaNamespaceURLField.getControl().addKeyListener(this);
+        this.localSchemaNamespaceURLField = WizardFieldUtils.createOptional255TextField(stringValidatorToolkit, localGroup, "Namespace URL", "");
+        this.localSchemaNamespaceURLField.getControl().addKeyListener(this);
 
         final Composite importSchemaRadioButtonContainer = new Composite(importGroup, SWT.NULL);
         importSchemaRadioButtonContainer.setLayout(new RowLayout(SWT.VERTICAL));
@@ -184,46 +190,43 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         this.importSchemaRadioButton.setText("Import a Schema");
         this.importSchemaRadioButton.addSelectionListener(this);
 
-        final Composite importSchemaLocationContainer = new Composite(importGroup, SWT.NULL);
-        final GridLayout importSchemaLocationLayout = new GridLayout();
-        final GridData importSchemaLocationLayoutData = new GridData(GridData.FILL_HORIZONTAL);
-        importSchemaLocationLayout.numColumns = 3;
-        importSchemaLocationContainer.setLayout(importSchemaLocationLayout);
-        importSchemaLocationContainer.setLayoutData(importSchemaLocationLayoutData);
+        final Composite importSchemaContainer = new Composite(importGroup, SWT.NULL);
+        final GridLayout importSchemaLayout = new GridLayout();
+        final GridData importSchemaLayoutData = new GridData(GridData.FILL_HORIZONTAL);
+        importSchemaLayout.numColumns = 2;
+        importSchemaContainer.setLayout(importSchemaLayout);
+        importSchemaContainer.setLayoutData(importSchemaLayoutData);
 
-        final Label importedSchemaLocationLabel = new Label(importSchemaLocationContainer, SWT.NULL);
-        importedSchemaLocationLabel.setText("Location");
+        final Label importedSchemaNameLabel = new Label(importSchemaContainer, SWT.NULL);
+        importedSchemaNameLabel.setText("Schema Name");
 
-        this.importedSchemaLocationField = stringValidatorToolkit.createTextField(importSchemaLocationContainer, new IFieldValidator<String>()
-        {
-            @Override
-            public String getErrorMessage()
-            {
-                return "Imported schema location is not a valid file";
-            }
+        final Text importedSchemaNameField = new Text(importSchemaContainer, SWT.BORDER | SWT.SINGLE);
+        importedSchemaNameField.setEditable(false);
+        importedSchemaNameField.setEnabled(false);
 
-            @Override
-            public String getWarningMessage()
-            {
-                return null;
-            }
+        final Label importedSchemaDescriptionLabel = new Label(importSchemaContainer, SWT.NULL);
+        importedSchemaDescriptionLabel.setText("Schema Description");
 
-            @Override
-            public boolean isValid(final String arg)
-            {
-                final File file = new File(arg);
-                return file.exists();
-            }
+        final Text importedSchemaDescriptionField = new Text(importSchemaContainer, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL);
+        importedSchemaDescriptionField.setEditable(false);
+        importedSchemaDescriptionField.setEnabled(false);
 
-            @Override
-            public boolean warningExist(final String arg)
-            {
-                return false;
-            }
-        }, true, "");
-        this.importedSchemaLocationField.getControl().addKeyListener(this);
+        // 3 empty cells due to the description field spanning 4 rows below
+        new Label(importSchemaContainer, SWT.NULL);
+        new Label(importSchemaContainer, SWT.NULL);
+        new Label(importSchemaContainer, SWT.NULL);
 
-        this.importSchemaBrowseButton = new Button(importSchemaLocationContainer, SWT.PUSH);
+        final Label importedSchemaNamespaceURLLabel = new Label(importSchemaContainer, SWT.NULL);
+        importedSchemaNamespaceURLLabel.setText("Schema Namespace URL");
+
+        final Text importedSchemaNamespaceURLField = new Text(importSchemaContainer, SWT.BORDER | SWT.SINGLE);
+        importedSchemaNamespaceURLField.setEditable(false);
+        importedSchemaNamespaceURLField.setEnabled(false);
+
+        // 1 empty cell to push the browse button to the right cell.
+        new Label(importSchemaContainer, SWT.NULL);
+
+        this.importSchemaBrowseButton = new Button(importSchemaContainer, SWT.PUSH);
         this.importSchemaBrowseButton.setText("Browse");
         this.importSchemaBrowseButton.addSelectionListener(new SelectionListener()
         {
@@ -242,10 +245,22 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
                 final String filePath = fileDialog.open();
                 if (filePath != null)
                 {
+                    if (currentSchema != null && importedSchema != null)
+                    {
+                        final boolean confirm = MessageDialog.openConfirm(getShell(), "Are you sure you want to import a new schema?",
+                            "Importing a new schema will cause all your current metadata to be overwritten and your associations will be lost. Are you sure you wish to proceed?");
+                        if (!confirm)
+                        {
+                            return;
+                        }
+                    }
+
                     try
                     {
-                        importedSchema = schemaService.importSchema(new File(filePath));
-                        importedSchemaLocationField.setContents(filePath);
+                        importedSchema = schemaService.parseSchema(new File(filePath));
+                        importedSchemaNameField.setText(importedSchema.getName());
+                        importedSchemaDescriptionField.setText(importedSchema.getDescription());
+                        importedSchemaNamespaceURLField.setText(importedSchema.getNamespaceURL());
                         setPageComplete(allFieldsAreValid());
                     }
                     catch (final SAXException e)
@@ -280,24 +295,59 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         final GridData multiLineGridData = new GridData(GridData.FILL_BOTH);
         multiLineGridData.verticalSpan = 4;
 
-        this.schemaNameField.getControl().setLayoutData(singleLineGridData);
-        this.schemaDescriptionField.getControl().setLayoutData(multiLineGridData);
-        this.schemaNamespaceURLField.getControl().setLayoutData(singleLineGridData);
-        this.importedSchemaLocationField.getControl().setLayoutData(singleLineGridData);
+        this.localSchemaNameField.getControl().setLayoutData(singleLineGridData);
+        this.localSchemaDescriptionField.getControl().setLayoutData(multiLineGridData);
+        this.localSchemaNamespaceURLField.getControl().setLayoutData(singleLineGridData);
+        importedSchemaNameField.setLayoutData(singleLineGridData);
+        importedSchemaDescriptionField.setLayoutData(multiLineGridData);
+        importedSchemaNamespaceURLField.setLayoutData(singleLineGridData);
+        this.importSchemaBrowseButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
 
-        schemaNameLabel.setLayoutData(indentedGridData);
-        schemaDescriptionLabel.setLayoutData(indentedGridData);
-        schemaNamespaceURLLabel.setLayoutData(indentedGridData);
-        importedSchemaLocationLabel.setLayoutData(indentedGridData2);
+        localSchemaNameLabel.setLayoutData(indentedGridData);
+        localSchemaDescriptionLabel.setLayoutData(indentedGridData);
+        localSchemaNamespaceURLLabel.setLayoutData(indentedGridData);
 
-        this.schemaNameField.getControl().setEnabled(false);
-        this.schemaDescriptionField.getControl().setEnabled(false);
-        this.schemaNamespaceURLField.getControl().setEnabled(false);
-        this.importedSchemaLocationField.getControl().setEnabled(false);
+        this.localSchemaNameField.getControl().setEnabled(false);
+        this.localSchemaDescriptionField.getControl().setEnabled(false);
+        this.localSchemaNamespaceURLField.getControl().setEnabled(false);
         this.importSchemaBrowseButton.setEnabled(false);
 
+        if (this.currentSchema != null)
+        {
+            final boolean localSchema = this.currentSchema.getLocal();
+            final String schemaName = this.currentSchema.getName();
+            final String schemaDescription = this.currentSchema.getDescription();
+            final String schemaNamespaceURL = this.currentSchema.getNamespaceURL();
+            if (localSchema)
+            {
+                final Event event = new Event();
+                event.widget = localSchemaRadioButton;
+                event.text = FORCED_EVENT;
+                widgetSelected(new SelectionEvent(event));
+
+                this.localSchemaRadioButton.setSelection(true);
+                this.importSchemaRadioButton.setSelection(false);
+                this.localSchemaNameField.setContents(schemaName);
+                this.localSchemaDescriptionField.setContents(schemaDescription);
+                this.localSchemaNamespaceURLField.setContents(schemaNamespaceURL);
+            }
+            else
+            {
+                final Event event = new Event();
+                event.widget = importSchemaRadioButton;
+                event.text = FORCED_EVENT;
+                widgetSelected(new SelectionEvent(event));
+
+                this.localSchemaRadioButton.setSelection(false);
+                this.importSchemaRadioButton.setSelection(true);
+                importedSchemaNameField.setText(schemaName);
+                importedSchemaDescriptionField.setText(schemaDescription);
+                importedSchemaNamespaceURLField.setText(schemaNamespaceURL);
+            }
+        }
+
         setControl(this.container);
-        setPageComplete(false);
+        setPageComplete(allFieldsAreValid());
         this.errorMessageHandler.clearMessage();
     }
 
@@ -327,20 +377,29 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         this.errorMessageHandler.clearMessage();
         if (e.widget == this.localSchemaRadioButton)
         {
+            if (this.currentSchema != null && this.importedSchema != null && !Objects.equal(e.text, FORCED_EVENT))
+            {
+                final boolean confirm = MessageDialog.openConfirm(getShell(), "Are you sure you want to use a local schema?",
+                    "Using a local schema will cause all your current metadata to be removed. Are you sure you wish to proceed?");
+                if (!confirm)
+                {
+                    this.importSchemaRadioButton.setSelection(true);
+                    this.localSchemaRadioButton.setSelection(false);
+                    return;
+                }
+            }
             this.importSchemaRadioButton.setSelection(false);
-            this.schemaNameField.getControl().setEnabled(true);
-            this.schemaDescriptionField.getControl().setEnabled(true);
-            this.schemaNamespaceURLField.getControl().setEnabled(true);
-            this.importedSchemaLocationField.getControl().setEnabled(false);
+            this.localSchemaNameField.getControl().setEnabled(true);
+            this.localSchemaDescriptionField.getControl().setEnabled(true);
+            this.localSchemaNamespaceURLField.getControl().setEnabled(true);
             this.importSchemaBrowseButton.setEnabled(false);
         }
         else if (e.widget == this.importSchemaRadioButton)
         {
             this.localSchemaRadioButton.setSelection(false);
-            this.schemaNameField.getControl().setEnabled(false);
-            this.schemaDescriptionField.getControl().setEnabled(false);
-            this.schemaNamespaceURLField.getControl().setEnabled(false);
-            this.importedSchemaLocationField.getControl().setEnabled(true);
+            this.localSchemaNameField.getControl().setEnabled(false);
+            this.localSchemaDescriptionField.getControl().setEnabled(false);
+            this.localSchemaNamespaceURLField.getControl().setEnabled(false);
             this.importSchemaBrowseButton.setEnabled(true);
         }
         setPageComplete(allFieldsAreValid());
@@ -358,11 +417,11 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
     {
         if (this.localSchemaRadioButton.getSelection())
         {
-            return this.schemaNameField.isValid() && this.schemaDescriptionField.isValid() && this.schemaNamespaceURLField.isValid();
+            return this.localSchemaNameField.isValid() && this.localSchemaDescriptionField.isValid() && this.localSchemaNamespaceURLField.isValid();
         }
         if (this.importSchemaRadioButton.getSelection())
         {
-            return this.importedSchemaLocationField.isValid();
+            return this.importedSchema != null;
         }
         return false;
     }
@@ -374,17 +433,17 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
 
     public String getLocalSchemaName()
     {
-        return this.schemaNameField.getContents().trim();
+        return this.localSchemaNameField.getContents().trim();
     }
 
     public String getLocalSchemaDescription()
     {
-        return this.schemaDescriptionField.getContents().trim();
+        return this.localSchemaDescriptionField.getContents().trim();
     }
 
     public String getLocalSchemaNamespaceURL()
     {
-        return this.schemaNamespaceURLField.getContents().trim();
+        return this.localSchemaNamespaceURLField.getContents().trim();
     }
 
     public Schema getImportedSchema()

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<schema name="foo" description="This is the foo schema" namespace_url="">
+<schema name="foo" description="This is the foo schema" namespace_url="This is the foo namespace URL">
  
   <metadata_category name="cat1" use="optional">
     <value>Value One</value>

@@ -53,6 +53,14 @@ public interface IProjectService
      */
     Project editProject(final ProjectFieldsDTO projectFields, final Long id);
 
+    /**
+     * Edit a project
+     * @param schema The new schema to assign to the project.
+     * @param id of the project to update.
+     * @return The updated project.
+     */
+    Project editProject(final Schema schema, final Long id);
+
     
     Project findProjectById(Long id);
     

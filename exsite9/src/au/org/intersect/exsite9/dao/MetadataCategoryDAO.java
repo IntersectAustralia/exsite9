@@ -35,8 +35,16 @@ public final class MetadataCategoryDAO
         em.merge(mdc);
         em.getTransaction().commit();
     }
+
     public MetadataCategory findById(final Long id)
     {
         return em.find(MetadataCategory.class,id);        
+    }
+
+    public void delete(final MetadataCategory mdc)
+    {
+        em.getTransaction().begin();
+        em.remove(em.merge(mdc));
+        em.getTransaction().commit();
     }
 }

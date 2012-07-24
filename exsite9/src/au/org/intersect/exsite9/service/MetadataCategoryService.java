@@ -84,6 +84,5 @@ public final class MetadataCategoryService implements IMetadataCategoryService
         {
             em.close();
         }
-        
     }
 }
