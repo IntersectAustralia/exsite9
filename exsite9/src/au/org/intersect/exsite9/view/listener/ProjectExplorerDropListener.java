@@ -49,7 +49,7 @@ public class ProjectExplorerDropListener extends ViewerDropAdapter
      * 2. The selected item is the New Files Group. (The New Files Group can't be moved.) 
      * 3. The selected item is the target group. (ie drop onto itself)
      * 4. The selected item's parent group is the target group. (ie drop it where it already is)
-     * 5. The selected item is a group and the target group is the New Files Group. (We can't create groups in the New File Group.)
+     * 5. The selected item is a group or file and the target group is the New Files Group. (We can't move stuff into the New Files Group).
      * 6. The target group is a descendant of the selected item. (ie cause a loop in the hierarchy.)
      * 
      */
@@ -73,8 +73,12 @@ public class ProjectExplorerDropListener extends ViewerDropAdapter
                 continue;
             }
             
-            if ((selectedItem instanceof Group) && 
-                (newParent instanceof NewFilesGroup))
+            if (newParent instanceof NewFilesGroup)
+            {
+                continue;
+            }
+
+            if (newParent == null)
             {
                 continue;
             }
@@ -110,7 +114,7 @@ public class ProjectExplorerDropListener extends ViewerDropAdapter
     @Override
     public boolean validateDrop(Object target, int operation, TransferData transferType)
     {
-        if (target instanceof ResearchFile)
+        if (target instanceof ResearchFile || target instanceof NewFilesGroup || target == null)
         {
             return false;
         }
