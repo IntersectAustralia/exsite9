@@ -131,6 +131,11 @@
          </commandParameter>
       </command>
       <command
+            defaultHandler="au.org.intersect.exsite9.commands.handlers.EditMetadataCategoryHandler"
+            id="au.org.intersect.exsite9.commands.EditMetadataCategoryCommand"
+            name="Edit Metadata Category">
+      </command>
+      <command
             defaultHandler="au.org.intersect.exsite9.commands.handlers.ListFoldersHandler"
             id="au.org.intersect.exsite9.commands.ListFoldersCommand"
             name="List Folders">
@@ -321,6 +326,13 @@
                   mnemonic="N"
                   style="push"
                   tooltip="Add Metadata Category">
+            </command>
+            <command
+                  commandId="au.org.intersect.exsite9.commands.EditMetadataCategoryCommand"
+                  label="Edit Category..."
+                  mnemonic="E"
+                  style="push"
+                  tooltip="Edit Metadata Category">
             </command>
          </menu>
          <menu

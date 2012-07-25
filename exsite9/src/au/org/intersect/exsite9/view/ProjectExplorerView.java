@@ -122,6 +122,9 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
         final Command removeMetadataCategoryCommand = commandService.getCommand("au.org.intersect.exsite9.commands.RemoveMetadataCategoryCommand");
         removeMetadataCategoryCommand.addExecutionListener(this);
 
+        final Command editMetadataCategoryCommand = commandService.getCommand("au.org.intersect.exsite9.commands.EditMetadataCategoryCommand");
+        editMetadataCategoryCommand.addExecutionListener(this);
+
         initContextMenu();
     }
 
@@ -194,7 +197,8 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
                 || commandId.equals("au.org.intersect.exsite9.commands.ListFoldersCommand")
                 || commandId.equals("au.org.intersect.exsite9.commands.ExcludeResearchFiles")
                 || commandId.equals("au.org.intersect.exsite9.commands.ListExcludedFilesCommand")
-                || commandId.equals("au.org.intersect.exsite9.commands.RemoveMetadataCategoryCommand"))
+                || commandId.equals("au.org.intersect.exsite9.commands.RemoveMetadataCategoryCommand")
+                || commandId.equals("au.org.intersect.exsite9.commands.EditMetadataCategoryCommand"))
         {
             refresh();
         }

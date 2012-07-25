@@ -31,8 +31,8 @@ import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataCategoryUse;
 import au.org.intersect.exsite9.domain.MetadataValue;
-import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
+import au.org.intersect.exsite9.domain.Schema;
 import au.org.intersect.exsite9.service.IGroupService;
 import au.org.intersect.exsite9.service.IResearchFileService;
 import au.org.intersect.exsite9.wizard.WizardPageErrorHandler;
@@ -43,6 +43,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     private StringValidationToolkit stringValidatorToolkit;
     private final IFieldErrorMessageHandler errorMessageHandler = new WizardPageErrorHandler(this);
 
+    private Composite parent;
     private Composite container;
 
     private ValidatingField<String> categoryNameField;
@@ -52,7 +53,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     private Button addButton;
     private Button editButton;
 
-    private Project project;
+    private Schema schema;
     private List<MetadataValue> metadataValues;
     private MetadataCategory metadataCategory;
     
@@ -61,14 +62,14 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     private final List<ResearchFile> assignedFiles = new ArrayList<ResearchFile>();
     private final List<MetadataValue> valuesToBeDisassociated = new ArrayList<MetadataValue>();
 
-    protected AddMetadataCategoryWizardPage1(final String pageTitle, final String pageDescription, final Project project, final MetadataCategory metadataCategory,
+    protected AddMetadataCategoryWizardPage1(final String pageTitle, final String pageDescription, final Schema schema, final MetadataCategory metadataCategory,
             final List<MetadataValue> metadataValues)
     {
         super(pageTitle);    
         setTitle(pageTitle);
         setDescription(pageDescription);
         
-        this.project = project;
+        this.schema = schema;
         this.metadataValues = metadataValues;
         this.metadataCategory = metadataCategory;
     }
@@ -76,7 +77,18 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     @Override
     public void createControl(final Composite parent)
     {
+        this.parent = parent;
+        reload();
+    }
+
+    void reload()
+    {
+        if (this.container != null)
+        {
+            this.container.dispose();
+        }
         this.container = new Composite(parent, SWT.NULL);
+
         final GridLayout layout = new GridLayout();
         this.container.setLayout(layout);
         layout.numColumns = 3;
@@ -118,7 +130,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                     return false;
                 }
                 
-                final List<MetadataCategory> existingCategories = project.getSchema().getMetadataCategories();
+                final List<MetadataCategory> existingCategories = schema.getMetadataCategories();
 
                 for (final MetadataCategory existingCategory : existingCategories)
                 {
@@ -197,8 +209,8 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         
         for (MetadataValue value : this.metadataValues) 
         {
-			this.metadataValuesListWidget.add(value.getValue());
-		}
+            this.metadataValuesListWidget.add(value.getValue());
+        }
         this.metadataValuesListWidget.addSelectionListener(new SelectionListener()
         {
             @Override
@@ -250,9 +262,12 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         this.removeButton.setLayoutData(removeButtonGridData);
         this.editButton.setLayoutData(editButtonGridData);
 
+        this.container.pack();
+        this.container.layout();
+        this.parent.layout();
+
         setControl(this.container);
         setPageComplete(false);
-
     }
 
     @Override
@@ -463,5 +478,15 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     public List<MetadataValue> getValuesToBeDisassociated()
     {
         return valuesToBeDisassociated;
+    }
+
+    void setMetadataCategory(final MetadataCategory metadataCategory)
+    {
+        this.metadataCategory = metadataCategory;
+    }
+
+    void setMetadataValues(final List<MetadataValue> metadataValues)
+    {
+        this.metadataValues = metadataValues;
     }
 }
