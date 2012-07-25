@@ -167,6 +167,22 @@ public final class SchemaService implements ISchemaService
         }
     }
 
+    @Override
+    public void removeMetadataCategoryFromSchema(final Schema schema, final MetadataCategory metadataCategory)
+    {
+        final EntityManager em = this.emf.createEntityManager();
+        try
+        {
+            final SchemaDAO schemaDAO = this.schemaDAOFactory.createInstance(em);
+            schema.getMetadataCategories().remove(metadataCategory);
+            schemaDAO.updateSchema(schema);
+        }
+        finally
+        {
+            em.close();
+        }
+    }
+
     /**
      * @{inheritDoc}
      */

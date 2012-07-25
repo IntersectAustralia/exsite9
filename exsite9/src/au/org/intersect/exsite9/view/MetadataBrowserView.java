@@ -20,12 +20,7 @@ import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IExecutionListener;
-import org.eclipse.core.commands.IParameter;
-import org.eclipse.core.commands.NotEnabledException;
 import org.eclipse.core.commands.NotHandledException;
-import org.eclipse.core.commands.Parameterization;
-import org.eclipse.core.commands.ParameterizedCommand;
-import org.eclipse.core.commands.common.NotDefinedException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -43,11 +38,10 @@ import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
-import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.ViewPart;
 
 import com.google.common.base.Predicates;
@@ -69,6 +63,7 @@ import au.org.intersect.exsite9.service.IGroupService;
 import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.service.IResearchFileService;
 import au.org.intersect.exsite9.util.Pair;
+import au.org.intersect.exsite9.view.listener.MetadataCategorySelectionListener;
 import au.org.intersect.exsite9.view.widgets.MetadataButtonWidget;
 
 /**
@@ -134,6 +129,9 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
 
         final Command importMetadataSchemaCommand = commandService.getCommand("au.org.intersect.exsite9.commands.ImportMetadataSchemaCommand");
         importMetadataSchemaCommand.addExecutionListener(this);
+
+        final Command removeMetadataCategoryCommand = commandService.getCommand("au.org.intersect.exsite9.commands.RemoveMetadataCategoryCommand");
+        removeMetadataCategoryCommand.addExecutionListener(this);
 
         this.parent = parent;
 
@@ -207,16 +205,19 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
 
             final ToolBar toolBar = new ToolBar(headerComposite, SWT.FLAT | SWT.WRAP | SWT.RIGHT);
             new ToolItem(toolBar, SWT.SEPARATOR);
+
             final ToolItem editButtonItem = new ToolItem(toolBar, SWT.NULL);
-
             final Image editImage = Activator.getImageDescriptor("/icons/icon_metadata_16.png").createImage();
-
-            // This is how you gain access to Eclipse's built-in icons
-            // final Image editImage =
-            // PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ELCL_SYNCED);
-
             editButtonItem.setImage(editImage);
-            editButtonItem.addSelectionListener(new EditMetadataCategorySelectionListener(metadataCategory));
+            editButtonItem.addSelectionListener(new MetadataCategorySelectionListener(metadataCategory,
+                    "au.org.intersect.exsite9.commands.AddMetadataCategoryCommand", "au.org.intersect.exsite9.commands.AddMetadataCategoryCommand.categoryParameter"));
+
+            final ToolItem removeButtonItem = new ToolItem(toolBar, SWT.NULL);
+            final Image removeImage = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE);
+            removeButtonItem.setImage(removeImage);
+            removeButtonItem.addSelectionListener(new MetadataCategorySelectionListener(metadataCategory,
+                    "au.org.intersect.exsite9.commands.RemoveMetadataCategoryCommand", "au.org.intersect.exsite9.commands.RemoveMetadataCategoryCommand.categoryParameter"));
+
             new ToolItem(toolBar, SWT.SEPARATOR);
             toolBar.pack();
 
@@ -288,7 +289,8 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                 || commandId.equals("au.org.intersect.exsite9.commands.OpenProjectCommand")
                 || commandId.equals("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand")
                 || commandId.equals("au.org.intersect.exsite9.commands.EditProjectCommand")
-                || commandId.equals("au.org.intersect.exsite9.commands.ImportMetadataSchemaCommand"))
+                || commandId.equals("au.org.intersect.exsite9.commands.ImportMetadataSchemaCommand")
+                || commandId.equals("au.org.intersect.exsite9.commands.RemoveMetadataCategoryCommand"))
         {
             final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(
                     IProjectManager.class);
@@ -498,74 +500,6 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         for (final MetadataButtonWidget metadataButtonWidget : this.metadataButtons.values())
         {
             metadataButtonWidget.setSelection(false);
-        }
-    }
-
-    private static final class EditMetadataCategorySelectionListener implements SelectionListener
-    {
-        private final MetadataCategory metadataCategory;
-
-        public EditMetadataCategorySelectionListener(final MetadataCategory metadataCategory)
-        {
-            this.metadataCategory = metadataCategory;
-        }
-
-        @Override
-        public void widgetSelected(final SelectionEvent event)
-        {
-            // Fire the command including the metadata category ID as an argument.
-            final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-            final ICommandService commandService = (ICommandService) window.getService(ICommandService.class);
-            final Command command = commandService
-                    .getCommand("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand");
-
-            final IParameter iparam;
-            try
-            {
-                iparam = command
-                        .getParameter("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand.categoryParameter");
-            }
-            catch (final NotDefinedException e)
-            {
-                LOG.error("Cannot add parameter to command", e);
-                return;
-            }
-
-            final Parameterization params = new Parameterization(iparam, metadataCategory.getId().toString());
-            final ArrayList<Parameterization> parameters = new ArrayList<Parameterization>();
-            parameters.add(params);
-
-            // Build the parameterized command
-            final ParameterizedCommand pc = new ParameterizedCommand(command,
-                    parameters.toArray(new Parameterization[parameters.size()]));
-
-            // Execute the command
-            final IHandlerService handlerService = (IHandlerService) window.getService(IHandlerService.class);
-            try
-            {
-                handlerService.executeCommand(pc, null);
-            }
-            catch (final ExecutionException e)
-            {
-                LOG.error("Cannot execute paramertized command", e);
-            }
-            catch (final NotDefinedException e)
-            {
-                LOG.error("Cannot execute paramertized command", e);
-            }
-            catch (final NotEnabledException e)
-            {
-                LOG.error("Cannot execute paramertized command", e);
-            }
-            catch (final NotHandledException e)
-            {
-                LOG.error("Cannot execute paramertized command", e);
-            }
-        }
-
-        @Override
-        public void widgetDefaultSelected(final SelectionEvent e)
-        {
         }
     }
 }

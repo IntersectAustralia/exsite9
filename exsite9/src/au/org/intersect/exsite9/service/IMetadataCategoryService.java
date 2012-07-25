@@ -22,4 +22,6 @@ public interface IMetadataCategoryService
     void updateMetadataCategory(MetadataCategory existingMetadataCategoryToUpdate, final String name, final MetadataCategoryUse use, final List<MetadataValue> values);
     
     MetadataCategory findById(final Long id);
+
+    void deleteMetadataCategory(final MetadataCategory metadataCategory);
 }

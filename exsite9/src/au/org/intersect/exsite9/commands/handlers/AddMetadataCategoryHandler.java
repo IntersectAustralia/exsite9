@@ -49,8 +49,8 @@ public class AddMetadataCategoryHandler implements IHandler
         if (!Strings.nullToEmpty(eventParam).isEmpty())
         {
            final Long id = Long.valueOf(eventParam);
-           final IMetadataCategoryService metadataCategpryService = (IMetadataCategoryService) PlatformUI.getWorkbench().getService(IMetadataCategoryService.class);
-           metadataCategory = metadataCategpryService.findById(id);
+           final IMetadataCategoryService metadataCategoryService = (IMetadataCategoryService) PlatformUI.getWorkbench().getService(IMetadataCategoryService.class);
+           metadataCategory = metadataCategoryService.findById(id);
         }
         else
         {

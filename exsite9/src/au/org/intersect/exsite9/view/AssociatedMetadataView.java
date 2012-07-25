@@ -114,13 +114,17 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
                 .getCommand("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand");
         addMetadataCategoryCommand.addExecutionListener(this);
 
+        final Command importMetadataSchemaCommand = commandService.getCommand("au.org.intersect.exsite9.commands.ImportMetadataSchemaCommand");
+        importMetadataSchemaCommand.addExecutionListener(this);
+
+        final Command removeMetadataCategoryCommand = commandService.getCommand("au.org.intersect.exsite9.commands.RemoveMetadataCategoryCommand");
+        removeMetadataCategoryCommand.addExecutionListener(this);
+
     }
 
     @Override
     public void setFocus()
     {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -148,15 +152,11 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
         @Override
         public void dispose()
         {
-            // TODO Auto-generated method stub
-
         }
 
         @Override
         public void inputChanged(Viewer arg0, Object arg1, Object arg2)
         {
-            // TODO Auto-generated method stub
-
         }
 
         @SuppressWarnings("unchecked")
@@ -262,15 +262,11 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
     @Override
     public void notHandled(String arg0, NotHandledException arg1)
     {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void postExecuteFailure(String arg0, ExecutionException arg1)
     {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -282,8 +278,6 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
     @Override
     public void preExecute(String arg0, ExecutionEvent arg1)
     {
-        // TODO Auto-generated method stub
-
     }
 
     public void refresh()

@@ -115,9 +115,20 @@
             id="au.org.intersect.exsite9.commands.AddMetadataCategoryCommand"
             name="Add Metadata Category">
          <commandParameter
-         		id="au.org.intersect.exsite9.commands.AddMetadataCategoryCommand.categoryParameter"
-         		name="Category">
+               id="au.org.intersect.exsite9.commands.AddMetadataCategoryCommand.categoryParameter"
+               name="Category"
+               optional="false">
          </commandParameter>  
+      </command>
+      <command
+            defaultHandler="au.org.intersect.exsite9.commands.handlers.RemoveMetadataCategoryHandler"
+            id="au.org.intersect.exsite9.commands.RemoveMetadataCategoryCommand"
+            name="Remove Metadata Category">
+         <commandParameter
+               id="au.org.intersect.exsite9.commands.RemoveMetadataCategoryCommand.categoryParameter"
+               name="Category"
+               optional="false">
+         </commandParameter>
       </command>
       <command
             defaultHandler="au.org.intersect.exsite9.commands.handlers.ListFoldersHandler"

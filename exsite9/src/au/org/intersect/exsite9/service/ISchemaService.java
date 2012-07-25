@@ -59,6 +59,13 @@ public interface ISchemaService
     public void addMetadataCategoryToSchema(final Schema schema, final MetadataCategory metadataCategory);
 
     /**
+     * Removes a metadata category from a schema.
+     * @param schema The schema.
+     * @param metadataCategory The metadata category to remove.
+     */
+    public void removeMetadataCategoryFromSchema(final Schema schema, final MetadataCategory metadataCategory);
+
+    /**
      * Obtains the default directory on the file system that contains the pre-defined Schemas.
      * @return The default directory on the file system that contains the pre-defined Schemas. May be {@code null} if there is no default schema directory.
      */

@@ -50,6 +50,24 @@ public final class MetadataCategoryService implements IMetadataCategoryService
         }
     }
 
+    /**
+     * @{inheritDoc}
+     */
+    @Override
+    public void deleteMetadataCategory(final MetadataCategory metadataCategory)
+    {
+        final EntityManager em = this.emf.createEntityManager();
+        try
+        {
+            final MetadataCategoryDAO mdcDAO = this.metadataCategoryDAOFactory.createInstance(em);
+            mdcDAO.delete(metadataCategory);
+        }
+        finally
+        {
+            em.close();
+        }
+    }
+
     @Override
     public MetadataCategory findById(final Long id)
     {
