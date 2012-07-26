@@ -113,8 +113,11 @@ public final class AddFolderToProjectHandler implements IHandler
             Job identifyAllNewFilesForProject = new IdentifyAllNewFilesForProjectJob(folder);
             identifyAllNewFilesForProject.schedule();
             
-            Job consolidateFolders = new ConsolidateFoldersJob(folder, subFoldersOfNewFolder);
-            consolidateFolders.schedule();
+            if( ! subFoldersOfNewFolder.isEmpty())
+            {
+                Job consolidateFolders = new ConsolidateFoldersJob(folder, subFoldersOfNewFolder);
+                consolidateFolders.schedule();
+            }
         }
         return null;
     }
