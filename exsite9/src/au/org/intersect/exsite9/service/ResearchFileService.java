@@ -244,4 +244,25 @@ public class ResearchFileService implements IResearchFileService
         }
     }
 
+    public void consolidateSubFolderIntoParentFolder(final Project project, final Folder parentFolder, final Folder subFolder)
+    {
+        final EntityManager em = entityManagerFactory.createEntityManager();
+        try
+        {
+            final ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
+            final FolderDAO folderDAO = folderDAOFactory.createInstance(em);
+            parentFolder.getFiles().addAll(subFolder.getFiles());
+            subFolder.getFiles().clear();
+            folderDAO.updateFolder(parentFolder);
+            folderDAO.updateFolder(subFolder);
+            project.getFolders().remove(subFolder);
+            projectDAO.updateProject(project);
+            folderDAO.removeFolder(subFolder);
+        }
+        finally
+        {
+            em.close();
+        }
+    }
+    
 }

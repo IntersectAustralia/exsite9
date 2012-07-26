@@ -7,6 +7,7 @@
 package au.org.intersect.exsite9.commands.handlers;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.commands.ExecutionEvent;
@@ -23,6 +24,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.jobs.ConsolidateFoldersJob;
 import au.org.intersect.exsite9.jobs.IdentifyAllNewFilesForProjectJob;
 import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.service.IProjectService;
@@ -85,6 +87,7 @@ public final class AddFolderToProjectHandler implements IHandler
             final Folder folder = new Folder(directory);
 
             // Check if we are already watching the folder, or if the folder is a descendant of a folder we are already watching.
+            final List<Folder> subFoldersOfNewFolder = new ArrayList<Folder>();
             final List<Folder> watchedFolders = project.getFolders();
             for(final Folder watched : watchedFolders)
             {
@@ -98,6 +101,10 @@ public final class AddFolderToProjectHandler implements IHandler
                     MessageDialog.openError(shell, "Error", "The folder is already being watched as it is a sub-folder of a watched folder.");
                     return null;
                 }
+                else if(watched.getFolder().getAbsolutePath().startsWith(folder.getFolder().getAbsolutePath()))
+                {
+                    subFoldersOfNewFolder.add(watched);
+                }
             }
 
             final IProjectService projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
@@ -105,6 +112,9 @@ public final class AddFolderToProjectHandler implements IHandler
             
             Job identifyAllNewFilesForProject = new IdentifyAllNewFilesForProjectJob(folder);
             identifyAllNewFilesForProject.schedule();
+            
+            Job consolidateFolders = new ConsolidateFoldersJob(folder, subFoldersOfNewFolder);
+            consolidateFolders.schedule();
         }
         return null;
     }

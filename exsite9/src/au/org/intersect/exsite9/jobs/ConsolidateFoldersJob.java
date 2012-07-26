@@ -1,6 +1,7 @@
 package au.org.intersect.exsite9.jobs;
 
-import org.apache.log4j.Logger;
+import java.util.List;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -10,44 +11,33 @@ import org.eclipse.ui.PlatformUI;
 
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
-import au.org.intersect.exsite9.service.IResearchFileService;
 import au.org.intersect.exsite9.service.IProjectManager;
+import au.org.intersect.exsite9.service.IResearchFileService;
 import au.org.intersect.exsite9.view.ProjectExplorerView;
 import au.org.intersect.exsite9.view.ViewUtils;
 
-public class IdentifyAllNewFilesForProjectJob extends Job
+public class ConsolidateFoldersJob extends Job
 {
-    
-    private static final Logger LOG = Logger.getLogger(IdentifyAllNewFilesForProjectJob.class);
-    
-    private static final String jobName = "IdentifyAllNewFilesForProject";
-    
-    private final Folder folder;
-    
-    public IdentifyAllNewFilesForProjectJob()
-    {
-        super(jobName);
-        this.folder = null;
-    }
 
-    public IdentifyAllNewFilesForProjectJob(Folder folder)
+    private static final String jobName = "ConsolidateFoldersForProject";
+    
+    private final Folder parentFolder;
+    private final List<Folder> subFolders;
+    
+    public ConsolidateFoldersJob(Folder parentFolder, List<Folder>subFolders)
     {
         super(jobName);
-        this.folder = folder;
+        this.parentFolder = parentFolder;
+        this.subFolders = subFolders;
     }
     
     @Override
     protected IStatus run(IProgressMonitor monitor)
     {
-        // Only allow one instance of the job to run at a time.
-        if(!SemaphoreManager.getBackgroundJobSemaphore().tryAcquire())
-        {
-            LOG.info("Finding files cancelled due to already running process.");
-            return Status.CANCEL_STATUS;
-        }
-        
         try
         {
+            SemaphoreManager.getBackgroundJobSemaphore().acquire();
+            
             final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
             final Project project = projectManager.getCurrentProject();
      
@@ -55,17 +45,14 @@ public class IdentifyAllNewFilesForProjectJob extends Job
             {
                 return Status.CANCEL_STATUS;
             }
-            
-            monitor.beginTask("Indentify files...", IProgressMonitor.UNKNOWN);
+     
+            monitor.beginTask("Consolidating Folders", IProgressMonitor.UNKNOWN);
             
             final IResearchFileService fileService = (IResearchFileService) PlatformUI.getWorkbench().getService(IResearchFileService.class);
-            if (folder == null)
+            
+            for(final Folder subFolder : subFolders)
             {
-                fileService.identifyNewFilesForProject(project);
-            }
-            else
-            {
-                fileService.identifyNewFilesForFolder(project, this.folder);
+                fileService.consolidateSubFolderIntoParentFolder(project, parentFolder, subFolder);
             }
             
             // Refresh the project explorer view in the ui thread
@@ -79,10 +66,15 @@ public class IdentifyAllNewFilesForProjectJob extends Job
             
             return Status.OK_STATUS;
         }
+        catch(InterruptedException ie)
+        {
+            // TODO: handle this
+            return Status.CANCEL_STATUS;
+        }
         finally
         {
-            monitor.done();
             SemaphoreManager.getBackgroundJobSemaphore().release();
+            monitor.done();
         }
     }
 

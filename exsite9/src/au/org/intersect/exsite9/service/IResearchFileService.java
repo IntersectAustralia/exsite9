@@ -34,4 +34,6 @@ public interface IResearchFileService
 	public ResearchFile findResearchFileByID(final Long id);
 
     public void updateResearchFile(ResearchFile selectionObject);
+    
+    public void consolidateSubFolderIntoParentFolder(final Project project, final Folder parentFolder, final Folder subFolder);
 }
