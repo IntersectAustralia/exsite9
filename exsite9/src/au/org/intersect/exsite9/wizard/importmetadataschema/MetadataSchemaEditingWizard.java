@@ -8,6 +8,7 @@ package au.org.intersect.exsite9.wizard.importmetadataschema;
 
 import java.util.List;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.PlatformUI;
 
@@ -82,26 +83,41 @@ public abstract class MetadataSchemaEditingWizard extends Wizard
             }
             else
             {
-                schemaService.createImportedSchema(importedSchema);
-                projectService.editProject(importedSchema, currentProject.getId());
-                deleteSchema(currentSchema);
+                final boolean confirm = MessageDialog.openConfirm(getShell(), "Are you sure you want to use an imported metadata schema?",
+                    "Using an imported metadata schema will cause all your current metadata to be removed. Are you sure you want to proceed?");
+                if (confirm)
+                {
+                    schemaService.createImportedSchema(importedSchema);
+                    projectService.editProject(importedSchema, currentProject.getId());
+                    deleteSchema(currentSchema);
+                }
             }
         }
         else
         {
             if (schemaEditPage.getUseLocalSchema())
             {
-                final Schema localSchema = schemaService.createLocalSchema(localSchemaName, localSchemaDescription, localSchemaNamespaceURL);
-                projectService.editProject(localSchema, currentProject.getId());
-                deleteSchema(currentSchema);
+                final boolean confirm = MessageDialog.openConfirm(getShell(), "Are you sure you want to use a local metadata schema?",
+                    "Using a local metadata schema will cause all your current metadata to be removed. Are you sure you want to proceed?");
+                if (confirm)
+                {
+                    final Schema localSchema = schemaService.createLocalSchema(localSchemaName, localSchemaDescription, localSchemaNamespaceURL);
+                    projectService.editProject(localSchema, currentProject.getId());
+                    deleteSchema(currentSchema);
+                }
             }
             else
             {
                 if (!Objects.equal(currentSchema, importedSchema))
                 {
-                    schemaService.createImportedSchema(importedSchema);
-                    projectService.editProject(importedSchema, currentProject.getId());
-                    deleteSchema(currentSchema);
+                    final boolean confirm = MessageDialog.openConfirm(getShell(), "Are you sure you want to use an imported metadata schema?",
+                            "Using an imported metadata schema will cause all your current metadata to be removed. Are you sure you want to proceed?");
+                    if (confirm)
+                    {
+                        schemaService.createImportedSchema(importedSchema);
+                        projectService.editProject(importedSchema, currentProject.getId());
+                        deleteSchema(currentSchema);
+                    }
                 }
             }
         }

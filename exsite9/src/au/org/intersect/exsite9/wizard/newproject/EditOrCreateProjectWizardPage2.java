@@ -32,7 +32,6 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.xml.sax.SAXException;
 
-import com.google.common.base.Objects;
 import com.richclientgui.toolbox.validation.IFieldErrorMessageHandler;
 import com.richclientgui.toolbox.validation.ValidatingField;
 import com.richclientgui.toolbox.validation.string.StringValidationToolkit;
@@ -51,8 +50,6 @@ import au.org.intersect.exsite9.wizard.WizardPageErrorHandler;
 public final class EditOrCreateProjectWizardPage2 extends WizardPage implements KeyListener, SelectionListener
 {
     private static final Logger LOG = Logger.getLogger(EditOrCreateProjectWizardPage2.class);
-
-    private static final String FORCED_EVENT = "FORCED EVENT";
 
     private Composite container;
 
@@ -246,16 +243,6 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
                 final String filePath = fileDialog.open();
                 if (filePath != null)
                 {
-                    if (currentSchema != null && importedSchema != null)
-                    {
-                        final boolean confirm = MessageDialog.openConfirm(getShell(), "Are you sure you want to import a new schema?",
-                            "Importing a new schema will cause all your current metadata to be overwritten and your associations will be lost. Are you sure you wish to proceed?");
-                        if (!confirm)
-                        {
-                            return;
-                        }
-                    }
-
                     try
                     {
                         importedSchema = schemaService.parseSchema(new File(filePath));
@@ -327,7 +314,6 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
             {
                 final Event event = new Event();
                 event.widget = localSchemaRadioButton;
-                event.text = FORCED_EVENT;
                 widgetSelected(new SelectionEvent(event));
 
                 this.localSchemaRadioButton.setSelection(true);
@@ -340,7 +326,6 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
             {
                 final Event event = new Event();
                 event.widget = importSchemaRadioButton;
-                event.text = FORCED_EVENT;
                 widgetSelected(new SelectionEvent(event));
 
                 this.localSchemaRadioButton.setSelection(false);
@@ -382,17 +367,6 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         this.errorMessageHandler.clearMessage();
         if (e.widget == this.localSchemaRadioButton)
         {
-            if (this.currentSchema != null && this.importedSchema != null && !Objects.equal(e.text, FORCED_EVENT))
-            {
-                final boolean confirm = MessageDialog.openConfirm(getShell(), "Are you sure you want to use a local schema?",
-                    "Using a local schema will cause all your current metadata to be removed. Are you sure you wish to proceed?");
-                if (!confirm)
-                {
-                    this.importSchemaRadioButton.setSelection(true);
-                    this.localSchemaRadioButton.setSelection(false);
-                    return;
-                }
-            }
             this.importSchemaRadioButton.setSelection(false);
             this.localSchemaNameField.getControl().setEnabled(true);
             this.localSchemaDescriptionField.getControl().setEnabled(true);
@@ -426,7 +400,7 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         }
         if (this.importSchemaRadioButton.getSelection())
         {
-            return this.importedSchema != null;
+            return this.importedSchema != null && (importedSchema != currentSchema);
         }
         return false;
     }
