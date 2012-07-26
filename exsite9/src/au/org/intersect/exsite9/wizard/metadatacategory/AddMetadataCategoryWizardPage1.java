@@ -25,7 +25,6 @@ import org.eclipse.ui.PlatformUI;
 import com.richclientgui.toolbox.validation.IFieldErrorMessageHandler;
 import com.richclientgui.toolbox.validation.ValidatingField;
 import com.richclientgui.toolbox.validation.string.StringValidationToolkit;
-import com.richclientgui.toolbox.validation.validator.IFieldValidator;
 
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataCategory;
@@ -35,8 +34,9 @@ import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.Schema;
 import au.org.intersect.exsite9.service.IGroupService;
 import au.org.intersect.exsite9.service.IResearchFileService;
+import au.org.intersect.exsite9.validators.MetadataCategoryNameValidator;
+import au.org.intersect.exsite9.validators.MetadataValueValidator;
 import au.org.intersect.exsite9.wizard.WizardPageErrorHandler;
-import au.org.intersect.exsite9.xml.XMLUtils;
 
 public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyListener, SelectionListener
 {
@@ -99,63 +99,8 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         final Label projectNameLabel = new Label(this.container, SWT.NULL);
         projectNameLabel.setText("Category Title");
 
-        categoryNameField = this.stringValidatorToolkit.createTextField(this.container, new IFieldValidator<String>()
-        {
-            private String errorMessage;
-
-            @Override
-            public boolean warningExist(final String conents)
-            {
-                return false;
-            }
-
-            @Override
-            public boolean isValid(final String contents)
-            {
-                if (contents.trim().isEmpty())
-                {
-                    this.errorMessage = "Category title must not be empty.";
-                    return false;
-                }
-
-                if (contents.trim().length() >= 255)
-                {
-                    this.errorMessage = "Category title is too long.";
-                    return false;
-                }
-
-                if (!XMLUtils.isValidElementName(contents.trim()))
-                {
-                    this.errorMessage = "Category title is not a valid XML element name.";
-                    return false;
-                }
-                
-                final List<MetadataCategory> existingCategories = schema.getMetadataCategories();
-
-                for (final MetadataCategory existingCategory : existingCategories)
-                {
-                    final String currentMetadataCategoryName = metadataCategory == null ? "" : metadataCategory.getName();
-                    if (existingCategory.getName().equalsIgnoreCase(contents.trim()) && !contents.trim().equals(currentMetadataCategoryName))
-                    {
-                        this.errorMessage = "A Category with that name already exists for this project.";
-                        return false;
-                    }
-                }
-                return true;
-            }
-
-            @Override
-            public String getWarningMessage()
-            {
-                return "";
-            }
-
-            @Override
-            public String getErrorMessage()
-            {
-                return this.errorMessage;
-            }
-        }, true, metadataCategory == null ? "" : metadataCategory.getName());
+        categoryNameField = this.stringValidatorToolkit.createTextField(this.container, new MetadataCategoryNameValidator(this.schema.getMetadataCategories(), this.metadataCategory),
+            true, metadataCategory == null ? "" : metadataCategory.getName());
 
         this.categoryNameField.getControl().addKeyListener(this);
 
@@ -287,34 +232,19 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     {
         if (e.widget.equals(addButton))
         {
-            InputDialog userInput = new InputDialog(getShell(), "Enter Value", "Enter a new metadata value", "",
-                    new IInputValidator()
+            final InputDialog userInput = new InputDialog(getShell(), "Enter Value", "Enter a new metadata value", "", new IInputValidator()
+            {
+                @Override
+                public String isValid(final String contents)
+                {
+                    final MetadataValueValidator validator = new MetadataValueValidator(metadataValues);
+                    if (validator.isValid(contents))
                     {
-                        @Override
-                        public String isValid(String contents)
-                        {
-                            if (contents.trim().isEmpty())
-                            {
-                                return "Value must not be empty.";
-                            }
-
-                            if (contents.trim().length() >= 255)
-                            {
-                                return "Value is too long.";
-                            }
-
-                            final String[] listOfValues = metadataValuesListWidget.getItems();
-
-                            for (final String existingValue : listOfValues)
-                            {
-                                if (existingValue.equalsIgnoreCase(contents.trim()))
-                                {
-                                    return "A Value with that name already exists for this Category.";
-                                }
-                            }
-                            return null;
-                        }
-                    });
+                        return null;
+                    }
+                    return validator.getErrorMessage();
+                }
+            });
             userInput.open();
 
             if (userInput.getValue() == null || userInput.getValue().trim().isEmpty())

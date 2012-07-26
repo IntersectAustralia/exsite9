@@ -32,6 +32,7 @@ import au.org.intersect.exsite9.dao.factory.MetadataCategoryDAOFactory;
 import au.org.intersect.exsite9.dao.factory.SchemaDAOFactory;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.Schema;
+import au.org.intersect.exsite9.exception.InvalidSchemaException;
 import au.org.intersect.exsite9.xml.MetadataSchemaXMLReader;
 
 /**
@@ -196,7 +197,7 @@ public final class SchemaService implements ISchemaService
      * @{inheritDoc}
      */
     @Override
-    public Schema parseSchema(final File xmlFile) throws SAXException, IOException, ParserConfigurationException
+    public Schema parseSchema(final File xmlFile) throws SAXException, IOException, ParserConfigurationException, InvalidSchemaException
     {
         // Configure validator for RELAX NG Schema Support
         System.setProperty(SchemaFactory.class.getName() + ":" + XMLConstants.RELAXNG_NS_URI, "com.thaiopensource.relaxng.jaxp.XMLSyntaxSchemaFactory");

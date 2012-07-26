@@ -39,6 +39,7 @@ import com.richclientgui.toolbox.validation.string.StringValidationToolkit;
 import com.richclientgui.toolbox.validation.validator.IFieldValidator;
 
 import au.org.intersect.exsite9.domain.Schema;
+import au.org.intersect.exsite9.exception.InvalidSchemaException;
 import au.org.intersect.exsite9.service.ISchemaService;
 import au.org.intersect.exsite9.wizard.MaximumFieldLengthValidator;
 import au.org.intersect.exsite9.wizard.WizardFieldUtils;
@@ -265,18 +266,22 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
                     }
                     catch (final SAXException e)
                     {
-                        MessageDialog.openError(getShell(), "Could not import Schema", e.getMessage());
+                        MessageDialog.openError(getShell(), "Could not import Schema", "The XML file is an invalid metadata schema. Reason: " + e.getMessage());
                         LOG.error(e);
                     }
                     catch (final IOException e)
                     {
-                        MessageDialog.openError(getShell(), "Could not import Schema", e.getMessage());
+                        MessageDialog.openError(getShell(), "Could not import Schema", "Error reading the metadata schema. Reason: " + e.getMessage());
                         LOG.error(e);
                     }
                     catch (final ParserConfigurationException e)
                     {
-                        MessageDialog.openError(getShell(), "Could not import Schema", e.getMessage());
+                        MessageDialog.openError(getShell(), "Could not import Schema", "Error parsing the metadata schema. Reason: " + e.getMessage());
                         LOG.error(e);
+                    }
+                    catch (final InvalidSchemaException e)
+                    {
+                        MessageDialog.openError(getShell(), "Could not import Schema", "This XML file is an invalid metadata schema. Reason: " + e.getMessage());
                     }
                 }
             }

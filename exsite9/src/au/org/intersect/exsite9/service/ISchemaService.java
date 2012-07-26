@@ -15,6 +15,7 @@ import org.xml.sax.SAXException;
 
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.Schema;
+import au.org.intersect.exsite9.exception.InvalidSchemaException;
 
 /**
  * Provides services for manipulating Metadata {@link Schema}s
@@ -75,6 +76,10 @@ public interface ISchemaService
      * Parses the provides schema XML file to a schema object. <em>Does not persist the Schema to the database.</em>
      * @param xmlFile The XML File to import.
      * @return The imported Schema.
+     * @throws SAXException
+     * @throws IOException
+     * @throws ParserConfigurationException
+     * @throws InvalidSchemaException 
      */
-    public Schema parseSchema(final File xmlFile) throws SAXException, IOException, ParserConfigurationException;
+    public Schema parseSchema(final File xmlFile) throws SAXException, IOException, ParserConfigurationException, InvalidSchemaException;
 }
