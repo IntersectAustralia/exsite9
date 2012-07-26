@@ -306,10 +306,10 @@
                   mnemonic="S">
                <command
                      commandId="au.org.intersect.exsite9.commands.ImportMetadataSchemaCommand"
-                     label="Import..."
-                     mnemonic="I"
+                     label="Modify Schema..."
+                     mnemonic="M"
                      style="push"
-                     tooltip="Import metadata schema">
+                     tooltip="Modify the metadata schema">
                </command>
                <command
                      commandId="au.org.intersect.exsite9.commands.ExportMetadataSchemaCommand"
