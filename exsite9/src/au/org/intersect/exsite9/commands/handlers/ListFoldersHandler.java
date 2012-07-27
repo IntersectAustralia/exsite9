@@ -15,6 +15,7 @@ import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.core.commands.NotEnabledException;
 import org.eclipse.core.commands.NotHandledException;
 import org.eclipse.core.commands.common.NotDefinedException;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -23,6 +24,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.handlers.IHandlerService;
 
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.jobs.SemaphoreManager;
 import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.wizard.listfolders.ListFoldersWizard;
 
@@ -49,11 +51,25 @@ public class ListFoldersHandler implements IHandler
     {
         final IWorkbenchWindow activeWorkbenchWindow = HandlerUtil.getActiveWorkbenchWindow(event);
         final Shell shell = activeWorkbenchWindow.getShell();
-        final ListFoldersWizard wizard = new ListFoldersWizard();
-        final WizardDialog wizardDialog = new WizardDialog(shell, wizard);
-        wizardDialog.open();
-        
 
+        if( ! SemaphoreManager.getBackgroundJobSemaphore().tryAcquire() )
+        {
+            MessageDialog.openWarning(shell, "Editing Watched Folders", 
+                                             "You cannot edit the watched folder list whilst ExSite9 is looking for new files.");
+            return null;
+        }
+        
+        try
+        {
+            final ListFoldersWizard wizard = new ListFoldersWizard();
+            final WizardDialog wizardDialog = new WizardDialog(shell, wizard);
+            wizardDialog.open();
+        }
+        finally
+        {
+            SemaphoreManager.getBackgroundJobSemaphore().release();
+        }
+        
         final IHandlerService handlerService = (IHandlerService) activeWorkbenchWindow.getService(IHandlerService.class);
         
         try
