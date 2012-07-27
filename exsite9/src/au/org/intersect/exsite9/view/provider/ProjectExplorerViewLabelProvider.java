@@ -117,7 +117,7 @@ public final class ProjectExplorerViewLabelProvider extends StyledCellLabelProvi
 
         if (!file.exists())
         {
-            sb.append("THIS FILE DOES NOT EXIST").append(NEW_LINE);
+            sb.append("THIS FILE IS MISSING").append(NEW_LINE);
         }
         if (rf.getMetadataAssociations().isEmpty())
         {
