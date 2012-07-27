@@ -249,13 +249,6 @@
                   tooltip="Create a new project">
             </command>
             <command
-                  commandId="au.org.intersect.exsite9.commands.EditProjectCommand"
-                  label="Edit..."
-                  mnemonic="d"
-                  style="push"
-                  tooltip="Edit the current project">
-            </command>
-            <command
                   commandId="au.org.intersect.exsite9.commands.OpenProjectCommand"
                   icon="icons/icon_open_16.png"
                   label="Open..."
@@ -264,12 +257,19 @@
                   tooltip="Open an existing project">
             </command>
             <command
-                  commandId="au.org.intersect.exsite9.commands.ListFoldersCommand"
-                  icon="icons/icon-folder.png"
-                  label="Folders..."
-                  mnemonic="F"
+                  commandId="au.org.intersect.exsite9.commands.EditProjectCommand"
+                  label="Edit..."
+                  mnemonic="d"
                   style="push"
-                  tooltip="List the project folders">
+                  tooltip="Edit the current project">
+            </command>
+            <command
+                  commandId="au.org.intersect.exsite9.commands.ExportProjectXMLCommand"
+                  icon="icons/icon_export_16.png"
+                  label="Export..."
+                  mnemonic="x"
+                  style="push"
+                  tooltip="Export the project&apos;s details to XML">
             </command>
             <command
                   commandId="au.org.intersect.exsite9.commands.ListExcludedFilesCommand"
@@ -286,13 +286,25 @@
                   style="push"
                   tooltip="Refresh the project&apos;s folders">
             </command>
+         </menu>
+         <menu
+               id="au.org.intersect.exsite9.menu.folder"
+               label="Folder"
+               mnemonic="F"
+               tooltip="The watched folders menu">
             <command
-                  commandId="au.org.intersect.exsite9.commands.ExportProjectXMLCommand"
-                  icon="icons/icon_export_16.png"
-                  label="Export..."
-                  mnemonic="x"
+                  commandId="au.org.intersect.exsite9.commands.AddFolderToProjectCommand"
+                  label="Add Watched Folder..."
+                  mnemonic="A"
                   style="push"
-                  tooltip="Export the project&apos;s details to XML">
+                  tooltip="Add a new watched folder.">
+            </command>
+            <command
+                  commandId="au.org.intersect.exsite9.commands.ListFoldersCommand"
+                  label="Edit watched folders..."
+                  mnemonic="E"
+                  style="push"
+                  tooltip="Edit the watched folders">
             </command>
          </menu>
          <menu
@@ -364,36 +376,12 @@
       <menuContribution
             allPopups="false"
             locationURI="popup:au.org.intersect.exsite9.view.ProjectExplorerView">
-         <menu
-               label="New">
-            <command
-                  commandId="au.org.intersect.exsite9.commands.AddFolderToProjectCommand"
-                  icon="icons/icon-folder.png"
-                  label="Folder..."
-                  style="push">
-               <visibleWhen
-                     checkEnabled="false">
-                  <reference
-                        definitionId="au.org.intersect.exsite9.expression.InstanceOfProject">
-                  </reference>
-               </visibleWhen>
-            </command>
-            <command
-                  commandId="au.org.intersect.exsite9.commands.AddGroup"
-                  label="Group..."
-                  style="push">
-               <visibleWhen
-                     checkEnabled="false">
-                  <reference
-                        definitionId="au.org.intersect.exsite9.expression.InstanceOfProjectOrGroup">
-                  </reference>
-               </visibleWhen>
-            </command>
-         </menu>
          <command
                commandId="au.org.intersect.exsite9.commands.EditProjectCommand"
-               label="Edit Project Details..."
-               style="push">
+               label="Edit Project..."
+               mnemonic="E"
+               style="push"
+               tooltip="Edit the project details">
             <visibleWhen
                   checkEnabled="false">
                <reference
@@ -401,16 +389,39 @@
                </reference>
             </visibleWhen>
          </command>
-         <separator
-               name="exsite9.separator1"
-               visible="true">
-         </separator>
+         <command
+               commandId="au.org.intersect.exsite9.commands.AddGroup"
+               label="New Group..."
+               mnemonic="N"
+               style="push"
+               tooltip="Add a new group">
+            <visibleWhen
+                  checkEnabled="false">
+               <reference
+                     definitionId="au.org.intersect.exsite9.expression.InstanceOfProjectOrGroup">
+               </reference>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="au.org.intersect.exsite9.commands.AddFolderToProjectCommand"
+               label="Add Watched Folder..."
+               mnemonic="A"
+               style="push"
+               tooltip="Add a new watched folder">
+            <visibleWhen
+                  checkEnabled="false">
+               <reference
+                     definitionId="au.org.intersect.exsite9.expression.InstanceOfProject">
+               </reference>
+            </visibleWhen>
+         </command>
          <command
                commandId="au.org.intersect.exsite9.commands.ListFoldersCommand"
                icon="icons/icon-folder.png"
-               label="Folders..."
+               label="Edit Watched Folders..."
+               mnemonic="W"
                style="push"
-               tooltip="List the project folders">
+               tooltip="Edit the watched folders">
             <visibleWhen
                   checkEnabled="false">
                <reference
@@ -421,6 +432,7 @@
          <command
                commandId="au.org.intersect.exsite9.commands.ListExcludedFilesCommand"
                label="Excluded Files..."
+               mnemonic="c"
                style="push"
                tooltip="Lists the files that have been excluded from this project">
             <visibleWhen
@@ -434,7 +446,9 @@
                commandId="au.org.intersect.exsite9.commands.ReloadProjectCommand"
                icon="icons/icon_refresh_16.png"
                label="Refresh"
-               style="push">
+               mnemonic="R"
+               style="push"
+               tooltip="Refresh the list of files in the project">
             <visibleWhen
                   checkEnabled="false">
                <reference
@@ -444,8 +458,10 @@
          </command>
          <command
                commandId="au.org.intersect.exsite9.commands.DeleteGroupCommand"
-               label="Delete"
-               style="push">
+               label="Delete Group..."
+               mnemonic="D"
+               style="push"
+               tooltip="Delete the group">
             <visibleWhen
                   checkEnabled="false">
                <reference
@@ -453,15 +469,13 @@
                </reference>
             </visibleWhen>
          </command>
-         <separator
-               name="exsite9.separator2"
-               visible="true">
-         </separator>
          <command
                commandId="au.org.intersect.exsite9.commands.ExportProjectXMLCommand"
                icon="icons/icon_export_16.png"
                label="Export..."
-               style="push">
+               mnemonic="x"
+               style="push"
+               tooltip="Export the project as XML">
                <visibleWhen
                   checkEnabled="false">
                <reference
@@ -472,8 +486,9 @@
 
          <command
                commandId="au.org.intersect.exsite9.commands.RenameGroupCommand"
-               label="Rename Group"
-               style="push">
+               label="Rename Group..."
+               style="push"
+               tooltip="Rename the group">
             <visibleWhen
                   checkEnabled="false">
                <reference
@@ -483,8 +498,10 @@
          </command>
          <command
                commandId="au.org.intersect.exsite9.commands.ExcludeResearchFiles"
-               label="Exclude"
-               style="push">
+               label="Exclude File"
+               mnemonic="x"
+               style="push"
+               tooltip="Exclude the file">
             <visibleWhen
                   checkEnabled="false">
                <reference
@@ -494,8 +511,10 @@
          </command>
          <command
                commandId="au.org.intersect.exsite9.commands.FindResearchFile"
-               label="Find File"
-               style="push">
+               label="Find Missing File..."
+               mnemonic="F"
+               style="push"
+               tooltip="Find a missing file">
                <visibleWhen
                   checkEnabled="false">
                <reference
@@ -505,8 +524,10 @@
          </command>
          <command
                commandId="au.org.intersect.exsite9.commands.ShowInFileSystem"
-               label="Show In File System"
-               style="push">
+               label="Show In File System..."
+               mnemonic="S"
+               style="push"
+               tooltip="Show the file in the file system">
                <visibleWhen
                   checkEnabled="false">
                <reference
@@ -835,6 +856,10 @@
       <activityPatternBinding
             activityId="au.org.intersect.exsite9.activity.showProject"
             pattern="au.org.intersect.exsite9/au.org.intersect.exsite9.menu.submissionpackage">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="au.org.intersect.exsite9.activity.showProject"
+            pattern="au.org.intersect.exsite9/au.org.intersect.exsite9.menu.folder">
       </activityPatternBinding>
    </extension>
    <extension

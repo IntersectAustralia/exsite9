@@ -128,7 +128,10 @@ public final class AddFolderToProjectHandler implements IHandler
     @Override
     public boolean isEnabled()
     {
-        return true;
+        final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
+        final Project currentProject = projectManager.getCurrentProject();
+       
+        return (currentProject == null) ? false : true;
     }
 
     /**
