@@ -290,7 +290,7 @@ public class ProjectService implements IProjectService
     }
 
     @Override
-    public void replaceResearchFileInSubmissionPackageAndDeleteReplacedFile(long fileToBeReplacedId, long fileToBeUsedId)
+    public void removeResearchFileFromSystem(long fileToBeRemovedId)
     {
         EntityManager em = entityManagerFactory.createEntityManager();
         try
@@ -300,15 +300,14 @@ public class ProjectService implements IProjectService
             final SubmissionPackageDAO submissionPackageDAO = this.submissionPackageDAOFactory.createInstance(em);
             final FolderDAO folderDAO = this.folderDAOFactory.createInstance(em);
 
-            ResearchFile fileToBeReplacedAndDeleted = researchFileDAO.findById(fileToBeReplacedId);
-            ResearchFile fileToBeUsed = researchFileDAO.findById(fileToBeUsedId);
+            ResearchFile fileToBeRemoved = researchFileDAO.findById(fileToBeRemovedId);
             
             em.getTransaction().begin();
 
-            Group parentGroup = fileToBeReplacedAndDeleted.getParentGroup();
-            parentGroup.getResearchFiles().remove(fileToBeReplacedAndDeleted);
+            Group parentGroup = fileToBeRemoved.getParentGroup();
+            parentGroup.getResearchFiles().remove(fileToBeRemoved);
 
-            Iterator<MetadataAssociation> maIter = fileToBeReplacedAndDeleted.getMetadataAssociations().iterator();
+            Iterator<MetadataAssociation> maIter = fileToBeRemoved.getMetadataAssociations().iterator();
             while (maIter.hasNext())
             {
                 MetadataAssociation metadataAssociation = maIter.next();
@@ -318,19 +317,18 @@ public class ProjectService implements IProjectService
 
             // Remove the research file from any submission packages it is part of.
             final List<SubmissionPackage> submissionPackages = submissionPackageDAO
-                    .findSubmissionPackagesWithResearchFile(fileToBeReplacedAndDeleted);
+                    .findSubmissionPackagesWithResearchFile(fileToBeRemoved);
             for (final SubmissionPackage submissionPackage : submissionPackages)
             {
-                submissionPackage.getResearchFiles().remove(fileToBeReplacedAndDeleted);
-                submissionPackage.getResearchFiles().add(fileToBeUsed);
+                submissionPackage.getResearchFiles().remove(fileToBeRemoved);
                 submissionPackageDAO.updateSubmissionPackage(submissionPackage);
             }
             
-            Folder folder = researchFileDAO.getParentFolder(fileToBeReplacedAndDeleted);
-            folder.getFiles().remove(fileToBeReplacedAndDeleted);
+            Folder folder = researchFileDAO.getParentFolder(fileToBeRemoved);
+            folder.getFiles().remove(fileToBeRemoved);
             folderDAO.updateFolder(folder);
 
-            researchFileDAO.removeResearchFile(fileToBeReplacedAndDeleted);
+            researchFileDAO.removeResearchFile(fileToBeRemoved);
             em.getTransaction().commit();
         }
         finally

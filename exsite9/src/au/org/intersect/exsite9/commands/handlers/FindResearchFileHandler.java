@@ -20,7 +20,6 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.handlers.IHandlerService;
 
 import au.org.intersect.exsite9.domain.Folder;
-import au.org.intersect.exsite9.domain.NewFilesGroup;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.service.IProjectManager;
@@ -87,22 +86,13 @@ public class FindResearchFileHandler implements IHandler
                 {
                     if (existingResearchFile.getFile().equals(newFileObject))
                     {
-                        boolean confirmation = MessageDialog.openConfirm(shell, "", "The location you have chosen already contains a file with the same name that is already in the system, by proceeding the file and any associated metadata will be replaced by your selected file.");
+                        boolean confirmation = MessageDialog.openConfirm(shell, "", "The file you have chosen is already in the system in another location, by proceeding, that file and any associated metadata will be removed.");
                         if (confirmation)
                         {
-                            existingResearchFile.getMetadataAssociations().clear();
-                            existingResearchFile.getMetadataAssociations().addAll(
-                                    ((ResearchFile) selectionObject).getMetadataAssociations());
-
-                            if (existingResearchFile.getParentGroup() instanceof NewFilesGroup)
-                            {
-                                existingResearchFile.setParentGroup(((ResearchFile) selectionObject).getParentGroup());
-                            }
-
-                            // remove the selected file from the submission packages and add the existing one and delete
-                            // the selected file from the system
-                            projectService.replaceResearchFileInSubmissionPackageAndDeleteReplacedFile(
-                                    ((ResearchFile) selectionObject).getId(), existingResearchFile.getId());
+                            projectService.removeResearchFileFromSystem(existingResearchFile.getId());
+                            
+                            ((ResearchFile) selectionObject).setFile(newFileObject);
+                            researchFileService.updateResearchFile((ResearchFile) selectionObject);
                         }
                         return null;
                     }
