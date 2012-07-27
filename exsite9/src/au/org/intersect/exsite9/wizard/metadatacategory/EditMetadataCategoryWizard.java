@@ -21,7 +21,6 @@ import au.org.intersect.exsite9.domain.Schema;
 import au.org.intersect.exsite9.service.IGroupService;
 import au.org.intersect.exsite9.service.IMetadataCategoryService;
 import au.org.intersect.exsite9.service.IResearchFileService;
-import au.org.intersect.exsite9.service.ISchemaService;
 
 /**
  * Wizard used to Edit a Metadata Category.
@@ -38,7 +37,7 @@ public final class EditMetadataCategoryWizard extends Wizard
         super();
         setNeedsProgressMonitor(true);
         this.schema = schema;
-        this.listCategoriesPage = new ListMetadataCategoriesWizardPage(this.schema);
+        this.listCategoriesPage = new ListMetadataCategoriesWizardPage("Edit Metadata Category", "Choose a metadata category to edit.", this.schema, false);
         this.editCategoryPage = new AddMetadataCategoryWizardPage1("Edit Metadata Category",
     		"Edit the details of the metadata category you have selected", schema, null, Collections.<MetadataValue>emptyList());
     }
@@ -56,36 +55,14 @@ public final class EditMetadataCategoryWizard extends Wizard
         final IMetadataCategoryService metadataCategoryService = (IMetadataCategoryService) PlatformUI.getWorkbench().getService(IMetadataCategoryService.class);
         final IGroupService groupService = (IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class);
         final IResearchFileService fileService = (IResearchFileService) PlatformUI.getWorkbench().getService(IResearchFileService.class);
-        final ISchemaService schemaService = (ISchemaService) PlatformUI.getWorkbench().getService(ISchemaService.class);
-
-        final List<MetadataCategory> categoriesToDelete = listCategoriesPage.getMetadataCategoriesToDelete();
-        for (final MetadataCategory mdc : categoriesToDelete)
-        {
-            for (final MetadataValue mdv : mdc.getValues())
-            {
-                final List<ResearchFile> researchFiles = fileService.getResearchFilesWithAssociatedMetadata(mdc, mdv);
-                for (final ResearchFile researchFile : researchFiles)
-                {
-                    fileService.disassociateMetadata(researchFile, mdc, mdv);
-                }
-                final List<Group> groups = groupService.getGroupsWithAssociatedMetadata(mdc, mdv);
-                for (final Group group : groups)
-                {
-                    groupService.disassociateMetadata(group, mdc, mdv);
-                }
-            }
-            schemaService.removeMetadataCategoryFromSchema(schema, mdc);
-            metadataCategoryService.deleteMetadataCategory(mdc);
-        }
-
 
         final String categoryTitle = editCategoryPage.getMetadataCategoryName();
         final MetadataCategoryUse categoryUse = editCategoryPage.getMetadataCategoryUse();
         final List<MetadataValue> values = editCategoryPage.getMetadataCategoryValues();
 
-        // Update the modified medata category (if it was not deleted)
+        // Update the modified medata category
         final MetadataCategory metadataCategory = listCategoriesPage.getSelectedMetadataCategory();
-        if (metadataCategory == null || categoriesToDelete.contains(metadataCategory))
+        if (metadataCategory == null)
         {
             return true;
         }
@@ -102,10 +79,5 @@ public final class EditMetadataCategoryWizard extends Wizard
 
         metadataCategoryService.updateMetadataCategory(metadataCategory, categoryTitle, categoryUse, values);
         return true;
-    }
-
-    AddMetadataCategoryWizardPage1 getEditCategoryPage()
-    {
-        return this.editCategoryPage;
     }
 }

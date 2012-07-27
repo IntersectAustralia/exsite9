@@ -79,6 +79,8 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         this.currentSchema = currentSchema;
         this.importedSchema = currentSchema;
         this.schemaService = (ISchemaService) PlatformUI.getWorkbench().getService(ISchemaService.class);
+
+        LOG.info("Constructor");
     }
 
     /**
@@ -87,6 +89,8 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
     @Override
     public void createControl(final Composite parent)
     {
+        LOG.info("createControl");
+
         this.container = new Composite(parent, SWT.NULL);
         final GridLayout containerLayout = new GridLayout(1, true);
         this.container.setLayout(containerLayout);
@@ -230,6 +234,8 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
             @Override
             public void widgetSelected(final SelectionEvent event)
             {
+                LOG.info("Browse Button Clicked");
+
                 final FileDialog fileDialog = new FileDialog(parent.getShell(), SWT.OPEN);
                 fileDialog.setFilterExtensions(new String[]{"*.xml"});
                 fileDialog.setFilterNames(new String[]{"Schema Files (*.xml)"});
@@ -275,6 +281,7 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
             @Override
             public void widgetDefaultSelected(final SelectionEvent e)
             {
+                LOG.info("Browse Default Selected");
             }
         });
 
@@ -311,6 +318,7 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
             final String schemaNamespaceURL = this.currentSchema.getNamespaceURL();
             if (localSchema)
             {
+                LOG.info("useLocalSchema");
                 this.localSchemaNameField.setContents(schemaName);
                 this.localSchemaDescriptionField.setContents(schemaDescription);
                 this.localSchemaNamespaceURLField.setContents(schemaNamespaceURL);
@@ -318,10 +326,11 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
             }
             else
             {
+                LOG.info("useImportedSchema");
                 importedSchemaNameField.setText(schemaName);
                 importedSchemaDescriptionField.setText(schemaDescription);
                 importedSchemaNamespaceURLField.setText(schemaNamespaceURL);
-                enableImportedScheamFields();
+                enableImportedSchemaFields();
             }
         }
 
@@ -336,6 +345,7 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
     @Override
     public void keyPressed(final KeyEvent e)
     {
+        LOG.info("keyPressed");
     }
 
     /**
@@ -344,11 +354,13 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
     @Override
     public void keyReleased(final KeyEvent e)
     {
+        LOG.info("keyReleased");
         setPageComplete(allFieldsAreValid());
     }
 
     private void enableLocalSchemaFields()
     {
+        LOG.info("enable local schema fields");
         this.localSchemaRadioButton.setSelection(true);
         this.importSchemaRadioButton.setSelection(false);
         this.localSchemaNameField.getControl().setEnabled(true);
@@ -357,8 +369,9 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         this.importSchemaBrowseButton.setEnabled(false);
     }
 
-    private void enableImportedScheamFields()
+    private void enableImportedSchemaFields()
     {
+        LOG.info("enable imported schema fields");
         this.localSchemaRadioButton.setSelection(false);
         this.importSchemaRadioButton.setSelection(true);
         this.localSchemaNameField.getControl().setEnabled(false);
@@ -373,6 +386,7 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
     @Override
     public void widgetSelected(final SelectionEvent e)
     {
+        LOG.info("widgetSelected");
         this.errorMessageHandler.clearMessage();
         if (e.widget == this.localSchemaRadioButton)
         {
@@ -380,7 +394,7 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         }
         else if (e.widget == this.importSchemaRadioButton)
         {
-            enableImportedScheamFields();
+            enableImportedSchemaFields();
         }
         setPageComplete(allFieldsAreValid());
     }
@@ -391,10 +405,12 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
     @Override
     public void widgetDefaultSelected(final SelectionEvent e)
     {
+        LOG.info("widgetDefaultSelected");
     }
 
     private boolean allFieldsAreValid()
     {
+        LOG.info("allFieldsAreValid");
         if (this.localSchemaRadioButton.getSelection())
         {
             return this.localSchemaNameField.isValid() && this.localSchemaDescriptionField.isValid() && this.localSchemaNamespaceURLField.isValid();

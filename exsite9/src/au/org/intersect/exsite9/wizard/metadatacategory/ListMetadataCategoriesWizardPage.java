@@ -33,21 +33,20 @@ public final class ListMetadataCategoriesWizardPage extends WizardPage implement
     private final Schema schema;
     private final List<MetadataCategory> metadataCategories;
     private final List<MetadataCategory> metadataCategoriesToDelete = new ArrayList<MetadataCategory>();
+    private final boolean showRemoveButton;
 
     private Composite container;
     private org.eclipse.swt.widgets.List metadataCategoriesList;
     private Button removeButton;
     private MetadataCategory selectedMetadataCategory;
 
-    private EditMetadataCategoryWizard wizard;
-    private AddMetadataCategoryWizardPage1 nextPage;
-
-    protected ListMetadataCategoriesWizardPage(final Schema schema)
+    protected ListMetadataCategoriesWizardPage(final String title, final String description, final Schema schema, final boolean showRemoveButton)
     {
-        super("Metadata Categories");
-        setTitle("Metadata Categories");
-        setDescription("Choose a metadata category to edit");
+        super(title);
+        setTitle(title);
+        setDescription(description);
         this.schema = schema;
+        this.showRemoveButton = showRemoveButton;
         this.metadataCategories = new ArrayList<MetadataCategory>(this.schema.getMetadataCategories());
         Collections.sort(this.metadataCategories, new AlphabeticalMetadataCategoryComparator());
     }
@@ -55,9 +54,6 @@ public final class ListMetadataCategoriesWizardPage extends WizardPage implement
     @Override
     public void createControl(final Composite parent)
     {
-        this.wizard = (EditMetadataCategoryWizard)getWizard();
-        this.nextPage = wizard.getEditCategoryPage();
-
         this.container = new Composite(parent, SWT.NULL);
         final GridLayout layout = new GridLayout();
         this.container.setLayout(layout);
@@ -95,7 +91,6 @@ public final class ListMetadataCategoriesWizardPage extends WizardPage implement
                 metadataCategoriesToDelete.add(metadataCategoryToDelete);
                 removeButton.setEnabled(false);
                 selectedMetadataCategory = null;
-                nextPage.setPageComplete(true);
                 setPageComplete(true);
             }
 
@@ -105,6 +100,7 @@ public final class ListMetadataCategoriesWizardPage extends WizardPage implement
             }
         });
         this.removeButton.setEnabled(false);
+        this.removeButton.setVisible(this.showRemoveButton);
 
         setControl(this.container);
         setPageComplete(false);
@@ -122,7 +118,6 @@ public final class ListMetadataCategoriesWizardPage extends WizardPage implement
         {
             this.removeButton.setEnabled(false);
             this.selectedMetadataCategory = null;
-            this.nextPage.setPageComplete(true);
             setPageComplete(!this.metadataCategoriesToDelete.isEmpty());
         }
         else
@@ -130,28 +125,32 @@ public final class ListMetadataCategoriesWizardPage extends WizardPage implement
             final int selectedIndex = this.metadataCategoriesList.getSelectionIndex();
             this.selectedMetadataCategory = this.metadataCategories.get(selectedIndex);
             this.removeButton.setEnabled(true);
-            this.nextPage.setPageComplete(!this.metadataCategoriesToDelete.isEmpty());
             setPageComplete(true);
         }
     }
 
     @Override
-    public void widgetDefaultSelected(final SelectionEvent event)
-    {
-    }
-
     public IWizardPage getNextPage()
     {
-        if (this.selectedMetadataCategory == null)
+        final IWizardPage nextPage = super.getNextPage();
+        if (nextPage == null)
         {
             return null;
         }
 
-        // Configure the next page with the selected metadata category.
-        this.nextPage.setMetadataCategory(selectedMetadataCategory);
-        this.nextPage.setMetadataValues(selectedMetadataCategory.getValues());
-        this.nextPage.reload();
-        return this.nextPage;
+        if (nextPage instanceof AddMetadataCategoryWizardPage1 && this.selectedMetadataCategory != null)
+        {
+            final AddMetadataCategoryWizardPage1 editMetadataCategoryPage = (AddMetadataCategoryWizardPage1) nextPage;
+            editMetadataCategoryPage.setMetadataCategory(selectedMetadataCategory);
+            editMetadataCategoryPage.setMetadataValues(this.selectedMetadataCategory.getValues());
+            editMetadataCategoryPage.reload();
+        }
+        return nextPage;
+    }
+
+    @Override
+    public void widgetDefaultSelected(final SelectionEvent event)
+    {
     }
 
     MetadataCategory getSelectedMetadataCategory()
@@ -163,4 +162,5 @@ public final class ListMetadataCategoriesWizardPage extends WizardPage implement
     {
         return this.metadataCategoriesToDelete;
     }
+    
 }

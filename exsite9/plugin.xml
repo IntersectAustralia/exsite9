@@ -131,6 +131,11 @@
          </commandParameter>
       </command>
       <command
+            defaultHandler="au.org.intersect.exsite9.commands.handlers.RemoveMetadataWithWizardCategoryHandler"
+            id="au.org.intersect.exsite9.commands.RemoveMetadataCategoryWithWizardCommand"
+            name="Remove Metadata Category (with Wizard)">
+      </command>
+      <command
             defaultHandler="au.org.intersect.exsite9.commands.handlers.EditMetadataCategoryHandler"
             id="au.org.intersect.exsite9.commands.EditMetadataCategoryCommand"
             name="Edit Metadata Category">
@@ -347,6 +352,13 @@
                   mnemonic="E"
                   style="push"
                   tooltip="Edit Metadata Category">
+            </command>
+            <command
+                  commandId="au.org.intersect.exsite9.commands.RemoveMetadataCategoryWithWizardCommand"
+                  label="Delete Category..."
+                  mnemonic="D"
+                  style="push"
+                  tooltip="Delete Metadata Category">
             </command>
          </menu>
          <menu

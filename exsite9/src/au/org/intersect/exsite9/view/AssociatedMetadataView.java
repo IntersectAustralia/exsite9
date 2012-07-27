@@ -123,6 +123,8 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
         final Command editMetadataCategoryCommand = commandService.getCommand("au.org.intersect.exsite9.commands.EditMetadataCategoryCommand");
         editMetadataCategoryCommand.addExecutionListener(this);
 
+        final Command removeMetadataCategoryWithWizardCommand = commandService.getCommand("au.org.intersect.exsite9.commands.RemoveMetadataCategoryWithWizardCommand");
+        removeMetadataCategoryWithWizardCommand.addExecutionListener(this);
     }
 
     @Override

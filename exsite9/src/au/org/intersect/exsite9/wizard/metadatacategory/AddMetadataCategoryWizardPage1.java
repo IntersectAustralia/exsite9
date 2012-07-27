@@ -6,6 +6,7 @@ import java.util.List;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
@@ -126,9 +127,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         }
         
         this.useDropDown.addSelectionListener(new SelectionListener()
-        
         {
-            
             @Override
             public void widgetSelected(SelectionEvent e)
             {
@@ -218,7 +217,6 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     @Override
     public void keyPressed(KeyEvent e)
     {
-
     }
 
     @Override
@@ -313,8 +311,6 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                     }
                 }
             }
-
-
             this.metadataValues.remove(selectedIndex);
             this.metadataValuesListWidget.remove(selectedIndex);
             
@@ -334,7 +330,6 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
             InputDialog userInput = new InputDialog(getShell(), "Edit Value", "Enter the amended metadata value", this.metadataValuesListWidget.getSelection()[0],
                     new IInputValidator()
                     {
-            			
                         @Override
                         public String isValid(String contents)
                         {
@@ -372,6 +367,12 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         }
         
         setPageComplete(this.categoryNameField.isValid());
+    }
+    
+    @Override
+    public IWizardPage getPreviousPage()
+    {
+        return null;
     }
 
     @Override

@@ -16,7 +16,7 @@ public final class ImportMetadataSchemaWizard extends MetadataSchemaEditingWizar
 {
     public ImportMetadataSchemaWizard(final Project selectedProject)
     {
-        super(selectedProject, "Import Metadata Schema");
+        super(selectedProject, "Modify Metadata Schema");
         setNeedsProgressMonitor(true);
     }
 }
