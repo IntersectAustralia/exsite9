@@ -16,18 +16,20 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 import au.org.intersect.exsite9.domain.ResearchFile;
 
-public class ShowInFileSystemHandler implements IHandler
+public class OpenFileWithDefaultApplicationHandler implements IHandler
 {
-    private static final Logger LOG = Logger.getLogger(ShowInFileSystemHandler.class);
-
+    private static final Logger LOG = Logger.getLogger(OpenFileWithDefaultApplicationHandler.class);
+    
     @Override
-    public void addHandlerListener(final IHandlerListener handlerListener)
-    {  
+    public void addHandlerListener(IHandlerListener arg0)
+    {
+        // TODO Auto-generated method stub
+        
     }
 
     @Override
     public void dispose()
-    {        
+    {
     }
 
     @Override
@@ -42,12 +44,12 @@ public class ShowInFileSystemHandler implements IHandler
         
         try
         {
-            Desktop.getDesktop().open(((ResearchFile)selectionObject).getFile().getParentFile());
+            Desktop.getDesktop().open(((ResearchFile)selectionObject).getFile());
         }
         catch (IOException e)
         {
-            LOG.error("Cannot access the file system", e);
-            MessageDialog.openError(shell, "", "Unable to access the file system.");
+            LOG.error("The user's computer does not recognise this file or does not have a default application for it.");
+            MessageDialog.openError(shell, "", "Unable to open this file.");
         }
 
         
@@ -56,7 +58,7 @@ public class ShowInFileSystemHandler implements IHandler
 
     @Override
     public boolean isEnabled()
-    {    
+    {
         return true;
     }
 
@@ -67,8 +69,8 @@ public class ShowInFileSystemHandler implements IHandler
     }
 
     @Override
-    public void removeHandlerListener(final IHandlerListener handlerListener)
-    {     
+    public void removeHandlerListener(IHandlerListener arg0)
+    {        
     }
 
 }
