@@ -24,7 +24,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
@@ -312,27 +311,17 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
             final String schemaNamespaceURL = this.currentSchema.getNamespaceURL();
             if (localSchema)
             {
-                final Event event = new Event();
-                event.widget = localSchemaRadioButton;
-                widgetSelected(new SelectionEvent(event));
-
-                this.localSchemaRadioButton.setSelection(true);
-                this.importSchemaRadioButton.setSelection(false);
                 this.localSchemaNameField.setContents(schemaName);
                 this.localSchemaDescriptionField.setContents(schemaDescription);
                 this.localSchemaNamespaceURLField.setContents(schemaNamespaceURL);
+                enableLocalSchemaFields();
             }
             else
             {
-                final Event event = new Event();
-                event.widget = importSchemaRadioButton;
-                widgetSelected(new SelectionEvent(event));
-
-                this.localSchemaRadioButton.setSelection(false);
-                this.importSchemaRadioButton.setSelection(true);
                 importedSchemaNameField.setText(schemaName);
                 importedSchemaDescriptionField.setText(schemaDescription);
                 importedSchemaNamespaceURLField.setText(schemaNamespaceURL);
+                enableImportedScheamFields();
             }
         }
 
@@ -358,6 +347,26 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         setPageComplete(allFieldsAreValid());
     }
 
+    private void enableLocalSchemaFields()
+    {
+        this.localSchemaRadioButton.setSelection(true);
+        this.importSchemaRadioButton.setSelection(false);
+        this.localSchemaNameField.getControl().setEnabled(true);
+        this.localSchemaDescriptionField.getControl().setEnabled(true);
+        this.localSchemaNamespaceURLField.getControl().setEnabled(true);
+        this.importSchemaBrowseButton.setEnabled(false);
+    }
+
+    private void enableImportedScheamFields()
+    {
+        this.localSchemaRadioButton.setSelection(false);
+        this.importSchemaRadioButton.setSelection(true);
+        this.localSchemaNameField.getControl().setEnabled(false);
+        this.localSchemaDescriptionField.getControl().setEnabled(false);
+        this.localSchemaNamespaceURLField.getControl().setEnabled(false);
+        this.importSchemaBrowseButton.setEnabled(true);
+    }
+
     /**
      * @{inheritDoc
      */
@@ -367,19 +376,11 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         this.errorMessageHandler.clearMessage();
         if (e.widget == this.localSchemaRadioButton)
         {
-            this.importSchemaRadioButton.setSelection(false);
-            this.localSchemaNameField.getControl().setEnabled(true);
-            this.localSchemaDescriptionField.getControl().setEnabled(true);
-            this.localSchemaNamespaceURLField.getControl().setEnabled(true);
-            this.importSchemaBrowseButton.setEnabled(false);
+            enableLocalSchemaFields();
         }
         else if (e.widget == this.importSchemaRadioButton)
         {
-            this.localSchemaRadioButton.setSelection(false);
-            this.localSchemaNameField.getControl().setEnabled(false);
-            this.localSchemaDescriptionField.getControl().setEnabled(false);
-            this.localSchemaNamespaceURLField.getControl().setEnabled(false);
-            this.importSchemaBrowseButton.setEnabled(true);
+            enableImportedScheamFields();
         }
         setPageComplete(allFieldsAreValid());
     }

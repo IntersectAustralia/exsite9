@@ -206,6 +206,10 @@
        id="au.org.intersect.exsite9.commands.ShowInFileSystem"
        name="Show In File System">
  </command>
+ <command
+       id="au.org.intersect.exsite9.commands.OpenFileWithDefaultApplication"
+       name="Open File With Default Application">
+ </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -535,6 +539,17 @@
                </reference>
             </visibleWhen>
          </command>
+         <command
+               commandId="au.org.intersect.exsite9.commands.OpenFileWithDefaultApplication"
+               label="Open File With Default Application"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <reference
+                     definitionId="au.org.intersect.exsite9.expression.InstanceOfResearchFile">
+               </reference>
+            </visibleWhen>
+         </command>
       </menuContribution>
       <menuContribution
             allPopups="false"
@@ -693,6 +708,15 @@
                      definitionId="au.org.intersect.exsite9.expression.InstanceOfExistingResearchFile">
                </reference>
             </enabledWhen>
+   </handler>
+   <handler
+         class="au.org.intersect.exsite9.commands.handlers.OpenFileWithDefaultApplicationHandler"
+         commandId="au.org.intersect.exsite9.commands.OpenFileWithDefaultApplication">
+      <enabledWhen>
+         <reference
+               definitionId="au.org.intersect.exsite9.expression.InstanceOfExistingResearchFile">
+         </reference>
+      </enabledWhen>
    </handler>
    </extension>
    <extension
