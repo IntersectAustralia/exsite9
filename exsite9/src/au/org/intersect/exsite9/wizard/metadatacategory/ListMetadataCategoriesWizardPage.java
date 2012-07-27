@@ -55,8 +55,8 @@ public final class ListMetadataCategoriesWizardPage extends WizardPage implement
     @Override
     public void createControl(final Composite parent)
     {
-        wizard = (EditMetadataCategoryWizard)getWizard();
-        nextPage = wizard.getEditCategoryPage();
+        this.wizard = (EditMetadataCategoryWizard)getWizard();
+        this.nextPage = wizard.getEditCategoryPage();
 
         this.container = new Composite(parent, SWT.NULL);
         final GridLayout layout = new GridLayout();
@@ -90,7 +90,7 @@ public final class ListMetadataCategoriesWizardPage extends WizardPage implement
             public void widgetSelected(final SelectionEvent e)
             {
                 final int selectedIndex = metadataCategoriesList.getSelectionIndex();
-                final MetadataCategory metadataCategoryToDelete = metadataCategories.get(selectedIndex);
+                final MetadataCategory metadataCategoryToDelete = metadataCategories.remove(selectedIndex);
                 metadataCategoriesList.remove(selectedIndex);
                 metadataCategoriesToDelete.add(metadataCategoryToDelete);
                 removeButton.setEnabled(false);
@@ -122,7 +122,7 @@ public final class ListMetadataCategoriesWizardPage extends WizardPage implement
         {
             this.removeButton.setEnabled(false);
             this.selectedMetadataCategory = null;
-            nextPage.setPageComplete(true);
+            this.nextPage.setPageComplete(true);
             setPageComplete(!this.metadataCategoriesToDelete.isEmpty());
         }
         else
@@ -130,7 +130,7 @@ public final class ListMetadataCategoriesWizardPage extends WizardPage implement
             final int selectedIndex = this.metadataCategoriesList.getSelectionIndex();
             this.selectedMetadataCategory = this.metadataCategories.get(selectedIndex);
             this.removeButton.setEnabled(true);
-            nextPage.setPageComplete(!this.metadataCategoriesToDelete.isEmpty());
+            this.nextPage.setPageComplete(!this.metadataCategoriesToDelete.isEmpty());
             setPageComplete(true);
         }
     }
@@ -142,19 +142,16 @@ public final class ListMetadataCategoriesWizardPage extends WizardPage implement
 
     public IWizardPage getNextPage()
     {
-        System.out.println("GET NEXT PAGE called!");
-
         if (this.selectedMetadataCategory == null)
         {
-            System.out.println("NULL");
             return null;
         }
 
         // Configure the next page with the selected metadata category.
-        nextPage.setMetadataCategory(selectedMetadataCategory);
-        nextPage.setMetadataValues(selectedMetadataCategory.getValues());
-        nextPage.reload();
-        return nextPage;
+        this.nextPage.setMetadataCategory(selectedMetadataCategory);
+        this.nextPage.setMetadataValues(selectedMetadataCategory.getValues());
+        this.nextPage.reload();
+        return this.nextPage;
     }
 
     MetadataCategory getSelectedMetadataCategory()

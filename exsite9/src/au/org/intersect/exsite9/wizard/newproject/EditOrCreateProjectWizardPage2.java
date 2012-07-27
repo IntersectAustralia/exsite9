@@ -185,7 +185,7 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         final Composite importSchemaRadioButtonContainer = new Composite(importGroup, SWT.NULL);
         importSchemaRadioButtonContainer.setLayout(new RowLayout(SWT.VERTICAL));
         this.importSchemaRadioButton = new Button(importSchemaRadioButtonContainer, SWT.RADIO);
-        this.importSchemaRadioButton.setText("Import a Schema");
+        this.importSchemaRadioButton.setText("Use an imported Schema");
         this.importSchemaRadioButton.addSelectionListener(this);
 
         final Composite importSchemaContainer = new Composite(importGroup, SWT.NULL);

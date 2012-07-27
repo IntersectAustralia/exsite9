@@ -75,6 +75,7 @@ public final class EditMetadataCategoryWizard extends Wizard
                 }
             }
             schemaService.removeMetadataCategoryFromSchema(schema, mdc);
+            metadataCategoryService.deleteMetadataCategory(mdc);
         }
 
 
