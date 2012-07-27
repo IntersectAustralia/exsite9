@@ -64,6 +64,8 @@ public class OpenProjectHandler implements IHandler
             Job identifyAllNewFilesForProject = new IdentifyAllNewFilesForProjectJob();
             identifyAllNewFilesForProject.schedule();
             HandlerUtils.activateShowProjectActivity(activeWorkbenchWindow);
+            
+            shell.setText("ExSite9 - " + project.getName());
         }
 
         return project;

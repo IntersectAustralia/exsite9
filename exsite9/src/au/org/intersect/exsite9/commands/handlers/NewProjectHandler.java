@@ -64,6 +64,7 @@ public final class NewProjectHandler implements IHandler
         {
             projectManager.setCurrentProjectID(newProject.getId());
             HandlerUtils.activateShowProjectActivity(activeWorkbenchWindow);
+            shell.setText("ExSite9 - " + newProject.getName());
         }
         return newProject;
     }
