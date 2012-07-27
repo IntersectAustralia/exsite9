@@ -3,6 +3,7 @@ package au.org.intersect.exsite9.commands.handlers;
 import java.awt.Desktop;
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
@@ -14,6 +15,7 @@ import au.org.intersect.exsite9.domain.ResearchFile;
 
 public class ShowInFileSystemHandler implements IHandler
 {
+    private static final Logger LOG = Logger.getLogger(ShowInFileSystemHandler.class);
 
     @Override
     public void addHandlerListener(final IHandlerListener handlerListener)
@@ -38,8 +40,7 @@ public class ShowInFileSystemHandler implements IHandler
         }
         catch (IOException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOG.error("Cannot access the file system", e);
         }
 
         
@@ -48,7 +49,7 @@ public class ShowInFileSystemHandler implements IHandler
 
     @Override
     public boolean isEnabled()
-    {
+    {    
         return true;
     }
 

@@ -199,12 +199,10 @@
          name="Export metadata command">
 	</command>
 	<command
-         defaultHandler="au.org.intersect.exsite9.commands.handlers.FindResearchFileHandler"
          id="au.org.intersect.exsite9.commands.FindResearchFile"
          name="Find File">
    </command>
  <command
-       defaultHandler="au.org.intersect.exsite9.commands.handlers.ShowInFileSystemHandler"
        id="au.org.intersect.exsite9.commands.ShowInFileSystem"
        name="Show In File System">
  </command>
@@ -498,7 +496,7 @@
                commandId="au.org.intersect.exsite9.commands.FindResearchFile"
                label="Find File"
                style="push">
-            <visibleWhen
+               <visibleWhen
                   checkEnabled="false">
                <reference
                      definitionId="au.org.intersect.exsite9.expression.InstanceOfResearchFile">
@@ -509,7 +507,7 @@
                commandId="au.org.intersect.exsite9.commands.ShowInFileSystem"
                label="Show In File System"
                style="push">
-            <visibleWhen
+               <visibleWhen
                   checkEnabled="false">
                <reference
                      definitionId="au.org.intersect.exsite9.expression.InstanceOfResearchFile">
@@ -657,6 +655,24 @@
          </reference>
       </enabledWhen>
    </handler>
+   <handler
+         class="au.org.intersect.exsite9.commands.handlers.FindResearchFileHandler"
+         commandId="au.org.intersect.exsite9.commands.FindResearchFile">
+         <enabledWhen>
+               <reference
+                     definitionId="au.org.intersect.exsite9.expression.InstanceOfNoneExistingResearchFile">
+               </reference>	
+            </enabledWhen>
+   </handler>
+   <handler
+         class="au.org.intersect.exsite9.commands.handlers.ShowInFileSystemHandler"
+         commandId="au.org.intersect.exsite9.commands.ShowInFileSystem">
+         <enabledWhen>
+               <reference
+                     definitionId="au.org.intersect.exsite9.expression.InstanceOfExistingResearchFile">
+               </reference>
+            </enabledWhen>
+   </handler>
    </extension>
    <extension
          point="org.eclipse.core.expressions.definitions">
@@ -737,6 +753,57 @@
             </iterate>
          </with>
       </definition>
+      <definition
+            id="au.org.intersect.exsite9.expression.InstanceOfExistingResearchFile">
+         <with
+               variable="selection">
+               <and>
+               <count
+                  value="1">
+            </count>
+            <iterate
+                  ifEmpty="false"
+                  operator="and">
+                  <and>
+               <instanceof
+                     value="au.org.intersect.exsite9.domain.ResearchFile">
+               </instanceof>
+               <test
+               		property="au.org.interset.exsite9.property.researchFileExistsProperty"
+               		value="">
+               		</test>
+               		</and>
+            </iterate>
+            </and>
+         </with>
+      </definition>
+      <definition
+            id="au.org.intersect.exsite9.expression.InstanceOfNoneExistingResearchFile">
+         <with
+               variable="selection">
+               <and>
+               <count
+                  value="1">
+            </count>
+            <iterate
+                  ifEmpty="false"
+                  operator="and">
+                  <and>
+               <instanceof
+                     value="au.org.intersect.exsite9.domain.ResearchFile">
+               </instanceof>
+               <not>
+               		<test
+	               		property="au.org.interset.exsite9.property.researchFileExistsProperty"
+	               		value="">
+               		</test>
+               	</not>
+               		</and>
+            </iterate>
+            </and>
+         </with>
+      </definition>
+      
    </extension>
    <extension
          point="org.eclipse.core.expressions.propertyTesters">
@@ -746,6 +813,13 @@
             namespace="au.org.interset.exsite9.property"
             properties="groupName"
             type="au.org.intersect.exsite9.domain.Group">
+      </propertyTester>
+      <propertyTester
+            class="au.org.intersect.exsite9.property.FileExistsTester"
+            id="au.org.intersect.exsite9.property.FileExistsTester"
+            namespace="au.org.interset.exsite9.property"
+            properties="researchFileExistsProperty"
+            type="au.org.intersect.exsite9.domain.ResearchFile">
       </propertyTester>
    </extension>
    <extension
