@@ -378,6 +378,7 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         this.localSchemaDescriptionField.getControl().setEnabled(false);
         this.localSchemaNamespaceURLField.getControl().setEnabled(false);
         this.importSchemaBrowseButton.setEnabled(true);
+        this.importSchemaBrowseButton.setFocus();
     }
 
     /**
