@@ -1,15 +1,18 @@
 package au.org.intersect.exsite9.wizard.listfolders;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.PlatformUI;
 
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.jobs.ConsolidateFoldersJob;
 import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.service.IProjectService;
 
@@ -59,25 +62,44 @@ public class ListFoldersWizard extends Wizard
                     return false;
                 }
 
-                // check the new path isn't already a folder within the project
-                // TODO : We need to deal with the case that a parent directory of this one has already been added.
-                // OR this is a parent directory which contains directories that have already been added.
+                // check the new path isn't already a folder within the project or a sub or parent of one.
+                final List<Folder> subFoldersOfNewFolder = new ArrayList<Folder>();
                 for (Folder existingFolder : project.getFolders())
                 {
-                    if (existingFolder.getFolder().getAbsolutePath().equalsIgnoreCase(newFileForFolder.getAbsolutePath()))
+                    if (existingFolder.getFolder().getAbsolutePath()
+                            .equalsIgnoreCase(newFileForFolder.getAbsolutePath()))
                     {
                         MessageDialog.openError(null, "Error",
                                 "The folder you chose is already assigned to the project.");
                         return false;
                     }
+                    else if (newFileForFolder.getAbsolutePath()
+                            .startsWith(existingFolder.getFolder().getAbsolutePath()))
+                    {
+                        MessageDialog.openError(null, "Error",
+                                "The folder is already being watched as it is a sub-folder of a watched folder.");
+                        return false;
+                    }
+                    else if (existingFolder.getFolder().getAbsolutePath()
+                            .startsWith(newFileForFolder.getAbsolutePath()))
+                    {
+                        subFoldersOfNewFolder.add(existingFolder);
+                    }
                 }
+
+                if (!subFoldersOfNewFolder.isEmpty())
+                {
+                    Job consolidateFolders = new ConsolidateFoldersJob(folderAndPathEntry.getKey(),
+                            subFoldersOfNewFolder);
+                    consolidateFolders.schedule();
+                }
+                
                 // do updates
-                projectService.updateFolderPath(folderAndPathEntry.getKey().getId(),
-                        newFileForFolder);
+                projectService.updateFolderPath(folderAndPathEntry.getKey().getId(), newFileForFolder);
             }
         }
 
-        //remove any existing folders that have been chosen to be removed
+        // remove any existing folders that have been chosen to be removed
         if (!deletedFolderList.isEmpty())
         {
             projectService.removeFoldersFromProject(project, deletedFolderList);
