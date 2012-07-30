@@ -1,5 +1,6 @@
 package au.org.intersect.exsite9.wizard.listfolders;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,8 +18,11 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.ui.PlatformUI;
 
 import au.org.intersect.exsite9.domain.Folder;
+import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.service.IProjectManager;
 
 public class ListFoldersWizardPage1 extends WizardPage implements SelectionListener
 {
@@ -133,6 +137,34 @@ public class ListFoldersWizardPage1 extends WizardPage implements SelectionListe
             final String path = directoryDialog.open();
             if (path != null)
             {
+                
+                final File newFileForFolder = new File(path);
+
+                if (!newFileForFolder.exists() || !newFileForFolder.isDirectory() || !newFileForFolder.canRead())
+                {
+                    MessageDialog.openError(null, "Error", "Provided folder does not exist or is not readable.");
+                    return;
+                }
+                
+                final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(
+                        IProjectManager.class);
+                final Project project = projectManager.getCurrentProject();
+                
+                for (Folder existingFolder : project.getFolders())
+                {
+                    if (existingFolder.getFolder().getAbsolutePath().equalsIgnoreCase(path))
+                    {
+                        MessageDialog.openError(null, "Error","The folder you chose is already assigned to the project.");
+                        return;
+                    }
+                    else if (path.startsWith(existingFolder.getFolder().getAbsolutePath()))
+                    {
+                        MessageDialog.openError(null, "Error",
+                                "The folder is already being watched as it is a sub-folder of a watched folder.");
+                        return;
+                    }
+                }
+                
                 this.foldersAndNewPaths.put(this.folders.get(this.folderList.getSelectionIndex()), path);                
                 this.folderList.setItem(this.folderList.getSelectionIndex(), path);     //edit path in UI
                 setPageComplete(true);
