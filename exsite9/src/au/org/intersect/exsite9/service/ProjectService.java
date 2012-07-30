@@ -260,6 +260,8 @@ public class ProjectService implements IProjectService
             final ResearchFileDAO researchFileDAO = this.researchFileDAOFactory.createInstance(em);
 
             Folder folder = folderDAO.findById(folderId);
+            
+            String newFolderPath = newFileForFolder.getAbsolutePath();
 
             // modify the path in each of the research files
             List<ResearchFile> researchFiles = folder.getFiles();
@@ -267,11 +269,14 @@ public class ProjectService implements IProjectService
             for (ResearchFile researchFile : researchFiles)
             {
                 String originalPath = researchFile.getFile().getAbsolutePath();
-                String newPath = originalPath.replace(folder.getFolder().getAbsolutePath(),
-                        newFileForFolder.getAbsolutePath());
-                File replacementFile = new File(newPath);
-                researchFile.setFile(replacementFile);
-                researchFileDAO.updateResearchFile(researchFile);
+                
+                if(! originalPath.startsWith(newFolderPath))
+                {
+                    String newPath = originalPath.replace(folder.getFolder().getAbsolutePath(),newFolderPath);
+                    File replacementFile = new File(newPath);
+                    researchFile.setFile(replacementFile);
+                    researchFileDAO.updateResearchFile(researchFile);
+                }
             }
 
             folder.setFolder(newFileForFolder);
