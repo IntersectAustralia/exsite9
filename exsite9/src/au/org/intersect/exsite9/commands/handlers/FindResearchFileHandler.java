@@ -1,6 +1,8 @@
 package au.org.intersect.exsite9.commands.handlers;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -10,6 +12,7 @@ import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.core.commands.NotEnabledException;
 import org.eclipse.core.commands.NotHandledException;
 import org.eclipse.core.commands.common.NotDefinedException;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.FileDialog;
@@ -22,6 +25,7 @@ import org.eclipse.ui.handlers.IHandlerService;
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
+import au.org.intersect.exsite9.jobs.ConsolidateFoldersJob;
 import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.service.IProjectService;
 import au.org.intersect.exsite9.service.IResearchFileService;
@@ -75,12 +79,13 @@ public class FindResearchFileHandler implements IHandler
         }
 
         String parentPathOfNewFile = newFileObject.getParent();
+        Folder folder = new Folder(new File(parentPathOfNewFile));
 
         // Watched folder checking
         for (Folder existingFolder : currentProject.getFolders())
         {
-            if (existingFolder.getFolder().getAbsolutePath().equalsIgnoreCase(parentPathOfNewFile))
-            { // means the new location is in a folder that is already being watched
+            if (existingFolder.getFolder().getAbsolutePath().equalsIgnoreCase(parentPathOfNewFile) || parentPathOfNewFile.startsWith(existingFolder.getFolder().getAbsolutePath()))
+            { // means the new location is in a folder that is already being watched or in a sub-folder of a watched folder
 
                 for (ResearchFile existingResearchFile : existingFolder.getFiles())
                 {
@@ -97,12 +102,29 @@ public class FindResearchFileHandler implements IHandler
                         return null;
                     }
                 }
-                // if it hits this point it means that the folder is already watched but the file is not currently in
+                // if it hits this point it means that the folder is already watched or is a sub of a watched folder but the file is not currently in
                 // the system
                 ((ResearchFile) selectionObject).setFile(newFileObject);
                 researchFileService.updateResearchFile((ResearchFile) selectionObject);
                 return null;
             }
+            else if(existingFolder.getFolder().getAbsolutePath().startsWith(parentPathOfNewFile))
+            {//means the location of the relocated file is now in the parent of a watched sub-folder
+                
+                //we know the file doesn't exist in the system because the file is in the parent of a watched 
+                //folder so is basically the same as being in an un-watched folder
+                ((ResearchFile) selectionObject).setFile(newFileObject);
+                researchFileService.updateResearchFile((ResearchFile) selectionObject);
+                
+                //add the parent folder to the list of watched folders and consolidate the files from the sub-folder
+                projectService.mapFolderToProject(currentProject, folder);
+                
+                final List<Folder> subFoldersOfNewFolder = new ArrayList<Folder>();
+                subFoldersOfNewFolder.add(existingFolder);
+                Job consolidateFolders = new ConsolidateFoldersJob(folder, subFoldersOfNewFolder);
+                consolidateFolders.schedule();  
+            }
+            
         }
 
         // non-watched folder
@@ -112,7 +134,7 @@ public class FindResearchFileHandler implements IHandler
         {
             ((ResearchFile) selectionObject).setFile(newFileObject);
             researchFileService.updateResearchFile((ResearchFile) selectionObject);
-            projectService.mapFolderToProject(currentProject, new Folder(new File(parentPathOfNewFile)));
+            projectService.mapFolderToProject(currentProject, folder);
             return null;
         }
         return null;
