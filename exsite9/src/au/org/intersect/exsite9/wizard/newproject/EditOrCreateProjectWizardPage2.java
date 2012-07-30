@@ -418,7 +418,7 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         }
         if (this.importSchemaRadioButton.getSelection())
         {
-            return this.importedSchema != null && (importedSchema != currentSchema);
+            return (this.importedSchema != null) && (! this.importedSchema.getLocal());
         }
         return false;
     }
