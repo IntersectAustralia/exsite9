@@ -20,6 +20,7 @@ import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.MetadataAssociation;
 import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
@@ -121,6 +122,11 @@ public class ResearchFileService implements IResearchFileService
                     {
                         // nothing to do!
                         return;
+                    }
+
+                    if (metadataCategory.getType() == MetadataCategoryType.FREETEXT)
+                    {
+                        existingAssociation.getMetadataValues().clear();
                     }
                     existingAssociation.getMetadataValues().add(metadataValue);
                     metadataAssociationDAO.updateMetadataAssociation(existingAssociation);

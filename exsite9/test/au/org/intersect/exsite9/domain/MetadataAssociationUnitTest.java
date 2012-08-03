@@ -27,7 +27,7 @@ public final class MetadataAssociationUnitTest
         assertTrue(toTest1.getMetadataValues().isEmpty());
 
         final Long id = 124l;
-        final MetadataCategory mc = new MetadataCategory("some category");
+        final MetadataCategory mc = new MetadataCategory("some category", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
         toTest1.setId(id);
         toTest1.setMetadataCategory(mc);
         assertEquals(id, toTest1.getId());

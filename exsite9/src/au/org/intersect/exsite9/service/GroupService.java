@@ -23,6 +23,7 @@ import au.org.intersect.exsite9.domain.ExcludedFilesGroup;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataAssociation;
 import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.NewFilesGroup;
 import au.org.intersect.exsite9.domain.Project;
@@ -332,6 +333,12 @@ public final class GroupService implements IGroupService
                     {
                         // nothing to do!
                         return;
+                    }
+
+                    if (metadataCategory.getType() == MetadataCategoryType.FREETEXT)
+                    {
+                        // In a free-text metadata category type, there is only ever one value.
+                        existingAssociation.getMetadataValues().clear();
                     }
                     existingAssociation.getMetadataValues().add(metadataValue);
                     metadataAssociationDAO.updateMetadataAssociation(existingAssociation);

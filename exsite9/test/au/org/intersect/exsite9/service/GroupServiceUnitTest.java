@@ -23,6 +23,8 @@ import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataAssociation;
 import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataCategoryType;
+import au.org.intersect.exsite9.domain.MetadataCategoryUse;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.dto.HierarchyMoveDTO;
@@ -240,7 +242,7 @@ public class GroupServiceUnitTest extends DAOTest
         final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         groupService = new GroupService(emf, groupDAOFactory, metadataAssocationDAOFactory, researchFileDAOFactory);
 
-        final MetadataCategory metadataCategory = new MetadataCategory("metadataCategory");
+        final MetadataCategory metadataCategory = new MetadataCategory("metadataCategory", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
         final MetadataValue metadataValue = new MetadataValue("metadataValue");
         metadataCategory.getValues().add(metadataValue);
         metadataCategoryDAO.createMetadataCategory(metadataCategory);
@@ -279,7 +281,7 @@ public class GroupServiceUnitTest extends DAOTest
         assertTrue(metadataAssociation.getMetadataValues().contains(metadataValue2));
 
         // Ad another association under a different category.
-        final MetadataCategory metadataCategory2 = new MetadataCategory("metadatacategory number 2");
+        final MetadataCategory metadataCategory2 = new MetadataCategory("metadatacategory number 2", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
         final MetadataValue metadataValue3 = new MetadataValue("metadata value three");
         metadataCategory2.getValues().add(metadataValue3);
         metadataCategoryDAO.createMetadataCategory(metadataCategory2);
@@ -308,12 +310,12 @@ public class GroupServiceUnitTest extends DAOTest
         groupService = new GroupService(emf, groupDAOFactory, metadataAssocationDAOFactory, researchFileDAOFactory);
 
         // Disassociate metadata that is not associated.
-        final MetadataCategory metadataCategory1 = new MetadataCategory("metadataCategory");
+        final MetadataCategory metadataCategory1 = new MetadataCategory("metadataCategory", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
         final MetadataValue metadataValue1 = new MetadataValue("metadataValue");
         metadataCategory1.getValues().add(metadataValue1);
         metadataCategoryDAO.createMetadataCategory(metadataCategory1);
 
-        final MetadataCategory metadataCategory2 = new MetadataCategory("metadataCategory two");
+        final MetadataCategory metadataCategory2 = new MetadataCategory("metadataCategory two", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
         final MetadataValue metadataValue2 = new MetadataValue("metadataValue two");
         final MetadataValue metadataValue3 = new MetadataValue("metadataValue three");
         metadataCategory2.getValues().add(metadataValue2);
@@ -375,7 +377,7 @@ public class GroupServiceUnitTest extends DAOTest
         childGroup.getResearchFiles().add(rf);
         groupDAO.updateGroup(childGroup);
 
-        final MetadataCategory mc = new MetadataCategory("name");
+        final MetadataCategory mc = new MetadataCategory("name", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
         final MetadataValue mv = new MetadataValue("value");
         final MetadataAssociation ma = new MetadataAssociation(mc);
         mc.getValues().add(mv);
@@ -434,7 +436,7 @@ public class GroupServiceUnitTest extends DAOTest
 
         final Group myGroup = groupService.createNewGroup("testGetGroupsWithAssociatedMetadata");
 
-        final MetadataCategory mdc = new MetadataCategory("mdc-testGetGroupsWithAssociatedMetadata");
+        final MetadataCategory mdc = new MetadataCategory("mdc-testGetGroupsWithAssociatedMetadata", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
         final MetadataValue mdv = new MetadataValue("mdv-testGetGroupsWithAssociatedMetadata");
         mdc.getValues().add(mdv);
         metadataCategoryDAO.createMetadataCategory(mdc);

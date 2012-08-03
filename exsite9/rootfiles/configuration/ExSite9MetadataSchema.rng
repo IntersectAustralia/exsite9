@@ -22,6 +22,12 @@
 					<value>required</value>
 				</choice>
 			</attribute>
+			<attribute name="type">
+				<choice>
+					<value>Controlled Vocabulary</value>
+					<value>Free Text</value>
+				</choice>
+			</attribute>
 			<zeroOrMore>
 				<element name="value">
 					<text/>

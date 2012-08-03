@@ -15,6 +15,8 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataCategoryType;
+import au.org.intersect.exsite9.domain.MetadataCategoryUse;
 
 /**
  * Tests {@link MetadataCategoryDAO}
@@ -29,7 +31,7 @@ public final class MetadataCategoryDAOUnitTest
         final EntityTransaction et = Mockito.mock(EntityTransaction.class);
         final MetadataCategoryDAO toTest = new MetadataCategoryDAO(em);
 
-        final MetadataCategory mdc = new MetadataCategory("My MDC Name");
+        final MetadataCategory mdc = new MetadataCategory("My MDC Name", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
 
         when(em.getTransaction()).thenReturn(et);
 
@@ -47,7 +49,7 @@ public final class MetadataCategoryDAOUnitTest
         final EntityTransaction et = Mockito.mock(EntityTransaction.class);
         final MetadataCategoryDAO toTest = new MetadataCategoryDAO(em);
 
-        final MetadataCategory mdc = new MetadataCategory("My MDC Name");
+        final MetadataCategory mdc = new MetadataCategory("My MDC Name", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
 
         when(em.getTransaction()).thenReturn(et);
 

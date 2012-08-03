@@ -1,6 +1,7 @@
 package au.org.intersect.exsite9.wizard.metadatacategory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jface.wizard.Wizard;
@@ -8,6 +9,7 @@ import org.eclipse.ui.PlatformUI;
 
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataCategoryUse;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
@@ -61,8 +63,8 @@ public class AddMetadataCategoryWizard extends Wizard
     public boolean performFinish()
     {
         final String categoryTitle = page1.getMetadataCategoryName();
+        final MetadataCategoryType categoryType = page1.getMetadataCategoryType();
         final MetadataCategoryUse categoryUse = page1.getMetadataCategoryUse();
-        final List<MetadataValue> values = page1.getMetadataCategoryValues();
 
         // Persist the new metadata category.
         final IMetadataCategoryService metadataCategoryService = (IMetadataCategoryService) PlatformUI.getWorkbench()
@@ -84,14 +86,21 @@ public class AddMetadataCategoryWizard extends Wizard
         
         if (this.metadataCategory == null)
         {
-            final MetadataCategory newCategory = metadataCategoryService.createNewMetadataCategory(categoryTitle, categoryUse,
-                    values);
+            final List<MetadataValue> values;
+            if (categoryType == MetadataCategoryType.CONTROLLED_VOCABULARY)
+            {
+                values = page1.getMetadataCategoryValues();
+            }
+            else
+            {
+                values = Collections.emptyList();
+            }
+            final MetadataCategory newCategory = metadataCategoryService.createNewMetadataCategory(categoryTitle, categoryType, categoryUse, values);
             schemaService.addMetadataCategoryToSchema(this.project.getSchema(), newCategory);
         }
         else
         {
-            metadataCategoryService.updateMetadataCategory(this.metadataCategory, categoryTitle, categoryUse,
-                    page1.getMetadataCategoryValues());
+            metadataCategoryService.updateMetadataCategory(this.metadataCategory, categoryTitle, categoryUse, page1.getMetadataCategoryValues());
         }
 
         return this.project != null;

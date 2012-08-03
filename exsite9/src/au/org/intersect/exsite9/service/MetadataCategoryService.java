@@ -14,6 +14,7 @@ import javax.persistence.EntityManagerFactory;
 import au.org.intersect.exsite9.dao.MetadataCategoryDAO;
 import au.org.intersect.exsite9.dao.factory.MetadataCategoryDAOFactory;
 import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataCategoryUse;
 import au.org.intersect.exsite9.domain.MetadataValue;
 
@@ -32,14 +33,13 @@ public final class MetadataCategoryService implements IMetadataCategoryService
      * @{inheritDoc}
      */
     @Override
-    public MetadataCategory createNewMetadataCategory(final String name, final MetadataCategoryUse use, final List<MetadataValue> values)
+    public MetadataCategory createNewMetadataCategory(final String name, final MetadataCategoryType type, final MetadataCategoryUse use, final List<MetadataValue> values)
     {
         final EntityManager em = this.emf.createEntityManager();
         try
         {
             final MetadataCategoryDAO mdcDAO = this.metadataCategoryDAOFactory.createInstance(em);
-            final MetadataCategory mdc = new MetadataCategory(name);
-            mdc.setUse(use);
+            final MetadataCategory mdc = new MetadataCategory(name, type, use);
             mdc.setValues(values);
             mdcDAO.createMetadataCategory(mdc);
             return mdc;
@@ -97,6 +97,44 @@ public final class MetadataCategoryService implements IMetadataCategoryService
             existingMetadataCategoryToUpdate.setValues(values);
            
             mdcDAO.updateMetadataCategory(existingMetadataCategoryToUpdate);
+        }
+        finally
+        {
+            em.close();
+        }
+    }
+
+    @Override
+    public MetadataValue addValueToMetadataCategory(final MetadataCategory metadataCategory, final String metadataValue)
+    {
+        for (final MetadataValue existingValue : metadataCategory.getValues())
+        {
+            if (existingValue.getValue().equals(metadataValue))
+            {
+                return existingValue;
+            }
+        }
+
+        final MetadataValue newValue = new MetadataValue(metadataValue);
+        final List<MetadataValue> existingValues = metadataCategory.getValues();
+        existingValues.add(newValue);
+        metadataCategory.setValues(existingValues);
+
+        final EntityManager em = this.emf.createEntityManager();
+        try
+        {
+            final MetadataCategoryDAO mdcDAO = this.metadataCategoryDAOFactory.createInstance(em);
+            mdcDAO.updateMetadataCategory(metadataCategory);
+
+            final MetadataCategory updatedMetadataCategory = mdcDAO.findById(metadataCategory.getId());
+            for (final MetadataValue updatedValue : updatedMetadataCategory.getValues())
+            {
+                if (updatedValue.getValue().equals(metadataValue))
+                {
+                    return updatedValue;
+                }
+            }
+            return null;
         }
         finally
         {

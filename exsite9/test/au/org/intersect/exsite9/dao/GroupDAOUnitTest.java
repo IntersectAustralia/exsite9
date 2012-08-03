@@ -15,6 +15,8 @@ import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataAssociation;
 import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataCategoryType;
+import au.org.intersect.exsite9.domain.MetadataCategoryUse;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.ResearchFile;
 
@@ -143,7 +145,7 @@ public class GroupDAOUnitTest extends DAOTest
 
         assertNotNull(group.getId());
 
-        final MetadataCategory cat = new MetadataCategory("some metadata category");
+        final MetadataCategory cat = new MetadataCategory("some metadata category", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
         final MetadataValue val = new MetadataValue("some value");
         cat.getValues().add(val);
 

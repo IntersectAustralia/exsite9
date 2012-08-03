@@ -17,6 +17,8 @@ import org.mockito.Mockito;
 
 import au.org.intersect.exsite9.domain.MetadataAssociation;
 import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataCategoryType;
+import au.org.intersect.exsite9.domain.MetadataCategoryUse;
 
 /**
  * Tests {@link MetadataAssociationDAO}
@@ -31,7 +33,7 @@ public final class MetadataAssociationDAOUnitTest
 
         final MetadataAssociationDAO toTest = new MetadataAssociationDAO(em);
 
-        final MetadataCategory mdc = new MetadataCategory("mdc");
+        final MetadataCategory mdc = new MetadataCategory("mdc", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
         final MetadataAssociation mda = new MetadataAssociation(mdc);
 
         when(em.getTransaction()).thenReturn(et);
@@ -51,7 +53,7 @@ public final class MetadataAssociationDAOUnitTest
 
         final MetadataAssociationDAO toTest = new MetadataAssociationDAO(em);
 
-        final MetadataCategory mdc = new MetadataCategory("mdc");
+        final MetadataCategory mdc = new MetadataCategory("mdc", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
         final MetadataAssociation mda = new MetadataAssociation(mdc);
 
         when(em.getTransaction()).thenReturn(et);
@@ -71,7 +73,7 @@ public final class MetadataAssociationDAOUnitTest
 
         final MetadataAssociationDAO toTest = new MetadataAssociationDAO(em);
 
-        final MetadataCategory mdc = new MetadataCategory("mdc");
+        final MetadataCategory mdc = new MetadataCategory("mdc", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
         final MetadataAssociation mda = new MetadataAssociation(mdc);
 
         when(em.getTransaction()).thenReturn(et);
@@ -92,7 +94,7 @@ public final class MetadataAssociationDAOUnitTest
 
         final MetadataAssociationDAO toTest = new MetadataAssociationDAO(em);
 
-        final MetadataCategory mdc = new MetadataCategory("mdc");
+        final MetadataCategory mdc = new MetadataCategory("mdc", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
         final MetadataAssociation mda = new MetadataAssociation(mdc);
 
         when(em.getTransaction()).thenReturn(et);

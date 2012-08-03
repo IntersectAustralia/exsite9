@@ -65,11 +65,11 @@ public final class ResearchFileUnitTest
         schema.setName("schema");
         project.setSchema(schema);
         
-        MetadataCategory cat1 = new MetadataCategory("cat1");
+        MetadataCategory cat1 = new MetadataCategory("cat1", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
         cat1.setId(1L);
         schema.getMetadataCategories().add(cat1);
         
-        MetadataCategory cat2 = new MetadataCategory("cat2");
+        MetadataCategory cat2 = new MetadataCategory("cat2", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
         cat2.setId(2L);
         schema.getMetadataCategories().add(cat2);
         

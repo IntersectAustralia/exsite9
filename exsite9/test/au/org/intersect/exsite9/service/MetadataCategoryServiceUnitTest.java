@@ -12,6 +12,7 @@ import org.junit.Test;
 import au.org.intersect.exsite9.dao.DAOTest;
 import au.org.intersect.exsite9.dao.factory.MetadataCategoryDAOFactory;
 import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataCategoryUse;
 
 public class MetadataCategoryServiceUnitTest extends DAOTest
@@ -29,7 +30,7 @@ public class MetadataCategoryServiceUnitTest extends DAOTest
 
         metadataCategoryService = new MetadataCategoryService(emf, metadataCategoryDAOFactory);
 
-        MetadataCategory category = metadataCategoryService.createNewMetadataCategory("Names", MetadataCategoryUse.optional, null);
+        MetadataCategory category = metadataCategoryService.createNewMetadataCategory("Names", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional, null);
         MetadataCategory categoryFoundById = metadataCategoryService.findById(category.getId());
 
         assertEquals(category, categoryFoundById);
@@ -46,7 +47,7 @@ public class MetadataCategoryServiceUnitTest extends DAOTest
 
         metadataCategoryService = new MetadataCategoryService(emf, metadataCategoryDAOFactory);
 
-        MetadataCategory category = metadataCategoryService.createNewMetadataCategory("Names", MetadataCategoryUse.optional, null);
+        MetadataCategory category = metadataCategoryService.createNewMetadataCategory("Names", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional, null);
         
         metadataCategoryService.updateMetadataCategory(category, "NameUpdated", MetadataCategoryUse.required, null);
         

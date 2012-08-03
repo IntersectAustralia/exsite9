@@ -29,9 +29,9 @@ public class MetadataValue implements Serializable
     {
     }
 
-    public MetadataValue(final String name)
+    public MetadataValue(final String value)
     {
-        this.value = name;
+        this.value = value;
     }
 
     public Long getId()

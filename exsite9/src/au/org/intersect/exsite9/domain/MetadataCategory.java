@@ -38,7 +38,9 @@ public final class MetadataCategory implements Serializable
 
     private String name;
     
-    private MetadataCategoryUse use; 
+    private MetadataCategoryUse use;
+
+    private MetadataCategoryType type;
 
     @OneToMany(cascade=CascadeType.ALL, orphanRemoval=true)
     private List<MetadataValue> metadataValues = new ArrayList<MetadataValue>();
@@ -47,16 +49,11 @@ public final class MetadataCategory implements Serializable
     {
     }
 
-    public MetadataCategory(final String name)
-    {
-        this.name = name;
-        this.use = MetadataCategoryUse.optional;
-    }
-
-    public MetadataCategory(final String name, final MetadataCategoryUse use)
+    public MetadataCategory(final String name, final MetadataCategoryType type, final MetadataCategoryUse use)
     {
         this.name = name;
         this.use = use;
+        this.type = type;
     }
     
     public Long getId()
@@ -99,6 +96,16 @@ public final class MetadataCategory implements Serializable
         this.use = use;
     }
 
+    public MetadataCategoryType getType()
+    {
+        return this.type;
+    }
+
+    public void setType(final MetadataCategoryType metadataCategoryType)
+    {
+        this.type = metadataCategoryType;
+    }
+
     @Override
     public int hashCode()
     {
@@ -123,7 +130,7 @@ public final class MetadataCategory implements Serializable
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this).append("id", this.id).append("name", this.name).append("use",this.use).toString();
+        return new ToStringBuilder(this).append("id", this.id).append("name", this.name).append("type", this.type).append("use",this.use).toString();
     }
     
     public boolean isRequired()

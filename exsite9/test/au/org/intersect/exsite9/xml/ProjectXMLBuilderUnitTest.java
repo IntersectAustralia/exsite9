@@ -16,6 +16,8 @@ import org.junit.Test;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataAssociation;
 import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataCategoryType;
+import au.org.intersect.exsite9.domain.MetadataCategoryUse;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
@@ -47,7 +49,7 @@ public final class ProjectXMLBuilderUnitTest
                 projectCollectionType, EMPTY_STRING, projectAccessRights, projectLicence, EMPTY_STRING, projectSubject,
                 EMPTY_STRING, projectPhysicalLocation, EMPTY_STRING, projectLatLong, projectDatesOfCapture,
                 EMPTY_STRING, projectRelatedParty, EMPTY_STRING, EMPTY_STRING));
-        final MetadataCategory mdc1 = new MetadataCategory("CategoryName");
+        final MetadataCategory mdc1 = new MetadataCategory("CategoryName", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
         final MetadataValue mdv11 = new MetadataValue("val11");
         final MetadataValue mdv12 = new MetadataValue("val12");
         final MetadataValue mdv13 = new MetadataValue("val13");

@@ -80,10 +80,8 @@ public class BaseXMLBuilder
     {
         for (final MetadataValue metadataValue : metadataAssociation.getMetadataValues())
         {
-            final Element metadataAssociationElement = doc.createElement( metadataAssociation.getMetadataCategory().getName() );
+            final Element metadataAssociationElement = doc.createElement(metadataAssociation.getMetadataCategory().getName());
             metadataAssociationElement.setTextContent(metadataValue.getValue());
-            //metadataAssociationElement.setAttribute("category", metadataAssociation.getMetadataCategory().getName());
-            //metadataAssociationElement.setAttribute("value", metadataValue.getValue());
             parent.appendChild(metadataAssociationElement);
         }
     }

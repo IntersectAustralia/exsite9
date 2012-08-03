@@ -68,6 +68,7 @@ public final class MetadataSchemaXMLBuilder extends BaseXMLBuilder
             final Element catElement = doc.createElement(ELEMENT_METADATACATEGORY);
             catElement.setAttribute(ATTRIBUTE_NAME, category.getName());
             catElement.setAttribute(ATTRIBUTE_USE ,category.getUse().toString());
+            catElement.setAttribute(ATTRIBUTE_TYPE, category.getType().toString());
             
             for(final MetadataValue value : category.getValues())
             {

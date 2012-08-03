@@ -27,7 +27,7 @@ public final class MetadataCategoryUnitTest
         final String name = "name";
         final String newName = "newName";
         final Long id = Long.valueOf(7);
-        final MetadataCategory toTest2 = new MetadataCategory(name);
+        final MetadataCategory toTest2 = new MetadataCategory(name, MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
         assertEquals(name, toTest2.getName());
         assertNull(toTest2.getId());
         assertTrue(toTest2.getValues().isEmpty());

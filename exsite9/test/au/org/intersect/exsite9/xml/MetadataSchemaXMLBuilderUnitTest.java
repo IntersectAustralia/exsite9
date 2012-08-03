@@ -5,6 +5,8 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataCategoryType;
+import au.org.intersect.exsite9.domain.MetadataCategoryUse;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.Schema;
@@ -15,7 +17,6 @@ import au.org.intersect.exsite9.domain.Schema;
 public class MetadataSchemaXMLBuilderUnitTest
 {
     private static final String NEW_LINE = System.getProperty("line.separator");
-    private static final String EMPTY_STRING = "";
     
     @Test
     public void testBuildXML()
@@ -27,15 +28,15 @@ public class MetadataSchemaXMLBuilderUnitTest
         project.setSchema(schema);
         schema.setName("project-schema");
         
-        MetadataCategory cat1 = new MetadataCategory("cat1");
+        MetadataCategory cat1 = new MetadataCategory("cat1", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
         schema.getMetadataCategories().add(cat1);
         
         MetadataValue cat1Val1 = new MetadataValue("value one");
         cat1.getValues().add(cat1Val1);
         
         String expectedXML = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" + NEW_LINE 
-                           + "<schema description=\"" + EMPTY_STRING + "\" name=\"project-schema\" namespace_url=\"" + EMPTY_STRING + "\">" + NEW_LINE
-                           + "  <metadata_category name=\"cat1\" use=\"optional\">" + NEW_LINE
+                           + "<schema description=\"\" name=\"project-schema\" namespace_url=\"\">" + NEW_LINE
+                           + "  <metadata_category name=\"cat1\" type=\"Controlled Vocabulary\" use=\"optional\">" + NEW_LINE
                            + "    <value>value one</value>" + NEW_LINE
                            + "  </metadata_category>" + NEW_LINE
                            + "</schema>" + NEW_LINE;

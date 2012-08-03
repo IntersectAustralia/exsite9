@@ -15,6 +15,8 @@ import org.junit.Test;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataAssociation;
 import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataCategoryType;
+import au.org.intersect.exsite9.domain.MetadataCategoryUse;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.util.Pair;
 
@@ -28,9 +30,9 @@ public final class GroupUtilsUnitTest
     {
         final Group group = new Group("group");
 
-        final MetadataCategory cat1 = new MetadataCategory("cat1");
+        final MetadataCategory cat1 = new MetadataCategory("cat1", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
         cat1.setId(12l);
-        final MetadataCategory cat2 = new MetadataCategory("cat2");
+        final MetadataCategory cat2 = new MetadataCategory("cat2", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
         cat2.setId(32l);
 
         final MetadataValue val1 = new MetadataValue("val1");

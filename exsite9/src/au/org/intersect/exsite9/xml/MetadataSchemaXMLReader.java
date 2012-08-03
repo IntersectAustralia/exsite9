@@ -5,6 +5,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataCategoryUse;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Schema;
@@ -58,8 +59,9 @@ public final class MetadataSchemaXMLReader
         }
 
         final MetadataCategoryUse use = MetadataCategoryUse.valueOf(metadataCategoryElement.getAttribute(ATTRIBUTE_USE).trim());
+        final MetadataCategoryType type = MetadataCategoryType.fromString(metadataCategoryElement.getAttribute(ATTRIBUTE_TYPE).trim());
 
-        final MetadataCategory metadataCategory = new MetadataCategory(name, use);
+        final MetadataCategory metadataCategory = new MetadataCategory(name, type, use);
 
         final NodeList metadataCategoryValues = metadataCategoryElement.getElementsByTagName(ELEMENT_VALUE);
         for (int i = 0; i < metadataCategoryValues.getLength(); i++)

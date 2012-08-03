@@ -20,10 +20,17 @@ public final class MetadataValueValidator implements IFieldValidator<String>
     private String errorMessage;
 
     private final List<MetadataValue> existingMetadataValues;
+    private final boolean permitBlank;
 
     public MetadataValueValidator(final List<MetadataValue> existingMetadataValues)
     {
+        this(existingMetadataValues, false);
+    }
+
+    public MetadataValueValidator(final List<MetadataValue> existingMetadataValues, final boolean permitBlank)
+    {
         this.existingMetadataValues = existingMetadataValues;
+        this.permitBlank = permitBlank;
     }
 
     @Override
@@ -41,7 +48,7 @@ public final class MetadataValueValidator implements IFieldValidator<String>
     @Override
     public boolean isValid(final String contents)
     {
-        if (contents.trim().isEmpty())
+        if (contents.trim().isEmpty() && !permitBlank)
         {
             this.errorMessage = "Value must not be empty.";
             return false;

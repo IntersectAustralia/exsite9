@@ -29,6 +29,7 @@ import com.richclientgui.toolbox.validation.string.StringValidationToolkit;
 
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataCategoryUse;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.ResearchFile;
@@ -48,6 +49,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     private Composite container;
 
     private ValidatingField<String> categoryNameField;
+    private Combo typeDropDown;
     private Combo useDropDown;
     private org.eclipse.swt.widgets.List metadataValuesListWidget;
     private Button removeButton;
@@ -104,6 +106,40 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
             true, metadataCategory == null ? "" : metadataCategory.getName());
 
         this.categoryNameField.getControl().addKeyListener(this);
+
+        // empty cell due to having 3 columns below
+        new Label(container, SWT.NULL);
+
+        final Label typeLabel = new Label(this.container, SWT.NULL);
+        typeLabel.setText("Type");
+
+        this.typeDropDown = new Combo(this.container, SWT.DROP_DOWN | SWT.READ_ONLY | SWT.SINGLE);
+        this.typeDropDown.setItems(MetadataCategoryType.toArray());
+        this.typeDropDown.select(MetadataCategoryType.CONTROLLED_VOCABULARY.ordinal());
+
+        this.typeDropDown.addSelectionListener(new SelectionListener()
+        {
+            @Override
+            public void widgetSelected(final SelectionEvent event)
+            {
+                final int selectedIndex = typeDropDown.getSelectionIndex();
+                if (selectedIndex == MetadataCategoryType.CONTROLLED_VOCABULARY.ordinal())
+                {
+                    addButton.setEnabled(true);
+                    metadataValuesListWidget.setEnabled(true);
+                }
+                else
+                {
+                    addButton.setEnabled(false);
+                    metadataValuesListWidget.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void widgetDefaultSelected(final SelectionEvent event)
+            {
+            }
+        });
 
         // empty cell due to having 3 columns below
         new Label(container, SWT.NULL);
@@ -197,6 +233,23 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         editButton.setText("Edit...");
         editButton.addSelectionListener(this);
         editButton.setEnabled(false);
+
+        if (this.metadataCategory != null)
+        {
+            final int selectedTypeIndex = this.metadataCategory.getType().ordinal();
+            typeDropDown.select(selectedTypeIndex);
+            typeDropDown.setEnabled(false);
+            if (selectedTypeIndex == MetadataCategoryType.CONTROLLED_VOCABULARY.ordinal())
+            {
+                addButton.setEnabled(true);
+                metadataValuesListWidget.setEnabled(true);
+            }
+            else
+            {
+                addButton.setEnabled(false);
+                metadataValuesListWidget.setEnabled(false);
+            }
+        }
 
         final RowData addButtonGridData = new RowData();
         final RowData removeButtonGridData = new RowData();
@@ -384,6 +437,11 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     public String getMetadataCategoryName()
     {
         return this.categoryNameField.getContents().trim();
+    }
+
+    public MetadataCategoryType getMetadataCategoryType()
+    {
+        return MetadataCategoryType.values()[this.typeDropDown.getSelectionIndex()];
     }
 
     public MetadataCategoryUse getMetadataCategoryUse()
