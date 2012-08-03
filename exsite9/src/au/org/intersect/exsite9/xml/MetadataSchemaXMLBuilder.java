@@ -9,6 +9,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.Schema;
@@ -67,16 +68,20 @@ public final class MetadataSchemaXMLBuilder extends BaseXMLBuilder
         {
             final Element catElement = doc.createElement(ELEMENT_METADATACATEGORY);
             catElement.setAttribute(ATTRIBUTE_NAME, category.getName());
-            catElement.setAttribute(ATTRIBUTE_USE ,category.getUse().toString());
-            catElement.setAttribute(ATTRIBUTE_TYPE, category.getType().toString());
-            
-            for(final MetadataValue value : category.getValues())
+            catElement.setAttribute(ATTRIBUTE_USE, category.getUse().toString());
+
+            final MetadataCategoryType type = category.getType();
+            catElement.setAttribute(ATTRIBUTE_TYPE, type.toString());
+
+            if (type != MetadataCategoryType.FREETEXT)
             {
-                final Element valElement = doc.createElement(ELEMENT_VALUE);
-                valElement.setTextContent(value.getValue());
-                catElement.appendChild(valElement);
+                for(final MetadataValue value : category.getValues())
+                {
+                    final Element valElement = doc.createElement(ELEMENT_VALUE);
+                    valElement.setTextContent(value.getValue());
+                    catElement.appendChild(valElement);
+                }
             }
-            
             doc.getFirstChild().appendChild(catElement);
         }
     }

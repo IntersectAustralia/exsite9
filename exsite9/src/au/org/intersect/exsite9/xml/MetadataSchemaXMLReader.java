@@ -63,12 +63,16 @@ public final class MetadataSchemaXMLReader
 
         final MetadataCategory metadataCategory = new MetadataCategory(name, type, use);
 
-        final NodeList metadataCategoryValues = metadataCategoryElement.getElementsByTagName(ELEMENT_VALUE);
-        for (int i = 0; i < metadataCategoryValues.getLength(); i++)
+        if (type != MetadataCategoryType.FREETEXT)
         {
-            final Element metadataCategoryValue = (Element) metadataCategoryValues.item(i);
-            addMetadataCategoryValue(metadataCategory, metadataCategoryValue);
+            final NodeList metadataCategoryValues = metadataCategoryElement.getElementsByTagName(ELEMENT_VALUE);
+            for (int i = 0; i < metadataCategoryValues.getLength(); i++)
+            {
+                final Element metadataCategoryValue = (Element) metadataCategoryValues.item(i);
+                addMetadataCategoryValue(metadataCategory, metadataCategoryValue);
+            }
         }
+
         schema.getMetadataCategories().add(metadataCategory);
     }
 
