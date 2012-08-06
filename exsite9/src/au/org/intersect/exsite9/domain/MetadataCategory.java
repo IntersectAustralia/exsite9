@@ -132,9 +132,4 @@ public final class MetadataCategory implements Serializable
     {
         return new ToStringBuilder(this).append("id", this.id).append("name", this.name).append("type", this.type).append("use",this.use).toString();
     }
-    
-    public boolean isRequired()
-    {
-        return ((use != null) && (use.equals(MetadataCategoryUse.required)));
-    }
 }

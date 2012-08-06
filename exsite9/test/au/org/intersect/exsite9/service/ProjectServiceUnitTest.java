@@ -300,4 +300,39 @@ public final class ProjectServiceUnitTest extends DAOTest
         }
 
     }
+
+    @Test
+    public void testEditProjectSchema()
+    {
+        EntityManagerFactory emf = mock(EntityManagerFactory.class);
+
+        stub(emf.createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager())
+                .toReturn(createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager()).toReturn(createEntityManager());
+
+        ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
+        FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
+        ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
+        MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
+        SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
+        SchemaDAO schemaDAO = new SchemaDAO(emf.createEntityManager());
+
+        projectService = new ProjectService(emf, projectDAOFactory, folderDAOFactory, researchFileDAOFactory,
+                metadataAssociationDAOFactory, submissionPackageDAOFactory);
+
+        final Schema schema1 = new Schema("schema1", "", "", Boolean.TRUE);
+        schemaDAO.createSchema(schema1);
+        assertNotNull(schema1.getId());
+        final Schema schema2 = new Schema("schema2", "", "", Boolean.TRUE);
+        schemaDAO.createSchema(schema2);
+        assertNotNull(schema2.getId());
+
+        final Project project = projectService.createProject(new ProjectFieldsDTO("name", "owner", "description", "", "", "",
+                "", "", "", "", "", "", "", "", "", "", "", ""), schema1);
+        assertNotNull(project.getId());
+
+        projectService.editProject(schema2, project.getId());
+
+        final Project updatedProject = projectService.findProjectById(project.getId());
+        assertEquals(schema2, updatedProject.getSchema());
+    }
 }

@@ -291,6 +291,48 @@ public class GroupServiceUnitTest extends DAOTest
     }
 
     @Test
+    public void testAssociateMetadataToFreetextCategory()
+    {
+        final EntityManagerFactory emf = mock(EntityManagerFactory.class);
+        stub(emf.createEntityManager()).toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager());
+
+        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final MetadataAssociationDAOFactory metadataAssocationDAOFactory = new MetadataAssociationDAOFactory();
+        final MetadataCategoryDAO metadataCategoryDAO = new MetadataCategoryDAO(emf.createEntityManager());
+        final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
+        groupService = new GroupService(emf, groupDAOFactory, metadataAssocationDAOFactory, researchFileDAOFactory);
+
+        final MetadataCategory metadataCategory = new MetadataCategory("metadataCategory", MetadataCategoryType.FREETEXT, MetadataCategoryUse.optional);
+        final MetadataValue metadataValue = new MetadataValue("metadataValue");
+        metadataCategory.getValues().add(metadataValue);
+        metadataCategoryDAO.createMetadataCategory(metadataCategory);
+        final Group group = new Group("group name");
+        groupService.associateMetadata(group, metadataCategory, metadataValue);
+
+        List<MetadataAssociation> metadataAssociations = group.getMetadataAssociations();
+        assertEquals(1, metadataAssociations.size());
+        MetadataAssociation metadataAssociation = metadataAssociations.get(0);
+        assertNotNull(metadataAssociation);
+        assertEquals(metadataCategory, metadataAssociation.getMetadataCategory());
+        assertEquals(1, metadataAssociation.getMetadataValues().size());
+        assertEquals(metadataValue, metadataAssociation.getMetadataValues().get(0));
+
+        final MetadataValue newMetadataValue = new MetadataValue("new metadataValue");
+        metadataCategory.getValues().add(newMetadataValue);
+        metadataCategoryDAO.updateMetadataCategory(metadataCategory);
+        groupService.associateMetadata(group, metadataCategory, newMetadataValue);
+
+        metadataAssociations = group.getMetadataAssociations();
+        assertEquals(1, metadataAssociations.size());
+        assertEquals(newMetadataValue, metadataAssociations.get(0).getMetadataValues().get(0));
+    }
+
+    @Test
     public void testDisassociateMetadata()
     {
         final EntityManagerFactory emf = mock(EntityManagerFactory.class);
@@ -469,5 +511,114 @@ public class GroupServiceUnitTest extends DAOTest
 
         assertNull(groupService.findGroupByID(myGroup.getId() + 1000l));
         assertEquals(myGroup, groupService.findGroupByID(myGroup.getId()));
+    }
+
+    @Test
+    public void testDeleteGroupCheck1()
+    {
+        final EntityManagerFactory emf = mock(EntityManagerFactory.class);
+        stub(emf.createEntityManager()).toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager());
+
+        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
+        final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
+        groupService = new GroupService(emf, groupDAOFactory, metadataAssociationDAOFactory, researchFileDAOFactory);
+
+        final Group parentOfGroupToDelete = new Group("groupToDelete");
+        final Group groupToDelete = new Group("groupToDelete");
+
+        parentOfGroupToDelete.getGroups().add(groupToDelete);
+        groupToDelete.setParentGroup(parentOfGroupToDelete);
+
+        final Group siblingOfGroupToDelete = new Group("sibling");
+
+        parentOfGroupToDelete.getGroups().add(siblingOfGroupToDelete);
+        siblingOfGroupToDelete.setParentGroup(parentOfGroupToDelete);
+
+        final Group childOfGroupToDelete = new Group("sibling");
+
+        groupToDelete.getGroups().add(childOfGroupToDelete);
+        childOfGroupToDelete.setParentGroup(groupToDelete);
+
+        final String out = groupService.deleteGroupCheck(groupToDelete);
+        assertNotNull(out);
+    }
+
+    @Test
+    public void testDeleteGroupCheck2()
+    {
+        final EntityManagerFactory emf = mock(EntityManagerFactory.class);
+        stub(emf.createEntityManager()).toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager());
+
+        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
+        final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
+        groupService = new GroupService(emf, groupDAOFactory, metadataAssociationDAOFactory, researchFileDAOFactory);
+
+        final Group parentOfGroupToDelete = new Group("groupToDelete");
+        final Group groupToDelete = new Group("groupToDelete");
+
+        parentOfGroupToDelete.getGroups().add(groupToDelete);
+        groupToDelete.setParentGroup(parentOfGroupToDelete);
+
+        final File file1 = new File("some file");
+        final ResearchFile rf1 = new ResearchFile(file1);
+        final ResearchFile rf2 = new ResearchFile(file1);
+
+        rf1.setParentGroup(parentOfGroupToDelete);
+        parentOfGroupToDelete.getResearchFiles().add(rf1);
+
+        rf2.setParentGroup(groupToDelete);
+        groupToDelete.getResearchFiles().add(rf2);
+
+        final String out = groupService.deleteGroupCheck(groupToDelete);
+        assertNotNull(out);
+    }
+
+    @Test
+    public void testDeleteGroupCheck3()
+    {
+        final EntityManagerFactory emf = mock(EntityManagerFactory.class);
+        stub(emf.createEntityManager()).toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager());
+
+        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
+        final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
+        groupService = new GroupService(emf, groupDAOFactory, metadataAssociationDAOFactory, researchFileDAOFactory);
+
+        final Group parentOfGroupToDelete = new Group("groupToDelete");
+        final Group groupToDelete = new Group("groupToDelete");
+
+        parentOfGroupToDelete.getGroups().add(groupToDelete);
+        groupToDelete.setParentGroup(parentOfGroupToDelete);
+
+        final File file1 = new File("some file");
+        final File file2 = new File("some 2nd file");
+        final ResearchFile rf1 = new ResearchFile(file1);
+        final ResearchFile rf2 = new ResearchFile(file2);
+
+        rf1.setParentGroup(parentOfGroupToDelete);
+        parentOfGroupToDelete.getResearchFiles().add(rf1);
+
+        rf2.setParentGroup(groupToDelete);
+        groupToDelete.getResearchFiles().add(rf2);
+
+        final String out = groupService.deleteGroupCheck(groupToDelete);
+        assertNull(out);
     }
 }

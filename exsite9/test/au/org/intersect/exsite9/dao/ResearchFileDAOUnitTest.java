@@ -18,6 +18,7 @@ import org.junit.Test;
 
 import au.org.intersect.exsite9.dao.ResearchFileDAO;
 import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
+import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
@@ -26,7 +27,6 @@ public class ResearchFileDAOUnitTest extends DAOTest
 {
 
     private static ResearchFileDAOFactory researchFileDAOFactory;
-    private static String EMPTY_STRING = "";
 
     @BeforeClass
     public static void setupOnce()
@@ -95,9 +95,7 @@ public class ResearchFileDAOUnitTest extends DAOTest
         final ProjectDAO projectDAO = new ProjectDAO(em);
         final File fileOnDisk = new File("some-file.txt");
         final ResearchFile researchFile = new ResearchFile(fileOnDisk);
-        final Project project = new Project(new ProjectFieldsDTO("name", "owner", "desc", EMPTY_STRING, EMPTY_STRING,
-                EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING,
-                EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING));
+        final Project project = new Project(new ProjectFieldsDTO("name", "owner", "desc", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
         researchFile.setProject(project);
 
         projectDAO.createProject(project);
@@ -139,5 +137,28 @@ public class ResearchFileDAOUnitTest extends DAOTest
         em.getTransaction().commit();
         assertEquals(file3, researchFileDAO.findById(rf1.getId()).getFile());
 
+    }
+
+    @Test
+    public void testGetParentFolder()
+    {
+        final EntityManager em = createEntityManager();
+        final ResearchFileDAO researchFileDAO = researchFileDAOFactory.createInstance(em);
+        final FolderDAO folderDAO = new FolderDAO(em);
+
+        final File parent = new File("parent");
+        final Folder folder = new Folder(parent);
+
+        final File child = new File("child");
+        final ResearchFile rf = new ResearchFile(child);
+
+        folder.getFiles().add(rf);
+
+        researchFileDAO.createResearchFile(rf);
+        folderDAO.createFolder(folder);
+
+        final Folder outParent = researchFileDAO.getParentFolder(rf);
+        assertNotNull(outParent);
+        assertEquals(folder, outParent);
     }
 }

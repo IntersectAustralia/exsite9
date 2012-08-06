@@ -35,6 +35,12 @@ public final class MetadataCategoryUnitTest
         assertEquals(id, toTest2.getId());
         toTest2.setName(newName);
         assertEquals(newName, toTest2.getName());
+        assertEquals(MetadataCategoryUse.optional, toTest2.getUse());
+        toTest2.setUse(MetadataCategoryUse.required);
+        assertEquals(MetadataCategoryUse.required, toTest2.getUse());
+        assertEquals(MetadataCategoryType.CONTROLLED_VOCABULARY, toTest2.getType());
+        toTest2.setType(MetadataCategoryType.FREETEXT);
+        assertEquals(MetadataCategoryType.FREETEXT, toTest2.getType());
 
         assertTrue(toTest1.hashCode() != toTest2.hashCode());
     }

@@ -104,6 +104,13 @@ public final class ProjectUnitTest
         final String relatedInformation = "a related piece of information";
         toTest1.setRelatedInformation(relatedInformation);
         assertEquals(relatedInformation, toTest1.getRelatedInformation());
+
+        final Group excludedFilesGroup = toTest1.getExcludedFilesNode();
+        assertTrue(excludedFilesGroup instanceof ExcludedFilesGroup);
+
+        final Group newEFG = new Group("new efg");
+        toTest1.setExcludedFilesNode(newEFG);
+        assertEquals(newEFG, toTest1.getExcludedFilesNode());
     }
 
     @Test

@@ -31,7 +31,7 @@ import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.dto.HierarchyMoveDTO;
 
 /**
- * 
+ * Allows the manipulation of {@link Group}s.
  */
 public final class GroupService implements IGroupService
 {

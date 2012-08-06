@@ -70,4 +70,19 @@ public final class MetadataCategoryDAOUnitTest
 
         verify(em).find(MetadataCategory.class, 7l);
     }
+
+    @Test
+    public void testDelete()
+    {
+        final EntityManager em = Mockito.mock(EntityManager.class);
+        final EntityTransaction et = Mockito.mock(EntityTransaction.class);
+        final MetadataCategoryDAO toTest = new MetadataCategoryDAO(em);
+
+        final MetadataCategory mdc = new MetadataCategory("My MDC Name", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
+
+        when(em.getTransaction()).thenReturn(et);
+        when(em.merge(mdc)).thenReturn(mdc);
+        toTest.delete(mdc);
+        verify(em).remove(mdc);
+    }
 }

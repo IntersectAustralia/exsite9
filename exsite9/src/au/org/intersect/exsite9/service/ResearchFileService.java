@@ -40,21 +40,21 @@ public class ResearchFileService implements IResearchFileService
 	                   final ResearchFileDAOFactory researchFileDAOFactory,
 	                   final MetadataAssociationDAOFactory metadataAssociationDAOFactory,
 	                   final FolderDAOFactory folderDAOFactory)
-	{
-	    this.entityManagerFactory = entityManagerFactory;
-		this.researchFileDAOFactory = researchFileDAOFactory;
-		this.projectDAOFactory = projectDAOFactory;
-		this.metadataAssociationDAOFactory = metadataAssociationDAOFactory;
-		this.folderDAOFactory = folderDAOFactory;
+    {
+        this.entityManagerFactory = entityManagerFactory;
+        this.researchFileDAOFactory = researchFileDAOFactory;
+        this.projectDAOFactory = projectDAOFactory;
+        this.metadataAssociationDAOFactory = metadataAssociationDAOFactory;
+        this.folderDAOFactory = folderDAOFactory;
 	}
 	
-	@Override
+    @Override
     public void identifyNewFilesForProject(Project project)
     {
-	    for(Folder folder : project.getFolders())
-		{
-	        addFilesFromFolder(project, folder);
-		}
+        for(Folder folder : project.getFolders())
+        {
+            addFilesFromFolder(project, folder);
+        }
     }
 
     @Override
@@ -192,8 +192,7 @@ public class ResearchFileService implements IResearchFileService
     }
 
     @Override
-    public List<ResearchFile> getResearchFilesWithAssociatedMetadata(MetadataCategory metadataCategory,
-            MetadataValue metadataValue)
+    public List<ResearchFile> getResearchFilesWithAssociatedMetadata(MetadataCategory metadataCategory, MetadataValue metadataValue)
     {
         final EntityManager em = entityManagerFactory.createEntityManager();
         try
@@ -226,8 +225,7 @@ public class ResearchFileService implements IResearchFileService
     }
 
     @Override
-    public void disassociateMultipleMetadataValues(ResearchFile file, MetadataCategory metadataCategory,
-            List<MetadataValue> metadataValues)
+    public void disassociateMultipleMetadataValues(ResearchFile file, MetadataCategory metadataCategory, List<MetadataValue> metadataValues)
     {
         for (MetadataValue metadataValue : metadataValues)
         {
@@ -250,6 +248,7 @@ public class ResearchFileService implements IResearchFileService
         }
     }
 
+    @Override
     public void consolidateSubFolderIntoParentFolder(final Project project, final Folder parentFolder, final Folder subFolder)
     {
         final EntityManager em = entityManagerFactory.createEntityManager();
@@ -257,10 +256,13 @@ public class ResearchFileService implements IResearchFileService
         {
             final ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
             final FolderDAO folderDAO = folderDAOFactory.createInstance(em);
+
             parentFolder.getFiles().addAll(subFolder.getFiles());
             subFolder.getFiles().clear();
+
             folderDAO.updateFolder(parentFolder);
             folderDAO.updateFolder(subFolder);
+
             project.getFolders().remove(subFolder);
             projectDAO.updateProject(project);
             folderDAO.removeFolder(subFolder);

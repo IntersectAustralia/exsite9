@@ -159,11 +159,10 @@ public final class Schema implements Serializable
     
     public List<MetadataCategory> getRequiredMetadataCategories()
     {
-        List<MetadataCategory> requiredCategories = new ArrayList<MetadataCategory>();
-        
-        for(final MetadataCategory category : getMetadataCategories())
+        final List<MetadataCategory> requiredCategories = new ArrayList<MetadataCategory>();
+        for (final MetadataCategory category : this.metadataCategories)
         {
-            if (category.isRequired())
+            if (category.getUse() == MetadataCategoryUse.required)
             {
                 requiredCategories.add(category);
             }

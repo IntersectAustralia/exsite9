@@ -1,9 +1,11 @@
 package au.org.intersect.exsite9.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.persistence.EntityManagerFactory;
 
@@ -14,6 +16,7 @@ import au.org.intersect.exsite9.dao.factory.MetadataCategoryDAOFactory;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataCategoryUse;
+import au.org.intersect.exsite9.domain.MetadataValue;
 
 public class MetadataCategoryServiceUnitTest extends DAOTest
 {
@@ -57,5 +60,60 @@ public class MetadataCategoryServiceUnitTest extends DAOTest
         assertTrue(updatedCategoryFoundById.getName().equals("NameUpdated"));
         
         assertTrue(updatedCategoryFoundById.getUse().equals(MetadataCategoryUse.required));
+    }
+
+    @Test
+    public void testDeleteMetadataCategory()
+    {
+        final EntityManagerFactory emf = mock(EntityManagerFactory.class);
+        stub(emf.createEntityManager()).toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager());
+        final MetadataCategoryDAOFactory metadataCategoryDAOFactory = new MetadataCategoryDAOFactory();
+        metadataCategoryService = new MetadataCategoryService(emf, metadataCategoryDAOFactory);
+
+        final MetadataCategory category = metadataCategoryService.createNewMetadataCategory("Names",
+            MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional, Collections.<MetadataValue>emptyList());
+        assertNotNull(category.getId());
+
+        metadataCategoryService.deleteMetadataCategory(category);
+        assertNotNull(category.getId());
+
+        assertNull(metadataCategoryService.findById(category.getId()));
+    }
+
+    @Test
+    public void testAddValueToMetadataCategory()
+    {
+        final EntityManagerFactory emf = mock(EntityManagerFactory.class);
+        stub(emf.createEntityManager()).toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager());
+        final MetadataCategoryDAOFactory metadataCategoryDAOFactory = new MetadataCategoryDAOFactory();
+        metadataCategoryService = new MetadataCategoryService(emf, metadataCategoryDAOFactory);
+
+        MetadataCategory category = metadataCategoryService.createNewMetadataCategory("Names",
+            MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional, new ArrayList<MetadataValue>());
+        assertNotNull(category.getId());
+
+        final String value1 = "value1";
+
+        final MetadataValue mdv1 = metadataCategoryService.addValueToMetadataCategory(category, value1);
+        assertEquals(value1, mdv1.getValue());
+        assertNotNull(mdv1.getId());
+
+        category = metadataCategoryService.findById(category.getId());
+
+        final MetadataValue mdv11 = metadataCategoryService.addValueToMetadataCategory(category, value1);
+        assertEquals(mdv1, mdv11);
+
+        category = metadataCategoryService.findById(category.getId());
+        final String value2 = "value2";
+
+        final MetadataValue mdv2 = metadataCategoryService.addValueToMetadataCategory(category, value2);
+        assertEquals(value2, mdv2.getValue());
+        assertNotNull(mdv2.getId());
     }
 }
