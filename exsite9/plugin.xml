@@ -56,7 +56,7 @@
       <view
             allowMultiple="false"
             class="au.org.intersect.exsite9.view.MetadataBrowserView"
-            icon="icons/icon_metadata_12.png"
+            icon="icons/icon_category_16.png"
             id="au.org.intersect.exsite9.view.MetadataBrowserView"
             name="Metadata Browser"
             restorable="false">
@@ -64,6 +64,7 @@
       <view
             allowMultiple="false"
             class="au.org.intersect.exsite9.view.SubmissionPackageBrowserView"
+            icon="icons/icon_package_12.png"
             id="au.org.intersect.exsite9.view.SubmissionPackageBrowserView"
             name="Submission Package Browser"
             restorable="false">
@@ -267,6 +268,7 @@
             </command>
             <command
                   commandId="au.org.intersect.exsite9.commands.EditProjectCommand"
+                  icon="icons/icon_edit_16.png"
                   label="Edit..."
                   mnemonic="d"
                   style="push"
@@ -340,7 +342,7 @@
             </menu>
             <command
                   commandId="au.org.intersect.exsite9.commands.AddMetadataCategoryCommand"
-                  icon="icons/icon-metadata.png"
+                  icon="icons/icon_newcategory_16.png"
                   label="New Category..."
                   mnemonic="N"
                   style="push"
@@ -348,6 +350,7 @@
             </command>
             <command
                   commandId="au.org.intersect.exsite9.commands.EditMetadataCategoryCommand"
+                  icon="icons/icon_edit_16.png"
                   label="Edit Category..."
                   mnemonic="E"
                   style="push"
@@ -355,6 +358,7 @@
             </command>
             <command
                   commandId="au.org.intersect.exsite9.commands.RemoveMetadataCategoryWithWizardCommand"
+                  icon="icons/icon_exclude_16.png"
                   label="Delete Category..."
                   mnemonic="D"
                   style="push"
@@ -514,6 +518,7 @@
          </command>
          <command
                commandId="au.org.intersect.exsite9.commands.ExcludeResearchFiles"
+               icon="icons/icon_exclude_16.png"
                label="Exclude File"
                mnemonic="x"
                style="push"

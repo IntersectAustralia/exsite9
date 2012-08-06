@@ -43,7 +43,6 @@ import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
@@ -230,13 +229,13 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             new ToolItem(toolBar, SWT.SEPARATOR);
 
             final ToolItem editButtonItem = new ToolItem(toolBar, SWT.NULL);
-            final Image editImage = Activator.getImageDescriptor("/icons/icon_metadata_16.png").createImage();
+            final Image editImage = Activator.getImageDescriptor("/icons/icon_edit_16.png").createImage();
             editButtonItem.setImage(editImage);
             editButtonItem.addSelectionListener(new MetadataCategorySelectionListener(metadataCategory,
                     "au.org.intersect.exsite9.commands.AddMetadataCategoryCommand", "au.org.intersect.exsite9.commands.AddMetadataCategoryCommand.categoryParameter"));
 
             final ToolItem removeButtonItem = new ToolItem(toolBar, SWT.NULL);
-            final Image removeImage = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE);
+            final Image removeImage = Activator.getImageDescriptor("/icons/icon_exclude_16.png").createImage();
             removeButtonItem.setImage(removeImage);
             removeButtonItem.addSelectionListener(new MetadataCategorySelectionListener(metadataCategory,
                     "au.org.intersect.exsite9.commands.RemoveMetadataCategoryCommand", "au.org.intersect.exsite9.commands.RemoveMetadataCategoryCommand.categoryParameter"));

@@ -12,6 +12,7 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
+import au.org.intersect.exsite9.Activator;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.SubmissionPackage;
 
@@ -45,7 +46,8 @@ public final class SubmissionPackageBrowserViewLabelProvider extends StyledCellL
         {
             final SubmissionPackage submissionPackage = (SubmissionPackage) element;
             text.append(submissionPackage.getName());
-            cell.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ELCL_SYNCED));
+
+            cell.setImage(Activator.getImageDescriptor("/icons/icon_package_16.png").createImage());
         }
         else
         {
