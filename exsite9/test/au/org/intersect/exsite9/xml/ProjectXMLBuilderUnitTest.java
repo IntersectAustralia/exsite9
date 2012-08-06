@@ -65,6 +65,9 @@ public final class ProjectXMLBuilderUnitTest
         group1.getMetadataAssociations().add(mda1);
         group1.getResearchFiles().add(rf1);
 
+        final Group innerGroup1 = new Group("innerGroup1");
+        group1.getGroups().add(innerGroup1);
+
         project.getRootNode().getGroups().add(group1);
         project.getRootNode().getResearchFiles().add(rf2);
 
@@ -77,6 +80,7 @@ public final class ProjectXMLBuilderUnitTest
                                     "    <CategoryName>val11</CategoryName>" + NEW_LINE +
                                     "    <CategoryName>val12</CategoryName>" + NEW_LINE +
                                     "    <CategoryName>val13</CategoryName>" + NEW_LINE +
+                                    "    <group name=\"innerGroup1\"/>" + NEW_LINE +
                                     "    <file name=\"" + rf1.getFile().getName() + "\">" + NEW_LINE +
                                     "      <path>" + rf1.getFile().getAbsolutePath() + "</path>" + NEW_LINE +
                                     "    </file>" + NEW_LINE +

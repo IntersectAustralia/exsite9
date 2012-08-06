@@ -2,19 +2,23 @@ package au.org.intersect.exsite9.util;
 
 import java.util.Comparator;
 
-public class AlphabeticalPairComparator implements Comparator<Pair<String, String>>
+/**
+ * Comparator to compare a pair of Strings alphabetically.
+ */
+public final class AlphabeticalPairComparator implements Comparator<Pair<String, String>>
 {
-
+    /**
+     * @{inheritDoc}
+     */
     @Override
-    public int compare(Pair<String, String> pair1, Pair<String, String> pair2)
+    public int compare(final Pair<String, String> pair1, final Pair<String, String> pair2)
     {
-        int result = compareStrings(pair1.getFirst(), pair2.getFirst());
-        
+        final int result = compareStrings(pair1.getFirst(), pair2.getFirst());
         return result == 0 ? compareStrings(pair1.getSecond(), pair2.getSecond()) : result;
     }
 
-    private int compareStrings(String pair1, String pair2)
+    private int compareStrings(final String s1, final String s2)
     {
-        return pair1.compareToIgnoreCase(pair2);
+        return s1.compareToIgnoreCase(s2);
     }
 }

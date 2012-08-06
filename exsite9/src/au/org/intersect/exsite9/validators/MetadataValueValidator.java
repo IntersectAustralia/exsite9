@@ -68,6 +68,7 @@ public final class MetadataValueValidator implements IFieldValidator<String>
                 return false;
             }
         }
+        this.errorMessage = "";
         return true;
     }
 

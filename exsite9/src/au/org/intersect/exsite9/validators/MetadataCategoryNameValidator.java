@@ -70,6 +70,7 @@ public final class MetadataCategoryNameValidator implements IFieldValidator<Stri
                 return false;
             }
         }
+        this.errorMessage = "";
         return true;
     }
 

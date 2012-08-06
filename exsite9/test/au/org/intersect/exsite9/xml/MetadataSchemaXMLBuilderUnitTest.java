@@ -1,6 +1,12 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.xml;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -21,28 +27,35 @@ public class MetadataSchemaXMLBuilderUnitTest
     @Test
     public void testBuildXML()
     {
-        Project project = new Project();
+        final Project project = new Project();
         project.setName("Project");
+        assertNull(MetadataSchemaXMLBuilder.buildXML(project));
         
-        Schema schema = new Schema();
+        final Schema schema = new Schema();
         project.setSchema(schema);
         schema.setName("project-schema");
         
-        MetadataCategory cat1 = new MetadataCategory("cat1", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
+        final MetadataCategory cat1 = new MetadataCategory("cat1", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
         schema.getMetadataCategories().add(cat1);
+
+        final MetadataCategory cat2 = new MetadataCategory("cat2", MetadataCategoryType.FREETEXT, MetadataCategoryUse.recommended);
+        schema.getMetadataCategories().add(cat2);
         
-        MetadataValue cat1Val1 = new MetadataValue("value one");
+        final MetadataValue cat1Val1 = new MetadataValue("value one");
         cat1.getValues().add(cat1Val1);
+
+        final MetadataValue cat2Val1 = new MetadataValue("value two");
+        cat2.getValues().add(cat2Val1);
         
-        String expectedXML = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" + NEW_LINE 
+        final String expectedXML = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" + NEW_LINE 
                            + "<schema description=\"\" name=\"project-schema\" namespace_url=\"\">" + NEW_LINE
                            + "  <metadata_category name=\"cat1\" type=\"Controlled Vocabulary\" use=\"optional\">" + NEW_LINE
                            + "    <value>value one</value>" + NEW_LINE
                            + "  </metadata_category>" + NEW_LINE
+                           + "  <metadata_category name=\"cat2\" type=\"Free Text\" use=\"recommended\"/>" + NEW_LINE
                            + "</schema>" + NEW_LINE;
         
-        String actualXML = MetadataSchemaXMLBuilder.buildXML(project);
-        
+        final String actualXML = MetadataSchemaXMLBuilder.buildXML(project);
         assertEquals("XML matches", expectedXML, actualXML);
     }
 }

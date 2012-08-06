@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.xml;
 
 import static org.junit.Assert.assertFalse;
@@ -5,9 +11,11 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-public class ExSite9XMLHelperUnitTest
+/**
+ * Tests {@link XMLUtils}
+ */
+public final class XMLUtilsUnitTest
 {
-
     @Test
     public void testIsValidElementName()
     {
