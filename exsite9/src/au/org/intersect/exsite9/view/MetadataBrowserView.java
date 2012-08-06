@@ -288,6 +288,8 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                 freeTextField.setLayoutData(multiLineGridData);
 
                 final Button resetButton = new Button(contentComposite, SWT.PUSH);
+                final Button applyButton = new Button(contentComposite, SWT.PUSH);
+
                 resetButton.setText("Reset");
                 resetButton.setEnabled(false);
                 resetButton.addSelectionListener(new SelectionListener()
@@ -299,6 +301,8 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                         final String originalText = metadataValue == null ? "" : metadataValue.getValue();
                         freeTextField.setText(originalText);
                         freeTextField.setSelection(originalText.length(), originalText.length());
+                        resetButton.setEnabled(false);
+                        applyButton.setEnabled(false);
                     }
                     
                     @Override
@@ -307,7 +311,6 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                     }
                 });
 
-                final Button applyButton = new Button(contentComposite, SWT.PUSH);
                 applyButton.setText("Apply");
                 applyButton.setEnabled(false);
                 applyButton.addSelectionListener(new SelectionListener()
@@ -711,6 +714,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         }
         for (final MetadataTextWidget freeTextFields : this.metadataFreeTextFields.values())
         {
+            freeTextFields.setMetadataValue(null);
             freeTextFields.setText("");
         }
     }
