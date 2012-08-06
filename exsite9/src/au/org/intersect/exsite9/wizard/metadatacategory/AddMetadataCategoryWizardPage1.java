@@ -184,13 +184,16 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         final Label metadataValuesLabel = new Label(this.container, SWT.NULL);
         metadataValuesLabel.setText("Metadata Values");
 
-        this.metadataValuesListWidget = new org.eclipse.swt.widgets.List(this.container, SWT.BORDER | SWT.SINGLE | SWT.WRAP
-                | SWT.V_SCROLL);
-        
-        for (MetadataValue value : this.metadataValues) 
+        this.metadataValuesListWidget = new org.eclipse.swt.widgets.List(this.container, SWT.BORDER | SWT.SINGLE | SWT.WRAP | SWT.V_SCROLL);
+
+        if (this.metadataCategory != null && this.metadataCategory.getType() == MetadataCategoryType.CONTROLLED_VOCABULARY)
         {
-            this.metadataValuesListWidget.add(value.getValue());
+            for (MetadataValue value : this.metadataValues) 
+            {
+                this.metadataValuesListWidget.add(value.getValue());
+            }
         }
+
         this.metadataValuesListWidget.addSelectionListener(new SelectionListener()
         {
             @Override
