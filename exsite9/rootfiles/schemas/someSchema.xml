@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <schema name="foo" description="This is the foo schema" namespace_url="This is the foo namespace URL">
- 
+
   <metadata_category name="cat1" use="optional" type="Controlled Vocabulary">
     <value>Value One</value>
     <value> Value Two</value>
   </metadata_category>
- 
+
   <metadata_category name="cat2" use="recommended" type="Controlled Vocabulary">
-  </metadata_category>
- 
- 
-  <metadata_category name="cat3" use="required" type="Free Text">
     <value>Value One</value>
   </metadata_category>
- 
+
+  <metadata_category name="cat3" use="required" type="Free Text">
+  </metadata_category>
+
 </schema>
