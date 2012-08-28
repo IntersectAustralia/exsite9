@@ -25,7 +25,6 @@ import org.mockito.stubbing.Answer;
 
 import au.org.intersect.exsite9.dao.DAOTest;
 import au.org.intersect.exsite9.dao.ResearchFileDAO;
-import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.dao.factory.SubmissionPackageDAOFactory;
 import au.org.intersect.exsite9.domain.Project;
@@ -53,8 +52,7 @@ public final class SubmissionPackageServiceUnitTest extends DAOTest
 
         final SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
-        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
-        final SubmissionPackageService toTest = new SubmissionPackageService(emf, submissionPackageDAOFactory, projectDAOFactory, groupDAOFactory);
+        final SubmissionPackageService toTest = new SubmissionPackageService(emf, submissionPackageDAOFactory, projectDAOFactory);
 
         final Project project = new Project(new ProjectFieldsDTO("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
         final SubmissionPackage out1 = toTest.createSubmissionPackage(project, "name", "description", Collections.<ResearchFile>emptyList());
@@ -79,8 +77,7 @@ public final class SubmissionPackageServiceUnitTest extends DAOTest
 
         final SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
-        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
-        final SubmissionPackageService toTest = new SubmissionPackageService(emf, submissionPackageDAOFactory, projectDAOFactory, groupDAOFactory);
+        final SubmissionPackageService toTest = new SubmissionPackageService(emf, submissionPackageDAOFactory, projectDAOFactory);
 
         final Project project = new Project(new ProjectFieldsDTO("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
         final SubmissionPackage out1 = toTest.createSubmissionPackage(project, "name", "description", Collections.<ResearchFile>emptyList());
@@ -110,8 +107,7 @@ public final class SubmissionPackageServiceUnitTest extends DAOTest
 
         final SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
-        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
-        final SubmissionPackageService toTest = new SubmissionPackageService(emf, submissionPackageDAOFactory, projectDAOFactory, groupDAOFactory);
+        final SubmissionPackageService toTest = new SubmissionPackageService(emf, submissionPackageDAOFactory, projectDAOFactory);
 
         final Project project = new Project(new ProjectFieldsDTO("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
         final SubmissionPackage out1 = toTest.createSubmissionPackage(project, "name", "description", Collections.<ResearchFile>emptyList());
@@ -143,8 +139,7 @@ public final class SubmissionPackageServiceUnitTest extends DAOTest
 
         final SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
-        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
-        final SubmissionPackageService toTest = new SubmissionPackageService(emf, submissionPackageDAOFactory, projectDAOFactory, groupDAOFactory);
+        final SubmissionPackageService toTest = new SubmissionPackageService(emf, submissionPackageDAOFactory, projectDAOFactory);
 
         final Project project = new Project(new ProjectFieldsDTO("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
         final SubmissionPackage out1 = toTest.createSubmissionPackage(project, "name", "description", Collections.<ResearchFile>emptyList());
@@ -171,8 +166,7 @@ public final class SubmissionPackageServiceUnitTest extends DAOTest
 
         final SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
-        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
-        final SubmissionPackageService toTest = new SubmissionPackageService(emf, submissionPackageDAOFactory, projectDAOFactory, groupDAOFactory);
+        final SubmissionPackageService toTest = new SubmissionPackageService(emf, submissionPackageDAOFactory, projectDAOFactory);
 
         final Project project = new Project(new ProjectFieldsDTO("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
         final SubmissionPackage out1 = toTest.createSubmissionPackage(project, "name", "description", Collections.<ResearchFile>emptyList());
@@ -201,8 +195,7 @@ public final class SubmissionPackageServiceUnitTest extends DAOTest
 
         final SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
-        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
-        final SubmissionPackageService toTest = new SubmissionPackageService(emf, submissionPackageDAOFactory, projectDAOFactory, groupDAOFactory);
+        final SubmissionPackageService toTest = new SubmissionPackageService(emf, submissionPackageDAOFactory, projectDAOFactory);
 
         final Project project = new Project(new ProjectFieldsDTO("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
         final SubmissionPackage out1 = toTest.createSubmissionPackage(project, "name", "description", Collections.<ResearchFile>emptyList());
@@ -231,8 +224,7 @@ public final class SubmissionPackageServiceUnitTest extends DAOTest
 
         final SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
-        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
-        final SubmissionPackageService toTest = new SubmissionPackageService(emf, submissionPackageDAOFactory, projectDAOFactory, groupDAOFactory);
+        final SubmissionPackageService toTest = new SubmissionPackageService(emf, submissionPackageDAOFactory, projectDAOFactory);
 
         final Project project = new Project(new ProjectFieldsDTO("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
         final SubmissionPackage out1 = toTest.createSubmissionPackage(project, "name", "description", Collections.<ResearchFile>emptyList());
@@ -260,9 +252,8 @@ public final class SubmissionPackageServiceUnitTest extends DAOTest
 
         final SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
-        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
         final ResearchFileDAO researchFileDAO = new ResearchFileDAO(createEntityManager());
-        final SubmissionPackageService toTest = new SubmissionPackageService(emf, submissionPackageDAOFactory, projectDAOFactory, groupDAOFactory);
+        final SubmissionPackageService toTest = new SubmissionPackageService(emf, submissionPackageDAOFactory, projectDAOFactory);
 
         final ResearchFile rf = new ResearchFile(new File("rf"));
         researchFileDAO.createResearchFile(rf);

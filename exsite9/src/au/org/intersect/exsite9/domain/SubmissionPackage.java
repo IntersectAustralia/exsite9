@@ -46,6 +46,13 @@ public final class SubmissionPackage implements Serializable
     {
     }
 
+    public SubmissionPackage(final String name, final String description, final List<ResearchFile> researchFiles)
+    {
+        this.name = name;
+        this.description = description;
+        this.researchFiles.addAll(researchFiles);
+    }
+
     public Long getId()
     {
         return this.id;

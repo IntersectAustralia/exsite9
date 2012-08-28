@@ -12,7 +12,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.services.AbstractServiceFactory;
 import org.eclipse.ui.services.IServiceLocator;
 
-import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.dao.factory.SubmissionPackageDAOFactory;
 import au.org.intersect.exsite9.service.SubmissionPackageService;
@@ -37,8 +36,7 @@ public final class SubmissionPackageServiceFactory extends AbstractServiceFactor
         final EntityManagerFactory emf = (EntityManagerFactory) PlatformUI.getWorkbench().getService(EntityManagerFactory.class);
         final SubmissionPackageDAOFactory submissionPackageDAOFactory = new SubmissionPackageDAOFactory();
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
-        final GroupDAOFactory groupDaoFactory = new GroupDAOFactory();
-        return new SubmissionPackageService(emf, submissionPackageDAOFactory, projectDAOFactory, groupDaoFactory);
+        return new SubmissionPackageService(emf, submissionPackageDAOFactory, projectDAOFactory);
     }
 
 }

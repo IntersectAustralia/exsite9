@@ -33,30 +33,47 @@ public class BaseXMLBuilder
         return documentBuilder.newDocument();
     }
 
-    protected static Element createProjectRootElement(Document doc, Project project)
+    protected static Element createProjectInfo(final Document document, final Project project)
     {
-        final Element rootElement = doc.createElement("project");
-        
-        rootElement.setAttribute("name", project.getName());
-        rootElement.setAttribute("owner", project.getOwner());
-        rootElement.setAttribute("description", project.getDescription());
-        rootElement.setAttribute("collectionType", project.getCollectionType());
-        rootElement.setAttribute("rightsStatement", project.getRightsStatement());
-        rootElement.setAttribute("accessRights", project.getAccessRights());
-        rootElement.setAttribute("licence", project.getLicence());
-        rootElement.setAttribute("identifier", project.getIdentifier());
-        rootElement.setAttribute("subject", project.getSubject());
-        rootElement.setAttribute("electronicLocation", project.getElectronicLocation());
-        rootElement.setAttribute("physicalLocation", project.getPhysicalLocation());
-        rootElement.setAttribute("placeOrRegionName", project.getPlaceOrRegionName());
-        rootElement.setAttribute("latitudeLongitude", project.getLatitudeLongitude());
-        rootElement.setAttribute("datesOfCapture", project.getDatesOfCapture());
-        rootElement.setAttribute("citationInformation", project.getCitationInformation());
-        rootElement.setAttribute("relatedParty", project.getRelatedParty());
-        rootElement.setAttribute("relatedActivity", project.getRelatedActivity());
-        rootElement.setAttribute("relatedInformation", project.getRelatedInformation());
-        
-        return rootElement;
+        final Element projectInfoElement = document.createElement("project_info");
+        projectInfoElement.setAttribute("identifier", project.getIdentifier());
+        projectInfoElement.setAttribute("collectionType", project.getCollectionType());
+
+        final Element nameElement = createElementWithTextContent(document, "name", project.getName());
+        final Element descriptionElement = createElementWithTextContent(document, "description", project.getDescription());
+        final Element ownerElement = createElementWithTextContent(document, "owner", project.getOwner());
+        final Element accessRightsElement = createElementWithTextContent(document, "accessRights", project.getAccessRights());
+        final Element citationInformationElement = createElementWithTextContent(document, "citationInformation", project.getCitationInformation());
+        final Element datesOfCaptureElement = createElementWithTextContent(document, "datesOfCapture", project.getDatesOfCapture());
+        final Element electronicLocationElement = createElementWithTextContent(document, "electronicLocation", project.getElectronicLocation());
+        final Element latitudeLongitudeElement = createElementWithTextContent(document, "latitudeLongitude", project.getLatitudeLongitude());
+        final Element licenseElement = createElementWithTextContent(document, "license", project.getLicence());
+        final Element physicalLocationElement = createElementWithTextContent(document, "physicalLocation", project.getPhysicalLocation());
+        final Element placeOrRegionNameElement = createElementWithTextContent(document, "placeOrRegionName", project.getPlaceOrRegionName());
+        final Element relatedActivityElement = createElementWithTextContent(document, "relatedActivity", project.getRelatedActivity());
+        final Element relatedInformationElement = createElementWithTextContent(document, "relatedInformation", project.getRelatedInformation());
+        final Element relatedPartyElement = createElementWithTextContent(document, "relatedParty", project.getRelatedParty());
+        final Element rightsStatementElement = createElementWithTextContent(document, "rightsStatement", project.getRightsStatement());
+        final Element subjectElement = createElementWithTextContent(document, "subject", project.getSubject());
+
+        projectInfoElement.appendChild(nameElement);
+        projectInfoElement.appendChild(descriptionElement);
+        projectInfoElement.appendChild(ownerElement);
+        projectInfoElement.appendChild(accessRightsElement);
+        projectInfoElement.appendChild(citationInformationElement);
+        projectInfoElement.appendChild(datesOfCaptureElement);
+        projectInfoElement.appendChild(electronicLocationElement);
+        projectInfoElement.appendChild(latitudeLongitudeElement);
+        projectInfoElement.appendChild(licenseElement);
+        projectInfoElement.appendChild(physicalLocationElement);
+        projectInfoElement.appendChild(placeOrRegionNameElement);
+        projectInfoElement.appendChild(relatedActivityElement);
+        projectInfoElement.appendChild(relatedInformationElement);
+        projectInfoElement.appendChild(relatedPartyElement);
+        projectInfoElement.appendChild(rightsStatementElement);
+        projectInfoElement.appendChild(subjectElement);
+
+        return projectInfoElement;
     }
     
     protected static String transformDocumentToString(Document doc) throws TransformerConfigurationException, TransformerException
@@ -101,14 +118,27 @@ public class BaseXMLBuilder
         }
 
         final Element researchFileElement = doc.createElement("file");
-        researchFileElement.setAttribute("name", file.getName());
+
+        final Element fileNameElement = doc.createElement("name");
+        fileNameElement.setTextContent(file.getName());
+
         final Element filePathElement = doc.createElement("path");
         filePathElement.setTextContent(researchFilePath);
+
+        researchFileElement.appendChild(fileNameElement);
         researchFileElement.appendChild(filePathElement);
+
         for (final MetadataAssociation metadataAssociation : researchFile.getMetadataAssociations())
         {
             appendMetadataAssociation(doc, researchFileElement, metadataAssociation);
         }
         parent.appendChild(researchFileElement);
+    }
+
+    protected static Element createElementWithTextContent(final Document document, final String elementName, final String textContent)
+    {
+        final Element element = document.createElement(elementName);
+        element.setTextContent(textContent);
+        return element;
     }
 }

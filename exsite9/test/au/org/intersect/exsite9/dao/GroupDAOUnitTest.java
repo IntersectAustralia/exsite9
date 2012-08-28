@@ -252,7 +252,7 @@ public class GroupDAOUnitTest extends DAOTest
         group2.getResearchFiles().clear();
         groupDAO.updateGroup(group2);
         
-        List<Group> selectedGroups = groupDAO.getGroupsContainingSelectedFiles(selectedFiles);
+        List<Group> selectedGroups = GroupDAO.getGroupsContainingSelectedFiles(selectedFiles);
         
         assertEquals("No selected groups", 0, selectedGroups.size());
         
@@ -272,7 +272,7 @@ public class GroupDAOUnitTest extends DAOTest
         researchFileDAO.updateResearchFile(file2);
         researchFileDAO.updateResearchFile(file3);
         
-        selectedGroups = groupDAO.getGroupsContainingSelectedFiles(selectedFiles);
+        selectedGroups = GroupDAO.getGroupsContainingSelectedFiles(selectedFiles);
         assertEquals("One selected group", 1,selectedGroups.size());
         assertTrue("The root group is selected",selectedGroups.contains(rootNode));
         assertFalse("Group 1 is not selected",selectedGroups.contains(group1));
@@ -296,7 +296,7 @@ public class GroupDAOUnitTest extends DAOTest
         researchFileDAO.updateResearchFile(file2);
         researchFileDAO.updateResearchFile(file3);
         
-        selectedGroups = groupDAO.getGroupsContainingSelectedFiles(selectedFiles);
+        selectedGroups = GroupDAO.getGroupsContainingSelectedFiles(selectedFiles);
         assertEquals("One selected group", 1,selectedGroups.size());
         assertTrue("The root group is selected",selectedGroups.contains(rootNode));
         assertFalse("Group 1 is not selected",selectedGroups.contains(group1));
@@ -315,7 +315,7 @@ public class GroupDAOUnitTest extends DAOTest
         researchFileDAO.updateResearchFile(file2);
         researchFileDAO.updateResearchFile(file3);
         
-        selectedGroups = groupDAO.getGroupsContainingSelectedFiles(selectedFiles);
+        selectedGroups = GroupDAO.getGroupsContainingSelectedFiles(selectedFiles);
         assertEquals("Two selected group", 2,selectedGroups.size());
         assertTrue("The root group is selected",selectedGroups.contains(rootNode));
         assertTrue("Group 1 is selected",selectedGroups.contains(group1));
@@ -339,7 +339,7 @@ public class GroupDAOUnitTest extends DAOTest
         researchFileDAO.updateResearchFile(file2);
         researchFileDAO.updateResearchFile(file3);
         
-        selectedGroups = groupDAO.getGroupsContainingSelectedFiles(selectedFiles);
+        selectedGroups = GroupDAO.getGroupsContainingSelectedFiles(selectedFiles);
         assertEquals("Two selected group", 2,selectedGroups.size());
         assertTrue("The root group is selected",selectedGroups.contains(rootNode));
         assertTrue("Group 1 is selected",selectedGroups.contains(group1));
@@ -360,7 +360,7 @@ public class GroupDAOUnitTest extends DAOTest
         researchFileDAO.updateResearchFile(file2);
         researchFileDAO.updateResearchFile(file3);
         
-        selectedGroups = groupDAO.getGroupsContainingSelectedFiles(selectedFiles);
+        selectedGroups = GroupDAO.getGroupsContainingSelectedFiles(selectedFiles);
         assertEquals("Three selected group", 3,selectedGroups.size());
         assertTrue("The root group is selected",selectedGroups.contains(rootNode));
         assertTrue("Group 1 is selected",selectedGroups.contains(group1));

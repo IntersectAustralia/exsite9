@@ -34,31 +34,54 @@ public class SIPXMLBuilder extends BaseXMLBuilder
         try
         {
             final Document doc = createNewDocument();
-            
-            final Element rootElement = createProjectRootElement(doc, project);
+
+            final Element rootElement = doc.createElement("project");
             doc.appendChild(rootElement);
+
+            final Element projectInfoElement = createProjectInfo(doc, project);
+            rootElement.appendChild(projectInfoElement);
+
+            final Element groupsElement = doc.createElement("groups");
+            int numGroups = 0;
 
             for (final Group group : project.getRootNode().getGroups())
             {
-                if(selectedGroups.contains(group))
+                if (selectedGroups.contains(group))
                 {
-                    appendGroup(doc, selectedGroups, selectedFiles, rootElement, group, useGroupPaths, "");
+                    appendGroup(doc, selectedGroups, selectedFiles, groupsElement, group, useGroupPaths, "");
+                    numGroups++;
                 }
             }
 
+            if (numGroups > 0)
+            {
+                groupsElement.setAttribute("numGroups", Integer.toString(numGroups));
+                rootElement.appendChild(groupsElement);
+            }
+
+            final Element filesElement = doc.createElement("files");
+            int numFiles = 0;
+
             for (final ResearchFile researchFile : project.getRootNode().getResearchFiles())
             {
-                if(selectedFiles.contains(researchFile))
+                if (selectedFiles.contains(researchFile))
                 {
                     if (useGroupPaths)
                     {
-                        appendResearchFile(doc, rootElement, researchFile, researchFile.getFile().getName(), true);
+                        appendResearchFile(doc, filesElement, researchFile, researchFile.getFile().getName(), true);
                     }
                     else
                     {
-                        appendResearchFile(doc, rootElement, researchFile, true);
+                        appendResearchFile(doc, filesElement, researchFile, true);
                     }
+                    numFiles++;
                 }
+            }
+
+            if (numFiles > 0)
+            {
+                filesElement.setAttribute("numFiles", Integer.toString(numFiles));
+                rootElement.appendChild(filesElement);
             }
 
             return transformDocumentToString(doc);
@@ -93,13 +116,27 @@ public class SIPXMLBuilder extends BaseXMLBuilder
             appendMetadataAssociation(doc, groupElement, metadataAssociation);
         }
 
+        final Element groupsElement = doc.createElement("groups");
+        int numGroups = 0;
+
         for (final Group childGroup : group.getGroups())
         {
             if(selectedGroups.contains(childGroup))
             {
-                appendGroup(doc, selectedGroups, selectedFiles, groupElement, childGroup, useGroupPaths, groupPath);
+                // Recursion
+                appendGroup(doc, selectedGroups, selectedFiles, groupsElement, childGroup, useGroupPaths, groupPath);
+                numGroups++;
             }
         }
+
+        if (numGroups > 0)
+        {
+            groupsElement.setAttribute("numGroups", Integer.toString(numGroups));
+            groupElement.appendChild(groupsElement);
+        }
+
+        final Element filesElement = doc.createElement("files");
+        int numFiles = 0;
 
         for (final ResearchFile childFile : group.getResearchFiles())
         {
@@ -107,13 +144,20 @@ public class SIPXMLBuilder extends BaseXMLBuilder
             {
                 if (useGroupPaths)
                 {
-                    appendResearchFile(doc, groupElement, childFile, groupPath + childFile.getFile().getName(), true);
+                    appendResearchFile(doc, filesElement, childFile, groupPath + childFile.getFile().getName(), true);
                 }
                 else
                 {
-                    appendResearchFile(doc, groupElement, childFile, true);
+                    appendResearchFile(doc, filesElement, childFile, true);
                 }
+                numFiles++;
             }
+        }
+
+        if (numFiles > 0)
+        {
+            filesElement.setAttribute("numFiles", Integer.toString(numFiles));
+            groupElement.appendChild(filesElement);
         }
 
         parent.appendChild(groupElement);

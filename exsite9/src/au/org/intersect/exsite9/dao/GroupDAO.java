@@ -85,7 +85,7 @@ public final class GroupDAO
      * @param selectedFiles The list of selected files
      * @return The list of groups
      */
-    public List<Group> getGroupsContainingSelectedFiles(final List<ResearchFile> selectedFiles)
+    public static List<Group> getGroupsContainingSelectedFiles(final List<ResearchFile> selectedFiles)
     {
         List<Group> groups = new ArrayList<Group>(0);
         

@@ -29,7 +29,6 @@ import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 public final class ProjectXMLBuilderUnitTest
 {
     private static final String NEW_LINE = System.getProperty("line.separator");
-    private static final String EMPTY_STRING = "";
 
     @Test
     public void testBuildProject()
@@ -45,10 +44,18 @@ public final class ProjectXMLBuilderUnitTest
         final String projectPhysicalLocation = "Sydney";
         final String projectRelatedParty = "Intersect";
         final String projectSubject = "random";
+        final String rightsStatement = "miranda rights";
+        final String identifier = "18+";
+        final String electronicLocation = "github";
+        final String placeOrRegionName = "Mexico";
+        final String citationInformation = "some citation";
+        final String relatedActivity = "some related activity that is nice.";
+        final String relatedInformation = "related information";
+
         final Project project = new Project(new ProjectFieldsDTO(projectName, projectOwner, projectDescription,
-                projectCollectionType, EMPTY_STRING, projectAccessRights, projectLicence, EMPTY_STRING, projectSubject,
-                EMPTY_STRING, projectPhysicalLocation, EMPTY_STRING, projectLatLong, projectDatesOfCapture,
-                EMPTY_STRING, projectRelatedParty, EMPTY_STRING, EMPTY_STRING));
+                projectCollectionType, rightsStatement, projectAccessRights, projectLicence, identifier, projectSubject,
+                electronicLocation, projectPhysicalLocation, placeOrRegionName, projectLatLong, projectDatesOfCapture,
+                citationInformation, projectRelatedParty, relatedActivity, relatedInformation));
         final MetadataCategory mdc1 = new MetadataCategory("CategoryName", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
         final MetadataValue mdv11 = new MetadataValue("val11");
         final MetadataValue mdv12 = new MetadataValue("val12");
@@ -74,20 +81,48 @@ public final class ProjectXMLBuilderUnitTest
         final String xml = ProjectXMLBuilder.buildXML(project);
 
         final String expectedXML =  "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" + NEW_LINE +
-                "<project accessRights=\"admin\" citationInformation=\"\" collectionType=\"Dataset\" datesOfCapture=\"next week\" description=\"some boring description\" electronicLocation=\"\" identifier=\"\" latitudeLongitude=\"up and left a little\" licence=\"to kill\" name=\"projectName\" owner=\"project owner\" physicalLocation=\"Sydney\" placeOrRegionName=\"\" relatedActivity=\"\" relatedInformation=\"\" relatedParty=\"Intersect\" rightsStatement=\"\" subject=\"random\">" + NEW_LINE +
-                                    "  <group name=\"New Files\"/>" + NEW_LINE +
-                                    "  <group name=\"group1\">" + NEW_LINE +
-                                    "    <CategoryName>val11</CategoryName>" + NEW_LINE +
-                                    "    <CategoryName>val12</CategoryName>" + NEW_LINE +
-                                    "    <CategoryName>val13</CategoryName>" + NEW_LINE +
-                                    "    <group name=\"innerGroup1\"/>" + NEW_LINE +
-                                    "    <file name=\"" + rf1.getFile().getName() + "\">" + NEW_LINE +
-                                    "      <path>" + rf1.getFile().getAbsolutePath() + "</path>" + NEW_LINE +
+                                    "<project>" + NEW_LINE +
+                                    "  <project_info collectionType=\"" + projectCollectionType + "\" identifier=\"" + identifier + "\">" + NEW_LINE +
+                                    "    <name>" + projectName + "</name>" + NEW_LINE +
+                                    "    <description>" + projectDescription +"</description>" + NEW_LINE +
+                                    "    <owner>" + projectOwner + "</owner>" + NEW_LINE +
+                                    "    <accessRights>" + projectAccessRights + "</accessRights>" + NEW_LINE +
+                                    "    <citationInformation>" + citationInformation + "</citationInformation>" + NEW_LINE +
+                                    "    <datesOfCapture>" + projectDatesOfCapture + "</datesOfCapture>" + NEW_LINE +
+                                    "    <electronicLocation>" + electronicLocation + "</electronicLocation>" + NEW_LINE +
+                                    "    <latitudeLongitude>" + projectLatLong + "</latitudeLongitude>" + NEW_LINE +
+                                    "    <license>" + projectLicence + "</license>" + NEW_LINE +
+                                    "    <physicalLocation>" + projectPhysicalLocation + "</physicalLocation>" + NEW_LINE +
+                                    "    <placeOrRegionName>" + placeOrRegionName + "</placeOrRegionName>" + NEW_LINE +
+                                    "    <relatedActivity>" + relatedActivity + "</relatedActivity>" + NEW_LINE +
+                                    "    <relatedInformation>" + relatedInformation + "</relatedInformation>" + NEW_LINE +
+                                    "    <relatedParty>" + projectRelatedParty + "</relatedParty>" + NEW_LINE +
+                                    "    <rightsStatement>" + rightsStatement + "</rightsStatement>" + NEW_LINE +
+                                    "    <subject>" + projectSubject + "</subject>" + NEW_LINE +
+                                    "  </project_info>" + NEW_LINE +
+                                    "  <groups numGroups=\"2\">" + NEW_LINE +
+                                    "    <group name=\"New Files\"/>" + NEW_LINE +
+                                    "    <group name=\"group1\">" + NEW_LINE +
+                                    "      <CategoryName>val11</CategoryName>" + NEW_LINE +
+                                    "      <CategoryName>val12</CategoryName>" + NEW_LINE +
+                                    "      <CategoryName>val13</CategoryName>" + NEW_LINE +
+                                    "      <groups numGroups=\"1\">" + NEW_LINE +
+                                    "        <group name=\"innerGroup1\"/>" + NEW_LINE +
+                                    "      </groups>" + NEW_LINE +
+                                    "      <files numFiles=\"1\">" + NEW_LINE +
+                                    "        <file>" + NEW_LINE +
+                                    "          <name>" + rf1.getFile().getName() + "</name>" + NEW_LINE +
+                                    "          <path>" + rf1.getFile().getAbsolutePath() + "</path>" + NEW_LINE +
+                                    "        </file>" + NEW_LINE +
+                                    "      </files>" + NEW_LINE +
+                                    "    </group>" + NEW_LINE +
+                                    "  </groups>" + NEW_LINE +
+                                    "  <files numFiles=\"1\">" + NEW_LINE +
+                                    "    <file>" + NEW_LINE +
+                                    "      <name>" + rf2.getFile().getName() + "</name>" + NEW_LINE +
+                                    "      <path>" + rf2.getFile().getAbsolutePath() + "</path>" + NEW_LINE +
                                     "    </file>" + NEW_LINE +
-                                    "  </group>" + NEW_LINE +
-                                    "  <file name=\"" + rf2.getFile().getName() + "\">" + NEW_LINE +
-                                    "    <path>" + rf2.getFile().getAbsolutePath() + "</path>" + NEW_LINE +
-                                    "  </file>" + NEW_LINE +
+                                    "  </files>" + NEW_LINE +
                                     "</project>" + NEW_LINE;
 
         assertEquals(expectedXML, xml);

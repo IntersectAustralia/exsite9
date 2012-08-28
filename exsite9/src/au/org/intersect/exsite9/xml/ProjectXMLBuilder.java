@@ -6,6 +6,8 @@
  */
 package au.org.intersect.exsite9.xml;
 
+import java.util.List;
+
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -38,18 +40,34 @@ public final class ProjectXMLBuilder extends BaseXMLBuilder
         try
         {
             final Document doc = createNewDocument();
-            
-            final Element rootElement = createProjectRootElement(doc, project);
+            final Element rootElement = doc.createElement("project");
             doc.appendChild(rootElement);
-            
-            for (final Group group : project.getRootNode().getGroups())
+
+            final Element projectInfoElement = createProjectInfo(doc, project);
+            rootElement.appendChild(projectInfoElement);
+
+            final List<Group> groups = project.getRootNode().getGroups();
+            if (!groups.isEmpty())
             {
-                appendGroup(doc, rootElement, group);
+                final Element groupsElement = doc.createElement("groups");
+                groupsElement.setAttribute("numGroups", Integer.toString(groups.size()));
+                for (final Group group : groups)
+                {
+                    appendGroup(doc, groupsElement, group);
+                }
+                rootElement.appendChild(groupsElement);
             }
 
-            for (final ResearchFile researchFile : project.getRootNode().getResearchFiles())
+            final List<ResearchFile> researchFiles = project.getRootNode().getResearchFiles();
+            if (!researchFiles.isEmpty())
             {
-                appendResearchFile(doc, rootElement, researchFile, false);
+                final Element filesElement = doc.createElement("files");
+                filesElement.setAttribute("numFiles", Integer.toString(researchFiles.size()));
+                for (final ResearchFile researchFile : project.getRootNode().getResearchFiles())
+                {
+                    appendResearchFile(doc, filesElement, researchFile, false);
+                }
+                rootElement.appendChild(filesElement);
             }
 
             return transformDocumentToString(doc);
@@ -83,15 +101,29 @@ public final class ProjectXMLBuilder extends BaseXMLBuilder
             appendMetadataAssociation(doc, groupElement, metadataAssociation);
         }
 
-        for (final Group childGroup : group.getGroups())
+        final List<Group> childGroups = group.getGroups();
+        if (!childGroups.isEmpty())
         {
-            // Recursion :(
-            appendGroup(doc, groupElement, childGroup);
+            final Element groupsElement = doc.createElement("groups");
+            groupsElement.setAttribute("numGroups", Integer.toString(childGroups.size()));
+            for (final Group childGroup : childGroups)
+            {
+                // Recursion :(
+                appendGroup(doc, groupsElement, childGroup);
+            }
+            groupElement.appendChild(groupsElement);
         }
 
-        for (final ResearchFile childFile : group.getResearchFiles())
+        final List<ResearchFile> childFiles = group.getResearchFiles();
+        if (!childFiles.isEmpty())
         {
-            appendResearchFile(doc, groupElement, childFile, false);
+            final Element filesElement = doc.createElement("files");
+            filesElement.setAttribute("numFiles", Integer.toString(childFiles.size()));
+            for (final ResearchFile childFile : childFiles)
+            {
+                appendResearchFile(doc, filesElement, childFile, false);
+            }
+            groupElement.appendChild(filesElement);
         }
 
         parent.appendChild(groupElement);

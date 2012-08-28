@@ -17,7 +17,6 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import au.org.intersect.exsite9.dao.GroupDAO;
 import au.org.intersect.exsite9.dao.ProjectDAO;
 import au.org.intersect.exsite9.dao.SubmissionPackageDAO;
-import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.dao.factory.SubmissionPackageDAOFactory;
 import au.org.intersect.exsite9.domain.Group;
@@ -35,17 +34,14 @@ public final class SubmissionPackageService implements ISubmissionPackageService
     private final EntityManagerFactory entityManagerFactory;
     private final SubmissionPackageDAOFactory submissionPackageDAOFactory;
     private final ProjectDAOFactory projectDAOFactory;
-    private final GroupDAOFactory groupDAOFactory;
 
     public SubmissionPackageService(final EntityManagerFactory entityManagerFactory,
                                     final SubmissionPackageDAOFactory submissionPackageDAOFactory,
-                                    final ProjectDAOFactory projectDAOFactory,
-                                    final GroupDAOFactory groupDAOFactory)
+                                    final ProjectDAOFactory projectDAOFactory)
     {
         this.entityManagerFactory = entityManagerFactory;
         this.submissionPackageDAOFactory = submissionPackageDAOFactory;
         this.projectDAOFactory = projectDAOFactory;
-        this.groupDAOFactory = groupDAOFactory;
     }
 
     /**
@@ -163,9 +159,8 @@ public final class SubmissionPackageService implements ISubmissionPackageService
         final EntityManager em = this.entityManagerFactory.createEntityManager();
         try
         {
-            GroupDAO groupDAO = groupDAOFactory.createInstance(em);
             return SIPXMLBuilder.buildXML(project, 
-                                          groupDAO.getGroupsContainingSelectedFiles(submissionPackage.getResearchFiles()), 
+                                          GroupDAO.getGroupsContainingSelectedFiles(submissionPackage.getResearchFiles()), 
                                           submissionPackage, false);
         }
         finally
@@ -184,9 +179,7 @@ public final class SubmissionPackageService implements ISubmissionPackageService
 
         try
         {
-            final GroupDAO groupDAO = groupDAOFactory.createInstance(em);
-
-            final List<Group> selectedGroups = groupDAO.getGroupsContainingSelectedFiles(submissionPackage.getResearchFiles());
+            final List<Group> selectedGroups = GroupDAO.getGroupsContainingSelectedFiles(submissionPackage.getResearchFiles());
             return new SIPZIPBuilderRunnable(project, selectedGroups, submissionPackage, fileToWrite);
         }
         finally
