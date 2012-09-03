@@ -288,7 +288,12 @@ public class ResearchFileService implements IResearchFileService
         try
         {
             em.getTransaction().begin();
+            
             importFolder(em, project, folder, project.getRootNode(), folder);
+            
+            final ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
+            project.getFolders().add(folder);
+            projectDAO.updateProject(project);
         }
         catch(Exception e)
         {
@@ -306,7 +311,6 @@ public class ResearchFileService implements IResearchFileService
         LOG.debug("Import Folder: " + folder.getFolder().getName());
         
         final ResearchFileDAO researchFileDAO = researchFileDAOFactory.createInstance(em);
-        final FolderDAO folderDAO = folderDAOFactory.createInstance(em);
         final GroupDAO groupDAO = groupDAOFactory.createInstance(em);
         
         // Create group for folder
@@ -332,7 +336,6 @@ public class ResearchFileService implements IResearchFileService
                 researchFile.setParentGroup(parentGroup);
                 researchFileDAO.createResearchFile(researchFile);
                 parentFolder.getFiles().add(researchFile);
-                //folderDAO.updateFolder(folder);
                 newGroup.getResearchFiles().add(researchFile);
             }
         }
