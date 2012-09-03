@@ -8,7 +8,10 @@ package au.org.intersect.exsite9.domain;
 
 import java.io.File;
 import java.io.Serializable;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -35,6 +38,7 @@ import com.google.common.base.Objects;
     converterClass=au.org.intersect.exsite9.domain.utils.FileToStringConverter.class)
 public final class ResearchFile implements Serializable, IMetadataAssignable
 {
+
     private static final long serialVersionUID = 5047390909436811919L;
 
     @Id
@@ -163,4 +167,38 @@ public final class ResearchFile implements Serializable, IMetadataAssignable
         
         return missing;
     }
+    
+    public String getDisplayDate()
+    {
+        String displayDate = "";
+        if (this.file != null)
+        {
+            try{
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy hh:mm aa");
+                displayDate = sdf.format(new Date(this.file.lastModified()));
+            }
+            catch(Exception e){
+                // continue
+            }
+        }
+        return displayDate;
+    }
+    
+    public String getDisplaySize()
+    {
+        String displaySize = "0 B";
+        if(this.file != null){
+            try{
+                long size = this.file.length();
+                final String[] units = new String[] { "B", "KB", "MB", "GB", "TB" };
+                int digitGroups = (int) (Math.log10(size)/Math.log10(1024));
+                displaySize =  new DecimalFormat("#,##0.#").format(size/Math.pow(1024, digitGroups)) + " " + units[digitGroups];
+            }
+            catch(Exception e){
+                // continue
+            }
+        }
+        return displaySize;
+    }
+
 }

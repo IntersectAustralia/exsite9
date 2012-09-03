@@ -88,6 +88,9 @@ public final class ProjectExplorerViewLabelProvider extends StyledCellLabelProvi
             {
                 cell.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE));
             }
+            
+            text.append("    [" + rf.getDisplayDate() + "]");
+            text.append("    [" + rf.getDisplaySize() + "]");
         }
         else
         {
