@@ -42,7 +42,7 @@ public final class FolderUnitTest
         final File file = new File("/user/path/folder");
         final Folder toTest2 = new Folder(file);
         assertEquals(file.getName(), toTest2.getFolder().getName());
-        assertEquals(file.getAbsolutePath(), toTest2.getFolder().getPath());
+        assertEquals(file.getAbsolutePath(), toTest2.getFolder().getAbsolutePath());
         assertNull(toTest2.getId());
         assertEquals(0, toTest2.getLastCheckTimeInMillis());
     }
