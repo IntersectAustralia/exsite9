@@ -216,6 +216,10 @@
        id="au.org.intersect.exsite9.commands.OpenFileWithDefaultApplication"
        name="Open File With Default Application">
  </command>
+ <command
+       id="au.org.intersect.exsite9.commands.ImportFolderToProjectCommand"
+       name="Import Folder Structure">
+ </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -316,6 +320,13 @@
                   mnemonic="E"
                   style="push"
                   tooltip="Edit the watched folders">
+            </command>
+            <command
+                  commandId="au.org.intersect.exsite9.commands.ImportFolderToProjectCommand"
+                  label="Import Folder Structure..."
+                  mnemonic="I"
+                  style="push"
+                  tooltip="Import an existing folder structure.">
             </command>
          </menu>
          <menu
@@ -734,6 +745,10 @@
                definitionId="au.org.intersect.exsite9.expression.InstanceOfExistingResearchFile">
          </reference>
       </enabledWhen>
+   </handler>
+   <handler
+         class="au.org.intersect.exsite9.commands.handlers.ImportFolderToProjectHandler"
+         commandId="au.org.intersect.exsite9.commands.ImportFolderToProjectCommand">
    </handler>
    </extension>
    <extension

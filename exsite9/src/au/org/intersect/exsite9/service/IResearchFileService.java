@@ -84,4 +84,13 @@ public interface IResearchFileService
      * @param subFolder The sub folder.
      */
     public void consolidateSubFolderIntoParentFolder(final Project project, final Folder parentFolder, final Folder subFolder);
+    
+    /**
+     * Import an existing folder structure into the project creating new Groups for folders and new ResearchFiles for files.
+     * The created group will be a child of the Project.
+     * @param project
+     * @param folder
+     */
+    public void importFolderStructureForProject(final Project project, Folder folder);
+    
 }

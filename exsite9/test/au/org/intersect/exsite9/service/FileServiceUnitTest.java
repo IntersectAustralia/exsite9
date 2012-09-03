@@ -20,6 +20,7 @@ import au.org.intersect.exsite9.dao.DAOTest;
 import au.org.intersect.exsite9.dao.ProjectDAO;
 import au.org.intersect.exsite9.dao.ResearchFileDAO;
 import au.org.intersect.exsite9.dao.factory.FolderDAOFactory;
+import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
 import au.org.intersect.exsite9.dao.factory.MetadataAssociationDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
@@ -67,6 +68,7 @@ public class FileServiceUnitTest extends DAOTest
         ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         final MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
+        GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
       
     	Project project = new Project(new ProjectFieldsDTO("name","owner","description", EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING));
     	projectDAO.createProject(project);
@@ -75,7 +77,7 @@ public class FileServiceUnitTest extends DAOTest
     	
     	project.getFolders().add(f);
 
-    	fileService = new ResearchFileService(emf, projectDAOFactory,researchFileDAOFactory, metadataAssociationDAOFactory,folderDAOFactory);
+    	fileService = new ResearchFileService(emf, projectDAOFactory,researchFileDAOFactory, metadataAssociationDAOFactory,folderDAOFactory, groupDAOFactory);
     	
     	fileService.identifyNewFilesForProject(project);
     	
@@ -93,6 +95,7 @@ public class FileServiceUnitTest extends DAOTest
         ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
+        GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
         
     	Project project = new Project(new ProjectFieldsDTO("name","owner","description", EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING));
     	Folder f = new Folder(testDirFile);
@@ -103,7 +106,7 @@ public class FileServiceUnitTest extends DAOTest
     	ProjectDAO projectDAO = new ProjectDAO(createEntityManager());
     	projectDAO.createProject(project);
 
-    	fileService = new ResearchFileService(emf, projectDAOFactory,researchFileDAOFactory, metadataAssociationDAOFactory,folderDAOFactory);
+    	fileService = new ResearchFileService(emf, projectDAOFactory,researchFileDAOFactory, metadataAssociationDAOFactory,folderDAOFactory, groupDAOFactory);
     	
     	fileService.identifyNewFilesForProject(project);
     	
@@ -136,6 +139,7 @@ public class FileServiceUnitTest extends DAOTest
         ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
+        GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
         
     	Project project = new Project(new ProjectFieldsDTO("name","owner","description", EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING));
     	project.setId(2L);
@@ -146,7 +150,7 @@ public class FileServiceUnitTest extends DAOTest
         Folder f = new Folder(testDirFile);
         project.getFolders().add(f);
         
-        fileService = new ResearchFileService(emf, projectDAOFactory,researchFileDAOFactory, metadataAssociationDAOFactory,folderDAOFactory);
+        fileService = new ResearchFileService(emf, projectDAOFactory,researchFileDAOFactory, metadataAssociationDAOFactory,folderDAOFactory, groupDAOFactory);
         
         File.createTempFile("test-file-1", ".txt", testDirFile);
         

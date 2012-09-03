@@ -1,6 +1,7 @@
 package au.org.intersect.exsite9.service;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -10,14 +11,17 @@ import javax.persistence.TypedQuery;
 import org.apache.log4j.Logger;
 
 import au.org.intersect.exsite9.dao.FolderDAO;
+import au.org.intersect.exsite9.dao.GroupDAO;
 import au.org.intersect.exsite9.dao.MetadataAssociationDAO;
 import au.org.intersect.exsite9.dao.ProjectDAO;
 import au.org.intersect.exsite9.dao.ResearchFileDAO;
 import au.org.intersect.exsite9.dao.factory.FolderDAOFactory;
+import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
 import au.org.intersect.exsite9.dao.factory.MetadataAssociationDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
 import au.org.intersect.exsite9.domain.Folder;
+import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataAssociation;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataCategoryType;
@@ -34,18 +38,21 @@ public class ResearchFileService implements IResearchFileService
 	private final ProjectDAOFactory projectDAOFactory;
 	private final MetadataAssociationDAOFactory metadataAssociationDAOFactory;
 	private final FolderDAOFactory folderDAOFactory;
+	private final GroupDAOFactory groupDAOFactory;
 	
 	public ResearchFileService(final EntityManagerFactory entityManagerFactory,
 	                   final ProjectDAOFactory projectDAOFactory,
 	                   final ResearchFileDAOFactory researchFileDAOFactory,
 	                   final MetadataAssociationDAOFactory metadataAssociationDAOFactory,
-	                   final FolderDAOFactory folderDAOFactory)
+	                   final FolderDAOFactory folderDAOFactory,
+	                   final GroupDAOFactory groupDAOFactory)
     {
         this.entityManagerFactory = entityManagerFactory;
         this.researchFileDAOFactory = researchFileDAOFactory;
         this.projectDAOFactory = projectDAOFactory;
         this.metadataAssociationDAOFactory = metadataAssociationDAOFactory;
         this.folderDAOFactory = folderDAOFactory;
+        this.groupDAOFactory = groupDAOFactory;
 	}
 	
     @Override
@@ -271,6 +278,76 @@ public class ResearchFileService implements IResearchFileService
         {
             em.close();
         }
+    }
+
+    @Override
+    public void importFolderStructureForProject(Project project, Folder folder)
+    {
+        final EntityManager em = entityManagerFactory.createEntityManager();
+        
+        try
+        {
+            em.getTransaction().begin();
+            importFolder(em, project, folder, project.getRootNode(), folder);
+        }
+        catch(Exception e)
+        {
+            em.getTransaction().rollback();
+        }
+        finally
+        {
+            em.getTransaction().commit();
+            em.close();
+        }
+    }
+    
+    private void importFolder(EntityManager em, Project project, Folder parentFolder, Group parentGroup, Folder folder)
+    {
+        LOG.debug("Import Folder: " + folder.getFolder().getName());
+        
+        final ResearchFileDAO researchFileDAO = researchFileDAOFactory.createInstance(em);
+        final FolderDAO folderDAO = folderDAOFactory.createInstance(em);
+        final GroupDAO groupDAO = groupDAOFactory.createInstance(em);
+        
+        // Create group for folder
+        
+        Group newGroup = new Group(folder.getFolder().getName());
+        newGroup.setParentGroup(parentGroup);
+        parentGroup.getGroups().add(newGroup);
+        groupDAO.createGroup(newGroup);
+        groupDAO.updateGroup(parentGroup);
+        
+        // Create Research files for files
+        List<File> folderList = new ArrayList<File>(0);
+        for(File file : folder.getFolder().listFiles())
+        {
+            if(file.isDirectory())
+            {
+                folderList.add(file);
+            }
+            else
+            {
+                ResearchFile researchFile = new ResearchFile(file);
+                researchFile.setProject(project);
+                researchFile.setParentGroup(parentGroup);
+                researchFileDAO.createResearchFile(researchFile);
+                parentFolder.getFiles().add(researchFile);
+                //folderDAO.updateFolder(folder);
+                newGroup.getResearchFiles().add(researchFile);
+            }
+        }
+        groupDAO.updateGroup(newGroup);
+
+        // Recurse through the folders
+        if(! folderList.isEmpty())
+        {
+            for(File folderOnDisk : folderList)
+            {
+                Folder newFolder = new Folder(folderOnDisk);
+                importFolder(em, project, parentFolder, newGroup, newFolder);
+            }
+        }
+        
     }
     
 }

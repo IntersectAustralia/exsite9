@@ -24,6 +24,7 @@ import au.org.intersect.exsite9.dao.MetadataCategoryDAO;
 import au.org.intersect.exsite9.dao.ProjectDAO;
 import au.org.intersect.exsite9.dao.ResearchFileDAO;
 import au.org.intersect.exsite9.dao.factory.FolderDAOFactory;
+import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
 import au.org.intersect.exsite9.dao.factory.MetadataAssociationDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
@@ -59,7 +60,8 @@ public final class ResearchFileServiceUnitTest extends DAOTest
         final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         final FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
-        final ResearchFileService toTest = new ResearchFileService(emf, projectDAOFactory, researchFileDAOFactory, metadataAssocationDAOFactory, folderDAOFactory);
+        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final ResearchFileService toTest = new ResearchFileService(emf, projectDAOFactory, researchFileDAOFactory, metadataAssocationDAOFactory, folderDAOFactory, groupDAOFactory);
 
         final MetadataCategory metadataCategory = new MetadataCategory("metadataCategory", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
         final MetadataValue metadataValue = new MetadataValue("metadataValue");
@@ -127,7 +129,8 @@ public final class ResearchFileServiceUnitTest extends DAOTest
         final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         final FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
-        final ResearchFileService toTest = new ResearchFileService(emf, projectDAOFactory, researchFileDAOFactory, metadataAssocationDAOFactory, folderDAOFactory);
+        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final ResearchFileService toTest = new ResearchFileService(emf, projectDAOFactory, researchFileDAOFactory, metadataAssocationDAOFactory, folderDAOFactory, groupDAOFactory);
 
         final MetadataCategory metadataCategory = new MetadataCategory("metadataCategory", MetadataCategoryType.FREETEXT, MetadataCategoryUse.optional);
         final MetadataValue metadataValue = new MetadataValue("metadataValue");
@@ -175,7 +178,8 @@ public final class ResearchFileServiceUnitTest extends DAOTest
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         final FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
         final ResearchFileDAO researchFileDAO = new ResearchFileDAO(createEntityManager());
-        final ResearchFileService toTest = new ResearchFileService(emf, projectDAOFactory, researchFileDAOFactory, metadataAssocationDAOFactory, folderDAOFactory);
+        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final ResearchFileService toTest = new ResearchFileService(emf, projectDAOFactory, researchFileDAOFactory, metadataAssocationDAOFactory, folderDAOFactory, groupDAOFactory);
 
         // Disassociate metadata that is not associated.
         final MetadataCategory metadataCategory1 = new MetadataCategory("metadataCategory", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
@@ -234,7 +238,8 @@ public final class ResearchFileServiceUnitTest extends DAOTest
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         final FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
         final ResearchFileDAO researchFileDAO = new ResearchFileDAO(createEntityManager());
-        final ResearchFileService toTest = new ResearchFileService(emf, projectDAOFactory, researchFileDAOFactory, metadataAssocationDAOFactory, folderDAOFactory);
+        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final ResearchFileService toTest = new ResearchFileService(emf, projectDAOFactory, researchFileDAOFactory, metadataAssocationDAOFactory, folderDAOFactory, groupDAOFactory);
 
         final ResearchFile rf = new ResearchFile(new File("file on disk"));
         researchFileDAO.createResearchFile(rf);
@@ -268,7 +273,8 @@ public final class ResearchFileServiceUnitTest extends DAOTest
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         final FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
         final ResearchFileDAO researchFileDAO = new ResearchFileDAO(createEntityManager());
-        final ResearchFileService toTest = new ResearchFileService(emf, projectDAOFactory, researchFileDAOFactory, metadataAssocationDAOFactory, folderDAOFactory);
+        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final ResearchFileService toTest = new ResearchFileService(emf, projectDAOFactory, researchFileDAOFactory, metadataAssocationDAOFactory, folderDAOFactory, groupDAOFactory);
 
         final ResearchFile rf = new ResearchFile(new File("file on disk"));
         researchFileDAO.createResearchFile(rf);
@@ -297,7 +303,8 @@ public final class ResearchFileServiceUnitTest extends DAOTest
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         final FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
         final ResearchFileDAO researchFileDAO = new ResearchFileDAO(createEntityManager());
-        final ResearchFileService toTest = new ResearchFileService(emf, projectDAOFactory, researchFileDAOFactory, metadataAssocationDAOFactory, folderDAOFactory);
+        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final ResearchFileService toTest = new ResearchFileService(emf, projectDAOFactory, researchFileDAOFactory, metadataAssocationDAOFactory, folderDAOFactory, groupDAOFactory);
 
         final MetadataCategory metadataCategory2 = new MetadataCategory("metadataCategory two", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
         final MetadataValue metadataValue2 = new MetadataValue("metadataValue two");
@@ -347,7 +354,8 @@ public final class ResearchFileServiceUnitTest extends DAOTest
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         final FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
         final ResearchFileDAO researchFileDAO = new ResearchFileDAO(createEntityManager());
-        final ResearchFileService toTest = new ResearchFileService(emf, projectDAOFactory, researchFileDAOFactory, metadataAssocationDAOFactory, folderDAOFactory);
+        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final ResearchFileService toTest = new ResearchFileService(emf, projectDAOFactory, researchFileDAOFactory, metadataAssocationDAOFactory, folderDAOFactory, groupDAOFactory);
         
         final File file = new File("some file");
         final ResearchFile rf = new ResearchFile(file);
@@ -381,7 +389,8 @@ public final class ResearchFileServiceUnitTest extends DAOTest
         final ResearchFileDAO researchFileDAO = new ResearchFileDAO(createEntityManager());
         final FolderDAO folderDAO = new FolderDAO(createEntityManager());
         final ProjectDAO projectDAO = new ProjectDAO(createEntityManager());
-        final ResearchFileService toTest = new ResearchFileService(emf, projectDAOFactory, researchFileDAOFactory, metadataAssocationDAOFactory, folderDAOFactory);
+        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final ResearchFileService toTest = new ResearchFileService(emf, projectDAOFactory, researchFileDAOFactory, metadataAssocationDAOFactory, folderDAOFactory, groupDAOFactory);
 
         final File file1 = new File("parent file");
         final File file2 = new File("sub file");

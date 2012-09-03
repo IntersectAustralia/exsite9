@@ -32,9 +32,10 @@ public class ResearchFileDAO
     
     public void createResearchFile(ResearchFile file)
     {
-        em.getTransaction().begin();
+        final boolean transactionActive = em.getTransaction().isActive();
+        if (!transactionActive){em.getTransaction().begin();}
         em.persist(file);
-        em.getTransaction().commit();
+        if (!transactionActive){ em.getTransaction().commit(); }
     }
     
     public void removeResearchFile(final ResearchFile file)

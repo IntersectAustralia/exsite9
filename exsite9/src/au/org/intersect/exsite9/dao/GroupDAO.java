@@ -28,9 +28,10 @@ public final class GroupDAO
 
     public void createGroup(final Group group)
     {
-        em.getTransaction().begin();
+        final boolean localTransaction = em.getTransaction().isActive();
+        if (!localTransaction) { em.getTransaction().begin(); }
         em.persist(group);
-        em.getTransaction().commit();
+        if (!localTransaction) { em.getTransaction().commit(); }
     }
 
     public void deleteGroup(final Group group)

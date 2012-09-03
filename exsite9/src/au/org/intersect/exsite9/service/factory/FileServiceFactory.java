@@ -13,6 +13,7 @@ import org.eclipse.ui.services.AbstractServiceFactory;
 import org.eclipse.ui.services.IServiceLocator;
 
 import au.org.intersect.exsite9.dao.factory.FolderDAOFactory;
+import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
 import au.org.intersect.exsite9.dao.factory.MetadataAssociationDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
@@ -37,7 +38,8 @@ public final class FileServiceFactory extends AbstractServiceFactory
         final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         final MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         final FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
+        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
 
-        return new ResearchFileService(emf,projectDAOFactory,researchFileDAOFactory,metadataAssociationDAOFactory,folderDAOFactory);
+        return new ResearchFileService(emf,projectDAOFactory,researchFileDAOFactory,metadataAssociationDAOFactory,folderDAOFactory, groupDAOFactory);
     }
 }
