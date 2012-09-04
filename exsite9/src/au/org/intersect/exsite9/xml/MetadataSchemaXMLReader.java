@@ -39,9 +39,14 @@ public final class MetadataSchemaXMLReader
         return schema;
     }
 
-    private static Schema parseRootElement(final Element rootElement)
+    private static Schema parseRootElement(final Element rootElement) throws InvalidSchemaException
     {
         final String name = rootElement.getAttribute(ATTRIBUTE_NAME).trim();
+        if (name.length() >= 255)
+        {
+            throw new InvalidSchemaException("Schema name is too long.");
+        }
+
         final String description = rootElement.getAttribute(ATTRIBUTE_DESCRIPTION).trim();
         final String namespaceURL = rootElement.getAttribute(ATTRIBUTE_NAMESPACEURL).trim();
         return new Schema(name, description, namespaceURL, Boolean.FALSE);

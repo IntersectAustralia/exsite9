@@ -24,7 +24,6 @@ import com.richclientgui.toolbox.validation.string.StringValidationToolkit;
 import com.richclientgui.toolbox.validation.validator.IFieldValidator;
 
 import au.org.intersect.exsite9.domain.SubmissionPackage;
-import au.org.intersect.exsite9.wizard.MaximumFieldLengthValidator;
 import au.org.intersect.exsite9.wizard.WizardPageErrorHandler;
 
 /**
@@ -40,7 +39,7 @@ public final class CreateSubmissionPackageWizardPage1 extends WizardPage impleme
     private Composite container;
 
     private ValidatingField<String> nameField;
-    private ValidatingField<String> descriptionField;
+    private Text descriptionField;
 
     private SubmissionPackage currentSubmissionPackage;
     private final Collection<SubmissionPackage> existingSubmissionPackages;
@@ -125,15 +124,15 @@ public final class CreateSubmissionPackageWizardPage1 extends WizardPage impleme
         final Label descriptionLabel = new Label(this.container, SWT.NULL);
         descriptionLabel.setText("Description");
 
-        this.descriptionField = stringValidatorToolkit.createField(new Text(this.container, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL),
-                new MaximumFieldLengthValidator("Description", 255), false, this.currentSubmissionPackage == null ? "" : this.currentSubmissionPackage.getDescription());
-        this.descriptionField.getControl().addKeyListener(this);
+        this.descriptionField = new Text(this.container, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL);
+        this.descriptionField.setText(this.currentSubmissionPackage == null ? "" : this.currentSubmissionPackage.getDescription());
+        this.descriptionField.addKeyListener(this);
 
         final GridData singleLineGridData = new GridData(GridData.FILL_HORIZONTAL);
         final GridData multiLineGridData = new GridData(GridData.FILL_BOTH);
 
         this.nameField.getControl().setLayoutData(singleLineGridData);
-        this.descriptionField.getControl().setLayoutData(multiLineGridData);
+        this.descriptionField.setLayoutData(multiLineGridData);
 
         setControl(this.container);
         setPageComplete(this.currentSubmissionPackage != null);
@@ -153,7 +152,7 @@ public final class CreateSubmissionPackageWizardPage1 extends WizardPage impleme
     @Override
     public void keyReleased(final KeyEvent e)
     {
-        setPageComplete(this.nameField.isValid() && this.descriptionField.isValid());
+        setPageComplete(this.nameField.isValid());
     }
 
     public String getSubmissionPackageName()
@@ -163,6 +162,6 @@ public final class CreateSubmissionPackageWizardPage1 extends WizardPage impleme
 
     public String getSubmissionPackageDescription()
     {
-        return this.descriptionField.getContents().trim();
+        return this.descriptionField.getText().trim();
     }
 }

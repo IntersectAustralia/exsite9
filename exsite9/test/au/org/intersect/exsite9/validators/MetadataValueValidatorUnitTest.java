@@ -36,9 +36,8 @@ public final class MetadataValueValidatorUnitTest
             sb.append("a");
         }
 
-        // too long
-        assertFalse(toTest.isValid(sb.toString()));
-        assertFalse(toTest.getErrorMessage().isEmpty());
+        assertTrue(toTest.isValid(sb.toString()));
+        assertTrue(toTest.getErrorMessage().isEmpty());
 
         // name already used
         assertFalse(toTest.isValid(mv1.getValue()));
@@ -67,9 +66,8 @@ public final class MetadataValueValidatorUnitTest
             sb.append("a");
         }
 
-        // too long
-        assertFalse(toTest.isValid(sb.toString()));
-        assertFalse(toTest.getErrorMessage().isEmpty());
+        assertTrue(toTest.isValid(sb.toString()));
+        assertTrue(toTest.getErrorMessage().isEmpty());
 
         // name already used
         assertFalse(toTest.isValid(mv1.getValue()));

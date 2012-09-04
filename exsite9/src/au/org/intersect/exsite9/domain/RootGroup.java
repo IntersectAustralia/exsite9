@@ -5,18 +5,20 @@ import java.util.List;
 
 import javax.persistence.Entity;
 
+/**
+ * The Root group - every project has one.
+ */
 @Entity
 public final class RootGroup extends Group
 {
-
     private static final long serialVersionUID = -7294236885579971700L;
     
     public RootGroup()
     {
         
     }
-    
-    public RootGroup(String projectName)
+
+    public RootGroup(final String projectName)
     {
         super(projectName);
     }

@@ -2,6 +2,7 @@ package au.org.intersect.exsite9.domain;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,6 +24,7 @@ public class MetadataValue implements Serializable
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
+    @Column(columnDefinition = "longvarchar")
     private String value;
 
     public MetadataValue()

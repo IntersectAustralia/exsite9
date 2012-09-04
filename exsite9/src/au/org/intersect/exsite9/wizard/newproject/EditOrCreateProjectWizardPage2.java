@@ -34,13 +34,11 @@ import org.xml.sax.SAXException;
 import com.richclientgui.toolbox.validation.IFieldErrorMessageHandler;
 import com.richclientgui.toolbox.validation.ValidatingField;
 import com.richclientgui.toolbox.validation.string.StringValidationToolkit;
-import com.richclientgui.toolbox.validation.validator.IFieldValidator;
 
 import au.org.intersect.exsite9.domain.Schema;
 import au.org.intersect.exsite9.exception.InvalidSchemaException;
 import au.org.intersect.exsite9.service.ISchemaService;
 import au.org.intersect.exsite9.wizard.MaximumFieldLengthValidator;
-import au.org.intersect.exsite9.wizard.WizardFieldUtils;
 import au.org.intersect.exsite9.wizard.WizardPageErrorHandler;
 
 /**
@@ -56,8 +54,8 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
     private final IFieldErrorMessageHandler errorMessageHandler = new WizardPageErrorHandler(this);
 
     private ValidatingField<String> localSchemaNameField;
-    private ValidatingField<String> localSchemaDescriptionField;
-    private ValidatingField<String> localSchemaNamespaceURLField;
+    private Text localSchemaDescriptionField;
+    private Text localSchemaNamespaceURLField;
 
     private Button localSchemaRadioButton;
     private Button importSchemaRadioButton;
@@ -121,54 +119,14 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         final Label localSchemaNameLabel = new Label(localGroup, SWT.NULL);
         localSchemaNameLabel.setText("Schema Name");
 
-        localSchemaNameField = this.stringValidatorToolkit.createTextField(localGroup, new IFieldValidator<String>()
-        {
-            private String errorMessage;
-            
-            @Override
-            public boolean warningExist(final String conents)
-            {
-                return false;
-            }
-
-            @Override
-            public boolean isValid(final String contents)
-            {
-                if (contents.trim().isEmpty())
-                {
-                    this.errorMessage = "Schema name must not be empty.";
-                    return false;
-                }
-
-                if (contents.trim().length() >= 255)
-                {
-                    this.errorMessage = "Schema name is too long.";
-                    return false;
-                }
-                
-                return true;
-            }
-
-            @Override
-            public String getWarningMessage()
-            {
-                return "";
-            }
-
-            @Override
-            public String getErrorMessage()
-            {
-                return this.errorMessage;
-            }
-        }, true, "");
+        this.localSchemaNameField = this.stringValidatorToolkit.createTextField(localGroup, new MaximumFieldLengthValidator("Schema Name", 255), true, "");
         this.localSchemaNameField.getControl().addKeyListener(this);
 
         final Label localSchemaDescriptionLabel = new Label(localGroup, SWT.NULL);
         localSchemaDescriptionLabel.setText("Schema Description");
 
-        this.localSchemaDescriptionField = stringValidatorToolkit.createField(new Text(localGroup, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL),
-                new MaximumFieldLengthValidator("Description", 255), false, "");
-        this.localSchemaDescriptionField.getControl().addKeyListener(this);
+        this.localSchemaDescriptionField = new Text(localGroup, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL);
+        this.localSchemaDescriptionField.addKeyListener(this);
 
         // 3 empty cells due to the description field spanning 4 rows below
         new Label(localGroup, SWT.NULL);
@@ -178,8 +136,8 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         final Label localSchemaNamespaceURLLabel = new Label(localGroup, SWT.NULL);
         localSchemaNamespaceURLLabel.setText("Schema Namespace URL");
 
-        this.localSchemaNamespaceURLField = WizardFieldUtils.createOptional255TextField(stringValidatorToolkit, localGroup, "Namespace URL", "");
-        this.localSchemaNamespaceURLField.getControl().addKeyListener(this);
+        this.localSchemaNamespaceURLField = new Text(localGroup, SWT.SINGLE | SWT.BORDER);
+        this.localSchemaNamespaceURLField.addKeyListener(this);
 
         final Composite importSchemaRadioButtonContainer = new Composite(importGroup, SWT.NULL);
         importSchemaRadioButtonContainer.setLayout(new RowLayout(SWT.VERTICAL));
@@ -287,8 +245,8 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         multiLineGridData.verticalSpan = 4;
 
         this.localSchemaNameField.getControl().setLayoutData(singleLineGridData);
-        this.localSchemaDescriptionField.getControl().setLayoutData(multiLineGridData);
-        this.localSchemaNamespaceURLField.getControl().setLayoutData(singleLineGridData);
+        this.localSchemaDescriptionField.setLayoutData(multiLineGridData);
+        this.localSchemaNamespaceURLField.setLayoutData(singleLineGridData);
         importedSchemaNameField.setLayoutData(singleLineGridData);
         importedSchemaDescriptionField.setLayoutData(multiLineGridData);
         importedSchemaNamespaceURLField.setLayoutData(singleLineGridData);
@@ -299,8 +257,8 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         localSchemaNamespaceURLLabel.setLayoutData(indentedGridData);
 
         this.localSchemaNameField.getControl().setEnabled(false);
-        this.localSchemaDescriptionField.getControl().setEnabled(false);
-        this.localSchemaNamespaceURLField.getControl().setEnabled(false);
+        this.localSchemaDescriptionField.setEnabled(false);
+        this.localSchemaNamespaceURLField.setEnabled(false);
         this.importSchemaBrowseButton.setEnabled(false);
 
         if (this.currentSchema != null)
@@ -312,8 +270,8 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
             if (localSchema)
             {
                 this.localSchemaNameField.setContents(schemaName);
-                this.localSchemaDescriptionField.setContents(schemaDescription);
-                this.localSchemaNamespaceURLField.setContents(schemaNamespaceURL);
+                this.localSchemaDescriptionField.setText(schemaDescription);
+                this.localSchemaNamespaceURLField.setText(schemaNamespaceURL);
                 enableLocalSchemaFields();
             }
             else
@@ -352,8 +310,8 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         this.localSchemaRadioButton.setSelection(true);
         this.importSchemaRadioButton.setSelection(false);
         this.localSchemaNameField.getControl().setEnabled(true);
-        this.localSchemaDescriptionField.getControl().setEnabled(true);
-        this.localSchemaNamespaceURLField.getControl().setEnabled(true);
+        this.localSchemaDescriptionField.setEnabled(true);
+        this.localSchemaNamespaceURLField.setEnabled(true);
         this.importSchemaBrowseButton.setEnabled(false);
     }
 
@@ -362,8 +320,8 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         this.localSchemaRadioButton.setSelection(false);
         this.importSchemaRadioButton.setSelection(true);
         this.localSchemaNameField.getControl().setEnabled(false);
-        this.localSchemaDescriptionField.getControl().setEnabled(false);
-        this.localSchemaNamespaceURLField.getControl().setEnabled(false);
+        this.localSchemaDescriptionField.setEnabled(false);
+        this.localSchemaNamespaceURLField.setEnabled(false);
         this.importSchemaBrowseButton.setEnabled(true);
         this.importSchemaBrowseButton.setFocus();
     }
@@ -398,7 +356,7 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
     {
         if (this.localSchemaRadioButton.getSelection())
         {
-            return this.localSchemaNameField.isValid() && this.localSchemaDescriptionField.isValid() && this.localSchemaNamespaceURLField.isValid();
+            return this.localSchemaNameField.isValid();
         }
         if (this.importSchemaRadioButton.getSelection())
         {
@@ -419,12 +377,12 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
 
     public String getLocalSchemaDescription()
     {
-        return this.localSchemaDescriptionField.getContents().trim();
+        return this.localSchemaDescriptionField.getText().trim();
     }
 
     public String getLocalSchemaNamespaceURL()
     {
-        return this.localSchemaNamespaceURLField.getContents().trim();
+        return this.localSchemaNamespaceURLField.getText().trim();
     }
 
     public Schema getImportedSchema()

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -36,6 +37,7 @@ public final class MetadataCategory implements Serializable
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 255)
     private String name;
     
     private MetadataCategoryUse use;
