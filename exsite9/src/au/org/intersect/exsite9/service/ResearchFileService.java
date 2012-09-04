@@ -288,7 +288,12 @@ public class ResearchFileService implements IResearchFileService
         try
         {
             em.getTransaction().begin();
+            
             importFolder(em, project, folder, project.getRootNode(), folder);
+            
+            final ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
+            project.getFolders().add(folder);
+            projectDAO.updateProject(project);
         }
         catch(Exception e)
         {
@@ -306,16 +311,28 @@ public class ResearchFileService implements IResearchFileService
         LOG.debug("Import Folder: " + folder.getFolder().getName());
         
         final ResearchFileDAO researchFileDAO = researchFileDAOFactory.createInstance(em);
-        final FolderDAO folderDAO = folderDAOFactory.createInstance(em);
         final GroupDAO groupDAO = groupDAOFactory.createInstance(em);
         
         // Create group for folder
+        Group newGroup = null;
         
-        Group newGroup = new Group(folder.getFolder().getName());
-        newGroup.setParentGroup(parentGroup);
-        parentGroup.getGroups().add(newGroup);
-        groupDAO.createGroup(newGroup);
-        groupDAO.updateGroup(parentGroup);
+        for(Group group : parentGroup.getGroups())
+        {
+            if(group.getName().equalsIgnoreCase(folder.getFolder().getName()))
+            {
+                newGroup = group;
+                break;
+            }
+        }
+        
+        if(newGroup == null)
+        {
+            newGroup = new Group(folder.getFolder().getName());
+            newGroup.setParentGroup(parentGroup);
+            parentGroup.getGroups().add(newGroup);
+            groupDAO.createGroup(newGroup);
+            groupDAO.updateGroup(parentGroup);
+        }
         
         // Create Research files for files
         List<File> folderList = new ArrayList<File>(0);
@@ -327,13 +344,26 @@ public class ResearchFileService implements IResearchFileService
             }
             else
             {
-                ResearchFile researchFile = new ResearchFile(file);
-                researchFile.setProject(project);
-                researchFile.setParentGroup(parentGroup);
-                researchFileDAO.createResearchFile(researchFile);
-                parentFolder.getFiles().add(researchFile);
-                //folderDAO.updateFolder(folder);
-                newGroup.getResearchFiles().add(researchFile);
+                boolean createFile = true;
+                
+                for(ResearchFile researchFile : newGroup.getResearchFiles())
+                {
+                    if(researchFile.getFile().equals(file))
+                    {
+                        createFile = false;
+                        break;
+                    }
+                }
+                
+                if (createFile)
+                {
+                    ResearchFile researchFile = new ResearchFile(file);
+                    researchFile.setProject(project);
+                    researchFile.setParentGroup(newGroup);
+                    researchFileDAO.createResearchFile(researchFile);
+                    parentFolder.getFiles().add(researchFile);
+                    newGroup.getResearchFiles().add(researchFile);
+                }
             }
         }
         groupDAO.updateGroup(newGroup);
