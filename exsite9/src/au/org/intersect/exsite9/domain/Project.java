@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -38,23 +39,58 @@ public final class Project implements Serializable
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 255)
     private String name;
+
+    @Column(columnDefinition = "longvarchar")
     private String owner;
+
+    @Column(columnDefinition = "longvarchar")
     private String description;
+
+    @Column(columnDefinition = "longvarchar")
     private String collectionType;
+
+    @Column(columnDefinition = "longvarchar")
     private String rightsStatement;
+
+    @Column(columnDefinition = "longvarchar")
     private String accessRights;
+
+    @Column(columnDefinition = "longvarchar")
     private String licence;
+
+    @Column(columnDefinition = "longvarchar")
     private String identifier;
+
+    @Column(columnDefinition = "longvarchar")
     private String subject;
+
+    @Column(columnDefinition = "longvarchar")
     private String electronicLocation;
+
+    @Column(columnDefinition = "longvarchar")
     private String physicalLocation;
+
+    @Column(columnDefinition = "longvarchar")
     private String placeOrRegionName;
+
+    @Column(columnDefinition = "longvarchar")
     private String latitudeLongitude;
+
+    @Column(columnDefinition = "longvarchar")
     private String datesOfCapture;
+
+    @Column(columnDefinition = "longvarchar")
     private String citationInformation;
+
+    @Column(columnDefinition = "longvarchar")
     private String relatedParty;
+
+    @Column(columnDefinition = "longvarchar")
     private String relatedActivity;
+
+    @Column(columnDefinition = "longvarchar")
     private String relatedInformation;
 
     @ManyToMany(cascade = CascadeType.ALL)

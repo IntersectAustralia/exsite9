@@ -54,12 +54,6 @@ public final class MetadataValueValidator implements IFieldValidator<String>
             return false;
         }
 
-        if (contents.trim().length() >= 255)
-        {
-            this.errorMessage = "Value is too long.";
-            return false;
-        }
-
         for (final MetadataValue existingValue : this.existingMetadataValues)
         {
             if (existingValue.getValue().equalsIgnoreCase(contents.trim()))

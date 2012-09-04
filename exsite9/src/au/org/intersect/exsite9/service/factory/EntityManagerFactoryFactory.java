@@ -57,7 +57,6 @@ public final class EntityManagerFactoryFactory extends AbstractServiceFactory
             connectionURL = "jdbc:hsqldb:file:" + workspace + "/database/exsite9;shutdown=true;hsqldb.write_delay=false;";
         }
         properties.put(PersistenceUnitProperties.JDBC_URL, connectionURL);
-        
         properties.put(PersistenceUnitProperties.JDBC_USER, "sa");
         properties.put(PersistenceUnitProperties.JDBC_PASSWORD, "");
         properties.put(PersistenceUnitProperties.DDL_GENERATION, "create-tables");

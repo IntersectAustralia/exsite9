@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -37,6 +38,7 @@ public final class Folder implements Serializable
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     
+    @Column(columnDefinition = "longvarchar")
     @Convert("fileToStringConverter")
     private File folder;
     

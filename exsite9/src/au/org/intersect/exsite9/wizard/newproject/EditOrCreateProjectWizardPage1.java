@@ -22,11 +22,9 @@ import org.eclipse.swt.widgets.Text;
 import com.richclientgui.toolbox.validation.IFieldErrorMessageHandler;
 import com.richclientgui.toolbox.validation.ValidatingField;
 import com.richclientgui.toolbox.validation.string.StringValidationToolkit;
-import com.richclientgui.toolbox.validation.validator.IFieldValidator;
 
 import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 import au.org.intersect.exsite9.wizard.MaximumFieldLengthValidator;
-import au.org.intersect.exsite9.wizard.WizardFieldUtils;
 import au.org.intersect.exsite9.wizard.WizardPageErrorHandler;
 
 /**
@@ -35,23 +33,23 @@ import au.org.intersect.exsite9.wizard.WizardPageErrorHandler;
 public final class EditOrCreateProjectWizardPage1 extends WizardPage implements KeyListener
 {
     private ValidatingField<String> projectNameField;
-    private ValidatingField<String> projectDescriptionText;
-    private ValidatingField<String> projectOwnerText;
+    private Text projectDescriptionText;
+    private Text projectOwnerText;
     private Combo projectCollectionDropDown;
-    private ValidatingField<String> projectRightsStatementText;
-    private ValidatingField<String> projectAccessRightsText;
-    private ValidatingField<String> projectLicenceText;
-    private ValidatingField<String> projectIdentifierText;
-    private ValidatingField<String> projectSubjectText;
-    private ValidatingField<String> projectElectronicLocationText;
-    private ValidatingField<String> projectPhysicalLocationText;
-    private ValidatingField<String> projectPlaceOrRegionNameText;
-    private ValidatingField<String> projectLatitudeLongitudeText;
-    private ValidatingField<String> projectDatesOfCaptureText;
-    private ValidatingField<String> projectCitationInformationText;
-    private ValidatingField<String> projectRelatedPartyText;
-    private ValidatingField<String> projectRelatedActivityText;
-    private ValidatingField<String> projectRelatedInformationText;
+    private Text projectRightsStatementText;
+    private Text projectAccessRightsText;
+    private Text projectLicenceText;
+    private Text projectIdentifierText;
+    private Text projectSubjectText;
+    private Text projectElectronicLocationText;
+    private Text projectPhysicalLocationText;
+    private Text projectPlaceOrRegionNameText;
+    private Text projectLatitudeLongitudeText;
+    private Text projectDatesOfCaptureText;
+    private Text projectCitationInformationText;
+    private Text projectRelatedPartyText;
+    private Text projectRelatedActivityText;
+    private Text projectRelatedInformationText;
 
     private ProjectFieldsDTO incomingFieldValues;
 
@@ -88,62 +86,26 @@ public final class EditOrCreateProjectWizardPage1 extends WizardPage implements 
         final Label projectNameLabel = new Label(this.container, SWT.NULL);
         projectNameLabel.setText("Project Name");
 
-        projectNameField = this.stringValidatorToolkit.createTextField(this.container, new IFieldValidator<String>()
-        {
-            private String errorMessage;
-            
-            @Override
-            public boolean warningExist(final String conents)
-            {
-                return false;
-            }
-
-            @Override
-            public boolean isValid(final String contents)
-            {
-                if (contents.trim().isEmpty())
-                {
-                    this.errorMessage = "Project name must not be empty.";
-                    return false;
-                }
-
-                if (contents.trim().length() >= 255)
-                {
-                    this.errorMessage = "Project name is too long.";
-                    return false;
-                }
-                
-                return true;
-            }
-
-            @Override
-            public String getWarningMessage()
-            {
-                return "";
-            }
-
-            @Override
-            public String getErrorMessage()
-            {
-                return this.errorMessage;
-            }
-        }, true, this.incomingFieldValues.getName());
+        this.projectNameField = this.stringValidatorToolkit.createTextField(this.container, new MaximumFieldLengthValidator("Project name", 255),
+                true, this.incomingFieldValues.getName());
 
         this.projectNameField.getControl().addKeyListener(this);
 
         final Label projectOwnerLabel = new Label(this.container, SWT.NULL);
         projectOwnerLabel.setText("Project Owner");
 
-        this.projectOwnerText = WizardFieldUtils.createOptional255TextField(stringValidatorToolkit, this.container, "Owner", this.incomingFieldValues.getOwner());
-        this.projectOwnerText.getControl().addKeyListener(this);
+        this.projectOwnerText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        this.projectOwnerText.setText(this.incomingFieldValues.getOwner());
+        this.projectOwnerText.addKeyListener(this);
 
         final Label projectDescriptionLabel = new Label(this.container, SWT.NULL);
         projectDescriptionLabel.setText("Project Description");
 
-        this.projectDescriptionText = stringValidatorToolkit.createField(new Text(this.container, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL), new MaximumFieldLengthValidator("Description", 255), false, this.incomingFieldValues.getDescription());
-        this.projectDescriptionText.getControl().addKeyListener(this);
+        this.projectDescriptionText = new Text(this.container, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL);
+        this.projectDescriptionText.setText(this.incomingFieldValues.getDescription());
+        this.projectDescriptionText.addKeyListener(this);
         
-     // 3 empty cells due to the description field spanning 4 rows below
+        // 3 empty cells due to the description field spanning 4 rows below
         new Label(container, SWT.NULL);
         new Label(container, SWT.NULL);
         new Label(container, SWT.NULL);
@@ -155,134 +117,146 @@ public final class EditOrCreateProjectWizardPage1 extends WizardPage implements 
         this.projectCollectionDropDown.setItems(new String[] {"", "Dataset", "Collection"});
         for (int i = 0; i < this.projectCollectionDropDown.getItemCount(); i++)
         {
-            if (this.projectCollectionDropDown.getItem(i)
-                    .equalsIgnoreCase(this.incomingFieldValues.getCollectionType()))
+            if (this.projectCollectionDropDown.getItem(i).equalsIgnoreCase(this.incomingFieldValues.getCollectionType()))
             {
                 this.projectCollectionDropDown.select(i);
             }
         }
+
         this.projectCollectionDropDown.addSelectionListener(new SelectionListener()
         {
-            
             @Override
-            public void widgetSelected(SelectionEvent e)
+            public void widgetSelected(final SelectionEvent e)
             {
                 setPageComplete(allFieldsAreValid());                
             }
             
             @Override
-            public void widgetDefaultSelected(SelectionEvent e)
+            public void widgetDefaultSelected(final SelectionEvent e)
             {
-      
             }
         });
 
         final Label rightsStatementLabel = new Label(this.container, SWT.NULL);
         rightsStatementLabel.setText("Rights Statement");
 
-        this.projectRightsStatementText = WizardFieldUtils.createOptional255TextField(stringValidatorToolkit, this.container, "Rights Statement", this.incomingFieldValues.getRightsStatement());
-        this.projectRightsStatementText.getControl().addKeyListener(this);
+        this.projectRightsStatementText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        this.projectRightsStatementText.setText(this.incomingFieldValues.getRightsStatement());
+        this.projectRightsStatementText.addKeyListener(this);
 
         final Label accessRightsLabel = new Label(this.container, SWT.NULL);
         accessRightsLabel.setText("Access Rights");
 
-        this.projectAccessRightsText = WizardFieldUtils.createOptional255TextField(stringValidatorToolkit, this.container, "Access Rights", this.incomingFieldValues.getAccessRights());
-        this.projectAccessRightsText.getControl().addKeyListener(this);
+        this.projectAccessRightsText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        this.projectAccessRightsText.setText(this.incomingFieldValues.getAccessRights());
+        this.projectAccessRightsText.addKeyListener(this);
 
         final Label licenceLabel = new Label(this.container, SWT.NULL);
         licenceLabel.setText("Licence");
 
-        this.projectLicenceText = WizardFieldUtils.createOptional255TextField(stringValidatorToolkit, this.container, "Licence", this.incomingFieldValues.getLicence());
-        this.projectLicenceText.getControl().addKeyListener(this);
+        this.projectLicenceText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        this.projectLicenceText.setText(this.incomingFieldValues.getLicence());
+        this.projectLicenceText.addKeyListener(this);
 
         final Label identifierLabel = new Label(this.container, SWT.NULL);
         identifierLabel.setText("Identifier");
 
-        this.projectIdentifierText = WizardFieldUtils.createOptional255TextField(stringValidatorToolkit, this.container, "Identifier", this.incomingFieldValues.getIdentifier());
-        this.projectIdentifierText.getControl().addKeyListener(this);
+        this.projectIdentifierText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        this.projectIdentifierText.setText(this.incomingFieldValues.getIdentifier());
+        this.projectIdentifierText.addKeyListener(this);
 
         final Label subjectLabel = new Label(this.container, SWT.NULL);
         subjectLabel.setText("Subject");
 
-        this.projectSubjectText = WizardFieldUtils.createOptional255TextField(stringValidatorToolkit, this.container, "Subject", this.incomingFieldValues.getSubject());
-        this.projectSubjectText.getControl().addKeyListener(this);
+        this.projectSubjectText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        this.projectSubjectText.setText(this.incomingFieldValues.getSubject());
+        this.projectSubjectText.addKeyListener(this);
 
         final Label electronicLocationLabel = new Label(this.container, SWT.NULL);
         electronicLocationLabel.setText("Electronic Location");
 
-        this.projectElectronicLocationText = WizardFieldUtils.createOptional255TextField(stringValidatorToolkit, this.container, "Electronic Location", this.incomingFieldValues.getElectronicLocation());
-        this.projectElectronicLocationText.getControl().addKeyListener(this);
+        this.projectElectronicLocationText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        this.projectElectronicLocationText.setText(this.incomingFieldValues.getElectronicLocation());
+        this.projectElectronicLocationText.addKeyListener(this);
 
         final Label physicalLocationLabel = new Label(this.container, SWT.NULL);
         physicalLocationLabel.setText("Physical Location");
 
-        this.projectPhysicalLocationText = WizardFieldUtils.createOptional255TextField(stringValidatorToolkit, this.container, "Physical Location", this.incomingFieldValues.getPhysicalLocation());
-        this.projectPhysicalLocationText.getControl().addKeyListener(this);
+        this.projectPhysicalLocationText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        this.projectPhysicalLocationText.setText(this.incomingFieldValues.getPhysicalLocation());
+        this.projectPhysicalLocationText.addKeyListener(this);
 
         final Label placeOrRegionNameLabel = new Label(this.container, SWT.NULL);
         placeOrRegionNameLabel.setText("Place or Region Name");
 
-        this.projectPlaceOrRegionNameText = WizardFieldUtils.createOptional255TextField(stringValidatorToolkit, this.container, "Place or Region Name", this.incomingFieldValues.getPlaceOrRegionName());
-        this.projectPlaceOrRegionNameText.getControl().addKeyListener(this);
+        this.projectPlaceOrRegionNameText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        this.projectPlaceOrRegionNameText.setText(this.incomingFieldValues.getPlaceOrRegionName());
+        this.projectPlaceOrRegionNameText.addKeyListener(this);
 
         final Label latitudeLongitudeLabel = new Label(this.container, SWT.NULL);
         latitudeLongitudeLabel.setText("Latitude/Longitude");
 
-        this.projectLatitudeLongitudeText = WizardFieldUtils.createOptional255TextField(stringValidatorToolkit, this.container, "Latitude/Longitude", this.incomingFieldValues.getLatitudeLongitude());
-        this.projectLatitudeLongitudeText.getControl().addKeyListener(this);
+        this.projectLatitudeLongitudeText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        this.projectLatitudeLongitudeText.setText(this.incomingFieldValues.getLatitudeLongitude());
+        this.projectLatitudeLongitudeText.addKeyListener(this);
 
         final Label datesOfCaptureLabel = new Label(this.container, SWT.NULL);
         datesOfCaptureLabel.setText("Dates of Capture");
 
-        this.projectDatesOfCaptureText = WizardFieldUtils.createOptional255TextField(stringValidatorToolkit, this.container, "Dates of Capture", this.incomingFieldValues.getDatesOfCapture());
-        this.projectDatesOfCaptureText.getControl().addKeyListener(this);
+        this.projectDatesOfCaptureText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        this.projectDatesOfCaptureText.setText(this.incomingFieldValues.getDatesOfCapture());
+        this.projectDatesOfCaptureText.addKeyListener(this);
 
         final Label citationInformationLabel = new Label(this.container, SWT.NULL);
         citationInformationLabel.setText("Citation Information");
 
-        this.projectCitationInformationText = WizardFieldUtils.createOptional255TextField(stringValidatorToolkit, this.container, "Citation Information", this.incomingFieldValues.getCitationInformation());
-        this.projectCitationInformationText.getControl().addKeyListener(this);
+        this.projectCitationInformationText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        this.projectCitationInformationText.setText(this.incomingFieldValues.getCitationInformation());
+        this.projectCitationInformationText.addKeyListener(this);
 
         final Label relatedPartyLabel = new Label(this.container, SWT.NULL);
         relatedPartyLabel.setText("Related Party");
 
-        this.projectRelatedPartyText = WizardFieldUtils.createOptional255TextField(stringValidatorToolkit, this.container, "Related Party", this.incomingFieldValues.getRelatedParty());
-        this.projectRelatedPartyText.getControl().addKeyListener(this);
+        this.projectRelatedPartyText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        this.projectRelatedPartyText.setText(this.incomingFieldValues.getRelatedParty());
+        this.projectRelatedPartyText.addKeyListener(this);
 
         final Label relatedActivityLabel = new Label(this.container, SWT.NULL);
         relatedActivityLabel.setText("Related Activity");
 
-        this.projectRelatedActivityText = WizardFieldUtils.createOptional255TextField(stringValidatorToolkit, this.container, "Related Activity", this.incomingFieldValues.getRelatedActivity());
-        this.projectRelatedActivityText.getControl().addKeyListener(this);
+        this.projectRelatedActivityText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        this.projectRelatedActivityText.setText(this.incomingFieldValues.getRelatedActivity());
+        this.projectRelatedActivityText.addKeyListener(this);
 
         final Label relatedInformationLabel = new Label(this.container, SWT.NULL);
         relatedInformationLabel.setText("Related Information");
 
-        this.projectRelatedInformationText = WizardFieldUtils.createOptional255TextField(stringValidatorToolkit, this.container, "Related Information", this.incomingFieldValues.getRelatedInformation());
-        this.projectRelatedInformationText.getControl().addKeyListener(this);
+        this.projectRelatedInformationText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        this.projectRelatedInformationText.setText(this.incomingFieldValues.getRelatedInformation());
+        this.projectRelatedInformationText.addKeyListener(this);
 
         final GridData singleLineGridData = new GridData(GridData.FILL_HORIZONTAL);
         final GridData multiLineGridData = new GridData(GridData.FILL_BOTH);
         multiLineGridData.verticalSpan = 4;
 
         this.projectNameField.getControl().setLayoutData(singleLineGridData);
-        this.projectOwnerText.getControl().setLayoutData(singleLineGridData);
-        this.projectDescriptionText.getControl().setLayoutData(multiLineGridData);
+        this.projectOwnerText.setLayoutData(singleLineGridData);
+        this.projectDescriptionText.setLayoutData(multiLineGridData);
         this.projectCollectionDropDown.setLayoutData(singleLineGridData);
-        this.projectRightsStatementText.getControl().setLayoutData(singleLineGridData);
-        this.projectAccessRightsText.getControl().setLayoutData(singleLineGridData);
-        this.projectLicenceText.getControl().setLayoutData(singleLineGridData);
-        this.projectIdentifierText.getControl().setLayoutData(singleLineGridData);
-        this.projectSubjectText.getControl().setLayoutData(singleLineGridData);
-        this.projectElectronicLocationText.getControl().setLayoutData(singleLineGridData);
-        this.projectPhysicalLocationText.getControl().setLayoutData(singleLineGridData);
-        this.projectPlaceOrRegionNameText.getControl().setLayoutData(singleLineGridData);
-        this.projectLatitudeLongitudeText.getControl().setLayoutData(singleLineGridData);
-        this.projectDatesOfCaptureText.getControl().setLayoutData(singleLineGridData);
-        this.projectCitationInformationText.getControl().setLayoutData(singleLineGridData);
-        this.projectRelatedPartyText.getControl().setLayoutData(singleLineGridData);
-        this.projectRelatedActivityText.getControl().setLayoutData(singleLineGridData);
-        this.projectRelatedInformationText.getControl().setLayoutData(singleLineGridData);
+        this.projectRightsStatementText.setLayoutData(singleLineGridData);
+        this.projectAccessRightsText.setLayoutData(singleLineGridData);
+        this.projectLicenceText.setLayoutData(singleLineGridData);
+        this.projectIdentifierText.setLayoutData(singleLineGridData);
+        this.projectSubjectText.setLayoutData(singleLineGridData);
+        this.projectElectronicLocationText.setLayoutData(singleLineGridData);
+        this.projectPhysicalLocationText.setLayoutData(singleLineGridData);
+        this.projectPlaceOrRegionNameText.setLayoutData(singleLineGridData);
+        this.projectLatitudeLongitudeText.setLayoutData(singleLineGridData);
+        this.projectDatesOfCaptureText.setLayoutData(singleLineGridData);
+        this.projectCitationInformationText.setLayoutData(singleLineGridData);
+        this.projectRelatedPartyText.setLayoutData(singleLineGridData);
+        this.projectRelatedActivityText.setLayoutData(singleLineGridData);
+        this.projectRelatedInformationText.setLayoutData(singleLineGridData);
 
         setControl(this.container);
         setPageComplete(allFieldsAreValid());
@@ -308,35 +282,19 @@ public final class EditOrCreateProjectWizardPage1 extends WizardPage implements 
     public ProjectFieldsDTO getProjectFields()
     {
         return new ProjectFieldsDTO(this.projectNameField.getContents().trim(), 
-                this.projectOwnerText.getContents().trim(), this.projectDescriptionText.getContents().trim(),                
+                this.projectOwnerText.getText().trim(), this.projectDescriptionText.getText().trim(),                
                 this.projectCollectionDropDown.getItem(this.projectCollectionDropDown.getSelectionIndex()),
-                this.projectRightsStatementText.getContents().trim(), this.projectAccessRightsText.getContents().trim(),
-                this.projectLicenceText.getContents().trim(), this.projectIdentifierText.getContents().trim(),
-                this.projectSubjectText.getContents().trim(), this.projectElectronicLocationText.getContents().trim(),
-                this.projectPhysicalLocationText.getContents().trim(), this.projectPlaceOrRegionNameText.getContents().trim(),
-                this.projectLatitudeLongitudeText.getContents().trim(), this.projectDatesOfCaptureText.getContents().trim(),
-                this.projectCitationInformationText.getContents().trim(), this.projectRelatedPartyText.getContents().trim(),
-                this.projectRelatedActivityText.getContents().trim(), this.projectRelatedInformationText.getContents().trim());
+                this.projectRightsStatementText.getText().trim(), this.projectAccessRightsText.getText().trim(),
+                this.projectLicenceText.getText().trim(), this.projectIdentifierText.getText().trim(),
+                this.projectSubjectText.getText().trim(), this.projectElectronicLocationText.getText().trim(),
+                this.projectPhysicalLocationText.getText().trim(), this.projectPlaceOrRegionNameText.getText().trim(),
+                this.projectLatitudeLongitudeText.getText().trim(), this.projectDatesOfCaptureText.getText().trim(),
+                this.projectCitationInformationText.getText().trim(), this.projectRelatedPartyText.getText().trim(),
+                this.projectRelatedActivityText.getText().trim(), this.projectRelatedInformationText.getText().trim());
     }
     
     private boolean allFieldsAreValid()
     {
-        return this.projectNameField.isValid() &&
-                this.projectDescriptionText.isValid() &&
-                this.projectOwnerText.isValid() &&
-                this.projectRightsStatementText.isValid() &&
-                this.projectAccessRightsText.isValid() &&
-                this.projectLicenceText.isValid() &&
-                this.projectIdentifierText.isValid() &&
-                this.projectSubjectText.isValid() &&
-                this.projectElectronicLocationText.isValid() &&
-                this.projectPhysicalLocationText.isValid() &&
-                this.projectPlaceOrRegionNameText.isValid() &&
-                this.projectLatitudeLongitudeText.isValid() &&
-                this.projectDatesOfCaptureText.isValid() &&
-                this.projectCitationInformationText.isValid() &&
-                this.projectRelatedPartyText.isValid() &&
-                this.projectRelatedActivityText.isValid() &&
-                this.projectRelatedInformationText.isValid();
+        return this.projectNameField.isValid();
     }
 }
