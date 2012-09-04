@@ -296,7 +296,7 @@ public final class ProjectServiceUnitTest extends DAOTest
         
         for (ResearchFile file : folderFromDB.getFiles())
         {
-            assertEquals("/new/location/" + file.getFile().getName(), file.getFile().getAbsolutePath());
+            assertEquals(updatedFileObject.getAbsolutePath() + File.separator + file.getFile().getName(), file.getFile().getAbsolutePath());
         }
 
     }
