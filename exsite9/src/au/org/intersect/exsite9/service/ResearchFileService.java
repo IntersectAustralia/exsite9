@@ -344,12 +344,26 @@ public class ResearchFileService implements IResearchFileService
             }
             else
             {
-                ResearchFile researchFile = new ResearchFile(file);
-                researchFile.setProject(project);
-                researchFile.setParentGroup(newGroup);
-                researchFileDAO.createResearchFile(researchFile);
-                parentFolder.getFiles().add(researchFile);
-                newGroup.getResearchFiles().add(researchFile);
+                boolean createFile = true;
+                
+                for(ResearchFile researchFile : newGroup.getResearchFiles())
+                {
+                    if(researchFile.getFile().equals(file))
+                    {
+                        createFile = false;
+                        break;
+                    }
+                }
+                
+                if (createFile)
+                {
+                    ResearchFile researchFile = new ResearchFile(file);
+                    researchFile.setProject(project);
+                    researchFile.setParentGroup(newGroup);
+                    researchFileDAO.createResearchFile(researchFile);
+                    parentFolder.getFiles().add(researchFile);
+                    newGroup.getResearchFiles().add(researchFile);
+                }
             }
         }
         groupDAO.updateGroup(newGroup);
