@@ -379,5 +379,28 @@ public class ResearchFileService implements IResearchFileService
         }
         
     }
+
+    @Override
+    public void changeAFilesParentFolder(ResearchFile researchFile, long newFolderId)
+    {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        try
+        {
+            final ResearchFileDAO researchFileDAO = this.researchFileDAOFactory.createInstance(em);
+            final FolderDAO folderDAO = this.folderDAOFactory.createInstance(em);
+            
+            Folder folder = researchFileDAO.getParentFolder(researchFile);
+            folder.getFiles().remove(researchFile);
+            Folder newFolder = folderDAO.findById(newFolderId);
+            newFolder.getFiles().add(researchFile);
+            folderDAO.updateFolder(folder);
+            folderDAO.updateFolder(newFolder);
+
+        }
+        finally
+        {
+            em.close();
+        }
+    }
     
 }

@@ -94,10 +94,10 @@ public class FindResearchFileHandler implements IHandler
                         boolean confirmation = MessageDialog.openConfirm(shell, "", "The file you have chosen is already in the system in another location, by proceeding, that file and any associated metadata will be removed.");
                         if (confirmation)
                         {
-                            projectService.removeResearchFileFromSystem(existingResearchFile.getId());
-                            
+                            projectService.removeResearchFileFromSystem(existingResearchFile.getId());                            
                             ((ResearchFile) selectionObject).setFile(newFileObject);
                             researchFileService.updateResearchFile((ResearchFile) selectionObject);
+                            researchFileService.changeAFilesParentFolder((ResearchFile) selectionObject, existingFolder.getId());
                         }
                         return null;
                     }

@@ -61,8 +61,8 @@ import au.org.intersect.exsite9.domain.NewFilesGroup;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.RootGroup;
-import au.org.intersect.exsite9.domain.utils.AlphabeticalMetadataCategoryComparator;
 import au.org.intersect.exsite9.domain.utils.AlphabeticalMetadataValueComparator;
+import au.org.intersect.exsite9.domain.utils.IDMetadataCategoryComparator;
 import au.org.intersect.exsite9.domain.utils.MetadataAssignableUtils;
 import au.org.intersect.exsite9.service.IGroupService;
 import au.org.intersect.exsite9.service.IMetadataCategoryService;
@@ -197,7 +197,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         this.expandBar = new ExpandBar(this.parent, SWT.BORDER | SWT.V_SCROLL);
 
         final List<MetadataCategory> sorted = new ArrayList<MetadataCategory>(metadataCategories);
-        Collections.sort(sorted, new AlphabeticalMetadataCategoryComparator());
+        Collections.sort(sorted, new IDMetadataCategoryComparator());
 
         for (final MetadataCategory metadataCategory : sorted)
         {

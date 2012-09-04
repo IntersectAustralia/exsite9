@@ -17,19 +17,20 @@ import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataCategoryUse;
 
 /**
- * Tests {@link AlphabeticalMetadataCategoryComparator}
+ * Tests {@link IDMetadataCategoryComparator}
  */
-public final class AlphabeticalMetadataCategoryComparatorUnitTest
+public final class IDMetadataCategoryComparatorUnitTest
 {
 
     @Test
     public void test()
     {
-        final AlphabeticalMetadataCategoryComparator toTest = new AlphabeticalMetadataCategoryComparator();
-        assertTrue(toTest instanceof Comparator<?>);
+        final Comparator<MetadataCategory> toTest = new IDMetadataCategoryComparator();
 
         final MetadataCategory cat1 = new MetadataCategory("cat1", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
         final MetadataCategory cat2 = new MetadataCategory("cat2", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
+        cat1.setId(100l);
+        cat2.setId(200l);
 
         assertTrue(toTest.compare(cat1, cat2) < 0);
         assertTrue(toTest.compare(cat2, cat1) > 0);
