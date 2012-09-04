@@ -23,7 +23,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.Schema;
-import au.org.intersect.exsite9.domain.utils.AlphabeticalMetadataCategoryComparator;
+import au.org.intersect.exsite9.domain.utils.IDMetadataCategoryComparator;
 
 /**
  * 
@@ -48,7 +48,7 @@ public final class ListMetadataCategoriesWizardPage extends WizardPage implement
         this.schema = schema;
         this.showRemoveButton = showRemoveButton;
         this.metadataCategories = new ArrayList<MetadataCategory>(this.schema.getMetadataCategories());
-        Collections.sort(this.metadataCategories, new AlphabeticalMetadataCategoryComparator());
+        Collections.sort(this.metadataCategories, new IDMetadataCategoryComparator());
     }
 
     @Override
