@@ -117,7 +117,7 @@ public class ExportSubmissionPackageZIPHandler implements IHandler
         {
             return null;
         }
-
+        
         final ISubmissionPackageService submissionPackageService = (ISubmissionPackageService) PlatformUI.getWorkbench().getService(ISubmissionPackageService.class);
         final IRunnableWithProgress zipBuilderRunnable = submissionPackageService.buildZIPForSubmissionPackage(currentproject, submissionPackage, new File(filePath));
 
@@ -129,7 +129,7 @@ public class ExportSubmissionPackageZIPHandler implements IHandler
         catch (final InvocationTargetException e)
         {
             final Throwable cause = e.getCause();
-            MessageDialog.openError(shell, "Could not generate submission package ZIP file", "Could not generate submission package ZIP file. " + cause.getMessage());
+            MessageDialog.openError(shell, "Could not generate submission package ZIP file", "Could not generate submission package ZIP file.\n\n" + cause.getMessage());
             LOG.error("Could not create submission package ZIP file.", e);
             return null;
         }

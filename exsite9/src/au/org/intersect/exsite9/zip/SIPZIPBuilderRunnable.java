@@ -11,6 +11,8 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 import java.util.List;
 
+import javax.swing.filechooser.FileSystemView;
+
 import org.apache.commons.compress.archivers.zip.Zip64Mode;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
@@ -25,6 +27,7 @@ import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.SubmissionPackage;
+import au.org.intersect.exsite9.exception.NotEnoughSpaceForZIPException;
 import au.org.intersect.exsite9.xml.SIPXMLBuilder;
 
 public final class SIPZIPBuilderRunnable implements IRunnableWithProgress
@@ -55,7 +58,7 @@ public final class SIPZIPBuilderRunnable implements IRunnableWithProgress
     public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
     {
         this.progressMonitor = monitor;
-
+        
         // Determine the size of all files we need to compress - so we can provide progress.
         long totalSizeBytes = 0;
         for (final ResearchFile researchFile : this.submissionPackage.getResearchFiles())
@@ -66,6 +69,30 @@ public final class SIPZIPBuilderRunnable implements IRunnableWithProgress
                 totalSizeBytes += file.length();
             }
         }
+        
+        // Throw an exception if we don't have enough room on the device
+        
+        File destinationRoot = destinationFile.getParentFile();
+        while(destinationRoot.getParentFile() != null)
+        {
+            destinationRoot = destinationRoot.getParentFile();
+        }        
+        
+        FileSystemView fsv = FileSystemView.getFileSystemView();
+        if(fsv.isFileSystemRoot(destinationRoot))
+        {
+            long freeSpaceBytes = destinationRoot.getUsableSpace();
+            LOG.info("Device has " + freeSpaceBytes + " bytes available.");
+            
+            if(totalSizeBytes > freeSpaceBytes)
+            {
+                LOG.info("No room for ZIP file.");
+                String msg = "Not enough free space on device " + destinationRoot.getAbsolutePath();
+                NotEnoughSpaceForZIPException nesfze = new NotEnoughSpaceForZIPException(msg);
+                throw new InvocationTargetException(nesfze);
+            }
+        }
+        
         final int totalSizeKiloBytes = (int) (totalSizeBytes / 1024);
         this.progressMonitor.beginTask(PROGRESS_MESSAGE, totalSizeKiloBytes);
 
