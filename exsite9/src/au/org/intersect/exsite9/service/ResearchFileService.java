@@ -314,12 +314,25 @@ public class ResearchFileService implements IResearchFileService
         final GroupDAO groupDAO = groupDAOFactory.createInstance(em);
         
         // Create group for folder
+        Group newGroup = null;
         
-        Group newGroup = new Group(folder.getFolder().getName());
-        newGroup.setParentGroup(parentGroup);
-        parentGroup.getGroups().add(newGroup);
-        groupDAO.createGroup(newGroup);
-        groupDAO.updateGroup(parentGroup);
+        for(Group group : parentGroup.getGroups())
+        {
+            if(group.getName().equalsIgnoreCase(folder.getFolder().getName()))
+            {
+                newGroup = group;
+                break;
+            }
+        }
+        
+        if(newGroup == null)
+        {
+            newGroup = new Group(folder.getFolder().getName());
+            newGroup.setParentGroup(parentGroup);
+            parentGroup.getGroups().add(newGroup);
+            groupDAO.createGroup(newGroup);
+            groupDAO.updateGroup(parentGroup);
+        }
         
         // Create Research files for files
         List<File> folderList = new ArrayList<File>(0);
@@ -333,7 +346,7 @@ public class ResearchFileService implements IResearchFileService
             {
                 ResearchFile researchFile = new ResearchFile(file);
                 researchFile.setProject(project);
-                researchFile.setParentGroup(parentGroup);
+                researchFile.setParentGroup(newGroup);
                 researchFileDAO.createResearchFile(researchFile);
                 parentFolder.getFiles().add(researchFile);
                 newGroup.getResearchFiles().add(researchFile);
