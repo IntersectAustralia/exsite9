@@ -92,5 +92,7 @@ public interface IResearchFileService
      * @param folder
      */
     public void importFolderStructureForProject(final Project project, Folder folder);
+
+    public void changeAFilesParentFolder(ResearchFile researchFile, long newFolderId);
     
 }
