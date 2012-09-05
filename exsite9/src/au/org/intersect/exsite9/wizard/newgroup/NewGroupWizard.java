@@ -48,8 +48,9 @@ public final class NewGroupWizard extends Wizard
     {
         final String newGroupName = this.page1.getNewGroupName();
         final IGroupService groupService = (IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class);
-        this.newGroup = groupService.createNewGroup(newGroupName);
-        groupService.addChildGroup(this.parentGroup, this.newGroup);
+        final Group theNewGroup = groupService.createNewGroup(newGroupName);
+        groupService.addChildGroup(this.parentGroup, theNewGroup);
+        this.newGroup = groupService.findGroupByID(theNewGroup.getId());
 
         return true;
     }

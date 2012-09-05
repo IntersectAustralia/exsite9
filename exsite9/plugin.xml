@@ -220,6 +220,11 @@
        id="au.org.intersect.exsite9.commands.ImportFolderToProjectCommand"
        name="Import Folder Structure">
  </command>
+ <command
+       defaultHandler="au.org.intersect.exsite9.commands.handlers.MoveToNewGroupHandler"
+       id="au.org.intersect.exsite9.commands.MoveToNewGroup"
+       name="Move selected items to new Group">
+ </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -430,6 +435,17 @@
                   checkEnabled="false">
                <reference
                      definitionId="au.org.intersect.exsite9.expression.InstanceOfProjectOrGroup">
+               </reference>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="au.org.intersect.exsite9.commands.MoveToNewGroup"
+               label="Create Group from..."
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <reference
+                     definitionId="au.org.intersect.exsite9.expression.InstanceOfResearchFileOrGroup">
                </reference>
             </visibleWhen>
          </command>
@@ -879,6 +895,17 @@
             </iterate>
             </and>
          </with>
+      </definition>
+      <definition
+            id="au.org.intersect.exsite9.expression.InstanceOfResearchFileOrGroup">
+         <or>
+            <reference
+                  definitionId="au.org.intersect.exsite9.expression.InstanceOfResearchFile">
+            </reference>
+            <reference
+                  definitionId="au.org.intersect.exsite9.expression.InstanceOfGroup">
+            </reference>
+         </or>
       </definition>
       
    </extension>

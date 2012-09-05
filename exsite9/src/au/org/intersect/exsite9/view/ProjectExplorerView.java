@@ -128,6 +128,9 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
         final Command removeMetadataCategoryWithWizardCommand = commandService.getCommand("au.org.intersect.exsite9.commands.RemoveMetadataCategoryWithWizardCommand");
         removeMetadataCategoryWithWizardCommand.addExecutionListener(this);
 
+        final Command moveToNewGroupCommand = commandService.getCommand("au.org.intersect.exsite9.commands.MoveToNewGroup");
+        moveToNewGroupCommand.addExecutionListener(this);
+
         initContextMenu();
     }
 
@@ -202,7 +205,8 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
                 || commandId.equals("au.org.intersect.exsite9.commands.ListExcludedFilesCommand")
                 || commandId.equals("au.org.intersect.exsite9.commands.RemoveMetadataCategoryCommand")
                 || commandId.equals("au.org.intersect.exsite9.commands.EditMetadataCategoryCommand")
-                || commandId.equals("au.org.intersect.exsite9.commands.RemoveMetadataCategoryWithWizardCommand"))
+                || commandId.equals("au.org.intersect.exsite9.commands.RemoveMetadataCategoryWithWizardCommand")
+                || commandId.equals("au.org.intersect.exsite9.commands.MoveToNewGroup"))
         {
             refresh();
         }
