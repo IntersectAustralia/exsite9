@@ -43,6 +43,7 @@ import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
@@ -207,14 +208,17 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             expandBarLayout.pack = true;
             expandBarLayout.justify = false;
             expandBarComposite.setLayout(expandBarLayout);
-
+            
             final Composite headerComposite = new Composite(expandBarComposite, SWT.NONE);
             final Composite contentComposite = new Composite(expandBarComposite, SWT.NONE);
-
+            
+            contentComposite.setToolTipText(metadataCategory.getName());
+            
             final ExpandItem expandItem = new ExpandItem(this.expandBar, SWT.NONE);
             expandItem.setText(metadataCategory.getName() + " (" + metadataCategory.getUse() + ")");
             expandItem.setControl(expandBarComposite);
             expandItem.setHeight(expandBarComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+            
             expandBarComposite.addControlListener(new ControlAdapter()
             {
                 @Override
@@ -233,13 +237,20 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             editButtonItem.setImage(editImage);
             editButtonItem.addSelectionListener(new MetadataCategorySelectionListener(metadataCategory,
                     "au.org.intersect.exsite9.commands.AddMetadataCategoryCommand", "au.org.intersect.exsite9.commands.AddMetadataCategoryCommand.categoryParameter"));
-
+            editButtonItem.setToolTipText("Edit category");
+            
             final ToolItem removeButtonItem = new ToolItem(toolBar, SWT.NULL);
             final Image removeImage = Activator.getImageDescriptor("/icons/icon_exclude_16.png").createImage();
             removeButtonItem.setImage(removeImage);
+            removeButtonItem.setToolTipText("Remove category");
             removeButtonItem.addSelectionListener(new MetadataCategorySelectionListener(metadataCategory,
                     "au.org.intersect.exsite9.commands.RemoveMetadataCategoryCommand", "au.org.intersect.exsite9.commands.RemoveMetadataCategoryCommand.categoryParameter"));
 
+            final ToolItem helpButtonItem = new ToolItem(toolBar, SWT.NULL);
+            final Image helpImage = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_LCL_LINKTO_HELP);
+            helpButtonItem.setImage(helpImage);
+            helpButtonItem.setToolTipText(metadataCategory.getName());
+            
             new ToolItem(toolBar, SWT.SEPARATOR);
             toolBar.pack();
 
