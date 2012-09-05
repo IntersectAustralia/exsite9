@@ -11,4 +11,5 @@ public final class MetadataSchemaXMLUtils
     public static final String ATTRIBUTE_NAMESPACEURL = "namespace_url";
     public static final String ATTRIBUTE_USE = "use";
     public static final String ATTRIBUTE_TYPE = "type";
+    public static final String ATTRIBUTE_INEXTENSIBLE = "inextensible";
 }

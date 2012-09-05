@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- NOTE this XML Schema is in RELAX-NG format. See http://relaxng.org/ -->
-<element name="schema" xmlns="http://relaxng.org/ns/structure/1.0">
+<element name="schema" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
 	<attribute name="name">
 		<text/>
 	</attribute>
@@ -27,6 +27,9 @@
 					<value>Controlled Vocabulary</value>
 					<value>Free Text</value>
 				</choice>
+			</attribute>
+			<attribute name="inextensible">
+				<data type="boolean"/>
 			</attribute>
 			<zeroOrMore>
 				<element name="value">

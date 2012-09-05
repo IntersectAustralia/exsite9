@@ -65,6 +65,7 @@ public class AddMetadataCategoryWizard extends Wizard
         final String categoryTitle = page1.getMetadataCategoryName();
         final MetadataCategoryType categoryType = page1.getMetadataCategoryType();
         final MetadataCategoryUse categoryUse = page1.getMetadataCategoryUse();
+        final boolean inextensible = page1.getIsInextensible();
 
         // Persist the new metadata category.
         final IMetadataCategoryService metadataCategoryService = (IMetadataCategoryService) PlatformUI.getWorkbench()
@@ -95,7 +96,7 @@ public class AddMetadataCategoryWizard extends Wizard
             {
                 values = Collections.emptyList();
             }
-            final MetadataCategory newCategory = metadataCategoryService.createNewMetadataCategory(categoryTitle, categoryType, categoryUse, values);
+            final MetadataCategory newCategory = metadataCategoryService.createNewMetadataCategory(categoryTitle, categoryType, categoryUse, inextensible, values);
             schemaService.addMetadataCategoryToSchema(this.project.getSchema(), newCategory);
         }
         else

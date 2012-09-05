@@ -43,6 +43,9 @@ public final class MetadataCategory implements Serializable
     private MetadataCategoryUse use;
 
     private MetadataCategoryType type;
+    
+    private boolean isInextensible;
+
 
     @OneToMany(cascade=CascadeType.ALL, orphanRemoval=true)
     private List<MetadataValue> metadataValues = new ArrayList<MetadataValue>();
@@ -108,6 +111,16 @@ public final class MetadataCategory implements Serializable
         this.type = metadataCategoryType;
     }
 
+    public boolean isInextensible()
+    {
+        return isInextensible;
+    }
+    
+    public void setInextensible(boolean isInextensible)
+    {
+        this.isInextensible = isInextensible;
+    }
+    
     @Override
     public int hashCode()
     {

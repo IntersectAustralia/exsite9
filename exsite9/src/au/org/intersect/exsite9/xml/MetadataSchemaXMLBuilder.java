@@ -72,6 +72,7 @@ public final class MetadataSchemaXMLBuilder extends BaseXMLBuilder
 
             final MetadataCategoryType type = category.getType();
             catElement.setAttribute(ATTRIBUTE_TYPE, type.toString());
+            catElement.setAttribute(ATTRIBUTE_INEXTENSIBLE, ((Boolean)category.isInextensible()).toString());
 
             if (type != MetadataCategoryType.FREETEXT)
             {
