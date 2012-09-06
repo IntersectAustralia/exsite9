@@ -15,9 +15,16 @@ public class FolderDAO
     
     public void createFolder(final Folder folder)
     {
-        em.getTransaction().begin();
+        final boolean transactionActive = em.getTransaction().isActive();
+        if (!transactionActive)
+        {
+            em.getTransaction().begin();
+        }
         em.persist(folder);
-        em.getTransaction().commit();
+        if (!transactionActive)
+        {
+            em.getTransaction().commit();
+        }
     }
     
     public Folder updateFolder(final Folder folder)
