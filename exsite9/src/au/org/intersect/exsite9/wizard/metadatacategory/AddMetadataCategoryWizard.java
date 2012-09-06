@@ -101,7 +101,7 @@ public class AddMetadataCategoryWizard extends Wizard
         }
         else
         {
-            metadataCategoryService.updateMetadataCategory(this.metadataCategory, categoryTitle, categoryUse, page1.getMetadataCategoryValues());
+            metadataCategoryService.updateMetadataCategory(this.metadataCategory, categoryTitle, categoryUse, inextensible, page1.getMetadataCategoryValues());
         }
 
         return this.project != null;

@@ -343,7 +343,7 @@
                   mnemonic="S">
                <command
                      commandId="au.org.intersect.exsite9.commands.ImportMetadataSchemaCommand"
-                     label="Modify Schema..."
+                     label="Select Schema..."
                      mnemonic="M"
                      style="push"
                      tooltip="Modify the metadata schema">
