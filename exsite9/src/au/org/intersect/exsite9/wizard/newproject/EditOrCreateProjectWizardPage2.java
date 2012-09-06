@@ -38,7 +38,7 @@ import com.richclientgui.toolbox.validation.string.StringValidationToolkit;
 import au.org.intersect.exsite9.domain.Schema;
 import au.org.intersect.exsite9.exception.InvalidSchemaException;
 import au.org.intersect.exsite9.service.ISchemaService;
-import au.org.intersect.exsite9.wizard.MaximumFieldLengthValidator;
+import au.org.intersect.exsite9.wizard.MaximumLengthFieldValidator;
 import au.org.intersect.exsite9.wizard.WizardPageErrorHandler;
 
 /**
@@ -119,7 +119,7 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         final Label localSchemaNameLabel = new Label(localGroup, SWT.NULL);
         localSchemaNameLabel.setText("Schema Name");
 
-        this.localSchemaNameField = this.stringValidatorToolkit.createTextField(localGroup, new MaximumFieldLengthValidator("Schema Name", 255), true, "");
+        this.localSchemaNameField = this.stringValidatorToolkit.createTextField(localGroup, new MaximumLengthFieldValidator("Schema Name", 255), true, "");
         this.localSchemaNameField.getControl().addKeyListener(this);
 
         final Label localSchemaDescriptionLabel = new Label(localGroup, SWT.NULL);
@@ -356,7 +356,7 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
     {
         if (this.localSchemaRadioButton.getSelection())
         {
-            return this.localSchemaNameField.isValid();
+            return this.localSchemaNameField.isValid() && !this.localSchemaNameField.getContents().isEmpty();
         }
         if (this.importSchemaRadioButton.getSelection())
         {

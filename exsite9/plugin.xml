@@ -697,6 +697,11 @@
          <service
                serviceClass="au.org.intersect.exsite9.service.ISchemaService"></service>
       </serviceFactory>
+      <serviceFactory
+            factoryClass="au.org.intersect.exsite9.service.factory.FieldOfResearchServiceFactory">
+         <service
+               serviceClass="au.org.intersect.exsite9.service.IFieldOfResearchService"></service>
+      </serviceFactory>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -952,6 +957,9 @@
       </startup>
       <startup
             class="au.org.intersect.exsite9.startup.InitializeFolderRefreshJob">
+      </startup>
+      <startup
+            class="au.org.intersect.exsite9.startup.InsertFieldsOfResearch">
       </startup>
    </extension>
    <extension

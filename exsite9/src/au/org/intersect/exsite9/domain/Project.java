@@ -46,6 +46,12 @@ public final class Project implements Serializable
     private String owner;
 
     @Column(columnDefinition = "longvarchar")
+    private String institution;
+
+    @Column(columnDefinition = "longvarchar")
+    private String email;
+
+    @Column(columnDefinition = "longvarchar")
     private String description;
 
     @Column(columnDefinition = "longvarchar")
@@ -76,7 +82,7 @@ public final class Project implements Serializable
     private String placeOrRegionName;
 
     @Column(columnDefinition = "longvarchar")
-    private String latitudeLongitude;
+    private String geographicalCoverage;
 
     @Column(columnDefinition = "longvarchar")
     private String datesOfCapture;
@@ -85,10 +91,25 @@ public final class Project implements Serializable
     private String citationInformation;
 
     @Column(columnDefinition = "longvarchar")
+    private String countries;
+
+    @Column(columnDefinition = "longvarchar")
+    private String languages;
+
+    @OneToOne
+    private FieldOfResearch fieldOfResearch;
+
+    @Column(columnDefinition = "longvarchar")
+    private String fundingBody;
+
+    @Column(columnDefinition = "longvarchar")
+    private String grantID;
+
+    @Column(columnDefinition = "longvarchar")
     private String relatedParty;
 
     @Column(columnDefinition = "longvarchar")
-    private String relatedActivity;
+    private String relatedGrant;
 
     @Column(columnDefinition = "longvarchar")
     private String relatedInformation;
@@ -117,6 +138,8 @@ public final class Project implements Serializable
     {
         name = "";
         owner = "";
+        institution = "";
+        email = "";
         description = "";
         collectionType = "";
         rightsStatement = "";
@@ -127,19 +150,25 @@ public final class Project implements Serializable
         electronicLocation = "";
         physicalLocation = "";
         placeOrRegionName = "";
-        latitudeLongitude = "";
+        geographicalCoverage = "";
         datesOfCapture = "";
         citationInformation = "";
+        countries = "";
+        languages = "";
+        fundingBody = "";
+        grantID = "";
         relatedParty = "";
-        relatedActivity = "";
+        relatedGrant = "";
         relatedInformation = "";
     }
 
     public Project(final ProjectFieldsDTO projectFields)
     {
         this.name = projectFields.getName();
-        this.description = projectFields.getDescription();
         this.owner = projectFields.getOwner();
+        this.institution = projectFields.getInstitution();
+        this.email = projectFields.getEmail();
+        this.description = projectFields.getDescription();
         this.collectionType = projectFields.getCollectionType();
         this.rightsStatement = projectFields.getRightsStatement();
         this.accessRights = projectFields.getAccessRights();
@@ -149,13 +178,17 @@ public final class Project implements Serializable
         this.electronicLocation = projectFields.getElectronicLocation();
         this.physicalLocation = projectFields.getPhysicalLocation();
         this.placeOrRegionName = projectFields.getPlaceOrRegionName();
-        this.latitudeLongitude = projectFields.getLatitudeLongitude();
+        this.geographicalCoverage = projectFields.getGeographicalCoverage();
         this.datesOfCapture = projectFields.getDatesOfCapture();
         this.citationInformation = projectFields.getCitationInformation();
+        this.countries = projectFields.getCountries();
+        this.languages = projectFields.getLanguages();
+        this.fieldOfResearch = projectFields.getFieldOfResearch();
+        this.fundingBody = projectFields.getFundingBody();
+        this.grantID = projectFields.getGrantID();
         this.relatedParty = projectFields.getRelatedParty();
-        this.relatedActivity = projectFields.getRelatedActivity();
+        this.relatedGrant = projectFields.getRelatedGrant();
         this.relatedInformation = projectFields.getRelatedInformation();
-
         this.folders = new ArrayList<Folder>(0);
         this.rootNode = new RootGroup(this.name);
         this.newFilesNode = new NewFilesGroup();
@@ -183,6 +216,36 @@ public final class Project implements Serializable
         this.name = name;
     }
 
+    public String getOwner()
+    {
+        return owner;
+    }
+    
+    public void setOwner(String owner)
+    {
+        this.owner = owner;
+    }
+
+    public String getInstitution()
+    {
+        return institution;
+    }
+
+    public void setInstitution(String institution)
+    {
+        this.institution = institution;
+    }
+
+    public String getEmail()
+    {
+        return email;
+    }
+
+    public void setEmail(final String email)
+    {
+        this.email = email;
+    }
+
     public String getDescription()
     {
         return description;
@@ -191,16 +254,6 @@ public final class Project implements Serializable
     public void setDescription(String description)
     {
         this.description = description;
-    }
-
-    public String getOwner()
-    {
-        return owner;
-    }
-
-    public void setOwner(String owner)
-    {
-        this.owner = owner;
     }
 
     public String getCollectionType()
@@ -293,14 +346,14 @@ public final class Project implements Serializable
         this.placeOrRegionName = placeOrRegionName;
     }
 
-    public String getLatitudeLongitude()
+    public String getGeographicalCoverage()
     {
-        return latitudeLongitude;
+        return geographicalCoverage;
     }
 
-    public void setLatitudeLongitude(String latitudeLongitude)
+    public void setGeographicalCoverage(String geographicalCoverage)
     {
-        this.latitudeLongitude = latitudeLongitude;
+        this.geographicalCoverage = geographicalCoverage;
     }
 
     public String getDatesOfCapture()
@@ -323,6 +376,56 @@ public final class Project implements Serializable
         this.citationInformation = citationInformation;
     }
 
+    public String getCountries()
+    {
+        return countries;
+    }
+
+    public void setCountries(final String countries)
+    {
+        this.countries = countries;
+    }
+
+    public String getLanguages()
+    {
+        return languages;
+    }
+
+    public void setLanguages(final String languages)
+    {
+        this.languages = languages;
+    }
+
+    public FieldOfResearch getFieldOfResearch()
+    {
+        return fieldOfResearch;
+    }
+
+    public void setFieldOfResearch(final FieldOfResearch fieldOfResearch)
+    {
+        this.fieldOfResearch = fieldOfResearch;
+    }
+    
+    public String getFundingBody()
+    {
+        return fundingBody;
+    }
+
+    public void setFundingBody(final String fundingBody)
+    {
+        this.fundingBody = fundingBody;
+    }
+
+    public String getGrantID()
+    {
+        return grantID;
+    }
+
+    public void setGrantID(final String grantID)
+    {
+        this.grantID = grantID;
+    }
+
     public String getRelatedParty()
     {
         return relatedParty;
@@ -333,14 +436,14 @@ public final class Project implements Serializable
         this.relatedParty = relatedParty;
     }
 
-    public String getRelatedActivity()
+    public String getRelatedGrant()
     {
-        return relatedActivity;
+        return relatedGrant;
     }
 
-    public void setRelatedActivity(String relatedActivity)
+    public void setRelatedGrant(String relatedGrant)
     {
-        this.relatedActivity = relatedActivity;
+        this.relatedGrant = relatedGrant;
     }
 
     public String getRelatedInformation()

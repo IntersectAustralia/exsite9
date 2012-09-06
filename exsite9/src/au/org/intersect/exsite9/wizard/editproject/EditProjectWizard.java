@@ -25,13 +25,16 @@ public class EditProjectWizard extends MetadataSchemaEditingWizard
         setNeedsProgressMonitor(true);
         this.page1 = new EditOrCreateProjectWizardPage1("Edit Project", "Please amend the details of your project",
                 new ProjectFieldsDTO(selectedProject.getName(), selectedProject.getOwner(),
+                        selectedProject.getInstitution(), selectedProject.getEmail(),
                         selectedProject.getDescription(), selectedProject.getCollectionType(),
                         selectedProject.getRightsStatement(), selectedProject.getAccessRights(),
                         selectedProject.getLicence(), selectedProject.getIdentifier(), selectedProject.getSubject(),
                         selectedProject.getElectronicLocation(), selectedProject.getPhysicalLocation(),
-                        selectedProject.getPlaceOrRegionName(), selectedProject.getLatitudeLongitude(),
+                        selectedProject.getPlaceOrRegionName(), selectedProject.getGeographicalCoverage(),
                         selectedProject.getDatesOfCapture(), selectedProject.getCitationInformation(),
-                        selectedProject.getRelatedParty(), selectedProject.getRelatedActivity(),
+                        selectedProject.getCountries(), selectedProject.getLanguages(), selectedProject.getFieldOfResearch(),
+                        selectedProject.getFundingBody(), selectedProject.getGrantID(),
+                        selectedProject.getRelatedParty(), selectedProject.getRelatedGrant(),
                         selectedProject.getRelatedInformation()));
 
         this.projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);

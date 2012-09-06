@@ -17,6 +17,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import au.org.intersect.exsite9.domain.FieldOfResearch;
 import au.org.intersect.exsite9.domain.MetadataAssociation;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
@@ -39,39 +40,56 @@ public class BaseXMLBuilder
         projectInfoElement.setAttribute("identifier", project.getIdentifier());
         projectInfoElement.setAttribute("collectionType", project.getCollectionType());
 
-        final Element nameElement = createElementWithTextContent(document, "name", project.getName());
+        final Element nameElement = createElementWithTextContent(document, "projectName", project.getName());
+        final Element ownerElement = createElementWithTextContent(document, "name", project.getOwner());
+        final Element institutionElement = createElementWithTextContent(document, "institution", project.getInstitution());
+        final Element emailElement = createElementWithTextContent(document, "email", project.getEmail());
         final Element descriptionElement = createElementWithTextContent(document, "description", project.getDescription());
-        final Element ownerElement = createElementWithTextContent(document, "owner", project.getOwner());
+        final Element rightsStatementElement = createElementWithTextContent(document, "rightsStatement", project.getRightsStatement());
         final Element accessRightsElement = createElementWithTextContent(document, "accessRights", project.getAccessRights());
-        final Element citationInformationElement = createElementWithTextContent(document, "citationInformation", project.getCitationInformation());
-        final Element datesOfCaptureElement = createElementWithTextContent(document, "datesOfCapture", project.getDatesOfCapture());
-        final Element electronicLocationElement = createElementWithTextContent(document, "electronicLocation", project.getElectronicLocation());
-        final Element latitudeLongitudeElement = createElementWithTextContent(document, "latitudeLongitude", project.getLatitudeLongitude());
         final Element licenseElement = createElementWithTextContent(document, "license", project.getLicence());
+        final Element subjectElement = createElementWithTextContent(document, "subject", project.getSubject());
+        final Element electronicLocationElement = createElementWithTextContent(document, "electronicLocation", project.getElectronicLocation());
         final Element physicalLocationElement = createElementWithTextContent(document, "physicalLocation", project.getPhysicalLocation());
         final Element placeOrRegionNameElement = createElementWithTextContent(document, "placeOrRegionName", project.getPlaceOrRegionName());
-        final Element relatedActivityElement = createElementWithTextContent(document, "relatedActivity", project.getRelatedActivity());
-        final Element relatedInformationElement = createElementWithTextContent(document, "relatedInformation", project.getRelatedInformation());
+        final Element geographicalCoverageElement = createElementWithTextContent(document, "geographicalCoverage", project.getGeographicalCoverage());
+        final Element datesOfCaptureElement = createElementWithTextContent(document, "datesOfCapture", project.getDatesOfCapture());
+        final Element citationInformationElement = createElementWithTextContent(document, "citationInformation", project.getCitationInformation());
+        final Element countriesElement = createElementWithTextContent(document, "countries", project.getCountries());
+        final Element languagesElement = createElementWithTextContent(document, "languages", project.getLanguages());
+
+        final FieldOfResearch fieldOfResearch = project.getFieldOfResearch();
+        final Element fieldOfResearchElement = createElementWithTextContent(document, "fieldOfResearch", fieldOfResearch == null ? "" : fieldOfResearch.toString());
+
+        final Element fundingBodyElement = createElementWithTextContent(document, "fundingBody", project.getFundingBody());
+        final Element grantIDElement = createElementWithTextContent(document, "grantID", project.getGrantID());
         final Element relatedPartyElement = createElementWithTextContent(document, "relatedParty", project.getRelatedParty());
-        final Element rightsStatementElement = createElementWithTextContent(document, "rightsStatement", project.getRightsStatement());
-        final Element subjectElement = createElementWithTextContent(document, "subject", project.getSubject());
+        final Element relatedGrantElement = createElementWithTextContent(document, "relatedGrant", project.getRelatedGrant());
+        final Element relatedInformationElement = createElementWithTextContent(document, "relatedInformation", project.getRelatedInformation());
 
         projectInfoElement.appendChild(nameElement);
-        projectInfoElement.appendChild(descriptionElement);
         projectInfoElement.appendChild(ownerElement);
+        projectInfoElement.appendChild(institutionElement);
+        projectInfoElement.appendChild(emailElement);
+        projectInfoElement.appendChild(descriptionElement);
+        projectInfoElement.appendChild(rightsStatementElement);
         projectInfoElement.appendChild(accessRightsElement);
-        projectInfoElement.appendChild(citationInformationElement);
-        projectInfoElement.appendChild(datesOfCaptureElement);
-        projectInfoElement.appendChild(electronicLocationElement);
-        projectInfoElement.appendChild(latitudeLongitudeElement);
         projectInfoElement.appendChild(licenseElement);
+        projectInfoElement.appendChild(subjectElement);
+        projectInfoElement.appendChild(electronicLocationElement);
         projectInfoElement.appendChild(physicalLocationElement);
         projectInfoElement.appendChild(placeOrRegionNameElement);
-        projectInfoElement.appendChild(relatedActivityElement);
-        projectInfoElement.appendChild(relatedInformationElement);
+        projectInfoElement.appendChild(geographicalCoverageElement);
+        projectInfoElement.appendChild(datesOfCaptureElement);
+        projectInfoElement.appendChild(citationInformationElement);
+        projectInfoElement.appendChild(countriesElement);
+        projectInfoElement.appendChild(languagesElement);
+        projectInfoElement.appendChild(fieldOfResearchElement);
+        projectInfoElement.appendChild(fundingBodyElement);
+        projectInfoElement.appendChild(grantIDElement);
         projectInfoElement.appendChild(relatedPartyElement);
-        projectInfoElement.appendChild(rightsStatementElement);
-        projectInfoElement.appendChild(subjectElement);
+        projectInfoElement.appendChild(relatedGrantElement);
+        projectInfoElement.appendChild(relatedInformationElement);
 
         return projectInfoElement;
     }

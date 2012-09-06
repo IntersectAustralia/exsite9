@@ -126,8 +126,10 @@ public class ProjectService implements IProjectService
             Project project = projectDAO.findById(id);
 
             project.setName(projectFields.getName());
-            project.setDescription(projectFields.getDescription());
             project.setOwner(projectFields.getOwner());
+            project.setInstitution(projectFields.getInstitution());
+            project.setEmail(projectFields.getEmail());
+            project.setDescription(projectFields.getDescription());
             project.setCollectionType(projectFields.getCollectionType());
             project.setRightsStatement(projectFields.getRightsStatement());
             project.setAccessRights(projectFields.getAccessRights());
@@ -137,11 +139,16 @@ public class ProjectService implements IProjectService
             project.setElectronicLocation(projectFields.getElectronicLocation());
             project.setPhysicalLocation(projectFields.getPhysicalLocation());
             project.setPlaceOrRegionName(projectFields.getPlaceOrRegionName());
-            project.setLatitudeLongitude(projectFields.getLatitudeLongitude());
+            project.setGeographicalCoverage(projectFields.getGeographicalCoverage());
             project.setDatesOfCapture(projectFields.getDatesOfCapture());
             project.setCitationInformation(projectFields.getCitationInformation());
             project.setRelatedParty(projectFields.getRelatedParty());
-            project.setRelatedActivity(projectFields.getRelatedActivity());
+            project.setCountries(projectFields.getCountries());
+            project.setLanguages(projectFields.getLanguages());
+            project.setFieldOfResearch(projectFields.getFieldOfResearch());
+            project.setFundingBody(projectFields.getFundingBody());
+            project.setGrantID(projectFields.getGrantID());
+            project.setRelatedGrant(projectFields.getRelatedGrant());
             project.setRelatedInformation(projectFields.getRelatedInformation());
 
             projectDAO.updateProject(project);

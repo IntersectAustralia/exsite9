@@ -30,6 +30,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.part.ViewPart;
 
+import au.org.intersect.exsite9.domain.FieldOfResearch;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.IMetadataAssignable;
 import au.org.intersect.exsite9.domain.MetadataCategory;
@@ -233,8 +234,10 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
     {
         List<Pair<String, String>> fieldsToDisplay = new ArrayList<Pair<String, String>>();
 
-        checkFieldIsNotEmpty(project.getName(), "Name", fieldsToDisplay);
-        checkFieldIsNotEmpty(project.getOwner(), "Owner", fieldsToDisplay);
+        checkFieldIsNotEmpty(project.getName(), "Project Name", fieldsToDisplay);
+        checkFieldIsNotEmpty(project.getOwner(), "Name", fieldsToDisplay);
+        checkFieldIsNotEmpty(project.getInstitution(), "Institution", fieldsToDisplay);
+        checkFieldIsNotEmpty(project.getEmail(), "Email", fieldsToDisplay);
         checkFieldIsNotEmpty(project.getDescription(), "Description", fieldsToDisplay);
         checkFieldIsNotEmpty(project.getCollectionType(), "Collection Type", fieldsToDisplay);
         checkFieldIsNotEmpty(project.getRightsStatement(), "Rights Statement", fieldsToDisplay);
@@ -245,18 +248,26 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
         checkFieldIsNotEmpty(project.getElectronicLocation(), "Electronic Location", fieldsToDisplay);
         checkFieldIsNotEmpty(project.getPhysicalLocation(), "Physical Location", fieldsToDisplay);
         checkFieldIsNotEmpty(project.getPlaceOrRegionName(), "Place Or Region Name", fieldsToDisplay);
-        checkFieldIsNotEmpty(project.getLatitudeLongitude(), "Latitude/Longitude", fieldsToDisplay);
+        checkFieldIsNotEmpty(project.getGeographicalCoverage(), "Geographical Coverage", fieldsToDisplay);
         checkFieldIsNotEmpty(project.getDatesOfCapture(), "Dates Of Capture", fieldsToDisplay);
         checkFieldIsNotEmpty(project.getCitationInformation(), "Citation Information", fieldsToDisplay);
+        checkFieldIsNotEmpty(project.getCountries(), "Countries", fieldsToDisplay);
+        checkFieldIsNotEmpty(project.getLanguages(), "Languages", fieldsToDisplay);
+        final FieldOfResearch fieldOfResearch = project.getFieldOfResearch();
+        if (fieldOfResearch != null)
+        {
+            fieldsToDisplay.add(new Pair<String, String>("Field of Research", fieldOfResearch.toString()));
+        }
+        checkFieldIsNotEmpty(project.getFundingBody(), "Funding Body", fieldsToDisplay);
+        checkFieldIsNotEmpty(project.getGrantID(), "Grant ID", fieldsToDisplay);
         checkFieldIsNotEmpty(project.getRelatedParty(), "Related Party", fieldsToDisplay);
-        checkFieldIsNotEmpty(project.getRelatedActivity(), "Related Activity", fieldsToDisplay);
+        checkFieldIsNotEmpty(project.getRelatedGrant(), "Related Grant", fieldsToDisplay);
         checkFieldIsNotEmpty(project.getRelatedInformation(), "Related Information", fieldsToDisplay);
 
         return fieldsToDisplay;
     }
 
-    private static void checkFieldIsNotEmpty(final String fieldValue, final String fieldKey,
-            List<Pair<String, String>> fieldsToDisplay)
+    private static void checkFieldIsNotEmpty(final String fieldValue, final String fieldKey, List<Pair<String, String>> fieldsToDisplay)
     {
         if (!fieldValue.isEmpty())
         {

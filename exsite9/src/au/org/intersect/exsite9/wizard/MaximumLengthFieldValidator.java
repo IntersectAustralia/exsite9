@@ -11,7 +11,7 @@ import com.richclientgui.toolbox.validation.validator.IFieldValidator;
 /**
  * Validator to enforce a maximum length of string fields.
  */
-public final class MaximumFieldLengthValidator implements IFieldValidator<String>
+public class MaximumLengthFieldValidator implements IFieldValidator<String>
 {
     private final String fieldName;
     private final int maxLength;
@@ -20,7 +20,7 @@ public final class MaximumFieldLengthValidator implements IFieldValidator<String
      * @param fieldName The name of the field, used in forming error messages.
      * @param maxLength The maximum length of the field.
      */
-    public MaximumFieldLengthValidator(final String fieldName, final int maxLength)
+    public MaximumLengthFieldValidator(final String fieldName, final int maxLength)
     {
         this.fieldName = fieldName;
         this.maxLength = maxLength;

@@ -22,6 +22,6 @@ public final class WizardFieldUtils
     public static ValidatingField<String> createOptional255TextField(final ValidationToolkit<String> toolkit, final Composite composite,
             final String fieldName, final String defaultValue)
     {
-        return toolkit.createTextField(composite, new MaximumFieldLengthValidator(fieldName, 255), false, defaultValue);
+        return toolkit.createTextField(composite, new MaximumLengthFieldValidator(fieldName, 255), false, defaultValue);
     }
 }

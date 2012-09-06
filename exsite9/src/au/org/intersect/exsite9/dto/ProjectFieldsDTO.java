@@ -6,37 +6,50 @@
  */
 package au.org.intersect.exsite9.dto;
 
+import au.org.intersect.exsite9.domain.FieldOfResearch;
+
 public class ProjectFieldsDTO
 {
-    private String name;
-    private String owner;
-    private String description;
-    private String collectionType;
-    private String rightsStatement;
-    private String accessRights;
-    private String licence;
-    private String identifier;
-    private String subject;
-    private String electronicLocation;
-    private String physicalLocation;
-    private String placeOrRegionName;
-    private String latitudeLongitude;
-    private String datesOfCapture;
-    private String citationInformation;
-    private String relatedParty;
-    private String relatedActivity;
-    private String relatedInformation;
+    private final String name;
+    private final String owner;
+    private final String institution;
+    private final String email;
+    private final String description;
+    private final String collectionType;
+    private final String rightsStatement;
+    private final String accessRights;
+    private final String licence;
+    private final String identifier;
+    private final String subject;
+    private final String electronicLocation;
+    private final String physicalLocation;
+    private final String placeOrRegionName;
+    private final String geograhpicalCoverage;
+    private final String datesOfCapture;
+    private final String citationInformation;
+    private final String countries;
+    private final String languages;
+    private final FieldOfResearch fieldOfResearch;
+    private final String fundingBody;
+    private final String grantID;
+    private final String relatedParty;
+    private final String relatedGrant;
+    private final String relatedInformation;
 
-    public ProjectFieldsDTO(final String name, final String owner, final String description,
-            final String collectionType, final String rightsStatement, final String accessRights, final String licence,
-            final String identifier, final String subject, final String electronicLocation,
-            final String physicalLocation, final String placeOrRegionName, final String latitudeLongitude,
-            final String datesOfCapture, final String citationInformation, final String relatedParty,
-            final String relatedActivity, final String relatedInformation)
+    public ProjectFieldsDTO(final String name, final String owner, final String institution, final String email,
+                            final String description, final String collectionType, final String rightsStatement,
+                            final String accessRights, final String licence, final String identifier, final String subject,
+                            final String electronicLocation, final String physicalLocation, final String placeOrRegionName,
+                            final String geographicalCoverage, final String datesOfCapture, final String citationInformation,
+                            final String countries, final String languages, final FieldOfResearch fieldOfResearch,
+                            final String fundingBody, final String grantID, final String relatedParty, final String relatedGrant,
+                            final String relatedInformation)
     {
         this.name = name;
-        this.description = description;
         this.owner = owner;
+        this.institution = institution;
+        this.email = email;
+        this.description = description;
         this.collectionType = collectionType;
         this.rightsStatement = rightsStatement;
         this.accessRights = accessRights;
@@ -46,11 +59,16 @@ public class ProjectFieldsDTO
         this.electronicLocation = electronicLocation;
         this.physicalLocation = physicalLocation;
         this.placeOrRegionName = placeOrRegionName;
-        this.latitudeLongitude = latitudeLongitude;
+        this.geograhpicalCoverage = geographicalCoverage;
         this.datesOfCapture = datesOfCapture;
         this.citationInformation = citationInformation;
+        this.countries = countries;
+        this.languages = languages;
+        this.fieldOfResearch = fieldOfResearch;
+        this.fundingBody = fundingBody;
+        this.grantID = grantID;
         this.relatedParty = relatedParty;
-        this.relatedActivity = relatedActivity;
+        this.relatedGrant = relatedGrant;
         this.relatedInformation = relatedInformation;
     }
 
@@ -62,6 +80,16 @@ public class ProjectFieldsDTO
     public String getOwner()
     {
         return owner;
+    }
+
+    public String getInstitution()
+    {
+        return institution;
+    }
+
+    public String getEmail()
+    {
+        return email;
     }
 
     public String getDescription()
@@ -114,9 +142,9 @@ public class ProjectFieldsDTO
         return placeOrRegionName;
     }
 
-    public String getLatitudeLongitude()
+    public String getGeographicalCoverage()
     {
-        return latitudeLongitude;
+        return geograhpicalCoverage;
     }
 
     public String getDatesOfCapture()
@@ -129,14 +157,39 @@ public class ProjectFieldsDTO
         return citationInformation;
     }
 
+    public String getCountries()
+    {
+        return countries;
+    }
+
+    public String getLanguages()
+    {
+        return languages;
+    }
+
+    public FieldOfResearch getFieldOfResearch()
+    {
+        return fieldOfResearch;
+    }
+
+    public String getFundingBody()
+    {
+        return fundingBody;
+    }
+
+    public String getGrantID()
+    {
+        return grantID;
+    }
+
     public String getRelatedParty()
     {
         return relatedParty;
     }
 
-    public String getRelatedActivity()
+    public String getRelatedGrant()
     {
-        return relatedActivity;
+        return relatedGrant;
     }
 
     public String getRelatedInformation()

@@ -12,9 +12,9 @@ import org.eclipse.jface.wizard.WizardPage;
 import com.richclientgui.toolbox.validation.IFieldErrorMessageHandler;
 
 /**
- * 
+ * Displays error messages on wizard pages.
  */
-public class WizardPageErrorHandler implements IFieldErrorMessageHandler
+public final class WizardPageErrorHandler implements IFieldErrorMessageHandler
 {
     private final WizardPage wizardPage;
 

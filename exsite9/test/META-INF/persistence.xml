@@ -17,6 +17,7 @@
         <class>au.org.intersect.exsite9.domain.MetadataValue</class>
         <class>au.org.intersect.exsite9.domain.MetadataAssociation</class>
         <class>au.org.intersect.exsite9.domain.SubmissionPackage</class>
+        <class>au.org.intersect.exsite9.domain.FieldOfResearch</class>
 
        <properties/>
     </persistence-unit>
