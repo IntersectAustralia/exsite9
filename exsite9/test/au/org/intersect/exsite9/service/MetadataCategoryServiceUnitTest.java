@@ -52,7 +52,7 @@ public class MetadataCategoryServiceUnitTest extends DAOTest
 
         MetadataCategory category = metadataCategoryService.createNewMetadataCategory("Names", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional, false, null);
         
-        metadataCategoryService.updateMetadataCategory(category, "NameUpdated", MetadataCategoryUse.required, null);
+        metadataCategoryService.updateMetadataCategory(category, "NameUpdated", MetadataCategoryUse.required, false, null);
         
         MetadataCategory updatedCategoryFoundById = metadataCategoryDAOFactory.createInstance(createEntityManager())
                 .findById(category.getId());
