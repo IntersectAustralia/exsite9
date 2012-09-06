@@ -387,10 +387,110 @@
                mnemonic="S">
             <command
                   commandId="au.org.intersect.exsite9.commands.CreateSubmissionPackageCommand"
-                  label="Create..."
+                  icon="icons/icon_new_16.png"
+                  label="Define Submission Package..."
                   mnemonic="C"
                   style="push"
                   tooltip="Create a submission package">
+            </command>
+            <command
+                  commandId="au.org.intersect.exsite9.commands.EditSubmissionPackageCommand"
+                  label="Edit Submission Package..."
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <reference
+                        definitionId="au.org.intersect.exsite9.expression.InstanceOfSubmissionPackage">
+                  </reference>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="au.org.intersect.exsite9.commands.DeleteSubmissionPackageCommand"
+                  label="Delete Submission Package"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <reference
+                        definitionId="au.org.intersect.exsite9.expression.InstanceOfSubmissionPackage">
+                  </reference>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="au.org.intersect.exsite9.commands.ExportSubmissionPackageXMLCommand"
+                  label="Export XML From Submission Package..."
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <reference
+                        definitionId="au.org.intersect.exsite9.expression.InstanceOfSubmissionPackage">
+                  </reference>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="au.org.intersect.exsite9.commands.ExportSubmissionPackageZIPCommand"
+                  label="Export ZIP From Submission Package..."
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <reference
+                        definitionId="au.org.intersect.exsite9.expression.InstanceOfSubmissionPackage">
+                  </reference>
+               </visibleWhen>
+            </command>
+         </menu>
+         <menu
+               id="au.org.intersect.exsite9.menu.group"
+               label="Group"
+               mnemonic="G">
+            <command
+                  commandId="au.org.intersect.exsite9.commands.AddGroup"
+                  label="New Group..."
+                  mnemonic="N"
+                  style="push"
+                  tooltip="Add Group to the project">
+               <visibleWhen
+                     checkEnabled="false">
+                  <reference
+                        definitionId="au.org.intersect.exsite9.expression.InstanceOfProjectOrGroup">
+                  </reference>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="au.org.intersect.exsite9.commands.MoveToNewGroup"
+                  label="Create Group from..."
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <reference
+                        definitionId="au.org.intersect.exsite9.expression.InstanceOfResearchFileOrGroup">
+                  </reference>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="au.org.intersect.exsite9.commands.RenameGroupCommand"
+                  label="Rename Group..."
+                  mnemonic="R"
+                  style="push"
+                  tooltip="Rename Group">
+               <visibleWhen
+                     checkEnabled="false">
+                  <reference
+                        definitionId="au.org.intersect.exsite9.expression.InstanceOfGroup">
+                  </reference>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="au.org.intersect.exsite9.commands.DeleteGroupCommand"
+                  label="Delete Group..."
+                  mnemonic="D"
+                  style="push"
+                  tooltip="Delete Group">
+               <visibleWhen
+                     checkEnabled="false">
+                  <reference
+                        definitionId="au.org.intersect.exsite9.expression.InstanceOfGroup">
+                  </reference>
+               </visibleWhen>
             </command>
          </menu>
       </menuContribution>
