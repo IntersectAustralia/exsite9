@@ -59,6 +59,7 @@ public final class EditMetadataCategoryWizard extends Wizard
         final String categoryTitle = editCategoryPage.getMetadataCategoryName();
         final MetadataCategoryUse categoryUse = editCategoryPage.getMetadataCategoryUse();
         final List<MetadataValue> values = editCategoryPage.getMetadataCategoryValues();
+        final boolean inextensible = editCategoryPage.getIsInextensible();
 
         // Update the modified medata category
         final MetadataCategory metadataCategory = listCategoriesPage.getSelectedMetadataCategory();
@@ -77,7 +78,7 @@ public final class EditMetadataCategoryWizard extends Wizard
             groupService.disassociateMultipleMetadataValues(assignedGroup, metadataCategory, editCategoryPage.getValuesToBeDisassociated());
         }
 
-        metadataCategoryService.updateMetadataCategory(metadataCategory, categoryTitle, categoryUse, values);
+        metadataCategoryService.updateMetadataCategory(metadataCategory, categoryTitle, categoryUse, inextensible, values);
         return true;
     }
 }

@@ -29,11 +29,11 @@ public final class MetadataCategoryService implements IMetadataCategoryService
         this.metadataCategoryDAOFactory = metadataCategoryDAOFactory;
     }
 
-    /**
+    /** 
      * @{inheritDoc}
      */
     @Override
-    public MetadataCategory createNewMetadataCategory(final String name, final MetadataCategoryType type, final MetadataCategoryUse use, final List<MetadataValue> values)
+    public MetadataCategory createNewMetadataCategory(final String name, final MetadataCategoryType type, final MetadataCategoryUse use, boolean inextensible, final List<MetadataValue> values)
     {
         final EntityManager em = this.emf.createEntityManager();
         try
@@ -41,6 +41,7 @@ public final class MetadataCategoryService implements IMetadataCategoryService
             final MetadataCategoryDAO mdcDAO = this.metadataCategoryDAOFactory.createInstance(em);
             final MetadataCategory mdc = new MetadataCategory(name, type, use);
             mdc.setValues(values);
+            mdc.setInextensible(inextensible);
             mdcDAO.createMetadataCategory(mdc);
             return mdc;
         }
@@ -85,7 +86,7 @@ public final class MetadataCategoryService implements IMetadataCategoryService
 
     @Override
     public void updateMetadataCategory(MetadataCategory existingMetadataCategoryToUpdate, String name,
-            MetadataCategoryUse use, List<MetadataValue> values)
+            MetadataCategoryUse use, boolean inExtensible, List<MetadataValue> values)
     {
         final EntityManager em = this.emf.createEntityManager();
         try
@@ -94,6 +95,7 @@ public final class MetadataCategoryService implements IMetadataCategoryService
 
             existingMetadataCategoryToUpdate.setName(name);
             existingMetadataCategoryToUpdate.setUse(use);
+            existingMetadataCategoryToUpdate.setInextensible(inExtensible);
             existingMetadataCategoryToUpdate.setValues(values);
            
             mdcDAO.updateMetadataCategory(existingMetadataCategoryToUpdate);

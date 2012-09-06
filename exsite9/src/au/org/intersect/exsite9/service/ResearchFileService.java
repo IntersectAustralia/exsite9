@@ -263,7 +263,7 @@ public class ResearchFileService implements IResearchFileService
         {
             final ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
             final FolderDAO folderDAO = folderDAOFactory.createInstance(em);
-
+            
             parentFolder.getFiles().addAll(subFolder.getFiles());
             subFolder.getFiles().clear();
 
@@ -287,11 +287,15 @@ public class ResearchFileService implements IResearchFileService
         
         try
         {
+            final ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
+            final FolderDAO folderDAO = folderDAOFactory.createInstance(em);
+            
+            folderDAO.createFolder(folder);
+            
             em.getTransaction().begin();
             
             importFolder(em, project, folder, project.getRootNode(), folder);
             
-            final ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
             project.getFolders().add(folder);
             projectDAO.updateProject(project);
         }
@@ -333,7 +337,7 @@ public class ResearchFileService implements IResearchFileService
             groupDAO.createGroup(newGroup);
             groupDAO.updateGroup(parentGroup);
         }
-        
+            
         // Create Research files for files
         List<File> folderList = new ArrayList<File>(0);
         for(File file : folder.getFolder().listFiles())
@@ -344,16 +348,20 @@ public class ResearchFileService implements IResearchFileService
             }
             else
             {
-                boolean createFile = true;
+                boolean createFile = false;
                 
-                for(ResearchFile researchFile : newGroup.getResearchFiles())
-                {
-                    if(researchFile.getFile().equals(file))
-                    {
-                        createFile = false;
-                        break;
-                    }
+                if(researchFileDAO.findByPath(project, file) == null){
+                    createFile = true;
                 }
+                
+                //for(ResearchFile researchFile : newGroup.getResearchFiles())
+                //{
+                //    if(researchFile.getFile().equals(file))
+                //    {
+                //        createFile = false;
+                //        break;
+                //    }
+                //}
                 
                 if (createFile)
                 {

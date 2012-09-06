@@ -55,6 +55,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     private Button removeButton;
     private Button addButton;
     private Button editButton;
+    private Button inextensibleCheckbox;
 
     private Schema schema;
     private List<MetadataValue> metadataValues;
@@ -179,7 +180,48 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
 
         // empty cell due to having 3 columns below
         new Label(container, SWT.NULL);
+                
+        final Label inextensibleLabel = new Label(this.container, SWT.NULL);
+        inextensibleLabel.setText("Inextensible");
+        inextensibleLabel.setToolTipText("An inextensible category can NOT have values added to it at a later date");
+        
+        this.inextensibleCheckbox = new Button(this.container, SWT.CHECK);
+        
+        if (this.metadataCategory != null)
+        {
+            this.inextensibleCheckbox.setSelection(this.metadataCategory.isInextensible());
+        }
+        
+        this.inextensibleCheckbox.addSelectionListener(new SelectionListener()
+        {
+            
+            @Override
+            public void widgetSelected(SelectionEvent e)
+            {
+                setPageComplete(categoryNameField.isValid());                
+                
+                if (!inextensibleCheckbox.getSelection())
+                {
+                    metadataValuesListWidget.setEnabled(true);
+                    addButton.setEnabled(true);
+                }
+                else if (inextensibleCheckbox.getSelection())
+                {
+                    metadataValuesListWidget.setEnabled(false);
+                    addButton.setEnabled(false);
+                    removeButton.setEnabled(false);
+                    editButton.setEnabled(false);
+                }
+            }
+            
+            @Override
+            public void widgetDefaultSelected(SelectionEvent e)
+            {
+            }
+        });
 
+        // empty cell due to having 3 columns below
+        new Label(container, SWT.NULL);
         
         final Label metadataValuesLabel = new Label(this.container, SWT.NULL);
         metadataValuesLabel.setText("Metadata Values");
@@ -251,6 +293,26 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
             {
                 addButton.setEnabled(false);
                 metadataValuesListWidget.setEnabled(false);
+            }
+            
+            if (this.metadataCategory.isInextensible() && this.schema.getLocal())
+            {
+                this.metadataValuesListWidget.setEnabled(false);
+                this.addButton.setEnabled(false);
+                this.removeButton.setEnabled(false);
+                this.editButton.setEnabled(false);
+            }
+            else if (!this.metadataCategory.isInextensible() && !this.schema.getLocal())
+            {
+                this.inextensibleCheckbox.setEnabled(false);
+            }
+            else if (this.metadataCategory.isInextensible() && !this.schema.getLocal())
+            {
+                this.inextensibleCheckbox.setEnabled(false);
+                this.metadataValuesListWidget.setEnabled(false);
+                this.addButton.setEnabled(false);
+                this.removeButton.setEnabled(false);
+                this.editButton.setEnabled(false);
             }
         }
 
@@ -472,6 +534,11 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         return valuesToBeDisassociated;
     }
 
+    public boolean getIsInextensible()
+    {
+       return this.inextensibleCheckbox.getSelection();
+    }
+    
     void setMetadataCategory(final MetadataCategory metadataCategory)
     {
         this.metadataCategory = metadataCategory;

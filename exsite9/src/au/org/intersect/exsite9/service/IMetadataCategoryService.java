@@ -17,14 +17,15 @@ import au.org.intersect.exsite9.domain.MetadataValue;
  * For performing operations with {@link MetadataCategory}
  */
 public interface IMetadataCategoryService
-{
-    MetadataCategory createNewMetadataCategory(final String name, final MetadataCategoryType type, final MetadataCategoryUse use, final List<MetadataValue> values);
-    
-    void updateMetadataCategory(MetadataCategory existingMetadataCategoryToUpdate, final String name, final MetadataCategoryUse use, final List<MetadataValue> values);
+{    
+    void updateMetadataCategory(MetadataCategory existingMetadataCategoryToUpdate, final String name, final MetadataCategoryUse use, final boolean inExtensible, final List<MetadataValue> values);
     
     MetadataCategory findById(final Long id);
 
     void deleteMetadataCategory(final MetadataCategory metadataCategory);
 
     MetadataValue addValueToMetadataCategory(final MetadataCategory metadataCategory, final String metadataValue);
+
+    MetadataCategory createNewMetadataCategory(String name, MetadataCategoryType type, MetadataCategoryUse use,
+            boolean inextensible, List<MetadataValue> values);
 }
