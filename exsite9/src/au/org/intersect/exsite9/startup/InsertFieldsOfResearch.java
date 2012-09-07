@@ -37,30 +37,47 @@ public final class InsertFieldsOfResearch implements IStartup
 
     private static final String NEW_LINE = System.getProperty("line.separator");
 
+    private final EntityManagerFactory emf;
+    private final File sqlFile;
+
+    /**
+     * For use in Unit Tests only.
+     * @param emf The entity manager factory.
+     * @param sqlFile The file to read SQL from.
+     */
+    InsertFieldsOfResearch(final EntityManagerFactory emf, final File sqlFile)
+    {
+        this.emf = emf;
+        this.sqlFile = sqlFile;
+    }
+
+    public InsertFieldsOfResearch()
+    {
+        this.emf = (EntityManagerFactory) PlatformUI.getWorkbench().getService(EntityManagerFactory.class);
+        final String workspaceDir = Platform.getInstallLocation().getURL().getPath();
+        final File configurationDir = new File(workspaceDir, "configuration");
+        this.sqlFile = new File(configurationDir, "fieldsOfResearch.sql");
+    }
+
     /**
      * @{inheritDoc}
      */
     @Override
     public void earlyStartup()
     {
-        final String workspaceDir = Platform.getInstallLocation().getURL().getPath();
-        final File configurationDir = new File(workspaceDir, "configuration");
-        final File initSqlFile = new File(configurationDir, "fieldsOfResearch.sql");
-
         final String sql;
         try
         {
-            sql = Files.toString(initSqlFile, Charsets.UTF_8);
+            sql = Files.toString(this.sqlFile, Charsets.UTF_8);
         }
         catch (final IOException e)
         {
-            LOG.error("Could not read file " + initSqlFile.getAbsolutePath(), e);
+            LOG.error("Could not read file " + this.sqlFile.getAbsolutePath(), e);
             return;
         }
         final List<String> statements = Arrays.asList(sql.split(NEW_LINE));
 
-        final EntityManagerFactory emf = (EntityManagerFactory) PlatformUI.getWorkbench().getService(EntityManagerFactory.class);
-        final EntityManager em = emf.createEntityManager();
+        final EntityManager em = this.emf.createEntityManager();
         final Connection connection = ((EntityManagerImpl)em.getDelegate()).getServerSession().getAccessor().getConnection();
         try
         {
@@ -96,7 +113,7 @@ public final class InsertFieldsOfResearch implements IStartup
         }
         catch (final SQLException e)
         {
-            LOG.error("Could not execute script " + initSqlFile.getAbsolutePath(), e);
+            LOG.error("Could not execute script " + this.sqlFile.getAbsolutePath(), e);
         }
         finally
         {

@@ -14,7 +14,7 @@ import javax.persistence.TypedQuery;
 import au.org.intersect.exsite9.domain.FieldOfResearch;
 
 /**
- * 
+ * Data Access Object for {@link FieldOfResearch} instances
  */
 public final class FieldOfResearchDAO
 {
@@ -25,6 +25,10 @@ public final class FieldOfResearchDAO
         this.em = em;
     }
 
+    /**
+     * Obtains all the {@link FieldOfResearch} instances.
+     * @return All the fields of research.
+     */
     public List<FieldOfResearch> getAll()
     {
         final TypedQuery<FieldOfResearch> query = em.createQuery("SELECT for FROM FieldOfResearch for ORDER BY for.code", FieldOfResearch.class);
