@@ -29,9 +29,6 @@ import au.org.intersect.exsite9.service.IProjectService;
  */
 public final class ProjectExplorerViewContentProviderUnitTest
 {
-
-    private static final String EMPTY_STRING = "";
-
     @Test
     public void testGetElements()
     {
@@ -42,7 +39,11 @@ public final class ProjectExplorerViewContentProviderUnitTest
         assertArrayEquals(Collections.emptyList().toArray(), toTest.getElements(null));
         assertArrayEquals(Collections.emptyList().toArray(), toTest.getElements(new Object()));
 
-        final Project project = new Project(new ProjectFieldsDTO("[TM]","owner","description", EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING));
+        final Project project = new Project(new ProjectFieldsDTO("name", "owner", "institution", "email", "desc",
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation"));
 
         final ProjectViewInputWrapper projectExplorerViewInput = new ProjectViewInputWrapper(project);
 
@@ -64,7 +65,11 @@ public final class ProjectExplorerViewContentProviderUnitTest
         assertArrayEquals(Collections.emptyList().toArray(), toTest.getChildren(null));
         assertArrayEquals(Collections.emptyList().toArray(), toTest.getChildren(new Object()));
 
-        final Project project = new Project(new ProjectFieldsDTO("name","owner","description", EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING));
+        final Project project = new Project(new ProjectFieldsDTO("name", "owner", "institution", "email", "desc",
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation"));
         final Group group1 = new Group("group1");
         final Group group2 = new Group("group2");
         final ResearchFile rf1 = new ResearchFile(new File("someFile"));

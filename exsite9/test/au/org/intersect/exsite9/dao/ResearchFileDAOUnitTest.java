@@ -95,7 +95,11 @@ public class ResearchFileDAOUnitTest extends DAOTest
         final ProjectDAO projectDAO = new ProjectDAO(em);
         final File fileOnDisk = new File("some-file.txt");
         final ResearchFile researchFile = new ResearchFile(fileOnDisk);
-        final Project project = new Project(new ProjectFieldsDTO("name", "owner", "desc", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
+        final Project project = new Project(new ProjectFieldsDTO("name", "owner", "institution", "email", "desc",
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation"));
         researchFile.setProject(project);
 
         projectDAO.createProject(project);

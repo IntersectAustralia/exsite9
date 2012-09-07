@@ -73,10 +73,11 @@ public class ProjectDAOUnitTest extends DAOTest
     @Test
     public void testUpdateProject()
     {
-        final Project project = new Project(new ProjectFieldsDTO("name", "owner", "desc",
+        final Project project = new Project(new ProjectFieldsDTO("name", "owner", "institution", "email", "desc",
             "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
-            "electronicLocation", "physicalLocation", "placeOrRegionName", "latitudeLongitude", "datesOfCapture",
-            "citationInformation", "relatedParty", "relatedActivity", "relatedInformation"));
+            "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+            "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+            "relatedInformation"));
         assertNull(project.getId());
 
         final EntityManager em = createEntityManager();
@@ -102,10 +103,11 @@ public class ProjectDAOUnitTest extends DAOTest
     @Test
     public void testFindProjectWithSubmissionPackage()
     {
-        final Project project = new Project(new ProjectFieldsDTO("name", "owner", "desc",
+        final Project project = new Project(new ProjectFieldsDTO("name", "owner", "institution", "email", "desc",
                 "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
-                "electronicLocation", "physicalLocation", "placeOrRegionName", "latitudeLongitude", "datesOfCapture",
-                "citationInformation", "relatedParty", "relatedActivity", "relatedInformation"));
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation"));
         assertNull(project.getId());
 
         final EntityManager em = createEntityManager();

@@ -54,7 +54,11 @@ public final class SubmissionPackageServiceUnitTest extends DAOTest
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         final SubmissionPackageService toTest = new SubmissionPackageService(emf, submissionPackageDAOFactory, projectDAOFactory);
 
-        final Project project = new Project(new ProjectFieldsDTO("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
+        final Project project = new Project(new ProjectFieldsDTO("name", "owner", "institution", "email", "desc",
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation"));
         final SubmissionPackage out1 = toTest.createSubmissionPackage(project, "name", "description", Collections.<ResearchFile>emptyList());
         assertNotNull(out1.getId());
         assertEquals("name", out1.getName());
@@ -79,7 +83,11 @@ public final class SubmissionPackageServiceUnitTest extends DAOTest
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         final SubmissionPackageService toTest = new SubmissionPackageService(emf, submissionPackageDAOFactory, projectDAOFactory);
 
-        final Project project = new Project(new ProjectFieldsDTO("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
+        final Project project = new Project(new ProjectFieldsDTO("name", "owner", "institution", "email", "desc",
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation"));
         final SubmissionPackage out1 = toTest.createSubmissionPackage(project, "name", "description", Collections.<ResearchFile>emptyList());
         assertNotNull(out1.getId());
         assertEquals("name", out1.getName());
@@ -109,7 +117,11 @@ public final class SubmissionPackageServiceUnitTest extends DAOTest
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         final SubmissionPackageService toTest = new SubmissionPackageService(emf, submissionPackageDAOFactory, projectDAOFactory);
 
-        final Project project = new Project(new ProjectFieldsDTO("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
+        final Project project = new Project(new ProjectFieldsDTO("name", "owner", "institution", "email", "desc",
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation"));
         final SubmissionPackage out1 = toTest.createSubmissionPackage(project, "name", "description", Collections.<ResearchFile>emptyList());
         assertNotNull(out1.getId());
         assertEquals("name", out1.getName());
@@ -141,7 +153,11 @@ public final class SubmissionPackageServiceUnitTest extends DAOTest
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         final SubmissionPackageService toTest = new SubmissionPackageService(emf, submissionPackageDAOFactory, projectDAOFactory);
 
-        final Project project = new Project(new ProjectFieldsDTO("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
+        final Project project = new Project(new ProjectFieldsDTO("name", "owner", "institution", "email", "desc",
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation"));
         final SubmissionPackage out1 = toTest.createSubmissionPackage(project, "name", "description", Collections.<ResearchFile>emptyList());
         assertNotNull(out1.getId());
         assertEquals("name", out1.getName());
@@ -168,7 +184,11 @@ public final class SubmissionPackageServiceUnitTest extends DAOTest
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         final SubmissionPackageService toTest = new SubmissionPackageService(emf, submissionPackageDAOFactory, projectDAOFactory);
 
-        final Project project = new Project(new ProjectFieldsDTO("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
+        final Project project = new Project(new ProjectFieldsDTO("name", "owner", "institution", "email", "desc",
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation"));
         final SubmissionPackage out1 = toTest.createSubmissionPackage(project, "name", "description", Collections.<ResearchFile>emptyList());
         assertNotNull(out1.getId());
         assertEquals("name", out1.getName());
@@ -197,7 +217,11 @@ public final class SubmissionPackageServiceUnitTest extends DAOTest
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         final SubmissionPackageService toTest = new SubmissionPackageService(emf, submissionPackageDAOFactory, projectDAOFactory);
 
-        final Project project = new Project(new ProjectFieldsDTO("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
+        final Project project = new Project(new ProjectFieldsDTO("name", "owner", "institution", "email", "desc",
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation"));
         final SubmissionPackage out1 = toTest.createSubmissionPackage(project, "name", "description", Collections.<ResearchFile>emptyList());
         assertNotNull(out1.getId());
         assertEquals("name", out1.getName());
@@ -226,7 +250,11 @@ public final class SubmissionPackageServiceUnitTest extends DAOTest
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         final SubmissionPackageService toTest = new SubmissionPackageService(emf, submissionPackageDAOFactory, projectDAOFactory);
 
-        final Project project = new Project(new ProjectFieldsDTO("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
+        final Project project = new Project(new ProjectFieldsDTO("name", "owner", "institution", "email", "desc",
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation"));
         final SubmissionPackage out1 = toTest.createSubmissionPackage(project, "name", "description", Collections.<ResearchFile>emptyList());
         assertNotNull(out1.getId());
         assertEquals("name", out1.getName());
@@ -259,7 +287,11 @@ public final class SubmissionPackageServiceUnitTest extends DAOTest
         researchFileDAO.createResearchFile(rf);
         assertNotNull(rf.getId());
 
-        final Project project = new Project(new ProjectFieldsDTO("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
+        final Project project = new Project(new ProjectFieldsDTO("name", "owner", "institution", "email", "desc",
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation"));
         final SubmissionPackage out1 = toTest.createSubmissionPackage(project, "name", "description", Arrays.asList(rf));
         assertNotNull(out1.getId());
 

@@ -22,6 +22,7 @@ import au.org.intersect.exsite9.dao.factory.MetadataAssociationDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
 import au.org.intersect.exsite9.dao.factory.SubmissionPackageDAOFactory;
+import au.org.intersect.exsite9.domain.FieldOfResearch;
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
@@ -51,8 +52,11 @@ public final class ProjectServiceUnitTest extends DAOTest
 
         final Schema schema = new Schema("", "", "", Boolean.TRUE);
         schemaDAO.createSchema(schema);
-        Project project = projectService.createProject(new ProjectFieldsDTO("name", "owner", "description", "", "", "",
-                "", "", "", "", "", "", "", "", "", "", "", ""), schema);
+        Project project = projectService.createProject(new ProjectFieldsDTO("name", "owner", "institution", "email", "desc",
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation"), schema);
 
         Project newProject = projectDAOFactory.createInstance(createEntityManager()).findById(project.getId());
 
@@ -81,8 +85,11 @@ public final class ProjectServiceUnitTest extends DAOTest
         final Schema schema = new Schema("", "", "", Boolean.TRUE);
         schemaDAO.createSchema(schema);
 
-        Project project = projectService.createProject(new ProjectFieldsDTO("name", "owner", "description", "", "", "",
-                "", "", "", "", "", "", "", "", "", "", "", ""), schema);
+        Project project = projectService.createProject(new ProjectFieldsDTO("name", "owner", "institution", "email", "desc",
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation"), schema);
 
         projectService.mapFolderToProject(project, folder);
 
@@ -115,8 +122,11 @@ public final class ProjectServiceUnitTest extends DAOTest
         final Schema schema = new Schema("", "", "", Boolean.TRUE);
         schemaDAO.createSchema(schema);
 
-        Project project = projectService.createProject(new ProjectFieldsDTO("name", "owner", "description", "", "", "",
-                "", "", "", "", "", "", "", "", "", "", "", ""), schema);
+        Project project = projectService.createProject(new ProjectFieldsDTO("name", "owner", "institution", "email", "desc",
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation"), schema);
 
         projectService.mapFolderToProject(project, folder1);
         projectService.mapFolderToProject(project, folder2);
@@ -154,8 +164,11 @@ public final class ProjectServiceUnitTest extends DAOTest
         final Schema schema = new Schema("", "", "", Boolean.TRUE);
         schemaDAO.createSchema(schema);
 
-        final ProjectFieldsDTO p1dto = new ProjectFieldsDTO("p1", "", "", "", "", "", "", "", "", "", "", "", "", "",
-                "", "", "", "");
+        final ProjectFieldsDTO p1dto = new ProjectFieldsDTO("p1", "owner", "institution", "email", "desc",
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation");
         final Project p1 = projectService.createProject(p1dto, schema);
         assertNotNull(p1.getId());
 
@@ -163,8 +176,11 @@ public final class ProjectServiceUnitTest extends DAOTest
         assertEquals(1, out.size());
         assertEquals(p1, out.get(0));
 
-        final ProjectFieldsDTO p2dto = new ProjectFieldsDTO("p2", "", "", "", "", "", "", "", "", "", "", "", "", "",
-                "", "", "", "");
+        final ProjectFieldsDTO p2dto = new ProjectFieldsDTO("p2", "owner", "institution", "email", "desc",
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation");
         final Project p2 = projectService.createProject(p2dto, schema);
         assertNotNull(p2.getId());
 
@@ -195,34 +211,44 @@ public final class ProjectServiceUnitTest extends DAOTest
         final Schema schema = new Schema("", "", "", Boolean.TRUE);
         schemaDAO.createSchema(schema);
 
-        final ProjectFieldsDTO p1dto = new ProjectFieldsDTO("p1", "", "", "", "", "", "", "", "", "", "", "", "", "",
-                "", "", "", "");
+        final ProjectFieldsDTO p1dto = new ProjectFieldsDTO("name", "owner", "institution", "email", "desc",
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation");
         
         final Project p1 = projectService.createProject(p1dto, schema);
         assertNotNull(p1.getId());
 
         final String name = "newName";
         final String owner = "newOwner";
+        final String institution = "newInstitution";
+        final String email = "new email";
         final String description = "newDesc";
-        final String collectionType = "collectionType";
-        final String rightsStatement = "rights";
-        final String accessRights = "accessRights";
-        final String license = "license";
-        final String identifier = "identifier";
-        final String subject = "subject";
-        final String electronicLocation = "electronicLocation";
-        final String physicalLocation = "physicalLocation";
-        final String placeOrRegionName = "placeOrRegionName";
-        final String latitudeLongitude = "latitudeLogitude";
-        final String datesOfCapture = "datesOfCapture";
-        final String citationInfo = "citationInfo";
-        final String relatedParty = "relatedParty";
-        final String relatedActivity = "relatedActivity";
-        final String relatedInfo = "relatedInfo";
-        final ProjectFieldsDTO updatedFields = new ProjectFieldsDTO(name, owner, description, collectionType,
+        final String collectionType = "newcollectionType";
+        final String rightsStatement = "newrights";
+        final String accessRights = "newaccessRights";
+        final String license = "newlicense";
+        final String identifier = "newidentifier";
+        final String subject = "newsubject";
+        final String electronicLocation = "newelectronicLocation";
+        final String physicalLocation = "newphysicalLocation";
+        final String placeOrRegionName = "newplaceOrRegionName";
+        final String geographicalCoverage = "newgeoCoverage";
+        final String datesOfCapture = "newdatesOfCapture";
+        final String citationInfo = "newcitationInfo";
+        final String countries = "newCountries";
+        final String languages = "newlanguages";
+        final FieldOfResearch fieldOfResearch = new FieldOfResearch("new Code", "new FOR");
+        final String fundingBody = "newFundingBody";
+        final String grantID = "newGrantID";
+        final String relatedParty = "newrelatedParty";
+        final String relatedGrant = "newrelatedActivity";
+        final String relatedInfo = "newrelatedInfo";
+        final ProjectFieldsDTO updatedFields = new ProjectFieldsDTO(name, owner, institution, email, description, collectionType,
                 rightsStatement, accessRights, license, identifier, subject, electronicLocation, physicalLocation,
-                placeOrRegionName, latitudeLongitude, datesOfCapture, citationInfo, relatedParty, relatedActivity,
-                relatedInfo);
+                placeOrRegionName, geographicalCoverage, datesOfCapture, citationInfo, countries, languages, fieldOfResearch,
+                fundingBody, grantID, relatedParty, relatedGrant, relatedInfo);
 
         projectService.editProject(updatedFields, p1.getId());
 
@@ -231,6 +257,8 @@ public final class ProjectServiceUnitTest extends DAOTest
 
         assertEquals(name, editedProject.getName());
         assertEquals(owner, editedProject.getOwner());
+        assertEquals(institution, editedProject.getInstitution());
+        assertEquals(email, editedProject.getEmail());
         assertEquals(description, editedProject.getDescription());
         assertEquals(collectionType, editedProject.getCollectionType());
         assertEquals(rightsStatement, editedProject.getRightsStatement());
@@ -241,11 +269,15 @@ public final class ProjectServiceUnitTest extends DAOTest
         assertEquals(electronicLocation, editedProject.getElectronicLocation());
         assertEquals(physicalLocation, editedProject.getPhysicalLocation());
         assertEquals(placeOrRegionName, editedProject.getPlaceOrRegionName());
-        assertEquals(latitudeLongitude, editedProject.getLatitudeLongitude());
+        assertEquals(geographicalCoverage, editedProject.getGeographicalCoverage());
         assertEquals(datesOfCapture, editedProject.getDatesOfCapture());
         assertEquals(citationInfo, editedProject.getCitationInformation());
+        assertEquals(countries, editedProject.getCountries());
+        assertEquals(languages, editedProject.getLanguages());
+        assertEquals(fieldOfResearch, editedProject.getFieldOfResearch());
+        assertEquals(grantID, editedProject.getGrantID());
         assertEquals(relatedParty, editedProject.getRelatedParty());
-        assertEquals(relatedActivity, editedProject.getRelatedActivity());
+        assertEquals(relatedGrant, editedProject.getRelatedGrant());
         assertEquals(relatedInfo, editedProject.getRelatedInformation());
     }
 
@@ -281,8 +313,11 @@ public final class ProjectServiceUnitTest extends DAOTest
         final Schema schema = new Schema("", "", "", Boolean.TRUE);
         schemaDAO.createSchema(schema);
 
-        Project project = projectService.createProject(new ProjectFieldsDTO("name", "owner", "description", "", "", "",
-                "", "", "", "", "", "", "", "", "", "", "", ""), schema);
+        Project project = projectService.createProject(new ProjectFieldsDTO("name", "owner", "institution", "email", "desc",
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation"), schema);
 
         projectService.mapFolderToProject(project, folder);
 
@@ -326,8 +361,11 @@ public final class ProjectServiceUnitTest extends DAOTest
         schemaDAO.createSchema(schema2);
         assertNotNull(schema2.getId());
 
-        final Project project = projectService.createProject(new ProjectFieldsDTO("name", "owner", "description", "", "", "",
-                "", "", "", "", "", "", "", "", "", "", "", ""), schema1);
+        final Project project = projectService.createProject(new ProjectFieldsDTO("name", "owner", "institution", "email", "desc",
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation"), schema1);
         assertNotNull(project.getId());
 
         projectService.editProject(schema2, project.getId());

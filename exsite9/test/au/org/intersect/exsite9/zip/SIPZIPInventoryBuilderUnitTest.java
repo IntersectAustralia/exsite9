@@ -16,15 +16,12 @@ import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 public class SIPZIPInventoryBuilderUnitTest
 {
     private static final String NEW_LINE = System.getProperty("line.separator");
-    private static final String EMPTY_STRING = "";
 
     @Test
     public void buildInventoryFileUnitTest() throws IOException
     {             
-        final Project project = new Project(new ProjectFieldsDTO("proj1", EMPTY_STRING, EMPTY_STRING,
-                EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING,
-                EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING,
-                EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING));
+        final Project project = new Project(new ProjectFieldsDTO("proj1", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
+                "", null, "", "", "", "", ""));
         
         final File file1 = new File("someResearchFile.txt");
         final File file2 = new File("someOtherResearchFile.txt");

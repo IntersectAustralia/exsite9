@@ -25,16 +25,21 @@ public final class ProjectUnitTest
     public void testConstruction()
     {
 
-        ProjectFieldsDTO projectFields = new ProjectFieldsDTO("project 1", "owner 1", "Project One", "",
-                "", "", "to kill", "", "random", "", "", "Sydney", "", "", "", "Intersect", "", "");
+        ProjectFieldsDTO projectFields = new ProjectFieldsDTO("name", "owner", "institution", "email", "desc",
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation");
 
         final Project toTest1 = new Project(projectFields);
 
         assertEquals(projectFields.getName(), toTest1.getName());
         assertTrue(toTest1.getRootNode().getGroups().size() == 1);
         assertTrue(toTest1.getRootNode().getResearchFiles().isEmpty());
-        assertEquals(projectFields.getDescription(), toTest1.getDescription());
         assertEquals(projectFields.getOwner(), toTest1.getOwner());
+        assertEquals(projectFields.getInstitution(), toTest1.getInstitution());
+        assertEquals(projectFields.getEmail(), toTest1.getEmail());
+        assertEquals(projectFields.getDescription(), toTest1.getDescription());
         assertEquals(projectFields.getLicence(), toTest1.getLicence());
         assertEquals(projectFields.getRelatedParty(), toTest1.getRelatedParty());
         assertEquals(projectFields.getRelatedInformation(), toTest1.getRelatedInformation());
@@ -81,9 +86,9 @@ public final class ProjectUnitTest
         toTest1.setPlaceOrRegionName(placeOrRegionName);
         assertEquals(placeOrRegionName, toTest1.getPlaceOrRegionName());
 
-        final String latitudeLongitude = "latLong";
-        toTest1.setLatitudeLongitude(latitudeLongitude);
-        assertEquals(latitudeLongitude, toTest1.getLatitudeLongitude());
+        final String geographicalCoverage = "latLong";
+        toTest1.setGeographicalCoverage(geographicalCoverage);
+        assertEquals(geographicalCoverage, toTest1.getGeographicalCoverage());
 
         final String datesOfCapture = "march 2012";
         toTest1.setDatesOfCapture(datesOfCapture);
@@ -93,13 +98,33 @@ public final class ProjectUnitTest
         toTest1.setCitationInformation(citationInformation);
         assertEquals(citationInformation, toTest1.getCitationInformation());
 
+        final String countries = "los angeles, india";
+        toTest1.setCountries(countries);
+        assertEquals(countries, toTest1.getCountries());
+
+        final String languages = "arabic, farsi";
+        toTest1.setLanguages(languages);
+        assertEquals(languages, toTest1.getLanguages());
+
+        final FieldOfResearch fieldOfResearch = new FieldOfResearch("someCode", "some field of research that is interesting");
+        toTest1.setFieldOfResearch(fieldOfResearch);
+        assertEquals(fieldOfResearch, toTest1.getFieldOfResearch());
+
+        final String fundingBody = "my body";
+        toTest1.setFundingBody(fundingBody);
+        assertEquals(fundingBody, toTest1.getFundingBody());
+
+        final String grantID = "a cool grant!";
+        toTest1.setGrantID(grantID);
+        assertEquals(grantID, toTest1.getGrantID());
+
         final String relatedParty = "a cool party";
         toTest1.setRelatedParty(relatedParty);
         assertEquals(relatedParty, toTest1.getRelatedParty());
 
-        final String relatedActivity = "a related activity";
-        toTest1.setRelatedActivity(relatedActivity);
-        assertEquals(relatedActivity, toTest1.getRelatedActivity());
+        final String relatedGrant = "a related grant";
+        toTest1.setRelatedGrant(relatedGrant);
+        assertEquals(relatedGrant, toTest1.getRelatedGrant());
 
         final String relatedInformation = "a related piece of information";
         toTest1.setRelatedInformation(relatedInformation);
@@ -123,8 +148,17 @@ public final class ProjectUnitTest
         final String o2 = "owner 2";
         final String d2 = "Project Two";
         
-        ProjectFieldsDTO proj1 = new ProjectFieldsDTO(n1, o1, d1, "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
-        ProjectFieldsDTO proj2 = new ProjectFieldsDTO(n2, o2, d2, "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+        ProjectFieldsDTO proj1 = new ProjectFieldsDTO(n1, o1, "institution", "email", d1,
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation");
+
+        ProjectFieldsDTO proj2 = new ProjectFieldsDTO(n2, o2, "institution", "email", d2,
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation");
 
         
         final Project toTest1 = new Project(proj1);

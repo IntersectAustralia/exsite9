@@ -19,12 +19,14 @@ import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 public final class ProjectExplorerViewInputUnitTest
 {
 
-    private static final String EMPTY_STRING = "";
-
     @Test
     public void testConstruction()
     {
-        final Project project = new Project(new ProjectFieldsDTO("name","owner","description", EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING));
+        final Project project = new Project(new ProjectFieldsDTO("name", "owner", "institution", "email", "desc",
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation"));
         final ProjectViewInputWrapper toTest = new ProjectViewInputWrapper(project);
         assertEquals(project, toTest.getProject());
     }

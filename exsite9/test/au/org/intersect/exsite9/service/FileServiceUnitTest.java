@@ -32,7 +32,6 @@ import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 public class FileServiceUnitTest extends DAOTest
 {
 	private final String testDirName = System.getProperty("java.io.tmpdir") + File.separator + "exsite9-FolderUnitTest";
-	private static String EMPTY_STRING = "";
     private File testDirFile = null;
     
     private ResearchFileService fileService = null;
@@ -70,7 +69,11 @@ public class FileServiceUnitTest extends DAOTest
         FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
         GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
       
-    	Project project = new Project(new ProjectFieldsDTO("name","owner","description", EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING));
+    	Project project = new Project(new ProjectFieldsDTO("name", "owner", "institution", "email", "desc",
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation"));
     	projectDAO.createProject(project);
 
     	Folder f = new Folder(testDirFile);
@@ -97,7 +100,11 @@ public class FileServiceUnitTest extends DAOTest
         FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
         GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
         
-    	Project project = new Project(new ProjectFieldsDTO("name","owner","description", EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING));
+    	Project project = new Project(new ProjectFieldsDTO("name", "owner", "institution", "email", "desc",
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation"));
     	Folder f = new Folder(testDirFile);
     	File.createTempFile("test-file-1", ".txt", testDirFile);
 
@@ -141,7 +148,11 @@ public class FileServiceUnitTest extends DAOTest
         FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
         GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
         
-    	Project project = new Project(new ProjectFieldsDTO("name","owner","description", EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING));
+    	Project project = new Project(new ProjectFieldsDTO("name", "owner", "institution", "email", "desc",
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation"));
     	project.setId(2L);
 
     	final ProjectDAO projectDAO = new ProjectDAO(createEntityManager());

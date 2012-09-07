@@ -20,8 +20,6 @@ import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
  */
 public final class ProjectManagerUnitTest
 {
-    private static final String EMPTY_STRING = "";
-
     @Test
     public void testProjectManager()
     {
@@ -32,7 +30,11 @@ public final class ProjectManagerUnitTest
         assertNull(toTest.getCurrentProject());
 
         final Long projectID = 99L;
-        final Project project = new Project(new ProjectFieldsDTO("name","owner","description", EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING));
+        final Project project = new Project(new ProjectFieldsDTO("name", "owner", "institution", "email", "desc",
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation"));
 
         project.setId(projectID);
 

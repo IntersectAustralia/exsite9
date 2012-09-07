@@ -13,6 +13,7 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
+import au.org.intersect.exsite9.domain.FieldOfResearch;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataAssociation;
 import au.org.intersect.exsite9.domain.MetadataCategory;
@@ -35,11 +36,13 @@ public final class ProjectXMLBuilderUnitTest
     {
         final String projectName = "projectName";
         final String projectOwner = "project owner";
+        final String institution = "institution";
+        final String email = "email";
         final String projectDescription = "some boring description";
         final String projectAccessRights = "admin";
         final String projectCollectionType = "Dataset";
         final String projectDatesOfCapture = "next week";
-        final String projectLatLong = "up and left a little";
+        final String geographicalCoverage = "up and left a little";
         final String projectLicence = "to kill";
         final String projectPhysicalLocation = "Sydney";
         final String projectRelatedParty = "Intersect";
@@ -49,13 +52,18 @@ public final class ProjectXMLBuilderUnitTest
         final String electronicLocation = "github";
         final String placeOrRegionName = "Mexico";
         final String citationInformation = "some citation";
-        final String relatedActivity = "some related activity that is nice.";
+        final String countries = "countries";
+        final String languages = "languages";
+        final FieldOfResearch fieldOfResearch = new FieldOfResearch("code", "desc");
+        final String fundingBody = "fundingBody";
+        final String grantID = "grantID";
+        final String relatedGrant = "some related grant that is nice.";
         final String relatedInformation = "related information";
 
-        final Project project = new Project(new ProjectFieldsDTO(projectName, projectOwner, projectDescription,
+        final Project project = new Project(new ProjectFieldsDTO(projectName, projectOwner, institution, email, projectDescription,
                 projectCollectionType, rightsStatement, projectAccessRights, projectLicence, identifier, projectSubject,
-                electronicLocation, projectPhysicalLocation, placeOrRegionName, projectLatLong, projectDatesOfCapture,
-                citationInformation, projectRelatedParty, relatedActivity, relatedInformation));
+                electronicLocation, projectPhysicalLocation, placeOrRegionName, geographicalCoverage, projectDatesOfCapture,
+                citationInformation, countries, languages, fieldOfResearch, fundingBody, grantID, projectRelatedParty, relatedGrant, relatedInformation));
         final MetadataCategory mdc1 = new MetadataCategory("CategoryName", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
         final MetadataValue mdv11 = new MetadataValue("val11");
         final MetadataValue mdv12 = new MetadataValue("val12");
@@ -83,22 +91,29 @@ public final class ProjectXMLBuilderUnitTest
         final String expectedXML =  "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" + NEW_LINE +
                                     "<project>" + NEW_LINE +
                                     "  <project_info collectionType=\"" + projectCollectionType + "\" identifier=\"" + identifier + "\">" + NEW_LINE +
-                                    "    <name>" + projectName + "</name>" + NEW_LINE +
+                                    "    <projectName>" + projectName + "</projectName>" + NEW_LINE +
+                                    "    <name>" + projectOwner + "</name>" + NEW_LINE +
+                                    "    <institution>" + institution + "</institution>" + NEW_LINE +
+                                    "    <email>" + email + "</email>" + NEW_LINE +
                                     "    <description>" + projectDescription +"</description>" + NEW_LINE +
-                                    "    <owner>" + projectOwner + "</owner>" + NEW_LINE +
+                                    "    <rightsStatement>" + rightsStatement + "</rightsStatement>" + NEW_LINE +
                                     "    <accessRights>" + projectAccessRights + "</accessRights>" + NEW_LINE +
-                                    "    <citationInformation>" + citationInformation + "</citationInformation>" + NEW_LINE +
-                                    "    <datesOfCapture>" + projectDatesOfCapture + "</datesOfCapture>" + NEW_LINE +
-                                    "    <electronicLocation>" + electronicLocation + "</electronicLocation>" + NEW_LINE +
-                                    "    <latitudeLongitude>" + projectLatLong + "</latitudeLongitude>" + NEW_LINE +
                                     "    <license>" + projectLicence + "</license>" + NEW_LINE +
+                                    "    <subject>" + projectSubject + "</subject>" + NEW_LINE +
+                                    "    <electronicLocation>" + electronicLocation + "</electronicLocation>" + NEW_LINE +
                                     "    <physicalLocation>" + projectPhysicalLocation + "</physicalLocation>" + NEW_LINE +
                                     "    <placeOrRegionName>" + placeOrRegionName + "</placeOrRegionName>" + NEW_LINE +
-                                    "    <relatedActivity>" + relatedActivity + "</relatedActivity>" + NEW_LINE +
-                                    "    <relatedInformation>" + relatedInformation + "</relatedInformation>" + NEW_LINE +
+                                    "    <geographicalCoverage>" + geographicalCoverage + "</geographicalCoverage>" + NEW_LINE +
+                                    "    <datesOfCapture>" + projectDatesOfCapture + "</datesOfCapture>" + NEW_LINE +
+                                    "    <citationInformation>" + citationInformation + "</citationInformation>" + NEW_LINE +
+                                    "    <countries>" + countries + "</countries>" + NEW_LINE +
+                                    "    <languages>" + languages + "</languages>" + NEW_LINE +
+                                    "    <fieldOfResearch>" + fieldOfResearch.toString() + "</fieldOfResearch>" + NEW_LINE +
+                                    "    <fundingBody>" + fundingBody + "</fundingBody>" + NEW_LINE +
+                                    "    <grantID>" + grantID + "</grantID>" + NEW_LINE +
                                     "    <relatedParty>" + projectRelatedParty + "</relatedParty>" + NEW_LINE +
-                                    "    <rightsStatement>" + rightsStatement + "</rightsStatement>" + NEW_LINE +
-                                    "    <subject>" + projectSubject + "</subject>" + NEW_LINE +
+                                    "    <relatedGrant>" + relatedGrant + "</relatedGrant>" + NEW_LINE +
+                                    "    <relatedInformation>" + relatedInformation + "</relatedInformation>" + NEW_LINE +
                                     "  </project_info>" + NEW_LINE +
                                     "  <groups numGroups=\"2\">" + NEW_LINE +
                                     "    <group name=\"New Files\"/>" + NEW_LINE +

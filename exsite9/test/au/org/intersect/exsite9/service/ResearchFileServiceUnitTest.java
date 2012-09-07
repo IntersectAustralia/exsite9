@@ -411,7 +411,11 @@ public final class ResearchFileServiceUnitTest extends DAOTest
         subFolder.getFiles().add(rf2);
         folderDAO.createFolder(subFolder);
 
-        final Project project = new Project(new ProjectFieldsDTO("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
+        final Project project = new Project(new ProjectFieldsDTO("name", "owner", "institution", "email", "desc",
+                "collectionType", "rightsStatement", "accessRights", "license", "identifier", "subject",
+                "electronicLocation", "physicalLocation", "placeOrRegionName", "geoCoverage", "datesOfCapture",
+                "citationInformation", "counries", "languages", null, "fundingBody", "grantID", "relatedParty", "relatedGrant",
+                "relatedInformation"));
         project.getFolders().add(parentFolder);
         project.getFolders().add(subFolder);
         projectDAO.createProject(project);
