@@ -16,7 +16,7 @@ import java.io.File;
 import org.junit.Test;
 
 /**
- * Tests {@link ResearchFile}
+ * Tests {@link Group}
  */
 public final class GroupUnitTest
 {
@@ -31,6 +31,8 @@ public final class GroupUnitTest
         assertEquals(n1, toTest1.getName());
         assertTrue(toTest1.getGroups().isEmpty());
         assertTrue(toTest1.getResearchFiles().isEmpty());
+        assertEquals(ResearchFileSortField.NAME, toTest1.getResearchFileSortField());
+        assertEquals(SortFieldDirection.ASC, toTest1.getResearchFileSortDirection());
 
         toTest1.setId(Long.valueOf(7));
         assertEquals(Long.valueOf(7), toTest1.getId());
@@ -42,6 +44,13 @@ public final class GroupUnitTest
         final String newName = "new name";
         toTest1.setName(newName);
         assertEquals(newName, toTest1.getName());
+
+        final ResearchFileSortField newSortField = ResearchFileSortField.MODIFIED_DATE;
+        final SortFieldDirection newSortDir = SortFieldDirection.DESC;
+        toTest1.setResearchFileSortDirection(newSortDir);
+        toTest1.setResearchFileSortField(newSortField);
+        assertEquals(newSortField, toTest1.getResearchFileSortField());
+        assertEquals(newSortDir, toTest1.getResearchFileSortDirection());
     }
 
     @Test

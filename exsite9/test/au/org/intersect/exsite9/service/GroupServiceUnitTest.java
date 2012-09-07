@@ -27,6 +27,8 @@ import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataCategoryUse;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.ResearchFile;
+import au.org.intersect.exsite9.domain.ResearchFileSortField;
+import au.org.intersect.exsite9.domain.SortFieldDirection;
 import au.org.intersect.exsite9.dto.HierarchyMoveDTO;
 
 public class GroupServiceUnitTest extends DAOTest
@@ -620,5 +622,43 @@ public class GroupServiceUnitTest extends DAOTest
 
         final String out = groupService.deleteGroupCheck(groupToDelete);
         assertNull(out);
+    }
+
+    @Test
+    public void testSortResearchFilesInGroup()
+    {
+        final EntityManagerFactory emf = mock(EntityManagerFactory.class);
+        stub(emf.createEntityManager()).toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager());
+
+        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
+        final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
+        groupService = new GroupService(emf, groupDAOFactory, metadataAssociationDAOFactory, researchFileDAOFactory);
+
+        final Group parent = groupService.createNewGroup("parent");
+        final Group child = groupService.createNewGroup("child");
+        groupService.addChildGroup(parent, child);
+
+        assertEquals(ResearchFileSortField.NAME, parent.getResearchFileSortField());
+        assertEquals(SortFieldDirection.ASC, parent.getResearchFileSortDirection());
+        assertEquals(ResearchFileSortField.NAME, child.getResearchFileSortField());
+        assertEquals(SortFieldDirection.ASC, child.getResearchFileSortDirection());
+
+        final ResearchFileSortField sortField = ResearchFileSortField.SIZE;
+        final SortFieldDirection sortDirection = SortFieldDirection.DESC;
+        groupService.sortResearchFilesInGroup(parent, sortField, sortDirection);
+
+        final Group parentOut = groupService.findGroupByID(parent.getId());
+        final Group childOut = groupService.findGroupByID(child.getId());
+
+        assertEquals(sortField, parentOut.getResearchFileSortField());
+        assertEquals(sortDirection, parentOut.getResearchFileSortDirection());
+        assertEquals(sortField, childOut.getResearchFileSortField());
+        assertEquals(sortDirection, childOut.getResearchFileSortDirection());
     }
 }

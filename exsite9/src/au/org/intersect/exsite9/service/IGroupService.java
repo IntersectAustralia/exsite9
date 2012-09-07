@@ -11,6 +11,8 @@ import java.util.List;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
+import au.org.intersect.exsite9.domain.ResearchFileSortField;
+import au.org.intersect.exsite9.domain.SortFieldDirection;
 import au.org.intersect.exsite9.dto.HierarchyMoveDTO;
 
 /**
@@ -93,4 +95,12 @@ public interface IGroupService
      * @return The group, or {@code null} if it could not be found.
      */
     Group findGroupByID(final Long groupID);
+
+    /**
+     * Configures a group's research files to be sorted by a particular field.
+     * @param group The group to configure the sort on.
+     * @param sortField The field to sort by.
+     * @param sortDirection The direction to sort by.
+     */
+    void sortResearchFilesInGroup(final Group group, final ResearchFileSortField sortField, final SortFieldDirection sortDirection);
 }

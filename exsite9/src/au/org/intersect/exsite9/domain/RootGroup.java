@@ -15,7 +15,7 @@ public final class RootGroup extends Group
     
     public RootGroup()
     {
-        
+        super();
     }
 
     public RootGroup(final String projectName)

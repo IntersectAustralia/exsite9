@@ -12,12 +12,18 @@ import au.org.intersect.exsite9.domain.ResearchFile;
 
 /**
  * A Comparator for {@link ResearchFile}s.
- * Compares them by their name ignoring case alphabetically ascending.
+ * Compares them by their name ignoring case alphabetically ascending or descending.
  */
-public final class AlphabeticalResearchFileComparator implements Comparator<ResearchFile>
+public class ResearchFileNameComparator implements Comparator<ResearchFile>
 {
-    public AlphabeticalResearchFileComparator()
+    protected final int factor;
+
+    /**
+     * @param ascending {@code true} to compare ascending. {@code false} to compare descending.
+     */
+    public ResearchFileNameComparator(final boolean ascending)
     {
+        this.factor = ascending ? 1 : -1;
     }
 
     @Override
@@ -30,16 +36,7 @@ public final class AlphabeticalResearchFileComparator implements Comparator<Rese
 
         if (compareIgnoreCase != 0)
         {
-            return compareIgnoreCase;
-        }
-
-        if (rf1.getId() < rf2.getId())
-        {
-            return -1;
-        }
-        else if (rf1.getId() > rf2.getId())
-        {
-            return 1;
+            return compareIgnoreCase * this.factor;
         }
         return 0;
     }

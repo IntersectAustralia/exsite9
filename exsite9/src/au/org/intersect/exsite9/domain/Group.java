@@ -52,15 +52,29 @@ public class Group implements Serializable, IMetadataAssignable
 
     @OneToMany
     private final List<MetadataAssociation> metadataAssociations = new ArrayList<MetadataAssociation>();
+
+    /**
+     * The field to sort child research files on.
+     */
+    private ResearchFileSortField researchFileSortField;
+
+    /**
+     * The direction to sort child research files on.
+     */
+    private SortFieldDirection researchFileSortDirection;
 	
 	public Group()
 	{
 		name = "";
+		researchFileSortField = ResearchFileSortField.NAME;
+		researchFileSortDirection = SortFieldDirection.ASC;
 	}
 	
     public Group(final String name)
     {
         this.name = name;
+        researchFileSortField = ResearchFileSortField.NAME;
+        researchFileSortDirection = SortFieldDirection.ASC;
     }
     
     public Long getId() {
@@ -104,6 +118,26 @@ public class Group implements Serializable, IMetadataAssignable
     public void setParentGroup(final Group parentGroup)
     {
         this.parentGroup = parentGroup;
+    }
+
+    public ResearchFileSortField getResearchFileSortField()
+    {
+        return this.researchFileSortField;
+    }
+
+    public void setResearchFileSortField(final ResearchFileSortField sortField)
+    {
+        this.researchFileSortField = sortField;
+    }
+
+    public SortFieldDirection getResearchFileSortDirection()
+    {
+        return this.researchFileSortDirection;
+    }
+
+    public void setResearchFileSortDirection(final SortFieldDirection sortDirection)
+    {
+        this.researchFileSortDirection = sortDirection;
     }
 
     /**

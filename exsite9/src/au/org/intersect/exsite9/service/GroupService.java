@@ -28,6 +28,8 @@ import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.NewFilesGroup;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
+import au.org.intersect.exsite9.domain.ResearchFileSortField;
+import au.org.intersect.exsite9.domain.SortFieldDirection;
 import au.org.intersect.exsite9.dto.HierarchyMoveDTO;
 
 /**
@@ -184,6 +186,8 @@ public final class GroupService implements IGroupService
             GroupDAO groupDAO = groupDAOFactory.createInstance(em);
             parentGroup.getGroups().add(childGroup);
             childGroup.setParentGroup(parentGroup);
+            childGroup.setResearchFileSortField(parentGroup.getResearchFileSortField());
+            childGroup.setResearchFileSortDirection(parentGroup.getResearchFileSortDirection());
             groupDAO.updateGroup(childGroup);
             groupDAO.updateGroup(parentGroup);
         }
@@ -483,5 +487,32 @@ public final class GroupService implements IGroupService
         {
             disassociateMetadata(group, metadataCategory, metadataValue);
         }
+    }
+
+    @Override
+    public void sortResearchFilesInGroup(final Group group, final ResearchFileSortField sortField, final SortFieldDirection sortDirection)
+    {
+        final EntityManager em = entityManagerFactory.createEntityManager();
+        final GroupDAO groupDAO = new GroupDAO(em);
+        try
+        {
+            configureReserachFileSortParams(groupDAO, group, sortField, sortDirection);
+        }
+        finally
+        {
+            em.close();
+        }
+    }
+
+    private static void configureReserachFileSortParams(final GroupDAO groupDAO, final Group group, final ResearchFileSortField sortField, final SortFieldDirection sortDirection)
+    {
+        group.setResearchFileSortDirection(sortDirection);
+        group.setResearchFileSortField(sortField);
+        for (final Group childGroup : group.getGroups())
+        {
+            // Recursion
+            configureReserachFileSortParams(groupDAO, childGroup, sortField, sortDirection);
+        }
+        groupDAO.updateGroup(group);
     }
 }

@@ -8,6 +8,7 @@ package au.org.intersect.exsite9.view.provider;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -21,8 +22,13 @@ import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.NewFilesGroup;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
+import au.org.intersect.exsite9.domain.ResearchFileSortField;
+import au.org.intersect.exsite9.domain.SortFieldDirection;
 import au.org.intersect.exsite9.domain.utils.AlphabeticalGroupComparator;
-import au.org.intersect.exsite9.domain.utils.AlphabeticalResearchFileComparator;
+import au.org.intersect.exsite9.domain.utils.ResearchFileExtensionComparator;
+import au.org.intersect.exsite9.domain.utils.ResearchFileModifiedDataComparator;
+import au.org.intersect.exsite9.domain.utils.ResearchFileNameComparator;
+import au.org.intersect.exsite9.domain.utils.ResearchFileSizeComparator;
 import au.org.intersect.exsite9.service.IGroupService;
 import au.org.intersect.exsite9.service.IProjectService;
 import au.org.intersect.exsite9.view.ProjectExplorerView;
@@ -107,7 +113,30 @@ public final class ProjectExplorerViewContentProvider implements ITreeContentPro
         final List<ResearchFile> researchFiles = new ArrayList<ResearchFile>(rootGroup.getResearchFiles());
 
         Collections.sort(groups, new AlphabeticalGroupComparator());
-        Collections.sort(researchFiles, new AlphabeticalResearchFileComparator());
+
+        final boolean ascending = rootGroup.getResearchFileSortDirection() == SortFieldDirection.ASC;
+
+        final Comparator<ResearchFile> researchFileComparator;
+        final ResearchFileSortField researchFileSortField = rootGroup.getResearchFileSortField();
+        if (researchFileSortField == ResearchFileSortField.NAME)
+        {
+            researchFileComparator = new ResearchFileNameComparator(ascending);
+        }
+        else if (researchFileSortField == ResearchFileSortField.SIZE)
+        {
+            researchFileComparator = new ResearchFileSizeComparator(ascending);
+        }
+        else if (researchFileSortField == ResearchFileSortField.EXTENSION)
+        {
+            researchFileComparator = new ResearchFileExtensionComparator(ascending);
+        }
+        else
+        {
+            // researchFileSortField == ResearchFileSortField.MODIFIED_DATE
+            researchFileComparator = new ResearchFileModifiedDataComparator(ascending);
+        }
+
+        Collections.sort(researchFiles, researchFileComparator);
 
         final List<Object> toReturn = new ArrayList<Object>();
         toReturn.addAll(groups);
