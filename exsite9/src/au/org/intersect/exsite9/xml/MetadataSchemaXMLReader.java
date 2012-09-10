@@ -65,9 +65,17 @@ public final class MetadataSchemaXMLReader
 
         final MetadataCategoryUse use = MetadataCategoryUse.valueOf(metadataCategoryElement.getAttribute(ATTRIBUTE_USE).trim());
         final MetadataCategoryType type = MetadataCategoryType.fromString(metadataCategoryElement.getAttribute(ATTRIBUTE_TYPE).trim());
+        
+        String description = "";
+        final NodeList descriptionNodes = metadataCategoryElement.getElementsByTagName(ELEMENT_DESCRIPTION);
+        if(descriptionNodes.item(0) != null){
+            description = descriptionNodes.item(0).getTextContent().trim();
+        }
+        
         final boolean inextensible = Boolean.valueOf(metadataCategoryElement.getAttribute(ATTRIBUTE_INEXTENSIBLE).trim());
 
         final MetadataCategory metadataCategory = new MetadataCategory(name, type, use);
+        metadataCategory.setDescription(description);
         metadataCategory.setInextensible(inextensible);
         metadataCategory.setImported(true);
 

@@ -32,11 +32,6 @@
 				<data type="boolean"/>
 			</attribute>
 			<zeroOrMore>
-				<element name="description">
-					<text/>
-				</element>
-			</zeroOrMore>
-			<zeroOrMore>
 				<element name="value">
 					<text/>
 				</element>
