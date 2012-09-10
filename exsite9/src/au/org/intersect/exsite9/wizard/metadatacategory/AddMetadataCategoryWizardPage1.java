@@ -295,18 +295,18 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                 metadataValuesListWidget.setEnabled(false);
             }
             
-            if (this.metadataCategory.isInextensible() && this.schema.getLocal())
+            if (this.metadataCategory.isInextensible() && !this.metadataCategory.isImported())
             {
                 this.metadataValuesListWidget.setEnabled(false);
                 this.addButton.setEnabled(false);
                 this.removeButton.setEnabled(false);
                 this.editButton.setEnabled(false);
             }
-            else if (!this.metadataCategory.isInextensible() && !this.schema.getLocal())
+            else if (!this.metadataCategory.isInextensible() && this.metadataCategory.isImported())
             {
                 this.inextensibleCheckbox.setEnabled(false);
             }
-            else if (this.metadataCategory.isInextensible() && !this.schema.getLocal())
+            else if (this.metadataCategory.isInextensible() && this.metadataCategory.isImported())
             {
                 this.inextensibleCheckbox.setEnabled(false);
                 this.metadataValuesListWidget.setEnabled(false);

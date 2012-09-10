@@ -33,7 +33,7 @@ public class MetadataCategoryServiceUnitTest extends DAOTest
 
         metadataCategoryService = new MetadataCategoryService(emf, metadataCategoryDAOFactory);
 
-        MetadataCategory category = metadataCategoryService.createNewMetadataCategory("Names", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional, false, null);
+        MetadataCategory category = metadataCategoryService.createNewMetadataCategory("Names", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional, false, false, null);
         MetadataCategory categoryFoundById = metadataCategoryService.findById(category.getId());
 
         assertEquals(category, categoryFoundById);
@@ -50,7 +50,7 @@ public class MetadataCategoryServiceUnitTest extends DAOTest
 
         metadataCategoryService = new MetadataCategoryService(emf, metadataCategoryDAOFactory);
 
-        MetadataCategory category = metadataCategoryService.createNewMetadataCategory("Names", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional, false, null);
+        MetadataCategory category = metadataCategoryService.createNewMetadataCategory("Names", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional, false, false, null);
         
         metadataCategoryService.updateMetadataCategory(category, "NameUpdated", MetadataCategoryUse.required, false, null);
         
@@ -73,7 +73,7 @@ public class MetadataCategoryServiceUnitTest extends DAOTest
         metadataCategoryService = new MetadataCategoryService(emf, metadataCategoryDAOFactory);
 
         final MetadataCategory category = metadataCategoryService.createNewMetadataCategory("Names",
-            MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional, false, Collections.<MetadataValue>emptyList());
+            MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional, false, false, Collections.<MetadataValue>emptyList());
         assertNotNull(category.getId());
 
         metadataCategoryService.deleteMetadataCategory(category);
@@ -95,7 +95,7 @@ public class MetadataCategoryServiceUnitTest extends DAOTest
         metadataCategoryService = new MetadataCategoryService(emf, metadataCategoryDAOFactory);
 
         MetadataCategory category = metadataCategoryService.createNewMetadataCategory("Names",
-            MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional, false, new ArrayList<MetadataValue>());
+            MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional, false, false, new ArrayList<MetadataValue>());
         assertNotNull(category.getId());
 
         final String value1 = "value1";
