@@ -96,12 +96,12 @@ public final class AddFolderToProjectHandler implements IHandler
                     MessageDialog.openError(shell, "Error", "The folder is already being watched.");
                     return null;
                 }
-                else if(folder.getFolder().getAbsolutePath().startsWith(watched.getFolder().getAbsolutePath()))
+                else if(folder.getFolder().getAbsolutePath().startsWith(watched.getFolder().getAbsolutePath() + File.pathSeparatorChar ))
                 {
                     MessageDialog.openError(shell, "Error", "The folder is already being watched as it is a sub-folder of a watched folder.");
                     return null;
                 }
-                else if(watched.getFolder().getAbsolutePath().startsWith(folder.getFolder().getAbsolutePath()))
+                else if(watched.getFolder().getAbsolutePath().startsWith(folder.getFolder().getAbsolutePath() + File.pathSeparatorChar))
                 {
                     subFoldersOfNewFolder.add(watched);
                 }
