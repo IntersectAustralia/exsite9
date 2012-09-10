@@ -228,7 +228,6 @@
        name="Import Folder Structure">
  </command>
  <command
-       defaultHandler="au.org.intersect.exsite9.commands.handlers.MoveToNewGroupHandler"
        id="au.org.intersect.exsite9.commands.MoveToNewGroup"
        name="Move selected items to new Group">
  </command>
@@ -335,7 +334,7 @@
                mnemonic="G">
             <command
                   commandId="au.org.intersect.exsite9.commands.AddGroup"
-                  label="New Group... JOHN"
+                  label="New Group..."
                   mnemonic="N"
                   style="push"
                   tooltip="Add Group to the project">
@@ -1144,6 +1143,15 @@
    <handler
          class="au.org.intersect.exsite9.commands.handlers.ImportFolderToProjectHandler"
          commandId="au.org.intersect.exsite9.commands.ImportFolderToProjectCommand">
+   </handler>
+   <handler
+         class="au.org.intersect.exsite9.commands.handlers.MoveToNewGroupHandler"
+         commandId="au.org.intersect.exsite9.commands.MoveToNewGroup">
+      <enabledWhen>
+         <reference
+               definitionId="au.org.intersect.exsite9.expression.InProjectExplorerViewAndInstanceOfResearchFileOrGroup">
+         </reference>
+      </enabledWhen>
    </handler>
    </extension>
    <extension
