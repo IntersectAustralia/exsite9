@@ -23,6 +23,7 @@ import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataAssociation;
+import au.org.intersect.exsite9.domain.MetadataAttributeValue;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataValue;
@@ -108,7 +109,7 @@ public class ResearchFileService implements IResearchFileService
     }
 
     @Override
-    public void associateMetadata(final ResearchFile file, final MetadataCategory metadataCategory, final MetadataValue metadataValue)
+    public void associateMetadata(final ResearchFile file, final MetadataCategory metadataCategory, final MetadataValue metadataValue, final MetadataAttributeValue metadataAttributeValue)
     {
 
         LOG.info("Assosciating metadata with file. " + file + " " + metadataCategory + " " + metadataValue);
@@ -145,6 +146,7 @@ public class ResearchFileService implements IResearchFileService
             {
                 final MetadataAssociation metadataAssociation = new MetadataAssociation(metadataCategory);
                 metadataAssociation.getMetadataValues().add(metadataValue);
+                metadataAssociation.setMetadataAttributeValue(metadataAttributeValue);
                 metadataAssociationDAO.createMetadataAssociation(metadataAssociation);
                 file.getMetadataAssociations().add(metadataAssociation);
             }

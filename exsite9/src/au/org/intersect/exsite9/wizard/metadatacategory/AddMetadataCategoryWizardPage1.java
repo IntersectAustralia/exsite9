@@ -28,6 +28,7 @@ import com.richclientgui.toolbox.validation.ValidatingField;
 import com.richclientgui.toolbox.validation.string.StringValidationToolkit;
 
 import au.org.intersect.exsite9.domain.Group;
+import au.org.intersect.exsite9.domain.MetadataAttributeValue;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataCategoryUse;
@@ -36,8 +37,10 @@ import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.Schema;
 import au.org.intersect.exsite9.service.IGroupService;
 import au.org.intersect.exsite9.service.IResearchFileService;
+import au.org.intersect.exsite9.validators.MetadataAttributeValueValidator;
 import au.org.intersect.exsite9.validators.MetadataCategoryNameValidator;
 import au.org.intersect.exsite9.validators.MetadataValueValidator;
+import au.org.intersect.exsite9.wizard.MaximumLengthFieldValidator;
 import au.org.intersect.exsite9.wizard.WizardPageErrorHandler;
 
 public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyListener, SelectionListener
@@ -52,13 +55,19 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     private Combo typeDropDown;
     private Combo useDropDown;
     private org.eclipse.swt.widgets.List metadataValuesListWidget;
-    private Button removeButton;
-    private Button addButton;
-    private Button editButton;
+    private org.eclipse.swt.widgets.List metadataAttributeValuesListWidget;
+    private Button removeValueButton;
+    private Button addValueButton;
+    private Button editValueButton;
+    private Button removeAttributeValueButton;
+    private Button addAttribueValueButton;
+    private Button editAttributeValueButton;
     private Button inextensibleCheckbox;
+    private ValidatingField<String> metadataAttributeNameField;
 
     private Schema schema;
     private List<MetadataValue> metadataValues;
+    private List<MetadataAttributeValue> metadataAttributeValues;
     private MetadataCategory metadataCategory;
     
     private final List<Group> assignedGroups = new ArrayList<Group>();
@@ -67,7 +76,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     private final List<MetadataValue> valuesToBeDisassociated = new ArrayList<MetadataValue>();
 
     protected AddMetadataCategoryWizardPage1(final String pageTitle, final String pageDescription, final Schema schema, final MetadataCategory metadataCategory,
-            final List<MetadataValue> metadataValues)
+            final List<MetadataValue> metadataValues, final List<MetadataAttributeValue> metadataAttributeValues)
     {
         super(pageTitle);    
         setTitle(pageTitle);
@@ -76,6 +85,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         this.schema = schema;
         this.metadataValues = metadataValues;
         this.metadataCategory = metadataCategory;
+        this.metadataAttributeValues = metadataAttributeValues;
     }
 
     @Override
@@ -126,13 +136,19 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                 final int selectedIndex = typeDropDown.getSelectionIndex();
                 if (selectedIndex == MetadataCategoryType.CONTROLLED_VOCABULARY.ordinal())
                 {
-                    addButton.setEnabled(true);
+                    addValueButton.setEnabled(true);
                     metadataValuesListWidget.setEnabled(true);
+                    metadataAttributeNameField.getControl().setEnabled(false);
+                    metadataAttributeValuesListWidget.setEnabled(false);
+                    addAttribueValueButton.setEnabled(false);
                 }
                 else
                 {
-                    addButton.setEnabled(false);
+                    addValueButton.setEnabled(false);
                     metadataValuesListWidget.setEnabled(false);
+                    metadataAttributeNameField.getControl().setEnabled(true);
+                    metadataAttributeValuesListWidget.setEnabled(true);
+                    addAttribueValueButton.setEnabled(true);
                 }
             }
 
@@ -203,14 +219,14 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                 if (!inextensibleCheckbox.getSelection())
                 {
                     metadataValuesListWidget.setEnabled(true);
-                    addButton.setEnabled(true);
+                    addValueButton.setEnabled(true);
                 }
                 else if (inextensibleCheckbox.getSelection())
                 {
                     metadataValuesListWidget.setEnabled(false);
-                    addButton.setEnabled(false);
-                    removeButton.setEnabled(false);
-                    editButton.setEnabled(false);
+                    addValueButton.setEnabled(false);
+                    removeValueButton.setEnabled(false);
+                    editValueButton.setEnabled(false);
                 }
             }
             
@@ -241,8 +257,62 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
             @Override
             public void widgetSelected(final SelectionEvent e)
             {
-                removeButton.setEnabled(metadataValuesListWidget.getSelectionCount() > 0);
-                editButton.setEnabled(metadataValuesListWidget.getSelectionCount() > 0);
+                removeValueButton.setEnabled(metadataValuesListWidget.getSelectionCount() > 0);
+                editValueButton.setEnabled(metadataValuesListWidget.getSelectionCount() > 0);
+            }
+
+            @Override
+            public void widgetDefaultSelected(final SelectionEvent e)
+            {
+            }
+        });
+        
+
+        final Composite valueRowComp = new Composite(container, SWT.NULL);
+        final RowLayout valueRowLayout = new RowLayout();
+        valueRowLayout.type = SWT.VERTICAL;
+        valueRowLayout.pack = false;
+        valueRowLayout.justify = true;
+        valueRowComp.setLayout(valueRowLayout);
+
+        this.addValueButton = new Button(valueRowComp, SWT.PUSH);
+        addValueButton.setText("Add...");
+        addValueButton.addSelectionListener(this);
+
+        this.removeValueButton = new Button(valueRowComp, SWT.PUSH);
+        removeValueButton.setText("Remove");
+        removeValueButton.addSelectionListener(this);
+        removeValueButton.setEnabled(false);
+        
+        this.editValueButton = new Button(valueRowComp, SWT.PUSH);
+        editValueButton.setText("Edit...");
+        editValueButton.addSelectionListener(this);
+        editValueButton.setEnabled(false);
+
+        final Label metadataAttributeLabel = new Label(this.container, SWT.NULL);
+        metadataAttributeLabel.setText("Attribute Name");
+
+        this.metadataAttributeNameField = this.stringValidatorToolkit.createTextField(this.container, new MaximumLengthFieldValidator("Attribute Name", 255),
+                false, metadataCategory == null ? "" : metadataCategory.getName());
+
+        final GridData singleLineGridData = new GridData(GridData.FILL_HORIZONTAL);
+        final GridData multiLineGridData = new GridData(GridData.FILL_BOTH);
+
+        // empty cell
+        new Label(container, SWT.NULL);
+
+        final Label metadataAttributeValuesLabel = new Label(this.container, SWT.NULL);
+        metadataAttributeValuesLabel.setText("Attribute Values");
+
+        this.metadataAttributeValuesListWidget = new org.eclipse.swt.widgets.List(this.container, SWT.BORDER | SWT.SINGLE | SWT.WRAP | SWT.V_SCROLL);
+
+        this.metadataAttributeValuesListWidget.addSelectionListener(new SelectionListener()
+        {
+            @Override
+            public void widgetSelected(final SelectionEvent e)
+            {
+                removeAttributeValueButton.setEnabled(metadataAttributeValuesListWidget.getSelectionCount() > 0);
+                editAttributeValueButton.setEnabled(metadataAttributeValuesListWidget.getSelectionCount() > 0);
             }
 
             @Override
@@ -251,33 +321,26 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
             }
         });
 
-        final GridData singleLineGridData = new GridData(GridData.FILL_HORIZONTAL);
-        final GridData multiLineGridData = new GridData(GridData.FILL_BOTH);
+        final Composite attributeRowComp = new Composite(container, SWT.NULL);
+        final RowLayout attributeRowLayout = new RowLayout();
+        attributeRowLayout.type = SWT.VERTICAL;
+        attributeRowLayout.pack = false;
+        attributeRowLayout.justify = true;
+        attributeRowComp.setLayout(attributeRowLayout);
 
-        this.categoryNameField.getControl().setLayoutData(singleLineGridData);
-        this.metadataValuesListWidget.setLayoutData(multiLineGridData);
+        this.addAttribueValueButton = new Button(attributeRowComp, SWT.PUSH);
+        addAttribueValueButton.setText("Add...");
+        addAttribueValueButton.addSelectionListener(this);
 
-        Composite rowComp = new Composite(container, SWT.NULL);
-
-        RowLayout rowLayout = new RowLayout();
-        rowLayout.type = SWT.VERTICAL;
-        rowLayout.pack = false;
-        rowLayout.justify = true;
-        rowComp.setLayout(rowLayout);
-
-        addButton = new Button(rowComp, SWT.PUSH);
-        addButton.setText("Add...");
-        addButton.addSelectionListener(this);
-
-        this.removeButton = new Button(rowComp, SWT.PUSH);
-        removeButton.setText("Remove");
-        removeButton.addSelectionListener(this);
-        removeButton.setEnabled(false);
+        this.removeAttributeValueButton = new Button(attributeRowComp, SWT.PUSH);
+        removeAttributeValueButton.setText("Remove");
+        removeAttributeValueButton.addSelectionListener(this);
+        removeAttributeValueButton.setEnabled(false);
         
-        this.editButton = new Button(rowComp, SWT.PUSH);
-        editButton.setText("Edit...");
-        editButton.addSelectionListener(this);
-        editButton.setEnabled(false);
+        this.editAttributeValueButton = new Button(attributeRowComp, SWT.PUSH);
+        editAttributeValueButton.setText("Edit...");
+        editAttributeValueButton.addSelectionListener(this);
+        editAttributeValueButton.setEnabled(false);
 
         if (this.metadataCategory != null)
         {
@@ -286,21 +349,21 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
             typeDropDown.setEnabled(false);
             if (selectedTypeIndex == MetadataCategoryType.CONTROLLED_VOCABULARY.ordinal())
             {
-                addButton.setEnabled(true);
+                addValueButton.setEnabled(true);
                 metadataValuesListWidget.setEnabled(true);
             }
             else
             {
-                addButton.setEnabled(false);
+                addValueButton.setEnabled(false);
                 metadataValuesListWidget.setEnabled(false);
             }
             
             if (this.metadataCategory.isInextensible() && this.schema.getLocal())
             {
                 this.metadataValuesListWidget.setEnabled(false);
-                this.addButton.setEnabled(false);
-                this.removeButton.setEnabled(false);
-                this.editButton.setEnabled(false);
+                this.addValueButton.setEnabled(false);
+                this.removeValueButton.setEnabled(false);
+                this.editValueButton.setEnabled(false);
             }
             else if (!this.metadataCategory.isInextensible() && !this.schema.getLocal())
             {
@@ -310,19 +373,26 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
             {
                 this.inextensibleCheckbox.setEnabled(false);
                 this.metadataValuesListWidget.setEnabled(false);
-                this.addButton.setEnabled(false);
-                this.removeButton.setEnabled(false);
-                this.editButton.setEnabled(false);
+                this.addValueButton.setEnabled(false);
+                this.removeValueButton.setEnabled(false);
+                this.editValueButton.setEnabled(false);
             }
         }
+        else
+        {
+            this.metadataAttributeNameField.getControl().setEnabled(false);
+            this.metadataAttributeValuesListWidget.setEnabled(false);
+            this.addAttribueValueButton.setEnabled(false);
+        }
 
-        final RowData addButtonGridData = new RowData();
-        final RowData removeButtonGridData = new RowData();
-        final RowData editButtonGridData = new RowData();
+        this.categoryNameField.getControl().setLayoutData(singleLineGridData);
+        this.metadataAttributeNameField.getControl().setLayoutData(singleLineGridData);
+        this.metadataValuesListWidget.setLayoutData(multiLineGridData);
+        this.metadataAttributeValuesListWidget.setLayoutData(multiLineGridData);
 
-        this.addButton.setLayoutData(addButtonGridData);
-        this.removeButton.setLayoutData(removeButtonGridData);
-        this.editButton.setLayoutData(editButtonGridData);
+        this.addValueButton.setLayoutData(new RowData());
+        this.removeValueButton.setLayoutData(new RowData());
+        this.editValueButton.setLayoutData(new RowData());
 
         this.container.pack();
         this.container.layout();
@@ -346,7 +416,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     @Override
     public void widgetSelected(SelectionEvent e)
     {
-        if (e.widget.equals(addButton))
+        if (e.widget.equals(addValueButton))
         {
             final InputDialog userInput = new InputDialog(getShell(), "Enter Value", "Enter a new metadata value", "", new IInputValidator()
             {
@@ -370,14 +440,38 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
 
             this.metadataValuesListWidget.add(userInput.getValue().trim());
             this.metadataValues.add(new MetadataValue(userInput.getValue().trim()));
-
         }
-        else if (e.widget.equals(removeButton))
+        else if (e.widget.equals(this.addAttribueValueButton))
+        {
+            final InputDialog userInput = new InputDialog(getShell(), "Enter Value", "Enter a new metadata attribute value", "", new IInputValidator()
+            {
+                @Override
+                public String isValid(final String contents)
+                {
+                    final MetadataAttributeValueValidator validator = new MetadataAttributeValueValidator(metadataAttributeValues);
+                    if (validator.isValid(contents))
+                    {
+                        return null;
+                    }
+                    return validator.getErrorMessage();
+                }
+            });
+            userInput.open();
+
+            if (userInput.getValue() == null || userInput.getValue().trim().isEmpty())
+            {
+                return;
+            }
+
+            this.metadataAttributeValuesListWidget.add(userInput.getValue().trim());
+            this.metadataAttributeValues.add(new MetadataAttributeValue(userInput.getValue().trim()));            
+        }
+        else if (e.widget.equals(removeValueButton))
         {
             if (this.metadataValuesListWidget.getSelectionCount() == 0)
             {
-                removeButton.setEnabled(metadataValuesListWidget.getSelectionCount() > 0);
-                editButton.setEnabled(metadataValuesListWidget.getSelectionCount() > 0);
+                removeValueButton.setEnabled(metadataValuesListWidget.getSelectionCount() > 0);
+                editValueButton.setEnabled(metadataValuesListWidget.getSelectionCount() > 0);
                 return;
             }
           
@@ -433,15 +527,19 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
             this.metadataValuesListWidget.remove(selectedIndex);
             
             //disable remove and edit buttons as the value is no longer there for selection
-            removeButton.setEnabled(metadataValuesListWidget.getSelectionCount() > 0);
-            editButton.setEnabled(metadataValuesListWidget.getSelectionCount() > 0);
+            removeValueButton.setEnabled(metadataValuesListWidget.getSelectionCount() > 0);
+            editValueButton.setEnabled(metadataValuesListWidget.getSelectionCount() > 0);
         }
-        else if (e.widget.equals(editButton))
+        else if (e.widget.equals(removeAttributeValueButton))
         {
-            if(this.metadataValuesListWidget.getSelectionCount() == 0)
+            // TODO
+        }
+        else if (e.widget.equals(editValueButton))
+        {
+            if (this.metadataValuesListWidget.getSelectionCount() == 0)
             {
-                removeButton.setEnabled(metadataValuesListWidget.getSelectionCount() > 0);
-                editButton.setEnabled(metadataValuesListWidget.getSelectionCount() > 0);
+                removeValueButton.setEnabled(metadataValuesListWidget.getSelectionCount() > 0);
+                editValueButton.setEnabled(metadataValuesListWidget.getSelectionCount() > 0);
                 return;
             }
             
@@ -483,6 +581,10 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
             this.metadataValues.get(this.metadataValuesListWidget.getSelectionIndex()).setValue(userInput.getValue().trim());
             this.metadataValuesListWidget.setItem(this.metadataValuesListWidget.getSelectionIndex(), userInput.getValue().trim());
         }
+        else if (e.widget.equals(editAttributeValueButton))
+        {
+            // TODO
+        }
         
         setPageComplete(this.categoryNameField.isValid());
     }
@@ -502,6 +604,11 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     public String getMetadataCategoryName()
     {
         return this.categoryNameField.getContents().trim();
+    }
+
+    public String getMetadataAttributeName()
+    {
+        return this.metadataAttributeNameField.getContents().trim();
     }
 
     public MetadataCategoryType getMetadataCategoryType()
@@ -534,6 +641,11 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         return valuesToBeDisassociated;
     }
 
+    public List<MetadataAttributeValue> getMetadataAttributeValues()
+    {
+        return metadataAttributeValues;
+    }
+
     public boolean getIsInextensible()
     {
        return this.inextensibleCheckbox.getSelection();
@@ -547,5 +659,10 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     void setMetadataValues(final List<MetadataValue> metadataValues)
     {
         this.metadataValues = metadataValues;
+    }
+
+    void setMetadataAttributeValues(final List<MetadataAttributeValue> metadataAttributeValues)
+    {
+        this.metadataAttributeValues = metadataAttributeValues;
     }
 }

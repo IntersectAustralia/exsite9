@@ -29,6 +29,8 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
@@ -40,6 +42,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.ISelectionListener;
@@ -49,12 +52,15 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.part.ViewPart;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Collections2;
 
 import au.org.intersect.exsite9.Activator;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.IMetadataAssignable;
+import au.org.intersect.exsite9.domain.MetadataAttribute;
+import au.org.intersect.exsite9.domain.MetadataAttributeValue;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataValue;
@@ -70,8 +76,10 @@ import au.org.intersect.exsite9.service.IMetadataCategoryService;
 import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.service.IResearchFileService;
 import au.org.intersect.exsite9.util.Pair;
+import au.org.intersect.exsite9.util.Triplet;
 import au.org.intersect.exsite9.validators.MetadataValueValidator;
 import au.org.intersect.exsite9.view.listener.MetadataCategorySelectionListener;
+import au.org.intersect.exsite9.view.widgets.MetadataAttributeValuesComboWidget;
 import au.org.intersect.exsite9.view.widgets.MetadataButtonWidget;
 import au.org.intersect.exsite9.view.widgets.MetadataTextWidget;
 
@@ -106,6 +114,8 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
     private final Map<Pair<MetadataCategory, MetadataValue>, MetadataButtonWidget> metadataButtons = new HashMap<Pair<MetadataCategory, MetadataValue>, MetadataButtonWidget>();
 
     private final Map<MetadataCategory, MetadataTextWidget> metadataFreeTextFields = new HashMap<MetadataCategory, MetadataTextWidget>();
+
+    private final Map<MetadataCategory, MetadataAttributeValuesComboWidget> metadataAttributeValueCombos = new HashMap<MetadataCategory, MetadataAttributeValuesComboWidget>();
 
     /**
      * 
@@ -187,6 +197,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
 
         this.metadataButtons.clear();
         this.metadataFreeTextFields.clear();
+        this.metadataAttributeValueCombos.clear();
         this.rows.clear();
 
         if (metadataCategories.isEmpty())
@@ -277,20 +288,38 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
     
                 for (final MetadataValue metadataValue : sortedMetadataValues)
                 {
-                    final MetadataButtonWidget mdbw = new MetadataButtonWidget(contentComposite, SWT.TOGGLE,
-                            metadataCategory, metadataValue);
+                    final MetadataButtonWidget mdbw = new MetadataButtonWidget(contentComposite, SWT.TOGGLE, metadataCategory, metadataValue);
                     mdbw.setText(metadataValue.getValue());
                     mdbw.addSelectionListener(this);
-                    final Pair<MetadataCategory, MetadataValue> pair = new Pair<MetadataCategory, MetadataValue>(
-                            metadataCategory, metadataValue);
+                    final Pair<MetadataCategory, MetadataValue> pair = new Pair<MetadataCategory, MetadataValue>(metadataCategory, metadataValue);
                     this.metadataButtons.put(pair, mdbw);
                 }
             }
             else
             {
-                final GridLayout gridLayout = new GridLayout(3, false);
+                final MetadataAttribute metadataAttribute = metadataCategory.getMetadataAttribute();
+                final boolean hasAttribute = metadataAttribute != null;
+
+                final int numCols = hasAttribute ? 5 : 3;
+
+                final GridLayout gridLayout = new GridLayout(numCols, false);
                 contentComposite.setLayout(gridLayout);
 
+                final MetadataAttributeValuesComboWidget combo;
+                if (hasAttribute)
+                {
+                    final Label attributeNameLabel = new Label(contentComposite, SWT.NULL);
+                    attributeNameLabel.setText(metadataAttribute.getName() + ":");
+
+                    combo = new MetadataAttributeValuesComboWidget(contentComposite, SWT.READ_ONLY);
+                    combo.setItems(metadataAttribute.getMetadataAttributeValues());
+                    this.metadataAttributeValueCombos.put(metadataCategory, combo);
+                }
+                else
+                {
+                    combo = null;
+                }
+                
                 final MetadataTextWidget freeTextField = new MetadataTextWidget(contentComposite, SWT.BORDER | SWT.SINGLE);
                 this.metadataFreeTextFields.put(metadataCategory, freeTextField);
 
@@ -299,6 +328,29 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
 
                 final Button resetButton = new Button(contentComposite, SWT.PUSH);
                 final Button applyButton = new Button(contentComposite, SWT.PUSH);
+
+                if (combo != null)
+                {
+                    combo.addModifyListener(new ModifyListener()
+                    {
+                        @Override
+                        public void modifyText(final ModifyEvent e)
+                        {
+                            if (!validMetadataAssignablesSelected(false))
+                            {
+                                resetButton.setEnabled(false);
+                                applyButton.setEnabled(false);
+                                return;
+                            }
+
+                            final MetadataAttributeValue oldValue = metadataAttributeValueCombos.get(metadataCategory).getMetadataAttributeValue();
+                            final MetadataAttributeValue currentValue = combo.getSelectedMetadataAttributeValue();
+                            final boolean enabled = !Objects.equal(oldValue, currentValue);
+                            resetButton.setEnabled(enabled);
+                            applyButton.setEnabled(enabled && !freeTextField.getText().trim().isEmpty());
+                        }
+                    });
+                }
 
                 resetButton.setText("Reset");
                 resetButton.setEnabled(false);
@@ -311,6 +363,18 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                         final String originalText = metadataValue == null ? "" : metadataValue.getValue();
                         freeTextField.setText(originalText);
                         freeTextField.setSelection(originalText.length(), originalText.length());
+                        if (combo != null)
+                        {
+                            final MetadataAttributeValue metadataAttributeValue = metadataAttributeValueCombos.get(metadataCategory).getMetadataAttributeValue();
+                            if (metadataAttributeValue != null)
+                            {
+                                combo.select(metadataAttributeValue);
+                            }
+                            else
+                            {
+                                combo.select(0);
+                            }
+                        }
                         resetButton.setEnabled(false);
                         applyButton.setEnabled(false);
                     }
@@ -345,6 +409,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                         }
 
                         final String newValue = freeTextField.getText();
+                        final MetadataAttributeValue metadataAttributeValue = combo != null ? combo.getSelectedMetadataAttributeValue() : null;
 
                         final MetadataValueValidator validtor = new MetadataValueValidator(Collections.<MetadataValue>emptyList(), true);
                         if (!validtor.isValid(newValue))
@@ -358,6 +423,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
 
                         // Disassociate old value
                         final MetadataValue oldAssociatedValue = freeTextField.getMetadataValue();
+
                         if (oldAssociatedValue != null)
                         {
                             for (final IMetadataAssignable metadataAssignable : selectedMetadataAssignables)
@@ -389,12 +455,12 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                                     // We need to reload the object model from the database because the user may have updated it's metadata associations
                                     // and wishes to perform another action on it (without selecting another one in between, which would force a reload from the DB)
                                     final Group freshGroup = groupService.findGroupByID(((Group)metadataAssignable).getId());
-                                    groupService.associateMetadata(freshGroup, updatedMetadataCategory, metadataValue);
+                                    groupService.associateMetadata(freshGroup, updatedMetadataCategory, metadataValue, metadataAttributeValue);
                                 }
                                 else if (metadataAssignable instanceof ResearchFile)
                                 {
                                     final ResearchFile freshResearchFile = researchFileService.findResearchFileByID(((ResearchFile)metadataAssignable).getId());
-                                    researchFileService.associateMetadata(freshResearchFile, updatedMetadataCategory, metadataValue);
+                                    researchFileService.associateMetadata(freshResearchFile, updatedMetadataCategory, metadataValue, metadataAttributeValue);
                                 }
                             }
                         }
@@ -542,12 +608,12 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                     // We need to reload the object model from the database because the user may have updated it's metadata associations
                     // and wishes to perform another action on it (without selecting another one in between, which would force a reload from the DB)
                     final Group freshGroup = this.groupService.findGroupByID(((Group)metadataAssignable).getId());
-                    groupService.associateMetadata(freshGroup, metadataCategory, metadataValue);
+                    groupService.associateMetadata(freshGroup, metadataCategory, metadataValue, null);
                 }
                 else if (metadataAssignable instanceof ResearchFile)
                 {
                     final ResearchFile freshResearchFile = this.researchFileService.findResearchFileByID(((ResearchFile)metadataAssignable).getId());
-                    researchFileService.associateMetadata(freshResearchFile, metadataCategory, metadataValue);
+                    researchFileService.associateMetadata(freshResearchFile, metadataCategory, metadataValue, null);
                 }
             }
         }
@@ -665,7 +731,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         if (!this.selectedMetadataAssignables.isEmpty())
         {
             // Determine a common set of buttons that should be pressed and press them.
-            final Set<Pair<MetadataCategory, MetadataValue>> intersection = new HashSet<Pair<MetadataCategory, MetadataValue>>(
+            final Set<Triplet<MetadataCategory, MetadataValue, MetadataAttributeValue>> intersection = new HashSet<Triplet<MetadataCategory, MetadataValue, MetadataAttributeValue>>(
                     MetadataAssignableUtils.getCategoryToValueMapping(this.selectedMetadataAssignables.get(0)));
 
             for (int i = 1; i < this.selectedMetadataAssignables.size(); i++)
@@ -690,14 +756,14 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
      * Sets the metadata values that are selected.
      * @param metadataCollectionPair the metadata to select.
      */
-    private void setMetadataValueWidgets(final Collection<Pair<MetadataCategory, MetadataValue>> metadataCollectionPair)
+    private void setMetadataValueWidgets(final Collection<Triplet<MetadataCategory, MetadataValue, MetadataAttributeValue>> metadataCollectionPair)
     {
-        for (final Pair<MetadataCategory, MetadataValue> pair : metadataCollectionPair)
+        for (final Triplet<MetadataCategory, MetadataValue, MetadataAttributeValue> triplet : metadataCollectionPair)
         {
-            final MetadataCategory metadataCategory = pair.getFirst();
+            final MetadataCategory metadataCategory = triplet.getFirst();
             if (metadataCategory.getType() == MetadataCategoryType.CONTROLLED_VOCABULARY)
             {
-                final MetadataButtonWidget metadataButtonWidget = this.metadataButtons.get(pair);
+                final MetadataButtonWidget metadataButtonWidget = this.metadataButtons.get(triplet);
                 if (metadataButtonWidget != null)
                 {
                     metadataButtonWidget.setSelection(true);
@@ -705,10 +771,18 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             }
             else
             {
-                final MetadataValue metadataValue = pair.getSecond();
+                final MetadataValue metadataValue = triplet.getSecond();
                 final MetadataTextWidget freeTextField = this.metadataFreeTextFields.get(metadataCategory);
                 freeTextField.setText(metadataValue.getValue());
                 freeTextField.setMetadataValue(metadataValue);
+
+                final MetadataAttributeValue metadataAttributeValue = triplet.getThird();
+                if (metadataAttributeValue != null)
+                {
+                    final MetadataAttributeValuesComboWidget comboWidget = this.metadataAttributeValueCombos.get(metadataCategory);
+                    comboWidget.select(metadataAttributeValue);
+                    comboWidget.setMetadataAttributeValue(metadataAttributeValue);
+                }
             }
         }
     }
@@ -726,6 +800,11 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         {
             freeTextFields.setMetadataValue(null);
             freeTextFields.setText("");
+        }
+        for (final MetadataAttributeValuesComboWidget comboWidget : this.metadataAttributeValueCombos.values())
+        {
+            comboWidget.setMetadataAttributeValue(null);
+            comboWidget.select(0);
         }
     }
 }

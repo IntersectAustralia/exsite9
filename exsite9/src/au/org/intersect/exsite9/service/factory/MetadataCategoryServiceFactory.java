@@ -12,6 +12,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.services.AbstractServiceFactory;
 import org.eclipse.ui.services.IServiceLocator;
 
+import au.org.intersect.exsite9.dao.factory.MetadataAttributeDAOFactory;
 import au.org.intersect.exsite9.dao.factory.MetadataCategoryDAOFactory;
 import au.org.intersect.exsite9.service.MetadataCategoryService;
 
@@ -30,7 +31,8 @@ public final class MetadataCategoryServiceFactory extends AbstractServiceFactory
     {
         final EntityManagerFactory emf = (EntityManagerFactory) PlatformUI.getWorkbench().getService(EntityManagerFactory.class);
         final MetadataCategoryDAOFactory mdcDAOFactory = new MetadataCategoryDAOFactory();
-        return new MetadataCategoryService(emf, mdcDAOFactory);
+        final MetadataAttributeDAOFactory mdaDAOFactory = new MetadataAttributeDAOFactory();
+        return new MetadataCategoryService(emf, mdcDAOFactory, mdaDAOFactory);
     }
 
 }

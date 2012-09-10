@@ -38,6 +38,8 @@ public final class MetadataAssociation implements Serializable
 
     private MetadataCategory metadataCategory;
 
+    private MetadataAttributeValue metadataAttributeValue;
+
     @OneToMany
     private final List<MetadataValue> metadataValues = new ArrayList<MetadataValue>();
 
@@ -73,6 +75,16 @@ public final class MetadataAssociation implements Serializable
     public List<MetadataValue> getMetadataValues()
     {
         return metadataValues;
+    }
+
+    public void setMetadataAttributeValue(final MetadataAttributeValue metadataAttributeValue)
+    {
+        this.metadataAttributeValue = metadataAttributeValue;
+    }
+
+    public MetadataAttributeValue getMetadataAttributeValue()
+    {
+        return this.metadataAttributeValue;
     }
 
     @Override

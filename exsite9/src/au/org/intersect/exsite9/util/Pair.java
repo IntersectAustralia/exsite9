@@ -14,7 +14,7 @@ import com.google.common.base.Objects;
 /**
  * A pair. May be used generically to associate a pair of items together.
  */
-public final class Pair<F, S>
+public class Pair<F, S>
 {
     private final F first;
     private final S second;

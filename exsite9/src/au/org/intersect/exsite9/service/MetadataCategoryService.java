@@ -11,8 +11,11 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
+import au.org.intersect.exsite9.dao.MetadataAttributeDAO;
 import au.org.intersect.exsite9.dao.MetadataCategoryDAO;
+import au.org.intersect.exsite9.dao.factory.MetadataAttributeDAOFactory;
 import au.org.intersect.exsite9.dao.factory.MetadataCategoryDAOFactory;
+import au.org.intersect.exsite9.domain.MetadataAttribute;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataCategoryUse;
@@ -22,26 +25,39 @@ public final class MetadataCategoryService implements IMetadataCategoryService
 {
     private final EntityManagerFactory emf;
     private final MetadataCategoryDAOFactory metadataCategoryDAOFactory;
+    private final MetadataAttributeDAOFactory metadataAttributeDAOFactory;
 
-    public MetadataCategoryService(final EntityManagerFactory emf, final MetadataCategoryDAOFactory metadataCategoryDAOFactory)
+    public MetadataCategoryService(final EntityManagerFactory emf, final MetadataCategoryDAOFactory metadataCategoryDAOFactory, final MetadataAttributeDAOFactory metadataAttributeDAOFactory)
     {
         this.emf = emf;
         this.metadataCategoryDAOFactory = metadataCategoryDAOFactory;
+        this.metadataAttributeDAOFactory = metadataAttributeDAOFactory;
     }
 
     /** 
      * @{inheritDoc}
      */
     @Override
-    public MetadataCategory createNewMetadataCategory(final String name, final MetadataCategoryType type, final MetadataCategoryUse use, boolean inextensible, final List<MetadataValue> values)
+    public MetadataCategory createNewMetadataCategory(final String name, final MetadataCategoryType type, final MetadataCategoryUse use, boolean inextensible, final List<MetadataValue> values,
+            final MetadataAttribute metadataAttribute)
     {
         final EntityManager em = this.emf.createEntityManager();
         try
         {
             final MetadataCategoryDAO mdcDAO = this.metadataCategoryDAOFactory.createInstance(em);
+            final MetadataAttributeDAO mdaDAO = this.metadataAttributeDAOFactory.createInstance(em);
+
             final MetadataCategory mdc = new MetadataCategory(name, type, use);
+
             mdc.setValues(values);
             mdc.setInextensible(inextensible);
+            
+            if (metadataAttribute != null)
+            {
+                mdaDAO.createMetadataAttribute(metadataAttribute);
+                mdc.setMetadataAttribute(metadataAttribute);
+            }
+
             mdcDAO.createMetadataCategory(mdc);
             return mdc;
         }

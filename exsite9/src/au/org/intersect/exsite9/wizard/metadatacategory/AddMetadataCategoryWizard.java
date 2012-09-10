@@ -8,6 +8,8 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.PlatformUI;
 
 import au.org.intersect.exsite9.domain.Group;
+import au.org.intersect.exsite9.domain.MetadataAttribute;
+import au.org.intersect.exsite9.domain.MetadataAttributeValue;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataCategoryUse;
@@ -43,13 +45,13 @@ public class AddMetadataCategoryWizard extends Wizard
         {
             page1 = new AddMetadataCategoryWizardPage1("Add Metadata Category",
                     "Please enter the details of the metadata category you wish to create", project.getSchema(), null,
-                    new ArrayList<MetadataValue>());
+                    new ArrayList<MetadataValue>(), new ArrayList<MetadataAttributeValue>());
         }
         else
         {
             page1 = new AddMetadataCategoryWizardPage1("Edit Metadata Category",
                     "Edit the details of the metadata category you have selected", project.getSchema(), metadataCategory,
-                    metadataCategory.getValues());
+                    metadataCategory.getValues(), null);
         }
     }
 
@@ -87,16 +89,22 @@ public class AddMetadataCategoryWizard extends Wizard
         
         if (this.metadataCategory == null)
         {
-            final List<MetadataValue> values;
+            final List<MetadataValue> metadataValues;
+            final MetadataAttribute metadataAttribute;
             if (categoryType == MetadataCategoryType.CONTROLLED_VOCABULARY)
             {
-                values = page1.getMetadataCategoryValues();
+                metadataValues = page1.getMetadataCategoryValues();
+                metadataAttribute = null;
             }
             else
             {
-                values = Collections.emptyList();
+                metadataValues = Collections.emptyList();
+                final String metadataAttributeName = page1.getMetadataAttributeName();
+                metadataAttribute = new MetadataAttribute(metadataAttributeName, page1.getMetadataAttributeValues());
             }
-            final MetadataCategory newCategory = metadataCategoryService.createNewMetadataCategory(categoryTitle, categoryType, categoryUse, inextensible, values);
+
+
+            final MetadataCategory newCategory = metadataCategoryService.createNewMetadataCategory(categoryTitle, categoryType, categoryUse, inextensible, metadataValues, metadataAttribute);
             schemaService.addMetadataCategoryToSchema(this.project.getSchema(), newCategory);
         }
         else

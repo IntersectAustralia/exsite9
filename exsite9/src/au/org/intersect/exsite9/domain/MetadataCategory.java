@@ -17,6 +17,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -46,9 +47,11 @@ public final class MetadataCategory implements Serializable
     
     private boolean isInextensible;
 
-
     @OneToMany(cascade=CascadeType.ALL, orphanRemoval=true)
     private List<MetadataValue> metadataValues = new ArrayList<MetadataValue>();
+
+    @OneToOne
+    private MetadataAttribute metadataAttribute;
 
     public MetadataCategory()
     {
@@ -119,6 +122,16 @@ public final class MetadataCategory implements Serializable
     public void setInextensible(boolean isInextensible)
     {
         this.isInextensible = isInextensible;
+    }
+
+    public MetadataAttribute getMetadataAttribute()
+    {
+        return this.metadataAttribute;
+    }
+
+    public void setMetadataAttribute(final MetadataAttribute metadataAttribute)
+    {
+        this.metadataAttribute = metadataAttribute;
     }
     
     @Override

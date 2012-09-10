@@ -9,6 +9,7 @@ package au.org.intersect.exsite9.service;
 import java.util.List;
 
 import au.org.intersect.exsite9.domain.Group;
+import au.org.intersect.exsite9.domain.MetadataAttributeValue;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.ResearchFileSortField;
@@ -68,7 +69,7 @@ public interface IGroupService
      * @param metadataCategory The category of metadata to associate.
      * @param metadataVale The value of metadata to associate.
      */
-    void associateMetadata(final Group group, final MetadataCategory metadataCategory, final MetadataValue metadataValue);
+    void associateMetadata(final Group group, final MetadataCategory metadataCategory, final MetadataValue metadataValue, final MetadataAttributeValue metadataAttributeValue);
 
     /**
      * Diassociates a metadata category and value from a Group.
@@ -77,7 +78,7 @@ public interface IGroupService
      * @param metadataValue The value of metadata to disassociate.
      */
     void disassociateMetadata(final Group group, final MetadataCategory metadataCategory, final MetadataValue metadataValue);
-    
+
     void disassociateMultipleMetadataValues(final Group group, final MetadataCategory metadataCategory, final List<MetadataValue> metadataValues);
 
 

@@ -12,9 +12,10 @@ import java.util.Set;
 
 import au.org.intersect.exsite9.domain.IMetadataAssignable;
 import au.org.intersect.exsite9.domain.MetadataAssociation;
+import au.org.intersect.exsite9.domain.MetadataAttributeValue;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
-import au.org.intersect.exsite9.util.Pair;
+import au.org.intersect.exsite9.util.Triplet;
 
 /**
  * Utilities for {@link IMetadataAssignable}
@@ -31,17 +32,18 @@ public final class MetadataAssignableUtils
      * @param group The group.
      * @return the set of metadata category to metadata value mappings.
      */
-    public static Set<Pair<MetadataCategory, MetadataValue>> getCategoryToValueMapping(final IMetadataAssignable metadataAssignable)
+    public static Set<Triplet<MetadataCategory, MetadataValue, MetadataAttributeValue>> getCategoryToValueMapping(final IMetadataAssignable metadataAssignable)
     {
-        final Set<Pair<MetadataCategory, MetadataValue>> toReturn = new HashSet<Pair<MetadataCategory,MetadataValue>>();
+        final Set<Triplet<MetadataCategory, MetadataValue, MetadataAttributeValue>> toReturn = new HashSet<Triplet<MetadataCategory,MetadataValue, MetadataAttributeValue>>();
 
         final List<MetadataAssociation> metadataAssociations = metadataAssignable.getMetadataAssociations();
         for (final MetadataAssociation metadataAssociation : metadataAssociations)
         {
             final MetadataCategory metadataCategory = metadataAssociation.getMetadataCategory();
+            final MetadataAttributeValue metadataAttributeValue = metadataAssociation.getMetadataAttributeValue();
             for (final MetadataValue metadataValue : metadataAssociation.getMetadataValues())
             {
-                toReturn.add(new Pair<MetadataCategory, MetadataValue>(metadataCategory, metadataValue));
+                toReturn.add(new Triplet<MetadataCategory, MetadataValue, MetadataAttributeValue>(metadataCategory, metadataValue, metadataAttributeValue));
             }
         }
         return toReturn;

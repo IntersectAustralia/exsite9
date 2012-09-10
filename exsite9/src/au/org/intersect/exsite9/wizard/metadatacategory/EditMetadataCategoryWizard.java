@@ -39,7 +39,7 @@ public final class EditMetadataCategoryWizard extends Wizard
         this.schema = schema;
         this.listCategoriesPage = new ListMetadataCategoriesWizardPage("Edit Metadata Category", "Choose a metadata category to edit.", this.schema, false);
         this.editCategoryPage = new AddMetadataCategoryWizardPage1("Edit Metadata Category",
-    		"Edit the details of the metadata category you have selected", schema, null, Collections.<MetadataValue>emptyList());
+    		"Edit the details of the metadata category you have selected", schema, null, Collections.<MetadataValue>emptyList(), null);
     }
 
     @Override

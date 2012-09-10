@@ -22,6 +22,7 @@ import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
 import au.org.intersect.exsite9.domain.ExcludedFilesGroup;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataAssociation;
+import au.org.intersect.exsite9.domain.MetadataAttributeValue;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataValue;
@@ -317,7 +318,7 @@ public final class GroupService implements IGroupService
     }
 
     @Override
-    public void associateMetadata(final Group group, final MetadataCategory metadataCategory, final MetadataValue metadataValue)
+    public void associateMetadata(final Group group, final MetadataCategory metadataCategory, final MetadataValue metadataValue, final MetadataAttributeValue metadataAttribtueValue)
     {
         LOG.info("Assosciating metadata with group. " + group + " " + metadataCategory + " " + metadataValue);
 
@@ -354,6 +355,7 @@ public final class GroupService implements IGroupService
             {
                 final MetadataAssociation metadataAssociation = new MetadataAssociation(metadataCategory);
                 metadataAssociation.getMetadataValues().add(metadataValue);
+                metadataAssociation.setMetadataAttributeValue(metadataAttribtueValue);
                 metadataAssociationDAO.createMetadataAssociation(metadataAssociation);
                 group.getMetadataAssociations().add(metadataAssociation);
             }
@@ -480,8 +482,7 @@ public final class GroupService implements IGroupService
     }
 
     @Override
-    public void disassociateMultipleMetadataValues(Group group, MetadataCategory metadataCategory,
-            List<MetadataValue> metadataValues)
+    public void disassociateMultipleMetadataValues(Group group, MetadataCategory metadataCategory, List<MetadataValue> metadataValues)
     {
         for(MetadataValue metadataValue : metadataValues)
         {

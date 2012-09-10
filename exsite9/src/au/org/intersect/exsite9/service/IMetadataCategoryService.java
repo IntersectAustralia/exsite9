@@ -8,6 +8,7 @@ package au.org.intersect.exsite9.service;
 
 import java.util.List;
 
+import au.org.intersect.exsite9.domain.MetadataAttribute;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataCategoryUse;
@@ -26,6 +27,16 @@ public interface IMetadataCategoryService
 
     MetadataValue addValueToMetadataCategory(final MetadataCategory metadataCategory, final String metadataValue);
 
-    MetadataCategory createNewMetadataCategory(String name, MetadataCategoryType type, MetadataCategoryUse use,
-            boolean inextensible, List<MetadataValue> values);
+    /**
+     * Creates a new metadata category.
+     * @param name The name of the metadata category.
+     * @param type The type of the metadata category.
+     * @param use The use of the metadata category.
+     * @param inextensible {@code true} if this metadata category is inextensible. {@code false} otherwiss.
+     * @param values The allowable values for this metadata category.
+     * @param metadataAttribute The attribute for this metadata category. May be {@code null}.
+     * @return The newly created metadata category.
+     */
+    MetadataCategory createNewMetadataCategory(final String name, final MetadataCategoryType type, final MetadataCategoryUse use,
+            final boolean inextensible, final List<MetadataValue> values, final MetadataAttribute metadataAttribute);
 }

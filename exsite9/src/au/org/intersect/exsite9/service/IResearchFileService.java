@@ -9,6 +9,7 @@ package au.org.intersect.exsite9.service;
 import java.util.List;
 
 import au.org.intersect.exsite9.domain.Folder;
+import au.org.intersect.exsite9.domain.MetadataAttributeValue;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
@@ -38,7 +39,7 @@ public interface IResearchFileService
 	 * @param metadataCategory The metadata category to associate.
 	 * @param metadataValue The metadata value to associate.
 	 */
-	public void associateMetadata(final ResearchFile file, final MetadataCategory metadataCategory, final MetadataValue metadataValue);
+	public void associateMetadata(final ResearchFile file, final MetadataCategory metadataCategory, final MetadataValue metadataValue, final MetadataAttributeValue metadataAttributeValue);
 
 	/**
 	 * Disassociates metadata from a research file. 
