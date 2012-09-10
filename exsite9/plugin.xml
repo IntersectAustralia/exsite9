@@ -1203,7 +1203,7 @@
                variable="selection">
             <iterate
                   ifEmpty="false"
-                  operator="or">
+                  operator="and">
                <and>
                   <instanceof
                         value="au.org.intersect.exsite9.domain.Group">
@@ -1294,14 +1294,33 @@
       </definition>
       <definition
             id="au.org.intersect.exsite9.expression.InstanceOfResearchFileOrGroup">
-         <or>
-            <reference
-                  definitionId="au.org.intersect.exsite9.expression.InstanceOfResearchFile">
-            </reference>
-            <reference
-                  definitionId="au.org.intersect.exsite9.expression.InstanceOfGroup">
-            </reference>
-         </or>
+         <with
+               variable="selection">
+            <iterate
+                  ifEmpty="false"
+                  operator="and">
+               <and>
+                  <not>
+                     <instanceof
+                           value="au.org.intersect.exsite9.domain.NewFilesGroup">
+                     </instanceof>
+                  </not>
+                  <not>
+                     <instanceof
+                           value="au.org.intersect.exsite9.domain.RootGroup">
+                     </instanceof>
+                  </not>
+                  <or>
+                     <instanceof
+                           value="au.org.intersect.exsite9.domain.Group">
+                     </instanceof>
+                     <instanceof
+                           value="au.org.intersect.exsite9.domain.ResearchFile">
+                     </instanceof>
+                  </or>
+               </and>
+            </iterate>
+         </with>
       </definition>
       
    </extension>
