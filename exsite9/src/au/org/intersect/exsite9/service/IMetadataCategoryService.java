@@ -26,6 +26,6 @@ public interface IMetadataCategoryService
 
     MetadataValue addValueToMetadataCategory(final MetadataCategory metadataCategory, final String metadataValue);
 
-    MetadataCategory createNewMetadataCategory(String name, MetadataCategoryType type, MetadataCategoryUse use,
+    MetadataCategory createNewMetadataCategory(String name, String description, MetadataCategoryType type, MetadataCategoryUse use,
             boolean inextensible, boolean imported, List<MetadataValue> values);
 }

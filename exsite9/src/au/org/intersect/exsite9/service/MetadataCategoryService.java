@@ -33,13 +33,14 @@ public final class MetadataCategoryService implements IMetadataCategoryService
      * @{inheritDoc}
      */
     @Override
-    public MetadataCategory createNewMetadataCategory(final String name, final MetadataCategoryType type, final MetadataCategoryUse use, boolean inextensible, boolean imported, final List<MetadataValue> values)
+    public MetadataCategory createNewMetadataCategory(final String name, final String description, final MetadataCategoryType type, final MetadataCategoryUse use, boolean inextensible, boolean imported, final List<MetadataValue> values)
     {
         final EntityManager em = this.emf.createEntityManager();
         try
         {
             final MetadataCategoryDAO mdcDAO = this.metadataCategoryDAOFactory.createInstance(em);
             final MetadataCategory mdc = new MetadataCategory(name, type, use);
+            mdc.setDescription(description);
             mdc.setValues(values);
             mdc.setInextensible(inextensible);
             mdc.setImported(imported);

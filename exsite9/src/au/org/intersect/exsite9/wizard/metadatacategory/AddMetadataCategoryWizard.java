@@ -97,7 +97,7 @@ public class AddMetadataCategoryWizard extends Wizard
             {
                 values = Collections.emptyList();
             }
-            final MetadataCategory newCategory = metadataCategoryService.createNewMetadataCategory(categoryTitle, categoryType, categoryUse, inextensible, false, values);
+            final MetadataCategory newCategory = metadataCategoryService.createNewMetadataCategory(categoryTitle, categoryDescription, categoryType, categoryUse, inextensible, false, values);
             schemaService.addMetadataCategoryToSchema(this.project.getSchema(), newCategory);
         }
         else

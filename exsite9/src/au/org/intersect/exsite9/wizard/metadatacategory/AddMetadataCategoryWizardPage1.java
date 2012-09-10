@@ -118,7 +118,9 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         categoryDescriptionLabel.setText("Description");
 
         this.descriptionText = new Text(this.container, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL);
-        this.descriptionText.setText((this.metadataCategory.getDescription()==null) ? "":this.metadataCategory.getDescription() );
+        if(this.metadataCategory != null){
+            this.descriptionText.setText((this.metadataCategory.getDescription()==null) ? "":this.metadataCategory.getDescription() );
+        }
         this.descriptionText.addKeyListener(this);
         
         // we have 3 columns, we want description to be 3 rows big
