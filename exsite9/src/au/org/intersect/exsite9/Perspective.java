@@ -20,6 +20,7 @@ import au.org.intersect.exsite9.view.AssociatedMetadataView;
 import au.org.intersect.exsite9.view.MetadataBrowserView;
 import au.org.intersect.exsite9.view.ProjectExplorerView;
 import au.org.intersect.exsite9.view.SubmissionPackageBrowserView;
+import au.org.intersect.exsite9.view.ThumbnailView;
 
 /**
  * A Perspective holds the configuration of configuration of views.
@@ -38,6 +39,7 @@ public final class Perspective implements IPerspectiveFactory
         leftFolder.addView(ProjectExplorerView.ID);
         leftFolder.addView(SubmissionPackageBrowserView.ID);
         bottomLeftFolder.addView(AssociatedMetadataView.ID);
+        bottomLeftFolder.addView(ThumbnailView.ID);
         rightFolder.addView(MetadataBrowserView.ID);
 
         // Configure the Project Explorer View
@@ -59,6 +61,11 @@ public final class Perspective implements IPerspectiveFactory
         final IViewLayout associatedMetadataViewLayout = layout.getViewLayout(AssociatedMetadataView.ID);
         associatedMetadataViewLayout.setCloseable(false);
         associatedMetadataViewLayout.setMoveable(false);
+        
+     // Configure the Thumbnail View
+        final IViewLayout ThumbnailViewLayout = layout.getViewLayout(ThumbnailView.ID);
+        ThumbnailViewLayout.setCloseable(false);
+        ThumbnailViewLayout.setMoveable(false);
 
         layout.setEditorAreaVisible(false);
 

@@ -19,7 +19,7 @@ import au.org.intersect.exsite9.domain.MetadataValue;
  */
 public interface IMetadataCategoryService
 {    
-    void updateMetadataCategory(MetadataCategory existingMetadataCategoryToUpdate, final String name, final MetadataCategoryUse use, final boolean inExtensible, final List<MetadataValue> values);
+    void updateMetadataCategory(MetadataCategory existingMetadataCategoryToUpdate, final String name, final String description, final MetadataCategoryUse use, final boolean inExtensible, final List<MetadataValue> values);
     
     MetadataCategory findById(final Long id);
 
@@ -32,11 +32,11 @@ public interface IMetadataCategoryService
      * @param name The name of the metadata category.
      * @param type The type of the metadata category.
      * @param use The use of the metadata category.
-     * @param inextensible {@code true} if this metadata category is inextensible. {@code false} otherwiss.
+     * @param imported {@code true} if this metadata category was imported.
      * @param values The allowable values for this metadata category.
      * @param metadataAttribute The attribute for this metadata category. May be {@code null}.
      * @return The newly created metadata category.
      */
     MetadataCategory createNewMetadataCategory(final String name, final MetadataCategoryType type, final MetadataCategoryUse use,
-            final boolean inextensible, final List<MetadataValue> values, final MetadataAttribute metadataAttribute);
+            final boolean inextensible, final boolean imported, final List<MetadataValue> values, final MetadataAttribute metadataAttribute);
 }

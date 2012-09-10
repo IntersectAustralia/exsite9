@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
 import com.richclientgui.toolbox.validation.IFieldErrorMessageHandler;
@@ -52,6 +53,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     private Composite container;
 
     private ValidatingField<String> categoryNameField;
+    private Text descriptionText;
     private Combo typeDropDown;
     private Combo useDropDown;
     private org.eclipse.swt.widgets.List metadataValuesListWidget;
@@ -121,6 +123,24 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         // empty cell due to having 3 columns below
         new Label(container, SWT.NULL);
 
+        
+        final Label categoryDescriptionLabel = new Label(this.container, SWT.NULL);
+        categoryDescriptionLabel.setText("Description");
+
+        this.descriptionText = new Text(this.container, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL);
+        this.descriptionText.setText(this.metadataCategory == null ? "" : this.metadataCategory.getDescription());
+        
+        // we have 3 columns, we want description to be 3 rows big
+        new Label(container, SWT.NULL);
+        
+        new Label(container, SWT.NULL);
+        new Label(container, SWT.NULL);
+        new Label(container, SWT.NULL);
+        
+        new Label(container, SWT.NULL);
+        new Label(container, SWT.NULL);
+        new Label(container, SWT.NULL);
+        
         final Label typeLabel = new Label(this.container, SWT.NULL);
         typeLabel.setText("Type");
 
@@ -342,6 +362,13 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         editAttributeValueButton.addSelectionListener(this);
         editAttributeValueButton.setEnabled(false);
 
+        final GridData descriptionMultiLineGridData = new GridData(GridData.FILL_BOTH);
+        descriptionMultiLineGridData.verticalSpan = 4;
+        
+        this.categoryNameField.getControl().setLayoutData(singleLineGridData);
+        this.descriptionText.setLayoutData(descriptionMultiLineGridData);
+        this.metadataValuesListWidget.setLayoutData(multiLineGridData);
+
         if (this.metadataCategory != null)
         {
             final int selectedTypeIndex = this.metadataCategory.getType().ordinal();
@@ -358,18 +385,18 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                 metadataValuesListWidget.setEnabled(false);
             }
             
-            if (this.metadataCategory.isInextensible() && this.schema.getLocal())
+            if (this.metadataCategory.isInextensible() && !this.metadataCategory.isImported())
             {
                 this.metadataValuesListWidget.setEnabled(false);
                 this.addValueButton.setEnabled(false);
                 this.removeValueButton.setEnabled(false);
                 this.editValueButton.setEnabled(false);
             }
-            else if (!this.metadataCategory.isInextensible() && !this.schema.getLocal())
+            else if (!this.metadataCategory.isInextensible() && this.metadataCategory.isImported())
             {
                 this.inextensibleCheckbox.setEnabled(false);
             }
-            else if (this.metadataCategory.isInextensible() && !this.schema.getLocal())
+            else if (this.metadataCategory.isInextensible() && this.metadataCategory.isImported())
             {
                 this.inextensibleCheckbox.setEnabled(false);
                 this.metadataValuesListWidget.setEnabled(false);
@@ -611,6 +638,10 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         return this.metadataAttributeNameField.getContents().trim();
     }
 
+    public String getCategoryDescription(){
+        return this.descriptionText.getText().trim();
+    }
+    
     public MetadataCategoryType getMetadataCategoryType()
     {
         return MetadataCategoryType.values()[this.typeDropDown.getSelectionIndex()];

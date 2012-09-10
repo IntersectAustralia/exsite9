@@ -57,11 +57,13 @@ public final class EditMetadataCategoryWizard extends Wizard
         final IResearchFileService fileService = (IResearchFileService) PlatformUI.getWorkbench().getService(IResearchFileService.class);
 
         final String categoryTitle = editCategoryPage.getMetadataCategoryName();
+        
         final MetadataCategoryUse categoryUse = editCategoryPage.getMetadataCategoryUse();
         final List<MetadataValue> values = editCategoryPage.getMetadataCategoryValues();
+        final String categoryDescription = editCategoryPage.getCategoryDescription();
         final boolean inextensible = editCategoryPage.getIsInextensible();
 
-        // Update the modified medata category
+        // Update the modified metadata category
         final MetadataCategory metadataCategory = listCategoriesPage.getSelectedMetadataCategory();
         if (metadataCategory == null)
         {
@@ -78,7 +80,7 @@ public final class EditMetadataCategoryWizard extends Wizard
             groupService.disassociateMultipleMetadataValues(assignedGroup, metadataCategory, editCategoryPage.getValuesToBeDisassociated());
         }
 
-        metadataCategoryService.updateMetadataCategory(metadataCategory, categoryTitle, categoryUse, inextensible, values);
+        metadataCategoryService.updateMetadataCategory(metadataCategory, categoryTitle, categoryDescription, categoryUse, inextensible, values);
         return true;
     }
 }

@@ -65,6 +65,7 @@ public class AddMetadataCategoryWizard extends Wizard
     public boolean performFinish()
     {
         final String categoryTitle = page1.getMetadataCategoryName();
+        final String categoryDescription = page1.getCategoryDescription();
         final MetadataCategoryType categoryType = page1.getMetadataCategoryType();
         final MetadataCategoryUse categoryUse = page1.getMetadataCategoryUse();
         final boolean inextensible = page1.getIsInextensible();
@@ -102,14 +103,12 @@ public class AddMetadataCategoryWizard extends Wizard
                 final String metadataAttributeName = page1.getMetadataAttributeName();
                 metadataAttribute = new MetadataAttribute(metadataAttributeName, page1.getMetadataAttributeValues());
             }
-
-
-            final MetadataCategory newCategory = metadataCategoryService.createNewMetadataCategory(categoryTitle, categoryType, categoryUse, inextensible, metadataValues, metadataAttribute);
+            final MetadataCategory newCategory = metadataCategoryService.createNewMetadataCategory(categoryTitle, categoryType, categoryUse, inextensible, false, metadataValues, metadataAttribute);
             schemaService.addMetadataCategoryToSchema(this.project.getSchema(), newCategory);
         }
         else
         {
-            metadataCategoryService.updateMetadataCategory(this.metadataCategory, categoryTitle, categoryUse, inextensible, page1.getMetadataCategoryValues());
+            metadataCategoryService.updateMetadataCategory(this.metadataCategory, categoryTitle, categoryDescription, categoryUse, inextensible, page1.getMetadataCategoryValues());
         }
 
         return this.project != null;

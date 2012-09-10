@@ -76,6 +76,13 @@
             name="Associated Metadata View"
             restorable="false">
       </view>
+   <view
+         allowMultiple="false"
+         class="au.org.intersect.exsite9.view.ThumbnailView"
+         id="au.org.intersect.exsite9.view.ThumbnailView"
+         name="Thumbnail"
+         restorable="false">
+   </view>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
@@ -221,7 +228,6 @@
        name="Import Folder Structure">
  </command>
  <command
-       defaultHandler="au.org.intersect.exsite9.commands.handlers.MoveToNewGroupHandler"
        id="au.org.intersect.exsite9.commands.MoveToNewGroup"
        name="Move selected items to new Group">
  </command>
@@ -323,137 +329,6 @@
             </command>
          </menu>
          <menu
-               id="au.org.intersect.exsite9.menu.folder"
-               label="Folder"
-               mnemonic="F"
-               tooltip="The watched folders menu">
-            <command
-                  commandId="au.org.intersect.exsite9.commands.AddFolderToProjectCommand"
-                  label="Add Watched Folder..."
-                  mnemonic="A"
-                  style="push"
-                  tooltip="Add a new watched folder.">
-            </command>
-            <command
-                  commandId="au.org.intersect.exsite9.commands.ListFoldersCommand"
-                  label="Edit watched folders..."
-                  mnemonic="E"
-                  style="push"
-                  tooltip="Edit the watched folders">
-            </command>
-            <command
-                  commandId="au.org.intersect.exsite9.commands.ImportFolderToProjectCommand"
-                  label="Import Folder Structure..."
-                  mnemonic="I"
-                  style="push"
-                  tooltip="Import an existing folder structure.">
-            </command>
-         </menu>
-         <menu
-               id="au.org.intersect.exsite9.menu.metadata"
-               label="Metadata"
-               mnemonic="M">
-            <menu
-                  label="Schema"
-                  mnemonic="S">
-               <command
-                     commandId="au.org.intersect.exsite9.commands.ImportMetadataSchemaCommand"
-                     label="Select Schema..."
-                     mnemonic="M"
-                     style="push"
-                     tooltip="Modify the metadata schema">
-               </command>
-               <command
-                     commandId="au.org.intersect.exsite9.commands.ExportMetadataSchemaCommand"
-                     label="Export..."
-                     mnemonic="x"
-                     style="push"
-                     tooltip="Export metadata schema">
-               </command>
-            </menu>
-            <command
-                  commandId="au.org.intersect.exsite9.commands.AddMetadataCategoryCommand"
-                  icon="icons/icon_newcategory_16.png"
-                  label="New Category..."
-                  mnemonic="N"
-                  style="push"
-                  tooltip="Add Metadata Category">
-            </command>
-            <command
-                  commandId="au.org.intersect.exsite9.commands.EditMetadataCategoryCommand"
-                  icon="icons/icon_edit_16.png"
-                  label="Edit Category..."
-                  mnemonic="E"
-                  style="push"
-                  tooltip="Edit Metadata Category">
-            </command>
-            <command
-                  commandId="au.org.intersect.exsite9.commands.RemoveMetadataCategoryWithWizardCommand"
-                  icon="icons/icon_exclude_16.png"
-                  label="Delete Category..."
-                  mnemonic="D"
-                  style="push"
-                  tooltip="Delete Metadata Category">
-            </command>
-         </menu>
-         <menu
-               id="au.org.intersect.exsite9.menu.submissionpackage"
-               label="Submission Package"
-               mnemonic="S">
-            <command
-                  commandId="au.org.intersect.exsite9.commands.CreateSubmissionPackageCommand"
-                  icon="icons/icon_new_16.png"
-                  label="Define Submission Package..."
-                  mnemonic="C"
-                  style="push"
-                  tooltip="Create a submission package">
-            </command>
-            <command
-                  commandId="au.org.intersect.exsite9.commands.EditSubmissionPackageCommand"
-                  label="Edit Submission Package..."
-                  style="push">
-               <visibleWhen
-                     checkEnabled="false">
-                  <reference
-                        definitionId="au.org.intersect.exsite9.expression.InstanceOfSubmissionPackage">
-                  </reference>
-               </visibleWhen>
-            </command>
-            <command
-                  commandId="au.org.intersect.exsite9.commands.DeleteSubmissionPackageCommand"
-                  label="Delete Submission Package"
-                  style="push">
-               <visibleWhen
-                     checkEnabled="false">
-                  <reference
-                        definitionId="au.org.intersect.exsite9.expression.InstanceOfSubmissionPackage">
-                  </reference>
-               </visibleWhen>
-            </command>
-            <command
-                  commandId="au.org.intersect.exsite9.commands.ExportSubmissionPackageXMLCommand"
-                  label="Export XML From Submission Package..."
-                  style="push">
-               <visibleWhen
-                     checkEnabled="false">
-                  <reference
-                        definitionId="au.org.intersect.exsite9.expression.InstanceOfSubmissionPackage">
-                  </reference>
-               </visibleWhen>
-            </command>
-            <command
-                  commandId="au.org.intersect.exsite9.commands.ExportSubmissionPackageZIPCommand"
-                  label="Export ZIP From Submission Package..."
-                  style="push">
-               <visibleWhen
-                     checkEnabled="false">
-                  <reference
-                        definitionId="au.org.intersect.exsite9.expression.InstanceOfSubmissionPackage">
-                  </reference>
-               </visibleWhen>
-            </command>
-         </menu>
-         <menu
                id="au.org.intersect.exsite9.menu.group"
                label="Group"
                mnemonic="G">
@@ -463,23 +338,11 @@
                   mnemonic="N"
                   style="push"
                   tooltip="Add Group to the project">
-               <visibleWhen
-                     checkEnabled="false">
-                  <reference
-                        definitionId="au.org.intersect.exsite9.expression.InstanceOfProjectOrGroup">
-                  </reference>
-               </visibleWhen>
             </command>
             <command
                   commandId="au.org.intersect.exsite9.commands.MoveToNewGroup"
                   label="Create Group from..."
                   style="push">
-               <visibleWhen
-                     checkEnabled="false">
-                  <reference
-                        definitionId="au.org.intersect.exsite9.expression.InstanceOfResearchFileOrGroup">
-                  </reference>
-               </visibleWhen>
             </command>
             <command
                   commandId="au.org.intersect.exsite9.commands.RenameGroupCommand"
@@ -487,12 +350,6 @@
                   mnemonic="R"
                   style="push"
                   tooltip="Rename Group">
-               <visibleWhen
-                     checkEnabled="false">
-                  <reference
-                        definitionId="au.org.intersect.exsite9.expression.InstanceOfGroup">
-                  </reference>
-               </visibleWhen>
             </command>
             <command
                   commandId="au.org.intersect.exsite9.commands.DeleteGroupCommand"
@@ -500,14 +357,8 @@
                   mnemonic="D"
                   style="push"
                   tooltip="Delete Group">
-               <visibleWhen
-                     checkEnabled="false">
-                  <reference
-                        definitionId="au.org.intersect.exsite9.expression.InstanceOfGroup">
-                  </reference>
-               </visibleWhen>
             </command>
-            <menu
+                        <menu
                   id="S"
                   label="Sort Files By...">
                <menu
@@ -645,6 +496,137 @@
                   </reference>
                </visibleWhen>
             </menu>
+         </menu>
+         <menu
+               id="au.org.intersect.exsite9.menu.folder"
+               label="Folder"
+               mnemonic="F"
+               tooltip="The watched folders menu">
+            <command
+                  commandId="au.org.intersect.exsite9.commands.AddFolderToProjectCommand"
+                  label="Add Watched Folder..."
+                  mnemonic="A"
+                  style="push"
+                  tooltip="Add a new watched folder.">
+            </command>
+            <command
+                  commandId="au.org.intersect.exsite9.commands.ListFoldersCommand"
+                  label="Edit watched folders..."
+                  mnemonic="E"
+                  style="push"
+                  tooltip="Edit the watched folders">
+            </command>
+            <command
+                  commandId="au.org.intersect.exsite9.commands.ImportFolderToProjectCommand"
+                  label="Import Folder Structure..."
+                  mnemonic="I"
+                  style="push"
+                  tooltip="Import an existing folder structure.">
+            </command>
+         </menu>
+         <menu
+               id="au.org.intersect.exsite9.menu.metadata"
+               label="Metadata"
+               mnemonic="M">
+            <menu
+                  label="Schema"
+                  mnemonic="S">
+               <command
+                     commandId="au.org.intersect.exsite9.commands.ImportMetadataSchemaCommand"
+                     label="Select Schema..."
+                     mnemonic="M"
+                     style="push"
+                     tooltip="Modify the metadata schema">
+               </command>
+               <command
+                     commandId="au.org.intersect.exsite9.commands.ExportMetadataSchemaCommand"
+                     label="Export..."
+                     mnemonic="x"
+                     style="push"
+                     tooltip="Export metadata schema">
+               </command>
+            </menu>
+            <command
+                  commandId="au.org.intersect.exsite9.commands.AddMetadataCategoryCommand"
+                  icon="icons/icon_newcategory_16.png"
+                  label="New Category..."
+                  mnemonic="N"
+                  style="push"
+                  tooltip="Add Metadata Category">
+            </command>
+            <command
+                  commandId="au.org.intersect.exsite9.commands.EditMetadataCategoryCommand"
+                  icon="icons/icon_edit_16.png"
+                  label="Edit Category..."
+                  mnemonic="E"
+                  style="push"
+                  tooltip="Edit Metadata Category">
+            </command>
+            <command
+                  commandId="au.org.intersect.exsite9.commands.RemoveMetadataCategoryWithWizardCommand"
+                  icon="icons/icon_exclude_16.png"
+                  label="Delete Category..."
+                  mnemonic="D"
+                  style="push"
+                  tooltip="Delete Metadata Category">
+            </command>
+         </menu>
+         <menu
+               id="au.org.intersect.exsite9.menu.submissionpackage"
+               label="Submission Package"
+               mnemonic="S">
+            <command
+                  commandId="au.org.intersect.exsite9.commands.CreateSubmissionPackageCommand"
+                  icon="icons/icon_new_16.png"
+                  label="Define Submission Package..."
+                  mnemonic="C"
+                  style="push"
+                  tooltip="Create a submission package">
+            </command>
+            <command
+                  commandId="au.org.intersect.exsite9.commands.EditSubmissionPackageCommand"
+                  label="Edit Submission Package..."
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <reference
+                        definitionId="au.org.intersect.exsite9.expression.InstanceOfSubmissionPackage">
+                  </reference>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="au.org.intersect.exsite9.commands.DeleteSubmissionPackageCommand"
+                  label="Delete Submission Package"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <reference
+                        definitionId="au.org.intersect.exsite9.expression.InstanceOfSubmissionPackage">
+                  </reference>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="au.org.intersect.exsite9.commands.ExportSubmissionPackageXMLCommand"
+                  label="Export XML From Submission Package..."
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <reference
+                        definitionId="au.org.intersect.exsite9.expression.InstanceOfSubmissionPackage">
+                  </reference>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="au.org.intersect.exsite9.commands.ExportSubmissionPackageZIPCommand"
+                  label="Export ZIP From Submission Package..."
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <reference
+                        definitionId="au.org.intersect.exsite9.expression.InstanceOfSubmissionPackage">
+                  </reference>
+               </visibleWhen>
+            </command>
          </menu>
       </menuContribution>
       <menuContribution
@@ -1013,7 +995,7 @@
          </command>
          <command
                commandId="au.org.intersect.exsite9.commands.CreateSubmissionPackageCommand"
-               label="Create Submission Package..."
+               label="Define Submission Package..."
                style="push">
             <visibleWhen
                   checkEnabled="false">
@@ -1105,7 +1087,7 @@
             commandId="au.org.intersect.exsite9.commands.AddGroup">
          <enabledWhen>
             <reference
-                  definitionId="au.org.intersect.exsite9.expression.OneItemSelected">
+                  definitionId="au.org.intersect.exsite9.expression.InProjectExplorerViewAndInstanceOfProjectOrGroupAndOneItemSelected">
             </reference>
          </enabledWhen>
       </handler>      
@@ -1118,7 +1100,7 @@
          commandId="au.org.intersect.exsite9.commands.DeleteGroupCommand">
       <enabledWhen>
          <reference
-               definitionId="au.org.intersect.exsite9.expression.OneItemSelected">
+               definitionId="au.org.intersect.exsite9.expression.InProjectExplorerViewAndInstanceOfGroupAndOneItemSelected">
          </reference>
       </enabledWhen>
    </handler>
@@ -1127,7 +1109,7 @@
          commandId="au.org.intersect.exsite9.commands.RenameGroupCommand">
       <enabledWhen>
          <reference
-               definitionId="au.org.intersect.exsite9.expression.OneItemSelected">
+               definitionId="au.org.intersect.exsite9.expression.InProjectExplorerViewAndInstanceOfGroupAndOneItemSelected">
          </reference>
       </enabledWhen>
    </handler>
@@ -1161,6 +1143,15 @@
    <handler
          class="au.org.intersect.exsite9.commands.handlers.ImportFolderToProjectHandler"
          commandId="au.org.intersect.exsite9.commands.ImportFolderToProjectCommand">
+   </handler>
+   <handler
+         class="au.org.intersect.exsite9.commands.handlers.MoveToNewGroupHandler"
+         commandId="au.org.intersect.exsite9.commands.MoveToNewGroup">
+      <enabledWhen>
+         <reference
+               definitionId="au.org.intersect.exsite9.expression.InProjectExplorerViewAndInstanceOfResearchFileOrGroup">
+         </reference>
+      </enabledWhen>
    </handler>
    </extension>
    <extension
@@ -1322,6 +1313,57 @@
             </iterate>
          </with>
       </definition>
+      <definition
+            id="au.org.intersect.exsite9.expression.InProjectExplorerView">
+         <with
+               variable="activePartId">
+            <equals
+                  value="au.org.intersect.exsite9.view.ProjectExplorerView">
+            </equals>
+         </with>
+      </definition>
+      
+      <definition
+      		id="au.org.intersect.exsite9.expression.InProjectExplorerViewAndInstanceOfResearchFileOrGroup">
+      	 <and>
+      	 	<reference
+                  definitionId="au.org.intersect.exsite9.expression.InProjectExplorerView">
+            </reference>
+            <reference
+                  definitionId="au.org.intersect.exsite9.expression.InstanceOfResearchFileOrGroup">
+            </reference>
+      	 </and>
+      </definition>	 
+      
+      <definition
+      		id="au.org.intersect.exsite9.expression.InProjectExplorerViewAndInstanceOfProjectOrGroupAndOneItemSelected">
+      	 <and>
+      	 	<reference
+                  definitionId="au.org.intersect.exsite9.expression.InProjectExplorerView">
+            </reference>
+            <reference
+                  definitionId="au.org.intersect.exsite9.expression.InstanceOfProjectOrGroup">
+            </reference>
+            <reference
+                  definitionId="au.org.intersect.exsite9.expression.OneItemSelected">
+            </reference>
+      	 </and>
+      </definition>
+      
+      <definition
+      		id="au.org.intersect.exsite9.expression.InProjectExplorerViewAndInstanceOfGroupAndOneItemSelected">
+      	 <and>
+      	 	<reference
+                  definitionId="au.org.intersect.exsite9.expression.InProjectExplorerView">
+            </reference>
+            <reference
+                  definitionId="au.org.intersect.exsite9.expression.InstanceOfGroup">
+            </reference>
+            <reference
+                  definitionId="au.org.intersect.exsite9.expression.OneItemSelected">
+            </reference>            
+      	 </and>
+      </definition>	
       
    </extension>
    <extension
@@ -1358,6 +1400,10 @@
       <activityPatternBinding
             activityId="au.org.intersect.exsite9.activity.showProject"
             pattern="au.org.intersect.exsite9/au.org.intersect.exsite9.menu.folder">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="au.org.intersect.exsite9.activity.showProject"
+            pattern="au.org.intersect.exsite9/au.org.intersect.exsite9.menu.group">
       </activityPatternBinding>
    </extension>
    <extension

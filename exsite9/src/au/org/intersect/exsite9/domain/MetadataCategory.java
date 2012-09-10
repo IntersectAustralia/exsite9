@@ -41,11 +41,16 @@ public final class MetadataCategory implements Serializable
     @Column(length = 255)
     private String name;
     
+    @Column(columnDefinition = "longvarchar")
+    private String description;
+    
     private MetadataCategoryUse use;
 
     private MetadataCategoryType type;
     
     private boolean isInextensible;
+    
+    private boolean imported;
 
     @OneToMany(cascade=CascadeType.ALL, orphanRemoval=true)
     private List<MetadataValue> metadataValues = new ArrayList<MetadataValue>();
@@ -82,6 +87,16 @@ public final class MetadataCategory implements Serializable
     public void setName(final String name)
     {
         this.name = name;
+    }
+
+    public String getDescription()
+    {
+        return description;
+    }
+
+    public void setDescription(String description)
+    {
+        this.description = description;
     }
 
     public List<MetadataValue> getValues()
@@ -132,6 +147,16 @@ public final class MetadataCategory implements Serializable
     public void setMetadataAttribute(final MetadataAttribute metadataAttribute)
     {
         this.metadataAttribute = metadataAttribute;
+    }
+    
+    public boolean isImported()
+    {
+        return imported;
+    }
+    
+    public void setImported(boolean imported)
+    {
+        this.imported = imported;
     }
     
     @Override
