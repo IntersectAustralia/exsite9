@@ -48,6 +48,8 @@ public final class MetadataCategory implements Serializable
     private MetadataCategoryType type;
     
     private boolean isInextensible;
+    
+    private boolean imported;
 
 
     @OneToMany(cascade=CascadeType.ALL, orphanRemoval=true)
@@ -132,6 +134,16 @@ public final class MetadataCategory implements Serializable
     public void setInextensible(boolean isInextensible)
     {
         this.isInextensible = isInextensible;
+    }
+    
+    public boolean isImported()
+    {
+        return imported;
+    }
+    
+    public void setImported(boolean imported)
+    {
+        this.imported = imported;
     }
     
     @Override

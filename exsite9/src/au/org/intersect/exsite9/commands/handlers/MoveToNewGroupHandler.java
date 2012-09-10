@@ -106,7 +106,7 @@ public final class MoveToNewGroupHandler implements IHandler
         final String errors = groupService.performHierarchyMove(moveItems);
         if (errors != null)
         {
-            MessageDialog.openError(shell, "Could not create group from selected items", errors); 
+            MessageDialog.openWarning(shell, "Could not create group from selected items", errors); 
         }
 
         return null;

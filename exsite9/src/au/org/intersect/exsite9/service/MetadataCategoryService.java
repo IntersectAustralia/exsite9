@@ -33,7 +33,7 @@ public final class MetadataCategoryService implements IMetadataCategoryService
      * @{inheritDoc}
      */
     @Override
-    public MetadataCategory createNewMetadataCategory(final String name, final MetadataCategoryType type, final MetadataCategoryUse use, boolean inextensible, final List<MetadataValue> values)
+    public MetadataCategory createNewMetadataCategory(final String name, final MetadataCategoryType type, final MetadataCategoryUse use, boolean inextensible, boolean imported, final List<MetadataValue> values)
     {
         final EntityManager em = this.emf.createEntityManager();
         try
@@ -42,6 +42,7 @@ public final class MetadataCategoryService implements IMetadataCategoryService
             final MetadataCategory mdc = new MetadataCategory(name, type, use);
             mdc.setValues(values);
             mdc.setInextensible(inextensible);
+            mdc.setImported(imported);
             mdcDAO.createMetadataCategory(mdc);
             return mdc;
         }
