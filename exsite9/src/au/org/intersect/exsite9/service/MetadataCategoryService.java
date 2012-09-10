@@ -85,7 +85,7 @@ public final class MetadataCategoryService implements IMetadataCategoryService
     }
 
     @Override
-    public void updateMetadataCategory(MetadataCategory existingMetadataCategoryToUpdate, String name,
+    public void updateMetadataCategory(MetadataCategory existingMetadataCategoryToUpdate, String name, String description,
             MetadataCategoryUse use, boolean inExtensible, List<MetadataValue> values)
     {
         final EntityManager em = this.emf.createEntityManager();
@@ -94,6 +94,7 @@ public final class MetadataCategoryService implements IMetadataCategoryService
             final MetadataCategoryDAO mdcDAO = this.metadataCategoryDAOFactory.createInstance(em);
 
             existingMetadataCategoryToUpdate.setName(name);
+            existingMetadataCategoryToUpdate.setDescription(description);
             existingMetadataCategoryToUpdate.setUse(use);
             existingMetadataCategoryToUpdate.setInextensible(inExtensible);
             existingMetadataCategoryToUpdate.setValues(values);

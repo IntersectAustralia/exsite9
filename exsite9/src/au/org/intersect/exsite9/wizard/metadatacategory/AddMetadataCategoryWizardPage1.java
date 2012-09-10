@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
 import com.richclientgui.toolbox.validation.IFieldErrorMessageHandler;
@@ -49,6 +50,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     private Composite container;
 
     private ValidatingField<String> categoryNameField;
+    private Text descriptionText;
     private Combo typeDropDown;
     private Combo useDropDown;
     private org.eclipse.swt.widgets.List metadataValuesListWidget;
@@ -111,6 +113,25 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         // empty cell due to having 3 columns below
         new Label(container, SWT.NULL);
 
+        
+        final Label categoryDescriptionLabel = new Label(this.container, SWT.NULL);
+        categoryDescriptionLabel.setText("Description");
+
+        this.descriptionText = new Text(this.container, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL);
+        this.descriptionText.setText((this.metadataCategory.getDescription()==null) ? "":this.metadataCategory.getDescription() );
+        this.descriptionText.addKeyListener(this);
+        
+        // we have 3 columns, we want description to be 3 rows big
+        new Label(container, SWT.NULL);
+        
+        new Label(container, SWT.NULL);
+        new Label(container, SWT.NULL);
+        new Label(container, SWT.NULL);
+        
+        new Label(container, SWT.NULL);
+        new Label(container, SWT.NULL);
+        new Label(container, SWT.NULL);
+        
         final Label typeLabel = new Label(this.container, SWT.NULL);
         typeLabel.setText("Type");
 
@@ -253,8 +274,11 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
 
         final GridData singleLineGridData = new GridData(GridData.FILL_HORIZONTAL);
         final GridData multiLineGridData = new GridData(GridData.FILL_BOTH);
-
+        final GridData descriptionMultiLineGridData = new GridData(GridData.FILL_BOTH);
+        descriptionMultiLineGridData.verticalSpan = 4;
+        
         this.categoryNameField.getControl().setLayoutData(singleLineGridData);
+        this.descriptionText.setLayoutData(descriptionMultiLineGridData);
         this.metadataValuesListWidget.setLayoutData(multiLineGridData);
 
         Composite rowComp = new Composite(container, SWT.NULL);
@@ -504,6 +528,10 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         return this.categoryNameField.getContents().trim();
     }
 
+    public String getCategoryDescription(){
+        return this.descriptionText.getText().trim();
+    }
+    
     public MetadataCategoryType getMetadataCategoryType()
     {
         return MetadataCategoryType.values()[this.typeDropDown.getSelectionIndex()];

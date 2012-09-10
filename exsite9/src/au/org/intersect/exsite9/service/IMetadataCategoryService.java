@@ -18,7 +18,7 @@ import au.org.intersect.exsite9.domain.MetadataValue;
  */
 public interface IMetadataCategoryService
 {    
-    void updateMetadataCategory(MetadataCategory existingMetadataCategoryToUpdate, final String name, final MetadataCategoryUse use, final boolean inExtensible, final List<MetadataValue> values);
+    void updateMetadataCategory(MetadataCategory existingMetadataCategoryToUpdate, final String name, final String description, final MetadataCategoryUse use, final boolean inExtensible, final List<MetadataValue> values);
     
     MetadataCategory findById(final Long id);
 
