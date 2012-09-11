@@ -29,6 +29,7 @@ import com.richclientgui.toolbox.validation.ValidatingField;
 import com.richclientgui.toolbox.validation.string.StringValidationToolkit;
 
 import au.org.intersect.exsite9.domain.Group;
+import au.org.intersect.exsite9.domain.MetadataAttribute;
 import au.org.intersect.exsite9.domain.MetadataAttributeValue;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataCategoryType;
@@ -130,6 +131,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
 
         this.descriptionText = new Text(this.container, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL);
         this.descriptionText.setText(this.metadataCategory == null ? "" : this.metadataCategory.getDescription());
+        this.descriptionText.addKeyListener(this);
         
         // we have 3 columns, we want description to be 3 rows big
         new Label(container, SWT.NULL);
@@ -314,7 +316,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         metadataAttributeLabel.setText("Attribute Name");
 
         this.metadataAttributeNameField = this.stringValidatorToolkit.createTextField(this.container, new MaximumLengthFieldValidator("Attribute Name", 255),
-                false, metadataCategory == null ? "" : metadataCategory.getName());
+                false, "");
 
         final GridData singleLineGridData = new GridData(GridData.FILL_HORIZONTAL);
         final GridData multiLineGridData = new GridData(GridData.FILL_BOTH);
@@ -326,6 +328,19 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         metadataAttributeValuesLabel.setText("Attribute Values");
 
         this.metadataAttributeValuesListWidget = new org.eclipse.swt.widgets.List(this.container, SWT.BORDER | SWT.SINGLE | SWT.WRAP | SWT.V_SCROLL);
+
+        if (this.metadataCategory != null && this.metadataCategory.getType() == MetadataCategoryType.FREETEXT)
+        {
+            final MetadataAttribute attribute = this.metadataCategory.getMetadataAttribute();
+            if (attribute != null)
+            {
+                metadataAttributeNameField.setContents(attribute.getName());
+                for (MetadataAttributeValue attributeValue : attribute.getMetadataAttributeValues()) 
+                {
+                    this.metadataAttributeValuesListWidget.add(attributeValue.getValue());
+                }
+            }
+        }
 
         this.metadataAttributeValuesListWidget.addSelectionListener(new SelectionListener()
         {
@@ -540,15 +555,12 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                                 + metadataValueAssignedFiles.size() + " file(s). Removing this value will cause these associations to also be deleted. Are you sure you want to proceed?";
                     }
                     
-                    final boolean deleteAssociations = MessageDialog.openConfirm(getShell(), "", messageString);
-                    if (!deleteAssociations)
+                    final boolean confirmDelete = MessageDialog.openConfirm(getShell(), "", messageString);
+                    if (!confirmDelete)
                     {
                         return;
                     }
-                    else if (deleteAssociations)
-                    {
-                        this.metadataValuesToBeDisassociated.add(metadataValueToDelete);
-                    }
+                    this.metadataValuesToBeDisassociated.add(metadataValueToDelete);
                 }
             }
             this.metadataValues.remove(selectedIndex);
@@ -579,35 +591,34 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
 
                 final List<Group> groupAssociations = groupService.getGroupsWithAssociatedMetadataAttribute(metadataCategory, toDelete);
                 final List<ResearchFile> fileAssociations = fileService.getResearchFilesWithAssociatedMetadataAttribute(metadataCategory, toDelete);
+    
+                if (!groupAssociations.isEmpty() || !fileAssociations.isEmpty())
+                {
+                    String messageString = null;
+                    //when the value is associated with both groups and files then display this
+                    if (!groupAssociations.isEmpty() && !fileAssociations.isEmpty())
+                    {
+                        messageString = "Metadata attribute value '" + toDelete.getValue() + "' is currently associated with "
+                                + groupAssociations.size() + " group(s) and " + fileAssociations.size() + " file(s). Removing this value will cause these attribute associations to also be deleted. Are you sure you want to proceed?";
+                    }
+                    //when the value is associated only with groups and not files then display this
+                    else if(!groupAssociations.isEmpty() && fileAssociations.isEmpty())
+                    {
+                        messageString = "Metadata attribute value '" + toDelete.getValue() + "' is currently associated with "
+                                + groupAssociations.size() + " group(s). Removing this value will cause these attribute associations to also be deleted. Are you sure you want to proceed?";
+                    }
+                    //when the value is associated only with files and not groups then display this
+                    else if(groupAssociations.isEmpty() && !fileAssociations.isEmpty())
+                    {
+                        messageString = "Metadata attribute value '" + toDelete.getValue() + "' is currently associated with "
+                                + fileAssociations.size() + " file(s). Removing this value will cause these attribute associations to also be deleted. Are you sure you want to proceed?";
+                    }
 
-                String messageString = null;
-                
-                //when the value is associated with both groups and files then display this
-                if(!groupAssociations.isEmpty() && !fileAssociations.isEmpty())
-                {
-                    messageString = "Metadata attribute value '" + toDelete.getValue() + "' is currently associated with "
-                            + groupAssociations.size() + " group(s) and " + fileAssociations.size() + " file(s). Removing this value will cause these attribute associations to also be deleted. Are you sure you want to proceed?";
-                }
-                //when the value is associated only with groups and not files then display this
-                else if(!groupAssociations.isEmpty() && fileAssociations.isEmpty())
-                {
-                    messageString = "Metadata value '" + toDelete.getValue() + "' is currently associated with "
-                            + groupAssociations.size() + " group(s). Removing this value will cause these associations to also be deleted. Are you sure you want to proceed?";
-                }
-                //when the value is associated only with files and not groups then display this
-                else if(groupAssociations.isEmpty() && !fileAssociations.isEmpty())
-                {
-                    messageString = "Metadata value '" + toDelete.getValue() + "' is currently associated with "
-                            + fileAssociations.size() + " file(s). Removing this value will cause these associations to also be deleted. Are you sure you want to proceed?";
-                }
-
-                final boolean deleteAssociations = MessageDialog.openConfirm(getShell(), "", messageString);
-                if (!deleteAssociations)
-                {
-                    return;
-                }
-                else if (deleteAssociations)
-                {
+                    final boolean confirmDelete = MessageDialog.openConfirm(getShell(), "", messageString);
+                    if (!confirmDelete)
+                    {
+                        return;
+                    }
                     this.metadataAttributeValuesToBeDisassociated.add(toDelete);
                 }
             }

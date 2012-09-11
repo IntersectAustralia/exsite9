@@ -36,6 +36,7 @@ public class MetadataSchemaXMLBuilderUnitTest
         schema.setName("project-schema");
         
         final MetadataCategory cat1 = new MetadataCategory("cat1", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
+        cat1.setDescription("This is cat1.");
         schema.getMetadataCategories().add(cat1);
 
         final MetadataCategory cat2 = new MetadataCategory("cat2", MetadataCategoryType.FREETEXT, MetadataCategoryUse.recommended);
@@ -51,6 +52,7 @@ public class MetadataSchemaXMLBuilderUnitTest
         final String expectedXML = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" + NEW_LINE 
                            + "<schema description=\"\" name=\"project-schema\" namespace_url=\"\">" + NEW_LINE
                            + "  <metadata_category inextensible=\"false\" name=\"cat1\" type=\"Controlled Vocabulary\" use=\"optional\">" + NEW_LINE
+                           + "    <description>This is cat1.</description>" + NEW_LINE
                            + "    <value>value one</value>" + NEW_LINE
                            + "  </metadata_category>" + NEW_LINE
                            + "  <metadata_category inextensible=\"true\" name=\"cat2\" type=\"Free Text\" use=\"recommended\"/>" + NEW_LINE

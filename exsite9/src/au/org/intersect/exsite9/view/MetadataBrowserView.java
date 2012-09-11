@@ -220,9 +220,6 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             
             final Composite headerComposite = new Composite(expandBarComposite, SWT.NONE);
             final Composite contentComposite = new Composite(expandBarComposite, SWT.NONE);
-            
-            contentComposite.setToolTipText(metadataCategory.getName());
-            
             final ExpandItem expandItem = new ExpandItem(this.expandBar, SWT.NONE);
             expandItem.setText(metadataCategory.getName() + " (" + metadataCategory.getUse() + ")");
             expandItem.setControl(expandBarComposite);
@@ -255,10 +252,12 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             removeButtonItem.addSelectionListener(new MetadataCategorySelectionListener(metadataCategory,
                     "au.org.intersect.exsite9.commands.RemoveMetadataCategoryCommand", "au.org.intersect.exsite9.commands.RemoveMetadataCategoryCommand.categoryParameter"));
 
-            final ToolItem helpButtonItem = new ToolItem(toolBar, SWT.NULL);
-            final Image helpImage = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_LCL_LINKTO_HELP);
-            helpButtonItem.setImage(helpImage);
-            helpButtonItem.setToolTipText(metadataCategory.getName());
+            if((metadataCategory.getDescription() != null) && (!metadataCategory.getDescription().isEmpty())){
+                final ToolItem helpButtonItem = new ToolItem(toolBar, SWT.FLAT);
+                final Image helpImage = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_LCL_LINKTO_HELP);
+                helpButtonItem.setImage(helpImage);
+                helpButtonItem.setToolTipText(metadataCategory.getDescription());
+            }
             
             new ToolItem(toolBar, SWT.SEPARATOR);
             toolBar.pack();

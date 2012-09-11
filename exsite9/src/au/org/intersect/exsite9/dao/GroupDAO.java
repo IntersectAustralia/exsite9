@@ -81,11 +81,11 @@ public final class GroupDAO
 
     public List<Group> getGroupsWithAssociatedMetadataAttribute(final MetadataCategory metadataCategory, final MetadataAttributeValue metadataAttributeValue)
     {
-        final String queryJQL = "SELECT g FROM Group g JOIN g,metadataAssociations a WHERE a.metadataCategory = :category AND a.metadataAttributeValue = :value";
+        final String queryJQL = "SELECT g FROM Group g JOIN g.metadataAssociations a WHERE a.metadataCategory = :category AND a.metadataAttributeValue = :value";
         final TypedQuery<Group> query = em.createQuery(queryJQL, Group.class);
         query.setParameter("category", metadataCategory);
         query.setParameter("value", metadataAttributeValue);
-        return null;
+        return query.getResultList();
     }
     
     /**

@@ -38,6 +38,6 @@ public interface IMetadataCategoryService
      * @param metadataAttribute The attribute for this metadata category. May be {@code null}.
      * @return The newly created metadata category.
      */
-    MetadataCategory createNewMetadataCategory(final String name, final MetadataCategoryType type, final MetadataCategoryUse use,
-            final boolean inextensible, final boolean imported, final List<MetadataValue> values, final MetadataAttribute metadataAttribute);
+    MetadataCategory createNewMetadataCategory(final String name, final String description, final MetadataCategoryType type, final MetadataCategoryUse use,
+        final boolean inextensible, final boolean imported, final List<MetadataValue> values, final MetadataAttribute metadataAttribute);
 }

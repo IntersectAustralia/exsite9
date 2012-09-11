@@ -49,9 +49,18 @@ public class AddMetadataCategoryWizard extends Wizard
         }
         else
         {
+            final List<MetadataAttributeValue> metadataAttribtueValues;
+            if (metadataCategory.getMetadataAttribute() == null)
+            {
+                metadataAttribtueValues = new ArrayList<MetadataAttributeValue>();
+            }
+            else
+            {
+                metadataAttribtueValues = metadataCategory.getMetadataAttribute().getMetadataAttributeValues();
+            }
             page1 = new AddMetadataCategoryWizardPage1("Edit Metadata Category",
                     "Edit the details of the metadata category you have selected", project.getSchema(), metadataCategory,
-                    metadataCategory.getValues(), null);
+                    metadataCategory.getValues(), metadataAttribtueValues);
         }
     }
 
@@ -116,7 +125,8 @@ public class AddMetadataCategoryWizard extends Wizard
                     metadataAttribute = null;
                 }
             }
-            final MetadataCategory newCategory = metadataCategoryService.createNewMetadataCategory(categoryTitle, categoryType, categoryUse, inextensible, false, metadataValues, metadataAttribute);
+            final MetadataCategory newCategory = metadataCategoryService.createNewMetadataCategory(categoryTitle, categoryDescription, categoryType,
+                    categoryUse, inextensible, false, metadataValues, metadataAttribute);
             schemaService.addMetadataCategoryToSchema(this.project.getSchema(), newCategory);
         }
         else
