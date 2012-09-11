@@ -637,35 +637,20 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                 editValueButton.setEnabled(metadataValuesListWidget.getSelectionCount() > 0);
                 return;
             }
-            
-            InputDialog userInput = new InputDialog(getShell(), "Edit Value", "Enter the amended metadata value", this.metadataValuesListWidget.getSelection()[0],
-                    new IInputValidator()
+
+            final InputDialog userInput = new InputDialog(getShell(), "Edit Value", "Enter the amended metadata value", this.metadataValuesListWidget.getSelection()[0], new IInputValidator()
+            {
+                @Override
+                public String isValid(final String contents)
+                {
+                    final MetadataValueValidator validator = new MetadataValueValidator(metadataValues);
+                    if (validator.isValid(contents))
                     {
-                        @Override
-                        public String isValid(String contents)
-                        {
-                            if (contents.trim().isEmpty())
-                            {
-                                return "Value must not be empty.";
-                            }
-
-                            if (contents.trim().length() >= 255)
-                            {
-                                return "Value is too long.";
-                            }
-
-                            final String[] listOfValues = metadataValuesListWidget.getItems();
-
-                            for (final String existingValue : listOfValues)
-                            {
-                                if (existingValue.equalsIgnoreCase(contents.trim()))
-                                {
-                                    return "A Value with that name already exists for this Category.";
-                                }
-                            }
-                            return null;
-                        }
-                    });
+                        return null;
+                    }
+                    return validator.getErrorMessage();
+                }
+            });
             userInput.open();
 
             if (userInput.getValue() == null || userInput.getValue().trim().isEmpty())
@@ -678,9 +663,31 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         }
         else if (e.widget.equals(editAttributeValueButton))
         {
-            // TODO
+            if (this.metadataAttributeValuesListWidget.getSelectionCount() == 0)
+            {
+                removeAttributeValueButton.setEnabled(metadataAttributeValuesListWidget.getSelectionCount() > 0);
+                editAttributeValueButton.setEnabled(metadataAttributeValuesListWidget.getSelectionCount() > 0);
+                return;
+            }
+
+            final InputDialog userInput = new InputDialog(getShell(), "Edit Value", "Enter the amended metadata attribute value", this.metadataAttributeValuesListWidget.getSelection()[0], new IInputValidator()
+            {
+                @Override
+                public String isValid(final String contents)
+                {
+                    final MetadataAttributeValueValidator validator = new MetadataAttributeValueValidator(metadataAttributeValues);
+                    if (validator.isValid(contents))
+                    {
+                        return null;
+                    }
+                    return validator.getErrorMessage();
+                }
+            });
+            userInput.open();
+
+            this.metadataAttributeValues.get(this.metadataAttributeValuesListWidget.getSelectionIndex()).setValue(userInput.getValue().trim());
+            this.metadataAttributeValuesListWidget.setItem(this.metadataAttributeValuesListWidget.getSelectionIndex(), userInput.getValue().trim());
         }
-        
         setPageComplete(this.categoryNameField.isValid());
     }
     

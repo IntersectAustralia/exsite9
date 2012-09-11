@@ -8,6 +8,8 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import au.org.intersect.exsite9.domain.MetadataAttribute;
+import au.org.intersect.exsite9.domain.MetadataAttributeValue;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataValue;
@@ -82,11 +84,27 @@ public final class MetadataSchemaXMLBuilder extends BaseXMLBuilder
             
             if (type != MetadataCategoryType.FREETEXT)
             {
-                for(final MetadataValue value : category.getValues())
+                for (final MetadataValue value : category.getValues())
                 {
                     final Element valElement = doc.createElement(ELEMENT_VALUE);
                     valElement.setTextContent(value.getValue());
                     catElement.appendChild(valElement);
+                }
+            }
+            else
+            {
+                final MetadataAttribute metadataAttribute = category.getMetadataAttribute();
+                if (metadataAttribute != null)
+                {
+                    final Element attributeElement = doc.createElement(ELEMENT_ATTRIBUTE);
+                    attributeElement.setAttribute(ATTRIBUTE_NAME, metadataAttribute.getName());
+                    for (final MetadataAttributeValue attributeValue : metadataAttribute.getMetadataAttributeValues())
+                    {
+                        final Element valueElement = doc.createElement(ELEMENT_VALUE);
+                        valueElement.setTextContent(attributeValue.getValue());
+                        attributeElement.appendChild(valueElement);
+                    }
+                    catElement.appendChild(attributeElement);
                 }
             }
             doc.getFirstChild().appendChild(catElement);

@@ -70,7 +70,7 @@ public final class ResearchFileServiceUnitTest extends DAOTest
 
         final File file = new File("some file");
         final ResearchFile rf = new ResearchFile(file);
-        toTest.associateMetadata(rf, metadataCategory, metadataValue);
+        toTest.associateMetadata(rf, metadataCategory, metadataValue, null);
 
         final List<MetadataAssociation> metadataAssociations = rf.getMetadataAssociations();
         assertEquals(1, metadataAssociations.size());
@@ -81,7 +81,7 @@ public final class ResearchFileServiceUnitTest extends DAOTest
         assertEquals(metadataValue, metadataAssociation.getMetadataValues().get(0));
 
         // Doing it again does nothing.
-        toTest.associateMetadata(rf, metadataCategory, metadataValue);
+        toTest.associateMetadata(rf, metadataCategory, metadataValue, null);
         assertEquals(1, metadataAssociations.size());
         metadataAssociation = metadataAssociations.get(0);
         assertNotNull(metadataAssociation);
@@ -94,7 +94,7 @@ public final class ResearchFileServiceUnitTest extends DAOTest
         metadataCategory.getValues().add(metadataValue2);
         metadataCategoryDAO.updateMetadataCategory(metadataCategory);
 
-        toTest.associateMetadata(rf, metadataCategory, metadataValue2);
+        toTest.associateMetadata(rf, metadataCategory, metadataValue2, null);
         assertEquals(1, metadataAssociations.size());
         metadataAssociation = metadataAssociations.get(0);
         assertNotNull(metadataAssociation);
@@ -109,7 +109,7 @@ public final class ResearchFileServiceUnitTest extends DAOTest
         metadataCategory2.getValues().add(metadataValue3);
         metadataCategoryDAO.createMetadataCategory(metadataCategory2);
 
-        toTest.associateMetadata(rf, metadataCategory2, metadataValue3);
+        toTest.associateMetadata(rf, metadataCategory2, metadataValue3, null);
         assertEquals(2, rf.getMetadataAssociations().size());
     }
 
@@ -139,7 +139,7 @@ public final class ResearchFileServiceUnitTest extends DAOTest
 
         final File file = new File("some file");
         final ResearchFile rf = new ResearchFile(file);
-        toTest.associateMetadata(rf, metadataCategory, metadataValue);
+        toTest.associateMetadata(rf, metadataCategory, metadataValue, null);
 
         List<MetadataAssociation> metadataAssociations = rf.getMetadataAssociations();
         assertEquals(1, metadataAssociations.size());
@@ -152,7 +152,7 @@ public final class ResearchFileServiceUnitTest extends DAOTest
         final MetadataValue newMetadataValue = new MetadataValue("new metadataValue");
         metadataCategory.getValues().add(newMetadataValue);
         metadataCategoryDAO.updateMetadataCategory(metadataCategory);
-        toTest.associateMetadata(rf, metadataCategory, newMetadataValue);
+        toTest.associateMetadata(rf, metadataCategory, newMetadataValue, null);
 
         metadataAssociations = rf.getMetadataAssociations();
         assertEquals(1, metadataAssociations.size());
@@ -201,9 +201,9 @@ public final class ResearchFileServiceUnitTest extends DAOTest
 
         toTest.disassociateMetadata(rf, metadataCategory1, metadataValue1);
         assertTrue(rf.getMetadataAssociations().isEmpty());
-        toTest.associateMetadata(rf, metadataCategory1, metadataValue1);
-        toTest.associateMetadata(rf, metadataCategory2, metadataValue2);
-        toTest.associateMetadata(rf, metadataCategory2, metadataValue3);
+        toTest.associateMetadata(rf, metadataCategory1, metadataValue1, null);
+        toTest.associateMetadata(rf, metadataCategory2, metadataValue2, null);
+        toTest.associateMetadata(rf, metadataCategory2, metadataValue3, null);
 
         List<MetadataAssociation> metadataAssociations = rf.getMetadataAssociations();
         assertEquals(2, metadataAssociations.size());
@@ -250,7 +250,7 @@ public final class ResearchFileServiceUnitTest extends DAOTest
         mdc.getValues().add(mdv);
         metadataCategoryDAO.createMetadataCategory(mdc);
 
-        toTest.associateMetadata(rf, mdc, mdv);
+        toTest.associateMetadata(rf, mdc, mdv, null);
 
         final List<ResearchFile> out = toTest.getResearchFilesWithAssociatedMetadata(mdc, mdv);
         assertEquals(1, out.size());
@@ -324,9 +324,9 @@ public final class ResearchFileServiceUnitTest extends DAOTest
         metadataCategoryDAO.createMetadataCategory(metadataCategory1);
 
         assertTrue(rf.getMetadataAssociations().isEmpty());
-        toTest.associateMetadata(rf, metadataCategory1, metadataValue1);
-        toTest.associateMetadata(rf, metadataCategory2, metadataValue2);
-        toTest.associateMetadata(rf, metadataCategory2, metadataValue3);
+        toTest.associateMetadata(rf, metadataCategory1, metadataValue1, null);
+        toTest.associateMetadata(rf, metadataCategory2, metadataValue2, null);
+        toTest.associateMetadata(rf, metadataCategory2, metadataValue3, null);
 
         List<MetadataAssociation> metadataAssociations = rf.getMetadataAssociations();
         assertEquals(2, metadataAssociations.size());

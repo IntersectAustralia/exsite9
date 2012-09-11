@@ -33,6 +33,7 @@ import org.eclipse.ui.part.ViewPart;
 import au.org.intersect.exsite9.domain.FieldOfResearch;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.IMetadataAssignable;
+import au.org.intersect.exsite9.domain.MetadataAttributeValue;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
@@ -43,6 +44,7 @@ import au.org.intersect.exsite9.service.IProjectService;
 import au.org.intersect.exsite9.service.IResearchFileService;
 import au.org.intersect.exsite9.util.AlphabeticalPairComparator;
 import au.org.intersect.exsite9.util.Pair;
+import au.org.intersect.exsite9.util.Triplet;
 
 public final class AssociatedMetadataView extends ViewPart implements ISelectionListener, IExecutionListener
 {
@@ -201,25 +203,27 @@ public final class AssociatedMetadataView extends ViewPart implements ISelection
             {
                 List<Pair<String, String>> stringsForTable = new ArrayList<Pair<String, String>>();
 
-                final Set<Pair<MetadataCategory, MetadataValue>> metadataToBeMapped = new HashSet<Pair<MetadataCategory, MetadataValue>>(
-                        MetadataAssignableUtils.getCategoryToValueMapping(this.selectedMetadataAssignables.get(0)));
+                final Set<Triplet<MetadataCategory, MetadataValue, MetadataAttributeValue>> metadataToBeMapped =
+                        new HashSet<Triplet<MetadataCategory, MetadataValue, MetadataAttributeValue>>(MetadataAssignableUtils.getCategoryToValueMapping(this.selectedMetadataAssignables.get(0)));
 
                 for (int i = 1; i < this.selectedMetadataAssignables.size(); i++)
                 {
-                    metadataToBeMapped.retainAll(MetadataAssignableUtils
-                            .getCategoryToValueMapping(this.selectedMetadataAssignables.get(i)));
+                    metadataToBeMapped.retainAll(MetadataAssignableUtils.getCategoryToValueMapping(this.selectedMetadataAssignables.get(i)));
                 }
 
-                for (Iterator<Pair<MetadataCategory, MetadataValue>> iterator = metadataToBeMapped.iterator(); iterator
-                        .hasNext();)
+                for (final Iterator<Triplet<MetadataCategory, MetadataValue, MetadataAttributeValue>> iterator = metadataToBeMapped.iterator(); iterator.hasNext();)
                 {
-                    Pair<MetadataCategory, MetadataValue> pair = (Pair<MetadataCategory, MetadataValue>) iterator
-                            .next();
+                    Triplet<MetadataCategory, MetadataValue, MetadataAttributeValue> triplet = (Triplet<MetadataCategory, MetadataValue, MetadataAttributeValue>) iterator.next();
 
-                    Pair<String, String> stringPair = new Pair<String, String>(pair.getFirst().getName(), pair
-                            .getSecond().getValue());
+                    final MetadataAttributeValue attributeValue = triplet.getThird();
 
-                    stringsForTable.add(stringPair);
+                    final StringBuffer second = new StringBuffer();
+                    second.append(triplet.getSecond().getValue());
+                    if (attributeValue != null)
+                    {
+                        second.append(" (").append(triplet.getFirst().getMetadataAttribute().getName()).append(" = ").append(attributeValue.getValue()).append(")");
+                    }
+                    stringsForTable.add(new Pair<String, String>(triplet.getFirst().getName(), second.toString()));
                 }
 
                 Collections.sort(stringsForTable, new AlphabeticalPairComparator());

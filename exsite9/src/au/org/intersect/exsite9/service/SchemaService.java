@@ -26,10 +26,13 @@ import javax.xml.validation.Validator;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import au.org.intersect.exsite9.dao.MetadataAttributeDAO;
 import au.org.intersect.exsite9.dao.MetadataCategoryDAO;
 import au.org.intersect.exsite9.dao.SchemaDAO;
+import au.org.intersect.exsite9.dao.factory.MetadataAttributeDAOFactory;
 import au.org.intersect.exsite9.dao.factory.MetadataCategoryDAOFactory;
 import au.org.intersect.exsite9.dao.factory.SchemaDAOFactory;
+import au.org.intersect.exsite9.domain.MetadataAttribute;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.Schema;
 import au.org.intersect.exsite9.exception.InvalidSchemaException;
@@ -43,6 +46,7 @@ public final class SchemaService implements ISchemaService
     private final EntityManagerFactory emf;
     private final SchemaDAOFactory schemaDAOFactory;
     private final MetadataCategoryDAOFactory metadataCategoryDAOFactory;
+    private final MetadataAttributeDAOFactory metadataAttributeDAOFactory;
     private final File defaultSchemaDirectory;
     private final File metadataSchemaSchema;
 
@@ -53,13 +57,15 @@ public final class SchemaService implements ISchemaService
      * @param schemaDAOFactory
      */
     public SchemaService(final File defaultSchemaDirectory, final File metadataSchemaSchema, final EntityManagerFactory emf,
-                         final SchemaDAOFactory schemaDAOFactory, final MetadataCategoryDAOFactory metadataCategoryDAOFactory)
+                         final SchemaDAOFactory schemaDAOFactory, final MetadataCategoryDAOFactory metadataCategoryDAOFactory,
+                         final MetadataAttributeDAOFactory metadataAttributeDAOFactory)
     {
         this.emf = emf;
         this.schemaDAOFactory = schemaDAOFactory;
         this.metadataCategoryDAOFactory = metadataCategoryDAOFactory;
         this.defaultSchemaDirectory = defaultSchemaDirectory;
         this.metadataSchemaSchema = metadataSchemaSchema;
+        this.metadataAttributeDAOFactory = metadataAttributeDAOFactory;
     }
 
     /**
@@ -91,8 +97,15 @@ public final class SchemaService implements ISchemaService
         try
         {
             final MetadataCategoryDAO metadataCategoryDAO = this.metadataCategoryDAOFactory.createInstance(em);
+            final MetadataAttributeDAO metadataAttribtueDAO = this.metadataAttributeDAOFactory.createInstance(em);
+
             for (final MetadataCategory metadataCategory : schema.getMetadataCategories())
             {
+                final MetadataAttribute metadataAttribute = metadataCategory.getMetadataAttribute();
+                if (metadataAttribute != null)
+                {
+                    metadataAttribtueDAO.createMetadataAttribute(metadataAttribute);
+                }
                 metadataCategoryDAO.createMetadataCategory(metadataCategory);
             }
 

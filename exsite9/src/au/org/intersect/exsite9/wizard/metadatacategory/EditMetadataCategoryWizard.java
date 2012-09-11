@@ -13,6 +13,8 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.PlatformUI;
 
 import au.org.intersect.exsite9.domain.Group;
+import au.org.intersect.exsite9.domain.MetadataAttribute;
+import au.org.intersect.exsite9.domain.MetadataAttributeValue;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataCategoryUse;
 import au.org.intersect.exsite9.domain.MetadataValue;
@@ -39,7 +41,7 @@ public final class EditMetadataCategoryWizard extends Wizard
         this.schema = schema;
         this.listCategoriesPage = new ListMetadataCategoriesWizardPage("Edit Metadata Category", "Choose a metadata category to edit.", this.schema, false);
         this.editCategoryPage = new AddMetadataCategoryWizardPage1("Edit Metadata Category",
-    		"Edit the details of the metadata category you have selected", schema, null, Collections.<MetadataValue>emptyList(), null);
+    		"Edit the details of the metadata category you have selected", schema, null, Collections.<MetadataValue>emptyList(), Collections.<MetadataAttributeValue>emptyList());
     }
 
     @Override
@@ -80,7 +82,19 @@ public final class EditMetadataCategoryWizard extends Wizard
             groupService.disassociateMultipleMetadataValues(assignedGroup, metadataCategory, editCategoryPage.getMetadataValuesToBeDisassociated());
         }
 
-        metadataCategoryService.updateMetadataCategory(metadataCategory, categoryTitle, categoryDescription, categoryUse, inextensible, values, null);
+        for (final MetadataAttributeValue mdav : editCategoryPage.getMetadataAttributeValuesToBeDisassociated())
+        {
+            groupService.disassociateMetadataAttributeValue(metadataCategory, mdav);
+            fileService.disassociateMetadataAttributeValue(metadataCategory, mdav);
+        }
+
+        final MetadataAttribute mda = metadataCategory.getMetadataAttribute();
+        if (mda != null)
+        {
+            mda.setName(editCategoryPage.getMetadataAttributeName());
+            mda.setMetadataAttributeValues(editCategoryPage.getMetadataAttributeValues());
+        }
+        metadataCategoryService.updateMetadataCategory(metadataCategory, categoryTitle, categoryDescription, categoryUse, inextensible, values, mda);
         return true;
     }
 }

@@ -137,7 +137,6 @@ public class AddMetadataCategoryWizard extends Wizard
                 mda.setName(page1.getMetadataAttributeName());
                 mda.setMetadataAttributeValues(page1.getMetadataAttributeValues());
             }
-
             metadataCategoryService.updateMetadataCategory(this.metadataCategory, categoryTitle, categoryDescription, categoryUse, inextensible, page1.getMetadataCategoryValues(), mda);
         }
 

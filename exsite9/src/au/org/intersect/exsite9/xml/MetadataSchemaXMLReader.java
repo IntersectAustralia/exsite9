@@ -4,12 +4,15 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import au.org.intersect.exsite9.domain.MetadataAttribute;
+import au.org.intersect.exsite9.domain.MetadataAttributeValue;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataCategoryUse;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Schema;
 import au.org.intersect.exsite9.exception.InvalidSchemaException;
+import au.org.intersect.exsite9.validators.MetadataAttributeValueValidator;
 import au.org.intersect.exsite9.validators.MetadataCategoryNameValidator;
 import au.org.intersect.exsite9.validators.MetadataValueValidator;
 
@@ -68,7 +71,7 @@ public final class MetadataSchemaXMLReader
         
         String description = "";
         final NodeList descriptionNodes = metadataCategoryElement.getElementsByTagName(ELEMENT_DESCRIPTION);
-        if(descriptionNodes.item(0) != null){
+        if (descriptionNodes.item(0) != null){
             description = descriptionNodes.item(0).getTextContent().trim();
         }
         
@@ -88,6 +91,30 @@ public final class MetadataSchemaXMLReader
                 addMetadataCategoryValue(metadataCategory, metadataCategoryValue);
             }
         }
+        else
+        {
+            final NodeList attributeElementList = metadataCategoryElement.getElementsByTagName(ELEMENT_ATTRIBUTE);
+            if (attributeElementList.getLength() > 1)
+            {
+                throw new InvalidSchemaException("Only one " + ELEMENT_ATTRIBUTE + " element permitted as a child of a free-text metadata category");
+            }
+            if (attributeElementList.getLength() > 0)
+            {
+                final Element attribtueElement = (Element) attributeElementList.item(0);
+                final String attributeName = attribtueElement.getAttribute(ATTRIBUTE_NAME);
+                final MetadataAttribute metadataAttribute = new MetadataAttribute();
+                metadataAttribute.setName(attributeName);
+
+                final NodeList attributeNodeValuesList = attribtueElement.getElementsByTagName(ELEMENT_VALUE);
+                for (int i = 0; i < attributeNodeValuesList.getLength(); i++)
+                {
+                    final Element metadataAttributeValue = (Element) attributeNodeValuesList.item(i);
+                    addMetadataAttributeValue(metadataAttribute, metadataAttributeValue);
+                }
+
+                metadataCategory.setMetadataAttribute(metadataAttribute);
+            }
+        }
 
         schema.getMetadataCategories().add(metadataCategory);
     }
@@ -101,5 +128,16 @@ public final class MetadataSchemaXMLReader
             throw new InvalidSchemaException("Metadata value '" + value + "' in category '" + metadataCategory.getName() + "' is invalid. " + validator.getErrorMessage());
         }
         metadataCategory.getValues().add(new MetadataValue(value));
+    }
+
+    private static void addMetadataAttributeValue(final MetadataAttribute metadataAttribute, final Element metadataAttributeValueElement) throws InvalidSchemaException
+    {
+        final String value = metadataAttributeValueElement.getTextContent().trim();
+        final MetadataAttributeValueValidator validator = new MetadataAttributeValueValidator(metadataAttribute.getMetadataAttributeValues());
+        if (!validator.isValid(value))
+        {
+            throw new InvalidSchemaException("Metadata attribute value '" + value + "' in attribute '" + metadataAttribute.getName() + "' is invalid. " + validator.getErrorMessage());
+        }
+        metadataAttribute.getMetadataAttributeValues().add(new MetadataAttributeValue(value));
     }
 }

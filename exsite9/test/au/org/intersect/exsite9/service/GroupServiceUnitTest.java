@@ -249,7 +249,7 @@ public class GroupServiceUnitTest extends DAOTest
         metadataCategory.getValues().add(metadataValue);
         metadataCategoryDAO.createMetadataCategory(metadataCategory);
         final Group group = new Group("group name");
-        groupService.associateMetadata(group, metadataCategory, metadataValue);
+        groupService.associateMetadata(group, metadataCategory, metadataValue, null);
 
         final List<MetadataAssociation> metadataAssociations = group.getMetadataAssociations();
         assertEquals(1, metadataAssociations.size());
@@ -260,7 +260,7 @@ public class GroupServiceUnitTest extends DAOTest
         assertEquals(metadataValue, metadataAssociation.getMetadataValues().get(0));
 
         // Doing it again does nothing.
-        groupService.associateMetadata(group, metadataCategory, metadataValue);
+        groupService.associateMetadata(group, metadataCategory, metadataValue, null);
         assertEquals(1, metadataAssociations.size());
         metadataAssociation = metadataAssociations.get(0);
         assertNotNull(metadataAssociation);
@@ -273,7 +273,7 @@ public class GroupServiceUnitTest extends DAOTest
         metadataCategory.getValues().add(metadataValue2);
         metadataCategoryDAO.updateMetadataCategory(metadataCategory);
 
-        groupService.associateMetadata(group, metadataCategory, metadataValue2);
+        groupService.associateMetadata(group, metadataCategory, metadataValue2, null);
         assertEquals(1, metadataAssociations.size());
         metadataAssociation = metadataAssociations.get(0);
         assertNotNull(metadataAssociation);
@@ -288,7 +288,7 @@ public class GroupServiceUnitTest extends DAOTest
         metadataCategory2.getValues().add(metadataValue3);
         metadataCategoryDAO.createMetadataCategory(metadataCategory2);
 
-        groupService.associateMetadata(group, metadataCategory2, metadataValue3);
+        groupService.associateMetadata(group, metadataCategory2, metadataValue3, null);
         assertEquals(2, group.getMetadataAssociations().size());
     }
 
@@ -314,7 +314,7 @@ public class GroupServiceUnitTest extends DAOTest
         metadataCategory.getValues().add(metadataValue);
         metadataCategoryDAO.createMetadataCategory(metadataCategory);
         final Group group = new Group("group name");
-        groupService.associateMetadata(group, metadataCategory, metadataValue);
+        groupService.associateMetadata(group, metadataCategory, metadataValue, null);
 
         List<MetadataAssociation> metadataAssociations = group.getMetadataAssociations();
         assertEquals(1, metadataAssociations.size());
@@ -327,7 +327,7 @@ public class GroupServiceUnitTest extends DAOTest
         final MetadataValue newMetadataValue = new MetadataValue("new metadataValue");
         metadataCategory.getValues().add(newMetadataValue);
         metadataCategoryDAO.updateMetadataCategory(metadataCategory);
-        groupService.associateMetadata(group, metadataCategory, newMetadataValue);
+        groupService.associateMetadata(group, metadataCategory, newMetadataValue, null);
 
         metadataAssociations = group.getMetadataAssociations();
         assertEquals(1, metadataAssociations.size());
@@ -369,9 +369,9 @@ public class GroupServiceUnitTest extends DAOTest
         final Group group = groupService.createNewGroup("group name");
         groupService.disassociateMetadata(group, metadataCategory1, metadataValue1);
         assertTrue(group.getMetadataAssociations().isEmpty());
-        groupService.associateMetadata(group, metadataCategory1, metadataValue1);
-        groupService.associateMetadata(group, metadataCategory2, metadataValue2);
-        groupService.associateMetadata(group, metadataCategory2, metadataValue3);
+        groupService.associateMetadata(group, metadataCategory1, metadataValue1, null);
+        groupService.associateMetadata(group, metadataCategory2, metadataValue2, null);
+        groupService.associateMetadata(group, metadataCategory2, metadataValue3, null);
 
         List<MetadataAssociation> metadataAssociations = group.getMetadataAssociations();
         assertEquals(2, metadataAssociations.size());
@@ -485,7 +485,7 @@ public class GroupServiceUnitTest extends DAOTest
         mdc.getValues().add(mdv);
         metadataCategoryDAO.createMetadataCategory(mdc);
 
-        groupService.associateMetadata(myGroup, mdc, mdv);
+        groupService.associateMetadata(myGroup, mdc, mdv, null);
 
         final List<Group> out = groupService.getGroupsWithAssociatedMetadata(mdc, mdv);
         assertEquals(1, out.size());

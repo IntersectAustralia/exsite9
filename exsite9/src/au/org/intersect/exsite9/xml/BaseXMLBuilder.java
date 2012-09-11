@@ -19,6 +19,8 @@ import org.w3c.dom.Element;
 
 import au.org.intersect.exsite9.domain.FieldOfResearch;
 import au.org.intersect.exsite9.domain.MetadataAssociation;
+import au.org.intersect.exsite9.domain.MetadataAttributeValue;
+import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
@@ -110,13 +112,20 @@ public class BaseXMLBuilder
         return stringWriter.toString();
     }
     
-    protected static void appendMetadataAssociation(final Document doc, final Element parent,
-            final MetadataAssociation metadataAssociation)
+    protected static void appendMetadataAssociation(final Document doc, final Element parent, final MetadataAssociation metadataAssociation)
     {
         for (final MetadataValue metadataValue : metadataAssociation.getMetadataValues())
         {
-            final Element metadataAssociationElement = doc.createElement(metadataAssociation.getMetadataCategory().getName());
+            final MetadataCategory metadataCategory = metadataAssociation.getMetadataCategory();
+            final Element metadataAssociationElement = doc.createElement(metadataCategory.getName());
             metadataAssociationElement.setTextContent(metadataValue.getValue());
+
+            final MetadataAttributeValue attributeValue = metadataAssociation.getMetadataAttributeValue();
+            if (attributeValue != null)
+            {
+                metadataAssociationElement.setAttribute(metadataCategory.getMetadataAttribute().getName(), attributeValue.getValue());
+            }
+
             parent.appendChild(metadataAssociationElement);
         }
     }

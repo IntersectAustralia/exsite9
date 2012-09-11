@@ -78,6 +78,14 @@ public final class MetadataCategoryService implements IMetadataCategoryService
         try
         {
             final MetadataCategoryDAO mdcDAO = this.metadataCategoryDAOFactory.createInstance(em);
+            final MetadataAttributeDAO mdaDAO = this.metadataAttributeDAOFactory.createInstance(em);
+
+            final MetadataAttribute mda = metadataCategory.getMetadataAttribute();
+            if (mda != null)
+            {
+                mdaDAO.delete(mda);
+            }
+
             mdcDAO.delete(metadataCategory);
         }
         finally
@@ -102,19 +110,26 @@ public final class MetadataCategoryService implements IMetadataCategoryService
     }
 
     @Override
-    public void updateMetadataCategory(MetadataCategory existingMetadataCategoryToUpdate, String name, String description,
-            MetadataCategoryUse use, boolean inExtensible, List<MetadataValue> values, final MetadataAttribute metadataAttribute)
+    public void updateMetadataCategory(final MetadataCategory existingMetadataCategoryToUpdate, final String name, final String description,
+            final MetadataCategoryUse use, final boolean inExtensible, final List<MetadataValue> values, final MetadataAttribute metadataAttribute)
     {
         final EntityManager em = this.emf.createEntityManager();
         try
         {
             final MetadataCategoryDAO mdcDAO = this.metadataCategoryDAOFactory.createInstance(em);
+            final MetadataAttributeDAO mdaDAO = this.metadataAttributeDAOFactory.createInstance(em);
 
             existingMetadataCategoryToUpdate.setName(name);
             existingMetadataCategoryToUpdate.setDescription(description);
             existingMetadataCategoryToUpdate.setUse(use);
             existingMetadataCategoryToUpdate.setInextensible(inExtensible);
             existingMetadataCategoryToUpdate.setValues(values);
+            existingMetadataCategoryToUpdate.setMetadataAttribute(metadataAttribute);
+
+            if (metadataAttribute != null)
+            {
+                mdaDAO.updateMetadataAttribute(metadataAttribute);
+            }
            
             mdcDAO.updateMetadataCategory(existingMetadataCategoryToUpdate);
         }

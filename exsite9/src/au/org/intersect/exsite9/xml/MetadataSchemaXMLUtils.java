@@ -6,6 +6,7 @@ public final class MetadataSchemaXMLUtils
     public static final String ELEMENT_METADATACATEGORY = "metadata_category";
     public static final String ELEMENT_VALUE = "value";
     public static final String ELEMENT_DESCRIPTION = "description";
+    public static final String ELEMENT_ATTRIBUTE = "attribute";
 
     public static final String ATTRIBUTE_NAME = "name";
     public static final String ATTRIBUTE_DESCRIPTION = "description";

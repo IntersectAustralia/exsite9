@@ -41,6 +41,18 @@
 					<text/>
 				</element>
 			</zeroOrMore>
+			<optional>
+				<element name="attribute">
+					<attribute name="name">
+						<text/>
+					</attribute>
+					<zeroOrMore>
+						<element name="value">
+							<text/>
+						</element>
+					</zeroOrMore>
+				</element>
+			</optional>
 		</element>
 	</zeroOrMore>
 </element>

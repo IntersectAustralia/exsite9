@@ -13,4 +13,11 @@
   <metadata_category inextensible="false" name="cat3" use="required" type="Free Text">
   </metadata_category>
 
+  <metadata_category inextensible="false" name="cat4" use="required" type="Free Text">
+    <attribute name="attribute">
+    	<value>Value One</value>
+    	<value>Value Two</value>
+    </attribute>
+  </metadata_category>
+
 </schema>

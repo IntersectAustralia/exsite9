@@ -15,6 +15,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.services.AbstractServiceFactory;
 import org.eclipse.ui.services.IServiceLocator;
 
+import au.org.intersect.exsite9.dao.factory.MetadataAttributeDAOFactory;
 import au.org.intersect.exsite9.dao.factory.MetadataCategoryDAOFactory;
 import au.org.intersect.exsite9.dao.factory.SchemaDAOFactory;
 import au.org.intersect.exsite9.service.SchemaService;
@@ -59,7 +60,8 @@ public final class SchemaServiceFactory extends AbstractServiceFactory
         final EntityManagerFactory emf = (EntityManagerFactory) PlatformUI.getWorkbench().getService(EntityManagerFactory.class);
         final SchemaDAOFactory schemaDAOFactory = new SchemaDAOFactory();
         final MetadataCategoryDAOFactory metadataCategoryDAOFactory = new MetadataCategoryDAOFactory();
-        final SchemaService schemaService = new SchemaService(schemaDirToUse, metadataSchemaSchema, emf, schemaDAOFactory, metadataCategoryDAOFactory);
+        final MetadataAttributeDAOFactory metadataAttributeDAOFactory = new MetadataAttributeDAOFactory();
+        final SchemaService schemaService = new SchemaService(schemaDirToUse, metadataSchemaSchema, emf, schemaDAOFactory, metadataCategoryDAOFactory, metadataAttributeDAOFactory);
         return schemaService;
     }
 }

@@ -6,7 +6,9 @@
  */
 package au.org.intersect.exsite9.domain.utils;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Set;
 
@@ -14,11 +16,12 @@ import org.junit.Test;
 
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataAssociation;
+import au.org.intersect.exsite9.domain.MetadataAttributeValue;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataCategoryUse;
 import au.org.intersect.exsite9.domain.MetadataValue;
-import au.org.intersect.exsite9.util.Pair;
+import au.org.intersect.exsite9.util.Triplet;
 
 /**
  * Tests {@link MetadataAssignableUtils}
@@ -38,22 +41,29 @@ public final class GroupUtilsUnitTest
         final MetadataValue val1 = new MetadataValue("val1");
         final MetadataValue val2 = new MetadataValue("val2");
 
+        final MetadataAttributeValue mdav1 = new MetadataAttributeValue("mdav1");
+        final MetadataAttributeValue mdav2 = new MetadataAttributeValue("mdav1");
+        mdav1.setId(1l);
+        mdav2.setId(2l);
+
         final MetadataAssociation mda1 = new MetadataAssociation(cat1);
         mda1.setId(1l);
         mda1.getMetadataValues().add(val1);
+        mda1.setMetadataAttributeValue(mdav1);
 
         final MetadataAssociation mda2 = new MetadataAssociation(cat2);
         mda2.setId(2l);
         mda2.getMetadataValues().add(val2);
+        mda2.setMetadataAttributeValue(mdav2);
 
         group.getMetadataAssociations().add(mda1);
         group.getMetadataAssociations().add(mda2);
 
-        final Set<Pair<MetadataCategory, MetadataValue>> out = MetadataAssignableUtils.getCategoryToValueMapping(group);
+        final Set<Triplet<MetadataCategory, MetadataValue, MetadataAttributeValue>> out = MetadataAssignableUtils.getCategoryToValueMapping(group);
         assertNotNull(out);
         assertEquals(2, out.size());
 
-        assertTrue(out.contains(new Pair<MetadataCategory, MetadataValue>(cat1, val1)));
-        assertTrue(out.contains(new Pair<MetadataCategory, MetadataValue>(cat2, val2)));
+        assertTrue(out.contains(new Triplet<MetadataCategory, MetadataValue, MetadataAttributeValue>(cat1, val1, mdav1)));
+        assertTrue(out.contains(new Triplet<MetadataCategory, MetadataValue, MetadataAttributeValue>(cat2, val2, mdav2)));
     }
 }

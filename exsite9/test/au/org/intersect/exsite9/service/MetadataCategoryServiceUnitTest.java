@@ -12,7 +12,10 @@ import javax.persistence.EntityManagerFactory;
 import org.junit.Test;
 
 import au.org.intersect.exsite9.dao.DAOTest;
+import au.org.intersect.exsite9.dao.factory.MetadataAttributeDAOFactory;
 import au.org.intersect.exsite9.dao.factory.MetadataCategoryDAOFactory;
+import au.org.intersect.exsite9.domain.MetadataAttribute;
+import au.org.intersect.exsite9.domain.MetadataAttributeValue;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataCategoryUse;
@@ -30,12 +33,16 @@ public class MetadataCategoryServiceUnitTest extends DAOTest
                                        .toReturn(createEntityManager());
 
         MetadataCategoryDAOFactory metadataCategoryDAOFactory = new MetadataCategoryDAOFactory();
+        MetadataAttributeDAOFactory metadataAttribtueDAOFactory = new MetadataAttributeDAOFactory();
 
-        metadataCategoryService = new MetadataCategoryService(emf, metadataCategoryDAOFactory);
+        metadataCategoryService = new MetadataCategoryService(emf, metadataCategoryDAOFactory, metadataAttribtueDAOFactory);
 
-        MetadataCategory category = metadataCategoryService.createNewMetadataCategory("Names", "Description", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional, false, false, null);
+        final MetadataAttribute mda = new MetadataAttribute("Some Name", Collections.<MetadataAttributeValue>emptyList());
+
+        MetadataCategory category = metadataCategoryService.createNewMetadataCategory("Names", "Description", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional,
+            false, false, null, mda);
+
         MetadataCategory categoryFoundById = metadataCategoryService.findById(category.getId());
-
         assertEquals(category, categoryFoundById);
     }
     
@@ -47,12 +54,13 @@ public class MetadataCategoryServiceUnitTest extends DAOTest
                                         .toReturn(createEntityManager());
         
         MetadataCategoryDAOFactory metadataCategoryDAOFactory = new MetadataCategoryDAOFactory();
+        MetadataAttributeDAOFactory metadataAttribtueDAOFactory = new MetadataAttributeDAOFactory();
 
-        metadataCategoryService = new MetadataCategoryService(emf, metadataCategoryDAOFactory);
+        metadataCategoryService = new MetadataCategoryService(emf, metadataCategoryDAOFactory, metadataAttribtueDAOFactory);
 
-        MetadataCategory category = metadataCategoryService.createNewMetadataCategory("Names", "Description", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional, false, false, null);
-        
-        metadataCategoryService.updateMetadataCategory(category, "NameUpdated", "Description", MetadataCategoryUse.required, false, null);
+        MetadataCategory category = metadataCategoryService.createNewMetadataCategory("Names", "Description", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional, false, false, null, null);
+
+        metadataCategoryService.updateMetadataCategory(category, "NameUpdated", "Description", MetadataCategoryUse.required, false, null, null);
         
         MetadataCategory updatedCategoryFoundById = metadataCategoryDAOFactory.createInstance(createEntityManager())
                 .findById(category.getId());
@@ -70,10 +78,11 @@ public class MetadataCategoryServiceUnitTest extends DAOTest
                                        .toReturn(createEntityManager())
                                        .toReturn(createEntityManager());
         final MetadataCategoryDAOFactory metadataCategoryDAOFactory = new MetadataCategoryDAOFactory();
-        metadataCategoryService = new MetadataCategoryService(emf, metadataCategoryDAOFactory);
+        MetadataAttributeDAOFactory metadataAttribtueDAOFactory = new MetadataAttributeDAOFactory();
+        metadataCategoryService = new MetadataCategoryService(emf, metadataCategoryDAOFactory, metadataAttribtueDAOFactory);
 
         final MetadataCategory category = metadataCategoryService.createNewMetadataCategory("Names", "Description",
-            MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional, false, false, Collections.<MetadataValue>emptyList());
+            MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional, false, false, Collections.<MetadataValue>emptyList(), null);
         assertNotNull(category.getId());
 
         metadataCategoryService.deleteMetadataCategory(category);
@@ -92,10 +101,11 @@ public class MetadataCategoryServiceUnitTest extends DAOTest
                                        .toReturn(createEntityManager())
                                        .toReturn(createEntityManager());
         final MetadataCategoryDAOFactory metadataCategoryDAOFactory = new MetadataCategoryDAOFactory();
-        metadataCategoryService = new MetadataCategoryService(emf, metadataCategoryDAOFactory);
+        final MetadataAttributeDAOFactory metadataAttribtueDAOFactory = new MetadataAttributeDAOFactory();
+        metadataCategoryService = new MetadataCategoryService(emf, metadataCategoryDAOFactory, metadataAttribtueDAOFactory);
 
         MetadataCategory category = metadataCategoryService.createNewMetadataCategory("Names", "Description",
-            MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional, false, false, new ArrayList<MetadataValue>());
+            MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional, false, false, new ArrayList<MetadataValue>(), new MetadataAttribute());
         assertNotNull(category.getId());
 
         final String value1 = "value1";
