@@ -103,7 +103,7 @@ public final class MetadataCategoryService implements IMetadataCategoryService
 
     @Override
     public void updateMetadataCategory(MetadataCategory existingMetadataCategoryToUpdate, String name, String description,
-            MetadataCategoryUse use, boolean inExtensible, List<MetadataValue> values)
+            MetadataCategoryUse use, boolean inExtensible, List<MetadataValue> values, final MetadataAttribute metadataAttribute)
     {
         final EntityManager em = this.emf.createEntityManager();
         try

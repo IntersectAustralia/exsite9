@@ -80,12 +80,18 @@ public class AddMetadataCategoryWizard extends Wizard
 
         for (final ResearchFile assignedFile : page1.getAssignedFiles())
         {
-            fileService.disassociateMultipleMetadataValues(assignedFile, metadataCategory, page1.getValuesToBeDisassociated());
+            fileService.disassociateMultipleMetadataValues(assignedFile, metadataCategory, page1.getMetadataValuesToBeDisassociated());
         }
         
         for (final Group assignedGroup : page1.getAssignedGroups())
         {
-            groupService.disassociateMultipleMetadataValues(assignedGroup, metadataCategory, page1.getValuesToBeDisassociated());
+            groupService.disassociateMultipleMetadataValues(assignedGroup, metadataCategory, page1.getMetadataValuesToBeDisassociated());
+        }
+
+        for (final MetadataAttributeValue mdav : page1.getMetadataAttributeValuesToBeDisassociated())
+        {
+            groupService.disassociateMetadataAttributeValue(metadataCategory, mdav);
+            fileService.disassociateMetadataAttributeValue(metadataCategory, mdav);
         }
         
         if (this.metadataCategory == null)
@@ -101,14 +107,28 @@ public class AddMetadataCategoryWizard extends Wizard
             {
                 metadataValues = Collections.emptyList();
                 final String metadataAttributeName = page1.getMetadataAttributeName();
-                metadataAttribute = new MetadataAttribute(metadataAttributeName, page1.getMetadataAttributeValues());
+                if (!metadataAttributeName.isEmpty())
+                {
+                    metadataAttribute = new MetadataAttribute(metadataAttributeName, page1.getMetadataAttributeValues());
+                }
+                else
+                {
+                    metadataAttribute = null;
+                }
             }
             final MetadataCategory newCategory = metadataCategoryService.createNewMetadataCategory(categoryTitle, categoryType, categoryUse, inextensible, false, metadataValues, metadataAttribute);
             schemaService.addMetadataCategoryToSchema(this.project.getSchema(), newCategory);
         }
         else
         {
-            metadataCategoryService.updateMetadataCategory(this.metadataCategory, categoryTitle, categoryDescription, categoryUse, inextensible, page1.getMetadataCategoryValues());
+            final MetadataAttribute mda = this.metadataCategory.getMetadataAttribute();
+            if (mda != null)
+            {
+                mda.setName(page1.getMetadataAttributeName());
+                mda.setMetadataAttributeValues(page1.getMetadataAttributeValues());
+            }
+
+            metadataCategoryService.updateMetadataCategory(this.metadataCategory, categoryTitle, categoryDescription, categoryUse, inextensible, page1.getMetadataCategoryValues(), mda);
         }
 
         return this.project != null;

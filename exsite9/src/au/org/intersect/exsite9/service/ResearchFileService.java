@@ -201,6 +201,33 @@ public class ResearchFileService implements IResearchFileService
     }
 
     @Override
+    public void disassociateMetadataAttributeValue(final MetadataCategory metadataCategory, final MetadataAttributeValue metadataAttributeValue)
+    {
+        final List<ResearchFile> files = getResearchFilesWithAssociatedMetadataAttribute(metadataCategory, metadataAttributeValue);
+        for (final ResearchFile file : files)
+        {
+            final List<MetadataAssociation> associations = file.getMetadataAssociations();
+            for (final MetadataAssociation association : associations)
+            {
+                if (association.getMetadataCategory().equals(metadataCategory) && association.getMetadataAttributeValue().equals(metadataAttributeValue))
+                {
+                    association.setMetadataAttributeValue(null);
+                    final EntityManager em = this.entityManagerFactory.createEntityManager();
+                    try
+                    {
+                        final MetadataAssociationDAO metadataAssociationDAO = this.metadataAssociationDAOFactory.createInstance(em);
+                        metadataAssociationDAO.updateMetadataAssociation(association);
+                    }
+                    finally
+                    {
+                        em.close();
+                    }
+                }
+            }
+        }
+    }
+    
+    @Override
     public List<ResearchFile> getResearchFilesWithAssociatedMetadata(MetadataCategory metadataCategory, MetadataValue metadataValue)
     {
         final EntityManager em = entityManagerFactory.createEntityManager();
@@ -210,6 +237,24 @@ public class ResearchFileService implements IResearchFileService
             final TypedQuery<ResearchFile> query = em.createQuery(queryJQL, ResearchFile.class);
             query.setParameter("category", metadataCategory);
             query.setParameter("value", metadataValue);
+            return query.getResultList();
+        }
+        finally
+        {
+            em.close();
+        }
+    }
+
+    @Override
+    public List<ResearchFile> getResearchFilesWithAssociatedMetadataAttribute(final MetadataCategory metadataCategory, final MetadataAttributeValue metadataAttributeValue)
+    {
+        final EntityManager em = entityManagerFactory.createEntityManager();
+        try
+        {
+            final String queryJQL = "SELECT f FROM ResearchFile f JOIN f.metadataAssociations a WHERE a.metadataCategory = :category AND a.metadataAttributeValue = :value";
+            final TypedQuery<ResearchFile> query = em.createQuery(queryJQL, ResearchFile.class);
+            query.setParameter("category", metadataCategory);
+            query.setParameter("value", metadataAttributeValue);
             return query.getResultList();
         }
         finally
@@ -412,5 +457,4 @@ public class ResearchFileService implements IResearchFileService
             em.close();
         }
     }
-    
 }

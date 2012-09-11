@@ -72,15 +72,15 @@ public final class EditMetadataCategoryWizard extends Wizard
 
         for (final ResearchFile assignedFile : editCategoryPage.getAssignedFiles())
         {
-            fileService.disassociateMultipleMetadataValues(assignedFile, metadataCategory, editCategoryPage.getValuesToBeDisassociated());
+            fileService.disassociateMultipleMetadataValues(assignedFile, metadataCategory, editCategoryPage.getMetadataValuesToBeDisassociated());
         }
 
         for (final Group assignedGroup : editCategoryPage.getAssignedGroups())
         {
-            groupService.disassociateMultipleMetadataValues(assignedGroup, metadataCategory, editCategoryPage.getValuesToBeDisassociated());
+            groupService.disassociateMultipleMetadataValues(assignedGroup, metadataCategory, editCategoryPage.getMetadataValuesToBeDisassociated());
         }
 
-        metadataCategoryService.updateMetadataCategory(metadataCategory, categoryTitle, categoryDescription, categoryUse, inextensible, values);
+        metadataCategoryService.updateMetadataCategory(metadataCategory, categoryTitle, categoryDescription, categoryUse, inextensible, values, null);
         return true;
     }
 }

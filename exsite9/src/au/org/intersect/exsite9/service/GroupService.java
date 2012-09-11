@@ -409,6 +409,33 @@ public final class GroupService implements IGroupService
         }
     }
 
+    @Override
+    public void disassociateMetadataAttributeValue(final MetadataCategory metadataCategory, final MetadataAttributeValue metadataAttributeValue)
+    {
+        final List<Group> groups = getGroupsWithAssociatedMetadataAttribute(metadataCategory, metadataAttributeValue);
+        for (final Group group : groups)
+        {
+            final List<MetadataAssociation> associations = group.getMetadataAssociations();
+            for (final MetadataAssociation association : associations)
+            {
+                if (association.getMetadataCategory().equals(metadataCategory) && association.getMetadataAttributeValue().equals(metadataAttributeValue))
+                {
+                    association.setMetadataAttributeValue(null);
+                    final EntityManager em = this.entityManagerFactory.createEntityManager();
+                    try
+                    {
+                        final MetadataAssociationDAO metadataAssociationDAO = this.metadataAssociationDAOFactory.createInstance(em);
+                        metadataAssociationDAO.updateMetadataAssociation(association);
+                    }
+                    finally
+                    {
+                        em.close();
+                    }
+                }
+            }
+        }
+    }
+
     private boolean moveGroupToNewGroup(Group child, Group oldParent, Group newParent)
     {
         if(oldParent.getGroups().remove(child))
@@ -459,6 +486,21 @@ public final class GroupService implements IGroupService
         {
             final GroupDAO groupDAO = groupDAOFactory.createInstance(em);
             return groupDAO.getGroupsWithAssociatedMetadata(metadataCategory, metadataValue);
+        }
+        finally
+        {
+            em.close();
+        }
+    }
+
+    @Override
+    public List<Group> getGroupsWithAssociatedMetadataAttribute(final MetadataCategory metadataCategory, final MetadataAttributeValue metadataAttributeValue)
+    {
+        final EntityManager em = entityManagerFactory.createEntityManager();
+        try
+        {
+            final GroupDAO groupDAO = groupDAOFactory.createInstance(em);
+            return groupDAO.getGroupsWithAssociatedMetadataAttribute(metadataCategory, metadataAttributeValue);
         }
         finally
         {

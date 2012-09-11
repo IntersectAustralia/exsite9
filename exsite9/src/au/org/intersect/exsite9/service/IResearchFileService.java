@@ -49,6 +49,8 @@ public interface IResearchFileService
 	 */
 	public void disassociateMetadata(final ResearchFile file, final MetadataCategory metadataCategory, final MetadataValue metadataValue);
 
+	public void disassociateMetadataAttributeValue(final MetadataCategory metadataCategory, final MetadataAttributeValue metadataAttributeValue);
+
 	/**
 	 * Dissassociates multiple metadata values from a research file.
 	 * @param file The file.
@@ -64,6 +66,8 @@ public interface IResearchFileService
 	 * @return The research files with the provided assocation.
 	 */
 	public List<ResearchFile> getResearchFilesWithAssociatedMetadata(final MetadataCategory metadataCategory, final MetadataValue metadataValue);
+
+	public List<ResearchFile> getResearchFilesWithAssociatedMetadataAttribute(MetadataCategory metadataCategory, MetadataAttributeValue toDelete);
 
 	/**
 	 * Obtains a research file by it's ID.
@@ -95,5 +99,4 @@ public interface IResearchFileService
     public void importFolderStructureForProject(final Project project, Folder folder);
 
     public void changeAFilesParentFolder(ResearchFile researchFile, long newFolderId);
-    
 }

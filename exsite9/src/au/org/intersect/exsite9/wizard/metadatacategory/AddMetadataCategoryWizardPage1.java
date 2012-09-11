@@ -72,10 +72,11 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     private List<MetadataAttributeValue> metadataAttributeValues;
     private MetadataCategory metadataCategory;
     
-    private final List<Group> assignedGroups = new ArrayList<Group>();
+    private final List<Group> metadataValueAssignedGroups = new ArrayList<Group>();
+    private final List<ResearchFile> metadataValueAssignedFiles = new ArrayList<ResearchFile>();
 
-    private final List<ResearchFile> assignedFiles = new ArrayList<ResearchFile>();
-    private final List<MetadataValue> valuesToBeDisassociated = new ArrayList<MetadataValue>();
+    private final List<MetadataValue> metadataValuesToBeDisassociated = new ArrayList<MetadataValue>();
+    private final List<MetadataAttributeValue> metadataAttributeValuesToBeDisassociated = new ArrayList<MetadataAttributeValue>();
 
     protected AddMetadataCategoryWizardPage1(final String pageTitle, final String pageDescription, final Schema schema, final MetadataCategory metadataCategory,
             final List<MetadataValue> metadataValues, final List<MetadataAttributeValue> metadataAttributeValues)
@@ -511,32 +512,32 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                 final IGroupService groupService = (IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class);
                 final IResearchFileService fileService = (IResearchFileService) PlatformUI.getWorkbench().getService(IResearchFileService.class);
 
-                assignedGroups.clear();
-                assignedFiles.clear();
-                assignedGroups.addAll(groupService.getGroupsWithAssociatedMetadata(metadataCategory, metadataValueToDelete));
-                assignedFiles.addAll(fileService.getResearchFilesWithAssociatedMetadata(metadataCategory, metadataValueToDelete));
+                metadataValueAssignedGroups.clear();
+                metadataValueAssignedFiles.clear();
+                metadataValueAssignedGroups.addAll(groupService.getGroupsWithAssociatedMetadata(metadataCategory, metadataValueToDelete));
+                metadataValueAssignedFiles.addAll(fileService.getResearchFilesWithAssociatedMetadata(metadataCategory, metadataValueToDelete));
                 
-                if (!assignedGroups.isEmpty() || !assignedFiles.isEmpty())
+                if (!metadataValueAssignedGroups.isEmpty() || !metadataValueAssignedFiles.isEmpty())
                 {
                     String messageString = null;
                     
                     //when the value is associated with both groups and files then display this
-                    if(!assignedGroups.isEmpty() && !assignedFiles.isEmpty())
+                    if(!metadataValueAssignedGroups.isEmpty() && !metadataValueAssignedFiles.isEmpty())
                     {
                         messageString = "Metadata value '" + metadataValueToDelete.getValue() + "' is currently associated with "
-                                + assignedGroups.size() + " group(s) and " + assignedFiles.size() + " file(s). Removing this value will cause these associations to also be deleted. Are you sure you want to proceed?";
+                                + metadataValueAssignedGroups.size() + " group(s) and " + metadataValueAssignedFiles.size() + " file(s). Removing this value will cause these associations to also be deleted. Are you sure you want to proceed?";
                     }
                     //when the value is associated only with groups and not files then display this
-                    else if(!assignedGroups.isEmpty() && assignedFiles.isEmpty())
+                    else if(!metadataValueAssignedGroups.isEmpty() && metadataValueAssignedFiles.isEmpty())
                     {
                         messageString = "Metadata value '" + metadataValueToDelete.getValue() + "' is currently associated with "
-                                + assignedGroups.size() + " group(s). Removing this value will cause these associations to also be deleted. Are you sure you want to proceed?";
+                                + metadataValueAssignedGroups.size() + " group(s). Removing this value will cause these associations to also be deleted. Are you sure you want to proceed?";
                     }
                     //when the value is associated only with files and not groups then display this
-                    else if(assignedGroups.isEmpty() && !assignedFiles.isEmpty())
+                    else if(metadataValueAssignedGroups.isEmpty() && !metadataValueAssignedFiles.isEmpty())
                     {
                         messageString = "Metadata value '" + metadataValueToDelete.getValue() + "' is currently associated with "
-                                + assignedFiles.size() + " file(s). Removing this value will cause these associations to also be deleted. Are you sure you want to proceed?";
+                                + metadataValueAssignedFiles.size() + " file(s). Removing this value will cause these associations to also be deleted. Are you sure you want to proceed?";
                     }
                     
                     final boolean deleteAssociations = MessageDialog.openConfirm(getShell(), "", messageString);
@@ -546,7 +547,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
                     }
                     else if (deleteAssociations)
                     {
-                        this.valuesToBeDisassociated.add(metadataValueToDelete);
+                        this.metadataValuesToBeDisassociated.add(metadataValueToDelete);
                     }
                 }
             }
@@ -559,7 +560,63 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         }
         else if (e.widget.equals(removeAttributeValueButton))
         {
-            // TODO
+            if (this.metadataAttributeValuesListWidget.getSelectionCount() == 0)
+            {
+                removeAttributeValueButton.setEnabled(metadataAttributeValuesListWidget.getSelectionCount() > 0);
+                editAttributeValueButton.setEnabled(metadataAttributeValuesListWidget.getSelectionCount() > 0);
+                return;
+            }
+
+            final int selectedIndex = this.metadataAttributeValuesListWidget.getSelectionIndex();
+
+            // Check to see if the metadata attribute value is assigned to anything - and throw a warning if it is being deleted!
+            if (this.metadataCategory != null)
+            {
+                final MetadataAttributeValue toDelete = this.metadataAttributeValues.get(selectedIndex);
+
+                final IGroupService groupService = (IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class);
+                final IResearchFileService fileService = (IResearchFileService) PlatformUI.getWorkbench().getService(IResearchFileService.class);
+
+                final List<Group> groupAssociations = groupService.getGroupsWithAssociatedMetadataAttribute(metadataCategory, toDelete);
+                final List<ResearchFile> fileAssociations = fileService.getResearchFilesWithAssociatedMetadataAttribute(metadataCategory, toDelete);
+
+                String messageString = null;
+                
+                //when the value is associated with both groups and files then display this
+                if(!groupAssociations.isEmpty() && !fileAssociations.isEmpty())
+                {
+                    messageString = "Metadata attribute value '" + toDelete.getValue() + "' is currently associated with "
+                            + groupAssociations.size() + " group(s) and " + fileAssociations.size() + " file(s). Removing this value will cause these attribute associations to also be deleted. Are you sure you want to proceed?";
+                }
+                //when the value is associated only with groups and not files then display this
+                else if(!groupAssociations.isEmpty() && fileAssociations.isEmpty())
+                {
+                    messageString = "Metadata value '" + toDelete.getValue() + "' is currently associated with "
+                            + groupAssociations.size() + " group(s). Removing this value will cause these associations to also be deleted. Are you sure you want to proceed?";
+                }
+                //when the value is associated only with files and not groups then display this
+                else if(groupAssociations.isEmpty() && !fileAssociations.isEmpty())
+                {
+                    messageString = "Metadata value '" + toDelete.getValue() + "' is currently associated with "
+                            + fileAssociations.size() + " file(s). Removing this value will cause these associations to also be deleted. Are you sure you want to proceed?";
+                }
+
+                final boolean deleteAssociations = MessageDialog.openConfirm(getShell(), "", messageString);
+                if (!deleteAssociations)
+                {
+                    return;
+                }
+                else if (deleteAssociations)
+                {
+                    this.metadataAttributeValuesToBeDisassociated.add(toDelete);
+                }
+            }
+
+            this.metadataAttributeValues.remove(selectedIndex);
+            this.metadataAttributeValuesListWidget.remove(selectedIndex);
+
+            removeAttributeValueButton.setEnabled(metadataAttributeValuesListWidget.getSelectionCount() > 0);
+            editAttributeValueButton.setEnabled(metadataAttributeValuesListWidget.getSelectionCount() > 0);
         }
         else if (e.widget.equals(editValueButton))
         {
@@ -638,7 +695,8 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         return this.metadataAttributeNameField.getContents().trim();
     }
 
-    public String getCategoryDescription(){
+    public String getCategoryDescription()
+    {
         return this.descriptionText.getText().trim();
     }
     
@@ -659,17 +717,22 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     
     public List<Group> getAssignedGroups()
     {
-        return assignedGroups;
+        return metadataValueAssignedGroups;
     }
 
     public List<ResearchFile> getAssignedFiles()
     {
-        return assignedFiles;
+        return metadataValueAssignedFiles;
     }
 
-    public List<MetadataValue> getValuesToBeDisassociated()
+    public List<MetadataValue> getMetadataValuesToBeDisassociated()
     {
-        return valuesToBeDisassociated;
+        return metadataValuesToBeDisassociated;
+    }
+
+    public List<MetadataAttributeValue> getMetadataAttributeValuesToBeDisassociated()
+    {
+        return metadataAttributeValuesToBeDisassociated;
     }
 
     public List<MetadataAttributeValue> getMetadataAttributeValues()
@@ -679,7 +742,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
 
     public boolean getIsInextensible()
     {
-       return this.inextensibleCheckbox.getSelection();
+        return this.inextensibleCheckbox.getSelection();
     }
     
     void setMetadataCategory(final MetadataCategory metadataCategory)

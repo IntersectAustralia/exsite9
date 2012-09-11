@@ -29,8 +29,6 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
@@ -331,10 +329,11 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
 
                 if (combo != null)
                 {
-                    combo.addModifyListener(new ModifyListener()
+                    combo.addSelectionListener(new SelectionListener()
                     {
+                        
                         @Override
-                        public void modifyText(final ModifyEvent e)
+                        public void widgetSelected(final SelectionEvent e)
                         {
                             if (!validMetadataAssignablesSelected(false))
                             {
@@ -342,12 +341,17 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                                 applyButton.setEnabled(false);
                                 return;
                             }
-
+                            
                             final MetadataAttributeValue oldValue = metadataAttributeValueCombos.get(metadataCategory).getMetadataAttributeValue();
                             final MetadataAttributeValue currentValue = combo.getSelectedMetadataAttributeValue();
                             final boolean enabled = !Objects.equal(oldValue, currentValue);
                             resetButton.setEnabled(enabled);
                             applyButton.setEnabled(enabled && !freeTextField.getText().trim().isEmpty());
+                        }
+                        
+                        @Override
+                        public void widgetDefaultSelected(SelectionEvent e)
+                        {
                         }
                     });
                 }

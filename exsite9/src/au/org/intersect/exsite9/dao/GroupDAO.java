@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import au.org.intersect.exsite9.domain.Group;
+import au.org.intersect.exsite9.domain.MetadataAttributeValue;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.ResearchFile;
@@ -77,6 +78,15 @@ public final class GroupDAO
         query.setParameter("value", metadataValue);
         return query.getResultList();
     }
+
+    public List<Group> getGroupsWithAssociatedMetadataAttribute(final MetadataCategory metadataCategory, final MetadataAttributeValue metadataAttributeValue)
+    {
+        final String queryJQL = "SELECT g FROM Group g JOIN g,metadataAssociations a WHERE a.metadataCategory = :category AND a.metadataAttributeValue = :value";
+        final TypedQuery<Group> query = em.createQuery(queryJQL, Group.class);
+        query.setParameter("category", metadataCategory);
+        query.setParameter("value", metadataAttributeValue);
+        return null;
+    }
     
     /**
      * Returns the list of groups in the hierarchy between the root group
@@ -127,5 +137,4 @@ public final class GroupDAO
         }
         return groups;
     }
-
 }

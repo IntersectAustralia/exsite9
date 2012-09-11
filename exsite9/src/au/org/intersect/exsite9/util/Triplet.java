@@ -47,7 +47,7 @@ public final class Triplet<F, S, T> extends Pair<F, S>
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().appendSuper(super.hashCode()).append(this.third.hashCode()).toHashCode();
+        return new HashCodeBuilder().appendSuper(super.hashCode()).append(this.third).toHashCode();
     }
 
     @Override

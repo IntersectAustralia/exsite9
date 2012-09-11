@@ -79,8 +79,9 @@ public interface IGroupService
      */
     void disassociateMetadata(final Group group, final MetadataCategory metadataCategory, final MetadataValue metadataValue);
 
-    void disassociateMultipleMetadataValues(final Group group, final MetadataCategory metadataCategory, final List<MetadataValue> metadataValues);
+    void disassociateMetadataAttributeValue(final MetadataCategory metadataCategory, final MetadataAttributeValue metadataVale);
 
+    void disassociateMultipleMetadataValues(final Group group, final MetadataCategory metadataCategory, final List<MetadataValue> metadataValues);
 
     /**
      * Determines which groups are associated with a metadata category/value pair.
@@ -89,6 +90,8 @@ public interface IGroupService
      * @return A list of group associated with a metadata category/value pair.
      */
     List<Group> getGroupsWithAssociatedMetadata(final MetadataCategory metadataCategory, final MetadataValue metadataValue);
+
+    List<Group> getGroupsWithAssociatedMetadataAttribute(final MetadataCategory metadataCategory, final MetadataAttributeValue metadataAttributeValue);
 
     /**
      * Obtains a group by its ID.
