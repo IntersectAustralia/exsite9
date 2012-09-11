@@ -607,7 +607,7 @@
             </command>
             <command
                   commandId="au.org.intersect.exsite9.commands.ExportSubmissionPackageXMLCommand"
-                  label="Export XML From Submission Package..."
+                  label="Export XML"
                   style="push">
                <visibleWhen
                      checkEnabled="false">
@@ -618,7 +618,7 @@
             </command>
             <command
                   commandId="au.org.intersect.exsite9.commands.ExportSubmissionPackageZIPCommand"
-                  label="Export ZIP From Submission Package..."
+                  label="Export ZIP"
                   style="push">
                <visibleWhen
                      checkEnabled="false">
