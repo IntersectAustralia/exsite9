@@ -39,10 +39,10 @@ import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.Schema;
 import au.org.intersect.exsite9.service.IGroupService;
 import au.org.intersect.exsite9.service.IResearchFileService;
+import au.org.intersect.exsite9.validators.MetadataAttributeNameValidator;
 import au.org.intersect.exsite9.validators.MetadataAttributeValueValidator;
 import au.org.intersect.exsite9.validators.MetadataCategoryNameValidator;
 import au.org.intersect.exsite9.validators.MetadataValueValidator;
-import au.org.intersect.exsite9.wizard.MaximumLengthFieldValidator;
 import au.org.intersect.exsite9.wizard.WizardPageErrorHandler;
 
 public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyListener, SelectionListener
@@ -117,15 +117,13 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         final Label projectNameLabel = new Label(this.container, SWT.NULL);
         projectNameLabel.setText("Category Title");
 
-        categoryNameField = this.stringValidatorToolkit.createTextField(this.container, new MetadataCategoryNameValidator(this.schema.getMetadataCategories(), this.metadataCategory),
+        this.categoryNameField = this.stringValidatorToolkit.createTextField(this.container, new MetadataCategoryNameValidator(this.schema.getMetadataCategories(), this.metadataCategory),
             true, metadataCategory == null ? "" : metadataCategory.getName());
-
         this.categoryNameField.getControl().addKeyListener(this);
 
         // empty cell due to having 3 columns below
         new Label(container, SWT.NULL);
 
-        
         final Label categoryDescriptionLabel = new Label(this.container, SWT.NULL);
         categoryDescriptionLabel.setText("Description");
 
@@ -207,7 +205,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
             @Override
             public void widgetSelected(SelectionEvent e)
             {
-                setPageComplete(categoryNameField.isValid()); 
+                setPageComplete(allFieldsAreValid()); 
             }
             
             @Override
@@ -237,7 +235,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
             @Override
             public void widgetSelected(SelectionEvent e)
             {
-                setPageComplete(categoryNameField.isValid());                
+                setPageComplete(allFieldsAreValid());
                 
                 if (!inextensibleCheckbox.getSelection())
                 {
@@ -315,8 +313,8 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         final Label metadataAttributeLabel = new Label(this.container, SWT.NULL);
         metadataAttributeLabel.setText("Attribute Name");
 
-        this.metadataAttributeNameField = this.stringValidatorToolkit.createTextField(this.container, new MaximumLengthFieldValidator("Attribute Name", 255),
-                false, "");
+        this.metadataAttributeNameField = this.stringValidatorToolkit.createTextField(this.container, new MetadataAttributeNameValidator(), true, "");
+        this.metadataAttributeNameField.getControl().addKeyListener(this);
 
         final GridData singleLineGridData = new GridData(GridData.FILL_HORIZONTAL);
         final GridData multiLineGridData = new GridData(GridData.FILL_BOTH);
@@ -442,7 +440,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         this.parent.layout();
 
         setControl(this.container);
-        setPageComplete(false);
+        setPageComplete(allFieldsAreValid());
     }
 
     @Override
@@ -453,7 +451,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     @Override
     public void keyReleased(KeyEvent e)
     {
-        setPageComplete(this.categoryNameField.isValid());
+        setPageComplete(allFieldsAreValid());
     }
 
     @Override
@@ -688,7 +686,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
             this.metadataAttributeValues.get(this.metadataAttributeValuesListWidget.getSelectionIndex()).setValue(userInput.getValue().trim());
             this.metadataAttributeValuesListWidget.setItem(this.metadataAttributeValuesListWidget.getSelectionIndex(), userInput.getValue().trim());
         }
-        setPageComplete(this.categoryNameField.isValid());
+        setPageComplete(allFieldsAreValid());
     }
     
     @Override
@@ -700,7 +698,19 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
     @Override
     public void widgetDefaultSelected(SelectionEvent e)
     {
+    }
 
+    private boolean allFieldsAreValid()
+    {
+        if (!this.categoryNameField.isValid())
+        {
+            return false;
+        }
+        if (getMetadataCategoryType() == MetadataCategoryType.FREETEXT && !getMetadataAttributeValues().isEmpty())
+        {
+            return !this.metadataAttributeNameField.getContents().isEmpty() && this.metadataAttributeNameField.isValid();
+        }
+        return true;
     }
 
     public String getMetadataCategoryName()

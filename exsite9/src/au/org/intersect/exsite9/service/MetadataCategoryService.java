@@ -78,14 +78,15 @@ public final class MetadataCategoryService implements IMetadataCategoryService
         try
         {
             final MetadataCategoryDAO mdcDAO = this.metadataCategoryDAOFactory.createInstance(em);
-            final MetadataAttributeDAO mdaDAO = this.metadataAttributeDAOFactory.createInstance(em);
 
             final MetadataAttribute mda = metadataCategory.getMetadataAttribute();
             if (mda != null)
             {
+                final MetadataAttributeDAO mdaDAO = this.metadataAttributeDAOFactory.createInstance(em);
+                metadataCategory.setMetadataAttribute(null);
+                mdcDAO.updateMetadataCategory(metadataCategory);
                 mdaDAO.delete(mda);
             }
-
             mdcDAO.delete(metadataCategory);
         }
         finally
@@ -124,14 +125,20 @@ public final class MetadataCategoryService implements IMetadataCategoryService
             existingMetadataCategoryToUpdate.setUse(use);
             existingMetadataCategoryToUpdate.setInextensible(inExtensible);
             existingMetadataCategoryToUpdate.setValues(values);
+
+            final MetadataAttribute oldMetadataAttribute = existingMetadataCategoryToUpdate.getMetadataAttribute();
             existingMetadataCategoryToUpdate.setMetadataAttribute(metadataAttribute);
+            mdcDAO.updateMetadataCategory(existingMetadataCategoryToUpdate);
 
             if (metadataAttribute != null)
             {
                 mdaDAO.updateMetadataAttribute(metadataAttribute);
             }
-           
-            mdcDAO.updateMetadataCategory(existingMetadataCategoryToUpdate);
+
+            if (oldMetadataAttribute != null && metadataAttribute == null)
+            {
+                mdaDAO.delete(oldMetadataAttribute);
+            }
         }
         finally
         {

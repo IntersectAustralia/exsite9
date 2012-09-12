@@ -55,7 +55,7 @@ public final class MetadataCategoryNameValidator implements IFieldValidator<Stri
             return false;
         }
 
-        if (!XMLUtils.isValidElementName(contents.trim()))
+        if (!XMLUtils.isValidElementOrAttribute(contents.trim()))
         {
             this.errorMessage = "Category name is not a valid XML element.";
             return false;

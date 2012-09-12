@@ -14,7 +14,7 @@ public class XMLUtils
      * @param name The string to check
      * @return True if valid
      */
-    public static boolean isValidElementName(String name)
+    public static boolean isValidElementOrAttribute(String name)
     {
         
         // Can't start with punctuation or a number
@@ -33,11 +33,6 @@ public class XMLUtils
         // semi-colon, asterisk, open and close (), open and close {}, open and close []
         // plus sign, single quote, double quote, question mark, exclamation mark, back tick
         // tilde, at sign, dollar sign, percent sign, caret, equals, comma
-        if(name.matches("^[a-zA-Z].*[\\s&<>/\\\\|;\\*\\(\\)\\{\\}\\[\\]\\+'\"\\?\\!`~@\\$\\%\\^=,].*"))
-        {
-            return false;
-        }
-        
-        return true;
+        return !name.matches("^[a-zA-Z].*[\\s&<>/\\\\|;\\*\\(\\)\\{\\}\\[\\]\\+'\"\\?\\!`~@\\$\\%\\^=,].*");
     }
 }

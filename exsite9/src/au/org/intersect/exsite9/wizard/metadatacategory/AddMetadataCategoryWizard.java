@@ -131,13 +131,37 @@ public class AddMetadataCategoryWizard extends Wizard
         }
         else
         {
-            final MetadataAttribute mda = this.metadataCategory.getMetadataAttribute();
-            if (mda != null)
+            final MetadataAttribute oldMDA = this.metadataCategory.getMetadataAttribute();
+            final MetadataAttribute newMDA;
+
+            if (oldMDA != null)
             {
-                mda.setName(page1.getMetadataAttributeName());
-                mda.setMetadataAttributeValues(page1.getMetadataAttributeValues());
+                final String attrName = page1.getMetadataAttributeName();
+                if (!attrName.isEmpty())
+                {
+                    newMDA = oldMDA;
+                    newMDA.setName(page1.getMetadataAttributeName());
+                    newMDA.setMetadataAttributeValues(page1.getMetadataAttributeValues());
+                }
+                else
+                {
+                    newMDA = null;
+                }
             }
-            metadataCategoryService.updateMetadataCategory(this.metadataCategory, categoryTitle, categoryDescription, categoryUse, inextensible, page1.getMetadataCategoryValues(), mda);
+            else
+            {
+                final String attrName = page1.getMetadataAttributeName();
+                if (!attrName.isEmpty())
+                {
+                    newMDA = new MetadataAttribute(attrName, page1.getMetadataAttributeValues());
+                }
+                else
+                {
+                    newMDA = null;
+                }
+            }
+
+            metadataCategoryService.updateMetadataCategory(this.metadataCategory, categoryTitle, categoryDescription, categoryUse, inextensible, page1.getMetadataCategoryValues(), newMDA);
         }
 
         return this.project != null;

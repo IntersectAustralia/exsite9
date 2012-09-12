@@ -88,13 +88,37 @@ public final class EditMetadataCategoryWizard extends Wizard
             fileService.disassociateMetadataAttributeValue(metadataCategory, mdav);
         }
 
-        final MetadataAttribute mda = metadataCategory.getMetadataAttribute();
-        if (mda != null)
+        final MetadataAttribute oldMDA = metadataCategory.getMetadataAttribute();
+        final MetadataAttribute newMDA;
+
+        if (oldMDA != null)
         {
-            mda.setName(editCategoryPage.getMetadataAttributeName());
-            mda.setMetadataAttributeValues(editCategoryPage.getMetadataAttributeValues());
+            final String attrName = editCategoryPage.getMetadataAttributeName();
+            if (!attrName.isEmpty())
+            {
+                newMDA = oldMDA;
+                newMDA.setName(editCategoryPage.getMetadataAttributeName());
+                newMDA.setMetadataAttributeValues(editCategoryPage.getMetadataAttributeValues());
+            }
+            else
+            {
+                newMDA = null;
+            }
         }
-        metadataCategoryService.updateMetadataCategory(metadataCategory, categoryTitle, categoryDescription, categoryUse, inextensible, values, mda);
+        else
+        {
+            final String attrName = editCategoryPage.getMetadataAttributeName();
+            if (!attrName.isEmpty())
+            {
+                newMDA = new MetadataAttribute(attrName, editCategoryPage.getMetadataAttributeValues());
+            }
+            else
+            {
+                newMDA = null;
+            }
+        }
+
+        metadataCategoryService.updateMetadataCategory(metadataCategory, categoryTitle, categoryDescription, categoryUse, inextensible, values, newMDA);
         return true;
     }
 }
