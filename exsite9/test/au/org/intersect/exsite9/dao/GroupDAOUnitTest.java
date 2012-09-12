@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -14,6 +15,8 @@ import org.junit.Test;
 import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataAssociation;
+import au.org.intersect.exsite9.domain.MetadataAttribute;
+import au.org.intersect.exsite9.domain.MetadataAttributeValue;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataCategoryUse;
@@ -162,6 +165,52 @@ public class GroupDAOUnitTest extends DAOTest
         groupDAO.updateGroup(group);
 
         final List<Group> out = groupDAO.getGroupsWithAssociatedMetadata(cat, val);
+        assertFalse(out.isEmpty());
+        assertEquals(1, out.size());
+        assertEquals(group, out.get(0));
+
+        em.close();
+    }
+
+    @Test
+    public void testGetGroupsWithAssociatedMetadataAttribute()
+    {
+        final EntityManager em = createEntityManager();
+        final GroupDAO groupDAO = groupDAOFactory.createInstance(em);
+
+        final MetadataAssociationDAO metadataAssociationDAO = new MetadataAssociationDAO(em);
+        final MetadataCategoryDAO metadataCategoryDAO = new MetadataCategoryDAO(em);
+        final MetadataAttributeDAO metadataAttributeDAO = new MetadataAttributeDAO(em);
+
+        final Group group = new Group("group with metadata and attribute");
+        groupDAO.createGroup(group);
+        assertNotNull(group.getId());
+
+        final MetadataCategory cat = new MetadataCategory("some metadata category", MetadataCategoryType.FREETEXT, MetadataCategoryUse.optional);
+        final MetadataValue val = new MetadataValue("some value");
+        cat.getValues().add(val);
+        final MetadataAttributeValue mdav = new MetadataAttributeValue("mdav");
+        final MetadataAttribute mda = new MetadataAttribute("name", Arrays.asList(mdav));
+        metadataAttributeDAO.createMetadataAttribute(mda);
+        
+        cat.setMetadataAttribute(mda);
+        metadataCategoryDAO.createMetadataCategory(cat);
+
+        assertNotNull(cat.getId());
+        assertNotNull(val.getId());
+        assertNotNull(mdav.getId());
+        assertNotNull(mda.getId());
+
+        final MetadataAssociation metadataAssociation = new MetadataAssociation(cat);
+        metadataAssociation.getMetadataValues().add(val);
+        metadataAssociation.setMetadataAttributeValue(mdav);
+        metadataAssociationDAO.createMetadataAssociation(metadataAssociation);
+        assertNotNull(metadataAssociation.getId());
+
+        group.getMetadataAssociations().add(metadataAssociation);
+        groupDAO.updateGroup(group);
+
+        final List<Group> out = groupDAO.getGroupsWithAssociatedMetadataAttribute(cat, mdav);
         assertFalse(out.isEmpty());
         assertEquals(1, out.size());
         assertEquals(group, out.get(0));

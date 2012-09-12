@@ -20,6 +20,7 @@ import org.junit.Test;
 
 import au.org.intersect.exsite9.dao.DAOTest;
 import au.org.intersect.exsite9.dao.FolderDAO;
+import au.org.intersect.exsite9.dao.MetadataAttributeDAO;
 import au.org.intersect.exsite9.dao.MetadataCategoryDAO;
 import au.org.intersect.exsite9.dao.ProjectDAO;
 import au.org.intersect.exsite9.dao.ResearchFileDAO;
@@ -30,6 +31,8 @@ import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.MetadataAssociation;
+import au.org.intersect.exsite9.domain.MetadataAttribute;
+import au.org.intersect.exsite9.domain.MetadataAttributeValue;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataCategoryUse;
@@ -219,6 +222,68 @@ public final class ResearchFileServiceUnitTest extends DAOTest
         toTest.disassociateMetadata(rf, metadataCategory2, metadataValue3);
         metadataAssociations = rf.getMetadataAssociations();
         assertEquals(0, metadataAssociations.size());
+    }
+
+    @Test
+    public void testDisassociateMetadataAttributeValue()
+    {
+        final EntityManagerFactory emf = mock(EntityManagerFactory.class);
+        stub(emf.createEntityManager()).toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager());
+
+        final MetadataAssociationDAOFactory metadataAssocationDAOFactory = new MetadataAssociationDAOFactory();
+        final MetadataCategoryDAO metadataCategoryDAO = new MetadataCategoryDAO(createEntityManager());
+        final MetadataAttributeDAO metadataAttributeDAO = new MetadataAttributeDAO(createEntityManager());
+        final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
+        final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
+        final FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
+        final ResearchFileDAO researchFileDAO = new ResearchFileDAO(createEntityManager());
+        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final ResearchFileService toTest = new ResearchFileService(emf, projectDAOFactory, researchFileDAOFactory, metadataAssocationDAOFactory, folderDAOFactory, groupDAOFactory);
+
+        // Disassociate metadata that is not associated.
+        final MetadataCategory metadataCategory1 = new MetadataCategory("metadataCategory", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
+        final MetadataValue metadataValue1 = new MetadataValue("metadataValue");
+        metadataCategory1.getValues().add(metadataValue1);
+        metadataCategoryDAO.createMetadataCategory(metadataCategory1);
+
+        final MetadataCategory metadataCategory2 = new MetadataCategory("metadataCategory two", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
+        final MetadataValue metadataValue2 = new MetadataValue("metadataValue two");
+        final MetadataValue metadataValue3 = new MetadataValue("metadataValue three");
+        metadataCategory2.getValues().add(metadataValue2);
+        metadataCategory2.getValues().add(metadataValue3);
+        metadataCategoryDAO.createMetadataCategory(metadataCategory2);
+
+        final MetadataAttributeValue metadataAttributeValue1 = new MetadataAttributeValue("some value");
+        final MetadataAttribute metadataAttribute1 = new MetadataAttribute("some attribute", Arrays.asList(metadataAttributeValue1));
+        metadataAttributeDAO.createMetadataAttribute(metadataAttribute1);
+        
+        final File file = new File("some file");
+        final ResearchFile rf = new ResearchFile(file);
+        researchFileDAO.createResearchFile(rf);
+        assertNotNull(rf.getId());
+
+        toTest.disassociateMetadataAttributeValue(metadataCategory1, metadataAttributeValue1);
+        assertTrue(rf.getMetadataAssociations().isEmpty());
+        toTest.associateMetadata(rf, metadataCategory1, metadataValue1, metadataAttributeValue1);
+        toTest.associateMetadata(rf, metadataCategory2, metadataValue2, null);
+        toTest.associateMetadata(rf, metadataCategory2, metadataValue3, null);
+
+        List<MetadataAssociation> metadataAssociations = rf.getMetadataAssociations();
+        assertEquals(2, metadataAssociations.size());
+
+        toTest.disassociateMetadataAttributeValue(metadataCategory1, metadataAttributeValue1);
+        metadataAssociations = toTest.findResearchFileByID(rf.getId()).getMetadataAssociations();
+        assertEquals(2, metadataAssociations.size());
+
+        assertNull(metadataAssociations.get(0).getMetadataAttributeValue());
+        assertNull(metadataAssociations.get(1).getMetadataAttributeValue());
     }
 
     @Test

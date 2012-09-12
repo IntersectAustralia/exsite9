@@ -10,6 +10,7 @@ import static org.junit.Assert.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -19,6 +20,8 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import au.org.intersect.exsite9.domain.MetadataAttribute;
+import au.org.intersect.exsite9.domain.MetadataAttributeValue;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataCategoryUse;
@@ -40,7 +43,12 @@ public final class MetadataSchemaXMLReaderUnitTest
             + "  <metadata_category name=\"cat1\" type=\"Controlled Vocabulary\" use=\"optional\">" + NEW_LINE
             + "    <value>value one</value>" + NEW_LINE
             + "  </metadata_category>" + NEW_LINE
-            + "  <metadata_category name=\"cat2\" type=\"Free Text\" use=\"recommended\"/>" + NEW_LINE
+            + "  <metadata_category inextensible=\"true\" name=\"cat2\" type=\"Free Text\" use=\"recommended\">" + NEW_LINE
+            + "    <attribute name=\"attr1\">" + NEW_LINE
+            + "      <value>mdav1</value>" + NEW_LINE
+            + "      <value>mdav2</value>" + NEW_LINE
+            + "    </attribute>" + NEW_LINE
+            + "  </metadata_category>" + NEW_LINE
             + "</schema>" + NEW_LINE;
 
         final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -61,11 +69,19 @@ public final class MetadataSchemaXMLReaderUnitTest
         assertEquals(MetadataCategoryUse.optional, cat1.getUse());
         assertEquals(1, cat1.getValues().size());
         assertEquals("value one", cat1.getValues().get(0).getValue());
+        assertNull(cat1.getMetadataAttribute());
         final MetadataCategory cat2 = schema.getMetadataCategories().get(1);
         assertEquals("cat2", cat2.getName());
         assertEquals(MetadataCategoryType.FREETEXT, cat2.getType());
         assertEquals(MetadataCategoryUse.recommended, cat2.getUse());
         assertEquals(0, cat2.getValues().size());
+        final MetadataAttribute attr1 = cat2.getMetadataAttribute();
+        assertNotNull(attr1);
+        assertEquals("attr1", attr1.getName());
+        final List<MetadataAttributeValue> attrValues = attr1.getMetadataAttributeValues();
+        assertEquals(2, attrValues.size());
+        assertEquals("mdav1", attrValues.get(0).getValue());
+        assertEquals("mdav2", attrValues.get(1).getValue());
     }
 
     @Test

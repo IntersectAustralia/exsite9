@@ -16,6 +16,8 @@ import org.junit.Test;
 import au.org.intersect.exsite9.domain.FieldOfResearch;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataAssociation;
+import au.org.intersect.exsite9.domain.MetadataAttribute;
+import au.org.intersect.exsite9.domain.MetadataAttributeValue;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataCategoryUse;
@@ -68,8 +70,20 @@ public final class ProjectXMLBuilderUnitTest
         final MetadataValue mdv11 = new MetadataValue("val11");
         final MetadataValue mdv12 = new MetadataValue("val12");
         final MetadataValue mdv13 = new MetadataValue("val13");
+
         final MetadataAssociation mda1 = new MetadataAssociation(mdc1);
         mda1.getMetadataValues().addAll(Arrays.asList(mdv11, mdv12, mdv13));
+
+        final MetadataCategory mdc2 = new MetadataCategory("AnotherCategory", MetadataCategoryType.FREETEXT, MetadataCategoryUse.optional);
+        final MetadataAttributeValue mdav1 = new MetadataAttributeValue("attrVal1");
+        final MetadataAttributeValue mdav2 = new MetadataAttributeValue("attrVal2");
+        final MetadataAttribute mda = new MetadataAttribute("someAttribute", Arrays.asList(mdav1, mdav2));
+        final MetadataValue mdv14 = new MetadataValue("some free text");
+        mdc2.setMetadataAttribute(mda);
+
+        final MetadataAssociation mda2 = new MetadataAssociation(mdc2);
+        mda2.getMetadataValues().add(mdv14);
+        mda2.setMetadataAttributeValue(mdav1);
 
         final File file1 = new File("someResearchFile.txt");
         final File file2 = new File("someOtherResearchFile.txt");
@@ -79,6 +93,8 @@ public final class ProjectXMLBuilderUnitTest
         final Group group1 = new Group("group1");
         group1.getMetadataAssociations().add(mda1);
         group1.getResearchFiles().add(rf1);
+
+        rf1.getMetadataAssociations().add(mda2);
 
         final Group innerGroup1 = new Group("innerGroup1");
         group1.getGroups().add(innerGroup1);
@@ -128,6 +144,7 @@ public final class ProjectXMLBuilderUnitTest
                                     "        <file>" + NEW_LINE +
                                     "          <name>" + rf1.getFile().getName() + "</name>" + NEW_LINE +
                                     "          <path>" + rf1.getFile().getAbsolutePath() + "</path>" + NEW_LINE +
+                                    "          <AnotherCategory someAttribute=\"attrVal1\">some free text</AnotherCategory>" + NEW_LINE +
                                     "        </file>" + NEW_LINE +
                                     "      </files>" + NEW_LINE +
                                     "    </group>" + NEW_LINE +

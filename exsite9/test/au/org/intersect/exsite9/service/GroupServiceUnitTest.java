@@ -6,6 +6,7 @@ import static org.mockito.Mockito.stub;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.EntityManagerFactory;
@@ -15,6 +16,7 @@ import org.junit.Test;
 import au.org.intersect.exsite9.dao.DAOTest;
 import au.org.intersect.exsite9.dao.GroupDAO;
 import au.org.intersect.exsite9.dao.MetadataAssociationDAO;
+import au.org.intersect.exsite9.dao.MetadataAttributeDAO;
 import au.org.intersect.exsite9.dao.MetadataCategoryDAO;
 import au.org.intersect.exsite9.dao.ResearchFileDAO;
 import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
@@ -22,6 +24,8 @@ import au.org.intersect.exsite9.dao.factory.MetadataAssociationDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataAssociation;
+import au.org.intersect.exsite9.domain.MetadataAttribute;
+import au.org.intersect.exsite9.domain.MetadataAttributeValue;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataCategoryUse;
@@ -387,6 +391,63 @@ public class GroupServiceUnitTest extends DAOTest
         groupService.disassociateMetadata(group, metadataCategory2, metadataValue3);
         metadataAssociations = group.getMetadataAssociations();
         assertEquals(0, metadataAssociations.size());
+    }
+
+    @Test
+    public void testDisassociateMetadataAttributeValue()
+    {
+        final EntityManagerFactory emf = mock(EntityManagerFactory.class);
+        stub(emf.createEntityManager()).toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager());
+
+        final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final MetadataAssociationDAOFactory metadataAssocationDAOFactory = new MetadataAssociationDAOFactory();
+        final MetadataCategoryDAO metadataCategoryDAO = new MetadataCategoryDAO(emf.createEntityManager());
+        final MetadataAttributeDAO metadataAttributeDAO = new MetadataAttributeDAO(emf.createEntityManager());
+        final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
+        groupService = new GroupService(emf, groupDAOFactory, metadataAssocationDAOFactory, researchFileDAOFactory);
+
+        // Disassociate metadata attribute that is not associated.
+        final MetadataCategory metadataCategory1 = new MetadataCategory("metadataCategory", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
+        final MetadataValue metadataValue1 = new MetadataValue("metadataValue");
+        metadataCategory1.getValues().add(metadataValue1);
+        metadataCategoryDAO.createMetadataCategory(metadataCategory1);
+
+        final MetadataCategory metadataCategory2 = new MetadataCategory("metadataCategory two", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
+        final MetadataValue metadataValue2 = new MetadataValue("metadataValue two");
+        final MetadataValue metadataValue3 = new MetadataValue("metadataValue three");
+        metadataCategory2.getValues().add(metadataValue2);
+        metadataCategory2.getValues().add(metadataValue3);
+        metadataCategoryDAO.createMetadataCategory(metadataCategory2);
+
+        final MetadataAttributeValue metadataAttributeValue1 = new MetadataAttributeValue("some value");
+        final MetadataAttribute metadataAttribute1 = new MetadataAttribute("attribute", Arrays.asList(metadataAttributeValue1));
+        metadataAttributeDAO.createMetadataAttribute(metadataAttribute1);
+
+        final Group group = groupService.createNewGroup("group name");
+        groupService.disassociateMetadataAttributeValue(metadataCategory1, metadataAttributeValue1);
+        assertTrue(group.getMetadataAssociations().isEmpty());
+        groupService.associateMetadata(group, metadataCategory1, metadataValue1, metadataAttributeValue1);
+        groupService.associateMetadata(group, metadataCategory2, metadataValue2, null);
+        groupService.associateMetadata(group, metadataCategory2, metadataValue3, null);
+
+        List<MetadataAssociation> metadataAssociations = group.getMetadataAssociations();
+        assertEquals(2, metadataAssociations.size());
+
+        groupService.disassociateMetadataAttributeValue(metadataCategory1, metadataAttributeValue1);
+        metadataAssociations = groupService.findGroupByID(group.getId()).getMetadataAssociations();
+        assertEquals(2, metadataAssociations.size());
+
+        assertNull(metadataAssociations.get(0).getMetadataAttributeValue());
+        assertNull(metadataAssociations.get(1).getMetadataAttributeValue());
     }
 
     @Test

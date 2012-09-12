@@ -22,17 +22,17 @@ public final class MetadataAttributeDAO
         this.em = em;
     }
 
-    public void createMetadataAttribute(final MetadataAttribute mdc)
+    public void createMetadataAttribute(final MetadataAttribute mda)
     {
         em.getTransaction().begin();
-        em.persist(mdc);
+        em.persist(mda);
         em.getTransaction().commit();
     }
 
-    public void updateMetadataAttribute(final MetadataAttribute mdc)
+    public void updateMetadataAttribute(final MetadataAttribute mda)
     {
         em.getTransaction().begin();
-        em.merge(mdc);
+        em.merge(mda);
         em.getTransaction().commit();
     }
 
@@ -41,10 +41,10 @@ public final class MetadataAttributeDAO
         return em.find(MetadataAttribute.class, id);        
     }
 
-    public void delete(final MetadataAttribute mdc)
+    public void delete(final MetadataAttribute mda)
     {
         em.getTransaction().begin();
-        em.remove(em.merge(mdc));
+        em.remove(em.merge(mda));
         em.getTransaction().commit();
     }
 }
