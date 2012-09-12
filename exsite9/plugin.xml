@@ -232,7 +232,6 @@
        name="Move selected items to new Group">
  </command>
  <command
-       defaultHandler="au.org.intersect.exsite9.commands.handlers.SortResearchFilesInGroupHandler"
        id="au.org.intersect.exsite9.commands.SortResearchFilesInGroupCommand"
        name="Sort Research Files in Group">
     <commandParameter
@@ -489,12 +488,6 @@
                      </parameter>
                   </command>
                </menu>
-               <visibleWhen
-                     checkEnabled="false">
-                  <reference
-                        definitionId="au.org.intersect.exsite9.expression.InstanceOfGroup">
-                  </reference>
-               </visibleWhen>
             </menu>
          </menu>
          <menu
@@ -963,7 +956,7 @@
             <visibleWhen
                   checkEnabled="false">
                <reference
-                     definitionId="au.org.intersect.exsite9.expression.InstanceOfGroup">
+                     definitionId="au.org.intersect.exsite9.expression.InProjectExplorerViewAndInstanceOfProjectOrGroupOrNewFilesAndOneItemSelected">
                </reference>
             </visibleWhen>
          </menu>
@@ -1150,6 +1143,15 @@
       <enabledWhen>
          <reference
                definitionId="au.org.intersect.exsite9.expression.InProjectExplorerViewAndInstanceOfResearchFileOrGroup">
+         </reference>
+      </enabledWhen>
+   </handler>
+   <handler
+         class="au.org.intersect.exsite9.commands.handlers.SortResearchFilesInGroupHandler"
+         commandId="au.org.intersect.exsite9.commands.SortResearchFilesInGroupCommand">
+      <enabledWhen>
+         <reference
+               definitionId="au.org.intersect.exsite9.expression.InProjectExplorerViewAndInstanceOfProjectOrGroupOrNewFilesAndOneItemSelected">
          </reference>
       </enabledWhen>
    </handler>
@@ -1363,6 +1365,36 @@
                   definitionId="au.org.intersect.exsite9.expression.OneItemSelected">
             </reference>            
       	 </and>
+      </definition>
+      <definition
+            id="au.org.intersect.exsite9.expression.InstanceOfProjectOrGroupOrNewFiles">
+         <or>
+            <reference
+                  definitionId="au.org.intersect.exsite9.expression.InstanceOfProject">
+            </reference>
+            <with
+                  variable="selection">
+               <iterate>
+                  <instanceof
+                        value="au.org.intersect.exsite9.domain.Group">
+                  </instanceof>
+               </iterate>
+            </with>
+         </or>
+      </definition>
+      <definition
+            id="au.org.intersect.exsite9.expression.InProjectExplorerViewAndInstanceOfProjectOrGroupOrNewFilesAndOneItemSelected">
+         <and>
+            <reference
+                  definitionId="au.org.intersect.exsite9.expression.InProjectExplorerView">
+            </reference>
+            <reference
+                  definitionId="au.org.intersect.exsite9.expression.InstanceOfProjectOrGroupOrNewFiles">
+            </reference>
+            <reference
+                  definitionId="au.org.intersect.exsite9.expression.OneItemSelected">
+            </reference>
+         </and>
       </definition>	
       
    </extension>

@@ -15,6 +15,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import au.org.intersect.exsite9.domain.Group;
+import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFileSortField;
 import au.org.intersect.exsite9.domain.SortFieldDirection;
 import au.org.intersect.exsite9.service.IGroupService;
@@ -53,7 +54,17 @@ public final class SortResearchFilesInGroupHandler implements IHandler
         final SortFieldDirection sortDirection = Enum.valueOf(SortFieldDirection.class, sortDirectionParam);
 
         final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
-        final Group selectedGroup = (Group) selection.getFirstElement();
+
+        final Object firstElement = selection.getFirstElement();
+        final Group selectedGroup;
+        if (firstElement instanceof Project)
+        {
+            selectedGroup = ((Project) firstElement).getRootNode();
+        }
+        else
+        {
+            selectedGroup = (Group) selection.getFirstElement();
+        }
 
         final IGroupService groupService = (IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class);
 
