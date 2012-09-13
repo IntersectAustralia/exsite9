@@ -32,12 +32,14 @@ public final class SchemaServiceUnitTest extends DAOTest
         when(emf.createEntityManager()).thenReturn(createEntityManager());
 
         final File defaultSchemaDir = new File("defaultSchemaDir");
+        final File defaultSchemaFile = new File("defaultSchemaFile");
         final File metadataSchemaSchema = new File("metadataSchemaSchema");
         final SchemaDAOFactory schemaDAOFactory = new SchemaDAOFactory();
         final MetadataCategoryDAOFactory metadataCategoryDAOFactory = new MetadataCategoryDAOFactory();
         final MetadataAttributeDAOFactory metadataAttributeDAOFactory = new MetadataAttributeDAOFactory();
-        final SchemaService toTest = new SchemaService(defaultSchemaDir, metadataSchemaSchema, emf, schemaDAOFactory, metadataCategoryDAOFactory, metadataAttributeDAOFactory);
+        final SchemaService toTest = new SchemaService(defaultSchemaDir, defaultSchemaFile, metadataSchemaSchema, emf, schemaDAOFactory, metadataCategoryDAOFactory, metadataAttributeDAOFactory);
 
+        assertEquals(defaultSchemaFile, toTest.getDefaultSchema());
         assertEquals(defaultSchemaDir, toTest.getDefaultSchemaDirectory());
 
         final Schema schema = toTest.createLocalSchema("name", "description", "namespace url");
@@ -55,11 +57,12 @@ public final class SchemaServiceUnitTest extends DAOTest
         when(emf.createEntityManager()).thenReturn(createEntityManager());
 
         final File defaultSchemaDir = new File("defaultSchemaDir");
+        final File defaultSchemaFile = new File("defaultSchemaFile");
         final File metadataSchemaSchema = new File("metadataSchemaSchema");
         final SchemaDAOFactory schemaDAOFactory = new SchemaDAOFactory();
         final MetadataCategoryDAOFactory metadataCategoryDAOFactory = new MetadataCategoryDAOFactory();
         final MetadataAttributeDAOFactory metadataAttributeDAOFactory = new MetadataAttributeDAOFactory();
-        final SchemaService toTest = new SchemaService(defaultSchemaDir, metadataSchemaSchema, emf, schemaDAOFactory, metadataCategoryDAOFactory, metadataAttributeDAOFactory);
+        final SchemaService toTest = new SchemaService(defaultSchemaDir, defaultSchemaFile, metadataSchemaSchema, emf, schemaDAOFactory, metadataCategoryDAOFactory, metadataAttributeDAOFactory);
 
         final Schema importedSchema = new Schema("name", "desc", "namespace url", Boolean.FALSE);
         final MetadataCategory mdc = new MetadataCategory("category", MetadataCategoryType.FREETEXT, MetadataCategoryUse.optional);
@@ -85,11 +88,12 @@ public final class SchemaServiceUnitTest extends DAOTest
         });
 
         final File defaultSchemaDir = new File("defaultSchemaDir");
+        final File defaultSchemaFile = new File("defaultSchemaFile");
         final File metadataSchemaSchema = new File("metadataSchemaSchema");
         final SchemaDAOFactory schemaDAOFactory = new SchemaDAOFactory();
         final MetadataCategoryDAOFactory metadataCategoryDAOFactory = new MetadataCategoryDAOFactory();
         final MetadataAttributeDAOFactory metadataAttributeDAOFactory = new MetadataAttributeDAOFactory();
-        final SchemaService toTest = new SchemaService(defaultSchemaDir, metadataSchemaSchema, emf, schemaDAOFactory, metadataCategoryDAOFactory, metadataAttributeDAOFactory);
+        final SchemaService toTest = new SchemaService(defaultSchemaDir, defaultSchemaFile, metadataSchemaSchema, emf, schemaDAOFactory, metadataCategoryDAOFactory, metadataAttributeDAOFactory);
 
         final Schema schema = toTest.createLocalSchema("name", "description", "namespace url");
         assertNotNull(schema.getId());
@@ -119,11 +123,12 @@ public final class SchemaServiceUnitTest extends DAOTest
         });
 
         final File defaultSchemaDir = new File("defaultSchemaDir");
+        final File defaultSchemaFile = new File("defaultSchemaFile");
         final File metadataSchemaSchema = new File("metadataSchemaSchema");
         final SchemaDAOFactory schemaDAOFactory = new SchemaDAOFactory();
         final MetadataCategoryDAOFactory metadataCategoryDAOFactory = new MetadataCategoryDAOFactory();
         final MetadataAttributeDAOFactory metadataAttributeDAOFactory = new MetadataAttributeDAOFactory();
-        final SchemaService toTest = new SchemaService(defaultSchemaDir, metadataSchemaSchema, emf, schemaDAOFactory, metadataCategoryDAOFactory, metadataAttributeDAOFactory);
+        final SchemaService toTest = new SchemaService(defaultSchemaDir, defaultSchemaFile, metadataSchemaSchema, emf, schemaDAOFactory, metadataCategoryDAOFactory, metadataAttributeDAOFactory);
 
         final Schema importedSchema = new Schema("name", "desc", "namespace url", Boolean.FALSE);
         final MetadataCategory mdc = new MetadataCategory("category", MetadataCategoryType.FREETEXT, MetadataCategoryUse.optional);
@@ -152,11 +157,12 @@ public final class SchemaServiceUnitTest extends DAOTest
         });
 
         final File defaultSchemaDir = new File("defaultSchemaDir");
+        final File defaultSchemaFile = new File("defaultSchemaFile");
         final File metadataSchemaSchema = new File("metadataSchemaSchema");
         final SchemaDAOFactory schemaDAOFactory = new SchemaDAOFactory();
         final MetadataCategoryDAOFactory metadataCategoryDAOFactory = new MetadataCategoryDAOFactory();
         final MetadataAttributeDAOFactory metadataAttributeDAOFactory = new MetadataAttributeDAOFactory();
-        final SchemaService toTest = new SchemaService(defaultSchemaDir, metadataSchemaSchema, emf, schemaDAOFactory, metadataCategoryDAOFactory, metadataAttributeDAOFactory);
+        final SchemaService toTest = new SchemaService(defaultSchemaDir, defaultSchemaFile, metadataSchemaSchema, emf, schemaDAOFactory, metadataCategoryDAOFactory, metadataAttributeDAOFactory);
 
         final Schema schema = toTest.createLocalSchema("name", "description", "namespace url");
         assertNotNull(schema.getId());
