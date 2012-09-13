@@ -106,7 +106,6 @@ public final class InsertFieldsOfResearchJob extends Job
                     int alreadyExists = 0;
                     for (final String statement : statements)
                     {
-                        LOG.debug(statement);
                         try
                         {
                             stmt.execute(statement);

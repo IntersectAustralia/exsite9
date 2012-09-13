@@ -9,10 +9,12 @@ import au.org.intersect.exsite9.xml.XMLUtils;
  */
 public final class MetadataAttributeNameValidator implements IFieldValidator<String>
 {
+    private final boolean allowEmpty;
     private String errorMessage;
 
-    public MetadataAttributeNameValidator()
+    public MetadataAttributeNameValidator(final boolean allowEmpty)
     {
+        this.allowEmpty = allowEmpty;
     }
 
     @Override
@@ -30,9 +32,15 @@ public final class MetadataAttributeNameValidator implements IFieldValidator<Str
     @Override
     public boolean isValid(final String contents)
     {
-        if (contents.isEmpty())
+        if (contents.isEmpty() && this.allowEmpty)
         {
             return true;
+        }
+
+        if (contents.trim().isEmpty())
+        {
+            this.errorMessage = "Meadata Attribute name must not be empty.";
+            return false;
         }
 
         if (contents.trim().length() >= 255)
@@ -46,7 +54,7 @@ public final class MetadataAttributeNameValidator implements IFieldValidator<Str
             this.errorMessage = "Metadata Attribtue name is not a valid XML element.";
             return false;
         }
-        
+
         this.errorMessage = "";
         return true;
     }

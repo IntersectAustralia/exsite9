@@ -313,7 +313,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         final Label metadataAttributeLabel = new Label(this.container, SWT.NULL);
         metadataAttributeLabel.setText("Attribute Name");
 
-        this.metadataAttributeNameField = this.stringValidatorToolkit.createTextField(this.container, new MetadataAttributeNameValidator(), true, "");
+        this.metadataAttributeNameField = this.stringValidatorToolkit.createTextField(this.container, new MetadataAttributeNameValidator(true), true, "");
         this.metadataAttributeNameField.getControl().addKeyListener(this);
 
         final GridData singleLineGridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -392,31 +392,34 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
             {
                 addValueButton.setEnabled(true);
                 metadataValuesListWidget.setEnabled(true);
+                metadataAttributeNameField.getControl().setEnabled(false);
+                addAttribueValueButton.setEnabled(false);
+                metadataAttributeValuesListWidget.setEnabled(false);
             }
             else
             {
                 addValueButton.setEnabled(false);
                 metadataValuesListWidget.setEnabled(false);
+                metadataAttributeNameField.getControl().setEnabled(true);
+                addAttribueValueButton.setEnabled(true);
+                metadataAttributeValuesListWidget.setEnabled(true);
             }
-            
-            if (this.metadataCategory.isInextensible() && !this.metadataCategory.isImported())
+
+            if (this.metadataCategory.isInextensible())
             {
                 this.metadataValuesListWidget.setEnabled(false);
                 this.addValueButton.setEnabled(false);
                 this.removeValueButton.setEnabled(false);
                 this.editValueButton.setEnabled(false);
+                this.metadataAttributeNameField.getControl().setEnabled(false);
+                this.addAttribueValueButton.setEnabled(false);
+                this.metadataAttributeValuesListWidget.setEnabled(false);
+
             }
-            else if (!this.metadataCategory.isInextensible() && this.metadataCategory.isImported())
+
+            if (this.metadataCategory.isImported())
             {
                 this.inextensibleCheckbox.setEnabled(false);
-            }
-            else if (this.metadataCategory.isInextensible() && this.metadataCategory.isImported())
-            {
-                this.inextensibleCheckbox.setEnabled(false);
-                this.metadataValuesListWidget.setEnabled(false);
-                this.addValueButton.setEnabled(false);
-                this.removeValueButton.setEnabled(false);
-                this.editValueButton.setEnabled(false);
             }
         }
         else

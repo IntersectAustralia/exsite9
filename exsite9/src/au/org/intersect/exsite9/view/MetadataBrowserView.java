@@ -343,9 +343,14 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                             
                             final MetadataAttributeValue oldValue = metadataAttributeValueCombos.get(metadataCategory).getMetadataAttributeValue();
                             final MetadataAttributeValue currentValue = combo.getSelectedMetadataAttributeValue();
-                            final boolean enabled = !Objects.equal(oldValue, currentValue);
-                            resetButton.setEnabled(enabled);
-                            applyButton.setEnabled(enabled && !freeTextField.getText().trim().isEmpty());
+                            final boolean differentAttributeValue = !Objects.equal(oldValue, currentValue);
+
+                            final MetadataValue metadataValue = metadataFreeTextFields.get(metadataCategory).getMetadataValue();
+                            final String originalText = metadataValue == null ? "" : metadataValue.getValue();
+                            final boolean differentTextValue = !Objects.equal(freeTextField.getText().trim(), originalText);
+
+                            resetButton.setEnabled(differentAttributeValue || differentTextValue);
+                            applyButton.setEnabled(differentTextValue);
                         }
                         
                         @Override
