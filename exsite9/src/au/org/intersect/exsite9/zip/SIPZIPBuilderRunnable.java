@@ -71,15 +71,18 @@ public final class SIPZIPBuilderRunnable implements IRunnableWithProgress
         }
         
         // Throw an exception if we don't have enough room on the device
+        FileSystemView fsv = FileSystemView.getFileSystemView();
         
         File destinationRoot = destinationFile.getParentFile();
         while(destinationRoot.getParentFile() != null)
         {
+            if( (destinationRoot.getUsableSpace() > 0) || (fsv.isFileSystemRoot(destinationRoot))){
+                break;
+            }
             destinationRoot = destinationRoot.getParentFile();
         }        
         
-        FileSystemView fsv = FileSystemView.getFileSystemView();
-        if(fsv.isFileSystemRoot(destinationRoot))
+        if((destinationRoot.getUsableSpace() > 0) || (fsv.isFileSystemRoot(destinationRoot)))
         {
             long freeSpaceBytes = destinationRoot.getUsableSpace();
             LOG.info("Device has " + freeSpaceBytes + " bytes available.");
