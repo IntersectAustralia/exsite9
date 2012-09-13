@@ -130,14 +130,32 @@ public final class ThumbnailView extends ViewPart implements ISelectionListener
         { // meaning height is less than width
 
             optimumHeight = (int) (parentWindowWidth * originalImageRatio);
-            optimumWidth = parentWindowWidth;
+
+            if (optimumHeight > parentWindowHeight)
+            {
+                optimumHeight = parentWindowHeight;
+                optimumWidth = (int) (parentWindowHeight / originalImageRatio);
+            }
+            else
+            {
+                optimumWidth = parentWindowWidth;
+            }
 
         }
         else if (originalImageRatio > 1)
         { // meaning height is greater than width
 
-            optimumHeight = parentWindowHeight;
             optimumWidth = (int) (parentWindowHeight / originalImageRatio);
+
+            if (optimumWidth > parentWindowWidth)
+            {
+                optimumWidth = parentWindowWidth;
+                optimumHeight = (int) (parentWindowWidth * originalImageRatio);
+            }
+            else
+            {
+                optimumHeight = parentWindowHeight;
+            }
         }
         else
         {
