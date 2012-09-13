@@ -37,7 +37,7 @@ public interface IProjectService
      * @param project The current project
      * @param deletedFolderList The list of folders to be removed
      */
-    public Project removeFoldersFromProject(final Project project, final List<Folder> deletedFolderList);
+    public Project removeFoldersFromProject(final Project project, final List<String> deletedFolderList);
     
     /**
      * finds all projects in the database.
