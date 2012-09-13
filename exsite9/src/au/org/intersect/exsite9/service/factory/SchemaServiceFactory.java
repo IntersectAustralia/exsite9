@@ -45,13 +45,24 @@ public final class SchemaServiceFactory extends AbstractServiceFactory
         final File schemaDir = new File(workspaceDir, "schemas");
 
         final File schemaDirToUse;
+        final File defaultSchemaToUse;
         if (schemaDir.exists() && schemaDir.isDirectory())
         {
             schemaDirToUse = schemaDir;
+            final File defaultSchema = new File(schemaDirToUse, "DefaultSchema.xml");
+            if (defaultSchema.exists() && defaultSchema.canRead())
+            {
+                defaultSchemaToUse = defaultSchema;
+            }
+            else
+            {
+                defaultSchemaToUse = null;
+            }
         }
         else
         {
             schemaDirToUse = null;
+            defaultSchemaToUse = null;
         }
 
         final File configurationDir = new File(workspaceDir, "configuration");
@@ -61,7 +72,8 @@ public final class SchemaServiceFactory extends AbstractServiceFactory
         final SchemaDAOFactory schemaDAOFactory = new SchemaDAOFactory();
         final MetadataCategoryDAOFactory metadataCategoryDAOFactory = new MetadataCategoryDAOFactory();
         final MetadataAttributeDAOFactory metadataAttributeDAOFactory = new MetadataAttributeDAOFactory();
-        final SchemaService schemaService = new SchemaService(schemaDirToUse, metadataSchemaSchema, emf, schemaDAOFactory, metadataCategoryDAOFactory, metadataAttributeDAOFactory);
+        final SchemaService schemaService = new SchemaService(schemaDirToUse, defaultSchemaToUse, metadataSchemaSchema, emf, schemaDAOFactory,
+                metadataCategoryDAOFactory, metadataAttributeDAOFactory);
         return schemaService;
     }
 }

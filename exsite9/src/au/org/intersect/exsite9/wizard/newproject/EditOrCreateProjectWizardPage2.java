@@ -57,6 +57,10 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
     private Text localSchemaDescriptionField;
     private Text localSchemaNamespaceURLField;
 
+    private Text importedSchemaNameField;
+    private Text importedSchemaDescriptionField;
+    private Text importedSchemaNamespaceURLField;
+
     private Button localSchemaRadioButton;
     private Button importSchemaRadioButton;
     private Button importSchemaBrowseButton;
@@ -155,16 +159,16 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         final Label importedSchemaNameLabel = new Label(importSchemaContainer, SWT.NULL);
         importedSchemaNameLabel.setText("Schema Name");
 
-        final Text importedSchemaNameField = new Text(importSchemaContainer, SWT.BORDER | SWT.SINGLE);
-        importedSchemaNameField.setEditable(false);
-        importedSchemaNameField.setEnabled(false);
+        this.importedSchemaNameField = new Text(importSchemaContainer, SWT.BORDER | SWT.SINGLE);
+        this.importedSchemaNameField.setEditable(false);
+        this.importedSchemaNameField.setEnabled(false);
 
         final Label importedSchemaDescriptionLabel = new Label(importSchemaContainer, SWT.NULL);
         importedSchemaDescriptionLabel.setText("Schema Description");
 
-        final Text importedSchemaDescriptionField = new Text(importSchemaContainer, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL);
-        importedSchemaDescriptionField.setEditable(false);
-        importedSchemaDescriptionField.setEnabled(false);
+        this.importedSchemaDescriptionField = new Text(importSchemaContainer, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL);
+        this.importedSchemaDescriptionField.setEditable(false);
+        this.importedSchemaDescriptionField.setEnabled(false);
 
         // 3 empty cells due to the description field spanning 4 rows below
         new Label(importSchemaContainer, SWT.NULL);
@@ -174,9 +178,9 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         final Label importedSchemaNamespaceURLLabel = new Label(importSchemaContainer, SWT.NULL);
         importedSchemaNamespaceURLLabel.setText("Schema Namespace URL");
 
-        final Text importedSchemaNamespaceURLField = new Text(importSchemaContainer, SWT.BORDER | SWT.SINGLE);
-        importedSchemaNamespaceURLField.setEditable(false);
-        importedSchemaNamespaceURLField.setEnabled(false);
+        this.importedSchemaNamespaceURLField = new Text(importSchemaContainer, SWT.BORDER | SWT.SINGLE);
+        this.importedSchemaNamespaceURLField.setEditable(false);
+        this.importedSchemaNamespaceURLField.setEnabled(false);
 
         // 1 empty cell to push the browse button to the right cell.
         new Label(importSchemaContainer, SWT.NULL);
@@ -200,33 +204,7 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
                 final String filePath = fileDialog.open();
                 if (filePath != null)
                 {
-                    try
-                    {
-                        importedSchema = schemaService.parseSchema(new File(filePath));
-                        importedSchemaNameField.setText(importedSchema.getName());
-                        importedSchemaDescriptionField.setText(importedSchema.getDescription());
-                        importedSchemaNamespaceURLField.setText(importedSchema.getNamespaceURL());
-                        setPageComplete(allFieldsAreValid());
-                    }
-                    catch (final SAXException e)
-                    {
-                        MessageDialog.openError(getShell(), "Could not import Schema", "The XML file is an invalid metadata schema. Reason: " + e.getMessage());
-                        LOG.error(e);
-                    }
-                    catch (final IOException e)
-                    {
-                        MessageDialog.openError(getShell(), "Could not import Schema", "Error reading the metadata schema. Reason: " + e.getMessage());
-                        LOG.error(e);
-                    }
-                    catch (final ParserConfigurationException e)
-                    {
-                        MessageDialog.openError(getShell(), "Could not import Schema", "Error parsing the metadata schema. Reason: " + e.getMessage());
-                        LOG.error(e);
-                    }
-                    catch (final InvalidSchemaException e)
-                    {
-                        MessageDialog.openError(getShell(), "Could not import Schema", "This XML file is an invalid metadata schema. Reason: " + e.getMessage());
-                    }
+                    loadSchema(true, new File(filePath));
                 }
             }
 
@@ -247,9 +225,9 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         this.localSchemaNameField.getControl().setLayoutData(singleLineGridData);
         this.localSchemaDescriptionField.setLayoutData(multiLineGridData);
         this.localSchemaNamespaceURLField.setLayoutData(singleLineGridData);
-        importedSchemaNameField.setLayoutData(singleLineGridData);
-        importedSchemaDescriptionField.setLayoutData(multiLineGridData);
-        importedSchemaNamespaceURLField.setLayoutData(singleLineGridData);
+        this.importedSchemaNameField.setLayoutData(singleLineGridData);
+        this.importedSchemaDescriptionField.setLayoutData(multiLineGridData);
+        this.importedSchemaNamespaceURLField.setLayoutData(singleLineGridData);
         this.importSchemaBrowseButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
 
         localSchemaNameLabel.setLayoutData(indentedGridData);
@@ -282,10 +260,68 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
                 enableImportedSchemaFields();
             }
         }
+        else
+        {
+            // Load the default Schema.
+            final File defaultSchema = this.schemaService.getDefaultSchema();
+            if (defaultSchema != null)
+            {
+                final boolean successLoad = loadSchema(false, defaultSchema);
+                if (successLoad)
+                {
+                    importSchemaRadioButton.setSelection(true);
+                }
+            }
+        }
 
         setControl(this.container);
         setPageComplete(allFieldsAreValid());
         this.errorMessageHandler.clearMessage();
+    }
+
+    private boolean loadSchema(final boolean showErrors, final File schemaFile)
+    {
+        try
+        {
+            importedSchema = schemaService.parseSchema(schemaFile);
+            importedSchemaNameField.setText(importedSchema.getName());
+            importedSchemaDescriptionField.setText(importedSchema.getDescription());
+            importedSchemaNamespaceURLField.setText(importedSchema.getNamespaceURL());
+            setPageComplete(allFieldsAreValid());
+            return true;
+        }
+        catch (final SAXException e)
+        {
+            if (showErrors)
+            {
+                MessageDialog.openError(getShell(), "Could not import Schema", "The XML file is an invalid metadata schema. Reason: " + e.getMessage());
+            }
+            LOG.error(e);
+        }
+        catch (final IOException e)
+        {
+            if (showErrors)
+            {
+                MessageDialog.openError(getShell(), "Could not import Schema", "Error reading the metadata schema. Reason: " + e.getMessage());
+            }
+            LOG.error(e);
+        }
+        catch (final ParserConfigurationException e)
+        {
+            if (showErrors)
+            {
+                MessageDialog.openError(getShell(), "Could not import Schema", "Error parsing the metadata schema. Reason: " + e.getMessage());
+            }
+            LOG.error(e);
+        }
+        catch (final InvalidSchemaException e)
+        {
+            if (showErrors)
+            {
+                MessageDialog.openError(getShell(), "Could not import Schema", "This XML file is an invalid metadata schema. Reason: " + e.getMessage());
+            }
+        }
+        return false;
     }
 
     /**

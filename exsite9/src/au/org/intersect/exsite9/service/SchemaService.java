@@ -48,20 +48,23 @@ public final class SchemaService implements ISchemaService
     private final MetadataCategoryDAOFactory metadataCategoryDAOFactory;
     private final MetadataAttributeDAOFactory metadataAttributeDAOFactory;
     private final File defaultSchemaDirectory;
+    private final File defaultSchema;
     private final File metadataSchemaSchema;
 
     /**
      * @param defaultSchemaDirectory The default directory that metadata schema's will lie in.
+     * @param defaultSchema The default metadata schema - loaded by default for new projects.
      * @param metadataSchemaSchema The RELAX-NG format schema, used to validate metadata schemas.
      * @param emf
      * @param schemaDAOFactory
      */
-    public SchemaService(final File defaultSchemaDirectory, final File metadataSchemaSchema, final EntityManagerFactory emf,
+    public SchemaService(final File defaultSchemaDirectory, final File defaultSchema, final File metadataSchemaSchema, final EntityManagerFactory emf,
                          final SchemaDAOFactory schemaDAOFactory, final MetadataCategoryDAOFactory metadataCategoryDAOFactory,
                          final MetadataAttributeDAOFactory metadataAttributeDAOFactory)
     {
         this.emf = emf;
         this.schemaDAOFactory = schemaDAOFactory;
+        this.defaultSchema = defaultSchema;
         this.metadataCategoryDAOFactory = metadataCategoryDAOFactory;
         this.defaultSchemaDirectory = defaultSchemaDirectory;
         this.metadataSchemaSchema = metadataSchemaSchema;
@@ -212,6 +215,15 @@ public final class SchemaService implements ISchemaService
     public File getDefaultSchemaDirectory()
     {
         return this.defaultSchemaDirectory;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public File getDefaultSchema()
+    {
+        return this.defaultSchema;
     }
 
     /**

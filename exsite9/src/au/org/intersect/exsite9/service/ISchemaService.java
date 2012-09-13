@@ -73,6 +73,12 @@ public interface ISchemaService
     public File getDefaultSchemaDirectory();
 
     /**
+     * Obtains the default Schema.
+     * @return The default Schema to be used with new projects.
+     */
+    public File getDefaultSchema();
+
+    /**
      * Parses the provides schema XML file to a schema object. <em>Does not persist the Schema to the database.</em>
      * @param xmlFile The XML File to import.
      * @return The imported Schema.
