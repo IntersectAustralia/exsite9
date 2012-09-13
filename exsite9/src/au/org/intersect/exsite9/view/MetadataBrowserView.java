@@ -378,7 +378,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                     final MetadataValue metadataValue = metadataFreeTextFields.get(metadataCategory).getMetadataValue();
                     final String originalText = metadataValue == null ? "" : metadataValue.getValue();
                     final boolean differentTextValue = !Objects.equal(freeTextField.getText().trim(), originalText);
-
+                    freeTextField.setToolTipText(freeTextField.getText());
                     resetButton.setEnabled(differentAttributeValue || differentTextValue);
                     applyButton.setEnabled(differentTextValue);
                 }
@@ -399,6 +399,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                 final String originalText = metadataValue == null ? "" : metadataValue.getValue();
                 freeTextField.setText(originalText);
                 freeTextField.setSelection(originalText.length(), originalText.length());
+                freeTextField.setToolTipText(freeTextField.getText());
                 if (combo != null)
                 {
                     final MetadataAttributeValue metadataAttributeValue = metadataAttributeValueCombos.get(metadataCategory).getMetadataAttributeValue();
@@ -549,6 +550,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                 final MetadataValue metadataValue = metadataFreeTextFields.get(metadataCategory).getMetadataValue();
                 final String originalText = metadataValue == null ? "" : metadataValue.getValue();
                 final boolean enabled = !originalText.equals(freeTextField.getText());
+                freeTextField.setToolTipText(freeTextField.getText());
                 resetButton.setEnabled(enabled);
                 applyButton.setEnabled(enabled);
             }
@@ -824,6 +826,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                 final MetadataTextWidget freeTextField = this.metadataFreeTextFields.get(metadataCategory);
                 freeTextField.setText(metadataValue.getValue());
                 freeTextField.setMetadataValue(metadataValue);
+                freeTextField.setToolTipText(freeTextField.getText());
 
                 final MetadataAttributeValue metadataAttributeValue = triplet.getThird();
                 if (metadataAttributeValue != null)
@@ -849,6 +852,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         {
             freeTextFields.setMetadataValue(null);
             freeTextFields.setText("");
+            freeTextFields.setToolTipText(freeTextFields.getText());
         }
         for (final MetadataAttributeValuesComboWidget comboWidget : this.metadataAttributeValueCombos.values())
         {
