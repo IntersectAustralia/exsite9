@@ -151,9 +151,17 @@ public final class SchemaService implements ISchemaService
             schemaDAO.delete(schema);
 
             final MetadataCategoryDAO metadataCategoryDAO = this.metadataCategoryDAOFactory.createInstance(em);
+            final MetadataAttributeDAO metadataAttributeDAO = this.metadataAttributeDAOFactory.createInstance(em);
+
             for (final MetadataCategory mdc : mdcsToDelete)
             {
                 metadataCategoryDAO.delete(mdc);
+
+                final MetadataAttribute mda = mdc.getMetadataAttribute();
+                if (mda != null)
+                {
+                    metadataAttributeDAO.delete(mda);
+                }
             }
         }
         finally

@@ -12,6 +12,7 @@ import au.org.intersect.exsite9.domain.MetadataCategoryUse;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Schema;
 import au.org.intersect.exsite9.exception.InvalidSchemaException;
+import au.org.intersect.exsite9.validators.MetadataAttributeNameValidator;
 import au.org.intersect.exsite9.validators.MetadataAttributeValueValidator;
 import au.org.intersect.exsite9.validators.MetadataCategoryNameValidator;
 import au.org.intersect.exsite9.validators.MetadataValueValidator;
@@ -102,6 +103,12 @@ public final class MetadataSchemaXMLReader
             {
                 final Element attribtueElement = (Element) attributeElementList.item(0);
                 final String attributeName = attribtueElement.getAttribute(ATTRIBUTE_NAME);
+                final MetadataAttributeNameValidator manValidator = new MetadataAttributeNameValidator(false);
+                if (!manValidator.isValid(attributeName))
+                {
+                    throw new InvalidSchemaException("Metadata attribute name '" + name + "' is invalid. " + validator.getErrorMessage());
+                }
+
                 final MetadataAttribute metadataAttribute = new MetadataAttribute();
                 metadataAttribute.setName(attributeName);
 
