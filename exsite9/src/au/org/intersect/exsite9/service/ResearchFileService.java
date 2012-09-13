@@ -382,6 +382,8 @@ public class ResearchFileService implements IResearchFileService
         {
             newGroup = new Group(folder.getName());
             newGroup.setParentGroup(parentGroup);
+            newGroup.setResearchFileSortDirection(parentGroup.getResearchFileSortDirection());
+            newGroup.setResearchFileSortField(parentGroup.getResearchFileSortField());
             parentGroup.getGroups().add(newGroup);
             groupDAO.createGroup(newGroup);
             groupDAO.updateGroup(parentGroup);
