@@ -270,6 +270,7 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
                 if (successLoad)
                 {
                     importSchemaRadioButton.setSelection(true);
+                    importSchemaBrowseButton.setEnabled(true);
                 }
             }
         }
