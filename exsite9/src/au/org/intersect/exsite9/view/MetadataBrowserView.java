@@ -73,7 +73,6 @@ import au.org.intersect.exsite9.service.IGroupService;
 import au.org.intersect.exsite9.service.IMetadataCategoryService;
 import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.service.IResearchFileService;
-import au.org.intersect.exsite9.util.Pair;
 import au.org.intersect.exsite9.util.Triplet;
 import au.org.intersect.exsite9.validators.MetadataValueValidator;
 import au.org.intersect.exsite9.view.listener.MetadataCategorySelectionListener;
@@ -109,7 +108,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
     /**
      * The metadata buttons that are currently shown on the page - keyed by metadata category for easy lookup.
      */
-    private final Map<Pair<MetadataCategory, MetadataValue>, MetadataButtonWidget> metadataButtons = new HashMap<Pair<MetadataCategory, MetadataValue>, MetadataButtonWidget>();
+    private final Map<Triplet<MetadataCategory, MetadataValue, MetadataAttributeValue>, MetadataButtonWidget> metadataButtons = new HashMap<Triplet<MetadataCategory, MetadataValue, MetadataAttributeValue>, MetadataButtonWidget>();
 
     private final Map<MetadataCategory, MetadataTextWidget> metadataFreeTextFields = new HashMap<MetadataCategory, MetadataTextWidget>();
 
@@ -288,8 +287,8 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                     final MetadataButtonWidget mdbw = new MetadataButtonWidget(contentComposite, SWT.TOGGLE, metadataCategory, metadataValue);
                     mdbw.setText(metadataValue.getValue());
                     mdbw.addSelectionListener(this);
-                    final Pair<MetadataCategory, MetadataValue> pair = new Pair<MetadataCategory, MetadataValue>(metadataCategory, metadataValue);
-                    this.metadataButtons.put(pair, mdbw);
+                    final Triplet<MetadataCategory, MetadataValue, MetadataAttributeValue> triplet = new Triplet<MetadataCategory, MetadataValue, MetadataAttributeValue>(metadataCategory, metadataValue, null);
+                    this.metadataButtons.put(triplet, mdbw);
                 }
             }
             else
