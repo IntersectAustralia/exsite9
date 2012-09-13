@@ -36,6 +36,7 @@ import org.eclipse.ui.PlatformUI;
 public final class InsertFieldsOfResearchJob extends Job
 {
     private static final Logger LOG = Logger.getLogger(InsertFieldsOfResearchJob.class);
+    public static final String JOB_NAME = "Loading Fields of Research";
 
     private final EntityManagerFactory emf;
     private final File sqlFile;
@@ -45,7 +46,7 @@ public final class InsertFieldsOfResearchJob extends Job
      */
     public InsertFieldsOfResearchJob()
     {
-        super(InsertFieldsOfResearchJob.class.getName());
+        super(JOB_NAME);
         this.emf = (EntityManagerFactory) PlatformUI.getWorkbench().getService(EntityManagerFactory.class);
         final String workspaceDir = Platform.getInstallLocation().getURL().getPath();
         final File configurationDir = new File(workspaceDir, "configuration");
@@ -59,7 +60,7 @@ public final class InsertFieldsOfResearchJob extends Job
      */
     InsertFieldsOfResearchJob(final EntityManagerFactory emf, final File sqlFile)
     {
-        super(InsertFieldsOfResearchJob.class.getName());
+        super(JOB_NAME);
         this.emf = emf;
         this.sqlFile = sqlFile;
     }
