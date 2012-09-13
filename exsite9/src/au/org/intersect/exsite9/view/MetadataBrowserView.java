@@ -294,218 +294,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             }
             else
             {
-                final MetadataAttribute metadataAttribute = metadataCategory.getMetadataAttribute();
-                final boolean hasAttribute = metadataAttribute != null;
-
-                final int numCols = hasAttribute ? 5 : 3;
-
-                final GridLayout gridLayout = new GridLayout(numCols, false);
-                contentComposite.setLayout(gridLayout);
-
-                final MetadataAttributeValuesComboWidget combo;
-                if (hasAttribute)
-                {
-                    final Label attributeNameLabel = new Label(contentComposite, SWT.NULL);
-                    attributeNameLabel.setText(metadataAttribute.getName() + ":");
-
-                    combo = new MetadataAttributeValuesComboWidget(contentComposite, SWT.READ_ONLY);
-                    combo.setItems(metadataAttribute.getMetadataAttributeValues());
-                    this.metadataAttributeValueCombos.put(metadataCategory, combo);
-                }
-                else
-                {
-                    combo = null;
-                }
-                
-                final MetadataTextWidget freeTextField = new MetadataTextWidget(contentComposite, SWT.BORDER | SWT.SINGLE);
-                this.metadataFreeTextFields.put(metadataCategory, freeTextField);
-
-                final GridData multiLineGridData = new GridData(GridData.FILL_HORIZONTAL);
-                freeTextField.setLayoutData(multiLineGridData);
-
-                final Button resetButton = new Button(contentComposite, SWT.PUSH);
-                final Button applyButton = new Button(contentComposite, SWT.PUSH);
-
-                if (combo != null)
-                {
-                    combo.addSelectionListener(new SelectionListener()
-                    {
-                        
-                        @Override
-                        public void widgetSelected(final SelectionEvent e)
-                        {
-                            if (!validMetadataAssignablesSelected(false))
-                            {
-                                resetButton.setEnabled(false);
-                                applyButton.setEnabled(false);
-                                return;
-                            }
-                            
-                            final MetadataAttributeValue oldValue = metadataAttributeValueCombos.get(metadataCategory).getMetadataAttributeValue();
-                            final MetadataAttributeValue currentValue = combo.getSelectedMetadataAttributeValue();
-                            final boolean differentAttributeValue = !Objects.equal(oldValue, currentValue);
-
-                            final MetadataValue metadataValue = metadataFreeTextFields.get(metadataCategory).getMetadataValue();
-                            final String originalText = metadataValue == null ? "" : metadataValue.getValue();
-                            final boolean differentTextValue = !Objects.equal(freeTextField.getText().trim(), originalText);
-
-                            resetButton.setEnabled(differentAttributeValue || differentTextValue);
-                            applyButton.setEnabled(differentTextValue);
-                        }
-                        
-                        @Override
-                        public void widgetDefaultSelected(SelectionEvent e)
-                        {
-                        }
-                    });
-                }
-
-                resetButton.setText("Reset");
-                resetButton.setEnabled(false);
-                resetButton.addSelectionListener(new SelectionListener()
-                {
-                    @Override
-                    public void widgetSelected(final SelectionEvent e)
-                    {
-                        final MetadataValue metadataValue = metadataFreeTextFields.get(metadataCategory).getMetadataValue();
-                        final String originalText = metadataValue == null ? "" : metadataValue.getValue();
-                        freeTextField.setText(originalText);
-                        freeTextField.setSelection(originalText.length(), originalText.length());
-                        if (combo != null)
-                        {
-                            final MetadataAttributeValue metadataAttributeValue = metadataAttributeValueCombos.get(metadataCategory).getMetadataAttributeValue();
-                            if (metadataAttributeValue != null)
-                            {
-                                combo.select(metadataAttributeValue);
-                            }
-                            else
-                            {
-                                combo.select(0);
-                            }
-                        }
-                        resetButton.setEnabled(false);
-                        applyButton.setEnabled(false);
-                    }
-                    
-                    @Override
-                    public void widgetDefaultSelected(final SelectionEvent e)
-                    {
-                    }
-                });
-
-                applyButton.setText("Apply");
-                applyButton.setEnabled(false);
-                applyButton.addSelectionListener(new SelectionListener()
-                {
-                    @Override
-                    public void widgetSelected(final SelectionEvent event)
-                    {
-                        if (!validMetadataAssignablesSelected(true))
-                        {
-                            return;
-                        }
-
-                        // Handle the assignment.
-                        if (selectedMetadataAssignables.size() > 1)
-                        {
-                            final boolean performOperation = MessageDialog.openConfirm(getSite().getWorkbenchWindow().getShell(),
-                                "Caution","The metadata operation is about to be performed on all selected items. Are you sure you wish to proceed?");
-                            if (!performOperation)
-                            {
-                                return;
-                            }
-                        }
-
-                        final String newValue = freeTextField.getText();
-                        final MetadataAttributeValue metadataAttributeValue = combo != null ? combo.getSelectedMetadataAttributeValue() : null;
-
-                        final MetadataValueValidator validtor = new MetadataValueValidator(Collections.<MetadataValue>emptyList(), true);
-                        if (!validtor.isValid(newValue))
-                        {
-                            MessageDialog.openError(getSite().getWorkbenchWindow().getShell(), "Cannot apply metadata", "Cannot apply metadata. " + validtor.getErrorMessage());
-                            return;
-                        }
-
-                        // We need to reload the metadata category.
-                        final MetadataCategory updatedMetadataCategory = metadataCategoryService.findById(metadataCategory.getId());
-
-                        // Disassociate old value
-                        final MetadataValue oldAssociatedValue = freeTextField.getMetadataValue();
-
-                        if (oldAssociatedValue != null)
-                        {
-                            for (final IMetadataAssignable metadataAssignable : selectedMetadataAssignables)
-                            {
-                                if (metadataAssignable instanceof Group)
-                                {
-                                    // We need to reload the object model from the database because the user may have updated it's metadata associations
-                                    // and wishes to perform another action on it (without selecting another one in between, which would force a reload from the DB)
-                                    final Group freshGroup = groupService.findGroupByID(((Group)metadataAssignable).getId());
-                                    groupService.disassociateMetadata(freshGroup, updatedMetadataCategory, oldAssociatedValue);
-                                }
-                                else if (metadataAssignable instanceof ResearchFile)
-                                {
-                                    final ResearchFile freshResearchFile = researchFileService.findResearchFileByID(((ResearchFile)metadataAssignable).getId());
-                                    researchFileService.disassociateMetadata(freshResearchFile, updatedMetadataCategory, oldAssociatedValue);
-                                }
-                            }
-                        }
-
-                        // Add & Associate new value
-                        if (!newValue.isEmpty())
-                        {
-                            // Persist the newly configured metadata category value.
-                            final MetadataValue metadataValue = metadataCategoryService.addValueToMetadataCategory(updatedMetadataCategory, newValue);
-                            for (final IMetadataAssignable metadataAssignable : selectedMetadataAssignables)
-                            {
-                                if (metadataAssignable instanceof Group)
-                                {
-                                    // We need to reload the object model from the database because the user may have updated it's metadata associations
-                                    // and wishes to perform another action on it (without selecting another one in between, which would force a reload from the DB)
-                                    final Group freshGroup = groupService.findGroupByID(((Group)metadataAssignable).getId());
-                                    groupService.associateMetadata(freshGroup, updatedMetadataCategory, metadataValue, metadataAttributeValue);
-                                }
-                                else if (metadataAssignable instanceof ResearchFile)
-                                {
-                                    final ResearchFile freshResearchFile = researchFileService.findResearchFileByID(((ResearchFile)metadataAssignable).getId());
-                                    researchFileService.associateMetadata(freshResearchFile, updatedMetadataCategory, metadataValue, metadataAttributeValue);
-                                }
-                            }
-                        }
-                        reloadView();
-                        refreshRelatedViews();
-                    }
-                    
-                    @Override
-                    public void widgetDefaultSelected(final SelectionEvent event)
-                    {
-                    }
-                });
-
-                freeTextField.addKeyListener(new KeyListener()
-                {
-                    @Override
-                    public void keyReleased(final KeyEvent e)
-                    {
-                        if (!validMetadataAssignablesSelected(false))
-                        {
-                            resetButton.setEnabled(false);
-                            applyButton.setEnabled(false);
-                            return;
-                        }
-
-                        final MetadataValue metadataValue = metadataFreeTextFields.get(metadataCategory).getMetadataValue();
-                        final String originalText = metadataValue == null ? "" : metadataValue.getValue();
-                        final boolean enabled = !originalText.equals(freeTextField.getText());
-                        resetButton.setEnabled(enabled);
-                        applyButton.setEnabled(enabled);
-                    }
-                    
-                    @Override
-                    public void keyPressed(final KeyEvent e)
-                    {
-                    }
-                });
+                buildFreeTextRow(contentComposite, metadataCategory);
             }
 
             contentComposite.pack();
@@ -517,6 +306,259 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         this.expandBar.layout();
 
         this.parent.layout();
+    }
+
+    /**
+     * Builds a free text row.
+     * @param contentComposite The composite to build the row with.
+     * @param metadataCategory The metadata Category to use.
+     */
+    private void buildFreeTextRow(final Composite contentComposite, final MetadataCategory metadataCategory)
+    {
+        final MetadataAttribute metadataAttribute = metadataCategory.getMetadataAttribute();
+        final boolean hasAttribute = metadataAttribute != null;
+
+        final int numCols = hasAttribute ? 7 : 5;
+
+        final GridLayout gridLayout = new GridLayout(numCols, false);
+        contentComposite.setLayout(gridLayout);
+
+        final MetadataAttributeValuesComboWidget combo;
+        if (hasAttribute)
+        {
+            final Label attributeNameLabel = new Label(contentComposite, SWT.NULL);
+            attributeNameLabel.setText(metadataAttribute.getName() + ":");
+
+            combo = new MetadataAttributeValuesComboWidget(contentComposite, SWT.READ_ONLY);
+            combo.setItems(metadataAttribute.getMetadataAttributeValues());
+            this.metadataAttributeValueCombos.put(metadataCategory, combo);
+        }
+        else
+        {
+            combo = null;
+        }
+        
+        final MetadataTextWidget freeTextField = new MetadataTextWidget(contentComposite, SWT.BORDER | SWT.SINGLE);
+        this.metadataFreeTextFields.put(metadataCategory, freeTextField);
+
+        final GridData multiLineGridData = new GridData(GridData.FILL_HORIZONTAL);
+        freeTextField.setLayoutData(multiLineGridData);
+
+        final Button resetButton = new Button(contentComposite, SWT.PUSH);
+        resetButton.setText("Reset");
+        resetButton.setEnabled(false);
+
+        final Button applyButton = new Button(contentComposite, SWT.PUSH);
+        applyButton.setText("Apply");
+        applyButton.setEnabled(false);
+
+        final Button minusButton = new Button(contentComposite, SWT.PUSH);
+        minusButton.setText("-");
+
+        final Button plusButton = new Button(contentComposite, SWT.PUSH);
+        plusButton.setText("+");
+
+        if (combo != null)
+        {
+            combo.addSelectionListener(new SelectionListener()
+            {
+                @Override
+                public void widgetSelected(final SelectionEvent e)
+                {
+                    if (!validMetadataAssignablesSelected(false))
+                    {
+                        resetButton.setEnabled(false);
+                        applyButton.setEnabled(false);
+                        return;
+                    }
+                    
+                    final MetadataAttributeValue oldValue = metadataAttributeValueCombos.get(metadataCategory).getMetadataAttributeValue();
+                    final MetadataAttributeValue currentValue = combo.getSelectedMetadataAttributeValue();
+                    final boolean differentAttributeValue = !Objects.equal(oldValue, currentValue);
+
+                    final MetadataValue metadataValue = metadataFreeTextFields.get(metadataCategory).getMetadataValue();
+                    final String originalText = metadataValue == null ? "" : metadataValue.getValue();
+                    final boolean differentTextValue = !Objects.equal(freeTextField.getText().trim(), originalText);
+
+                    resetButton.setEnabled(differentAttributeValue || differentTextValue);
+                    applyButton.setEnabled(differentTextValue);
+                }
+                
+                @Override
+                public void widgetDefaultSelected(SelectionEvent e)
+                {
+                }
+            });
+        }
+
+        resetButton.addSelectionListener(new SelectionListener()
+        {
+            @Override
+            public void widgetSelected(final SelectionEvent e)
+            {
+                final MetadataValue metadataValue = metadataFreeTextFields.get(metadataCategory).getMetadataValue();
+                final String originalText = metadataValue == null ? "" : metadataValue.getValue();
+                freeTextField.setText(originalText);
+                freeTextField.setSelection(originalText.length(), originalText.length());
+                if (combo != null)
+                {
+                    final MetadataAttributeValue metadataAttributeValue = metadataAttributeValueCombos.get(metadataCategory).getMetadataAttributeValue();
+                    if (metadataAttributeValue != null)
+                    {
+                        combo.select(metadataAttributeValue);
+                    }
+                    else
+                    {
+                        combo.select(0);
+                    }
+                }
+                resetButton.setEnabled(false);
+                applyButton.setEnabled(false);
+            }
+            
+            @Override
+            public void widgetDefaultSelected(final SelectionEvent e)
+            {
+            }
+        });
+
+        applyButton.addSelectionListener(new SelectionListener()
+        {
+            @Override
+            public void widgetSelected(final SelectionEvent event)
+            {
+                if (!validMetadataAssignablesSelected(true))
+                {
+                    return;
+                }
+
+                // Handle the assignment.
+                if (selectedMetadataAssignables.size() > 1)
+                {
+                    final boolean performOperation = MessageDialog.openConfirm(getSite().getWorkbenchWindow().getShell(),
+                        "Caution","The metadata operation is about to be performed on all selected items. Are you sure you wish to proceed?");
+                    if (!performOperation)
+                    {
+                        return;
+                    }
+                }
+
+                final String newValue = freeTextField.getText();
+                final MetadataAttributeValue metadataAttributeValue = combo != null ? combo.getSelectedMetadataAttributeValue() : null;
+
+                final MetadataValueValidator validtor = new MetadataValueValidator(Collections.<MetadataValue>emptyList(), true);
+                if (!validtor.isValid(newValue))
+                {
+                    MessageDialog.openError(getSite().getWorkbenchWindow().getShell(), "Cannot apply metadata", "Cannot apply metadata. " + validtor.getErrorMessage());
+                    return;
+                }
+
+                // We need to reload the metadata category.
+                final MetadataCategory updatedMetadataCategory = metadataCategoryService.findById(metadataCategory.getId());
+
+                // Disassociate old value
+                final MetadataValue oldAssociatedValue = freeTextField.getMetadataValue();
+
+                if (oldAssociatedValue != null)
+                {
+                    for (final IMetadataAssignable metadataAssignable : selectedMetadataAssignables)
+                    {
+                        if (metadataAssignable instanceof Group)
+                        {
+                            // We need to reload the object model from the database because the user may have updated it's metadata associations
+                            // and wishes to perform another action on it (without selecting another one in between, which would force a reload from the DB)
+                            final Group freshGroup = groupService.findGroupByID(((Group)metadataAssignable).getId());
+                            groupService.disassociateMetadata(freshGroup, updatedMetadataCategory, oldAssociatedValue);
+                        }
+                        else if (metadataAssignable instanceof ResearchFile)
+                        {
+                            final ResearchFile freshResearchFile = researchFileService.findResearchFileByID(((ResearchFile)metadataAssignable).getId());
+                            researchFileService.disassociateMetadata(freshResearchFile, updatedMetadataCategory, oldAssociatedValue);
+                        }
+                    }
+                }
+
+                // Add & Associate new value
+                if (!newValue.isEmpty())
+                {
+                    // Persist the newly configured metadata category value.
+                    final MetadataValue metadataValue = metadataCategoryService.addValueToMetadataCategory(updatedMetadataCategory, newValue);
+                    for (final IMetadataAssignable metadataAssignable : selectedMetadataAssignables)
+                    {
+                        if (metadataAssignable instanceof Group)
+                        {
+                            // We need to reload the object model from the database because the user may have updated it's metadata associations
+                            // and wishes to perform another action on it (without selecting another one in between, which would force a reload from the DB)
+                            final Group freshGroup = groupService.findGroupByID(((Group)metadataAssignable).getId());
+                            groupService.associateMetadata(freshGroup, updatedMetadataCategory, metadataValue, metadataAttributeValue);
+                        }
+                        else if (metadataAssignable instanceof ResearchFile)
+                        {
+                            final ResearchFile freshResearchFile = researchFileService.findResearchFileByID(((ResearchFile)metadataAssignable).getId());
+                            researchFileService.associateMetadata(freshResearchFile, updatedMetadataCategory, metadataValue, metadataAttributeValue);
+                        }
+                    }
+                }
+                reloadView();
+                refreshRelatedViews();
+            }
+            
+            @Override
+            public void widgetDefaultSelected(final SelectionEvent event)
+            {
+            }
+        });
+
+        plusButton.addSelectionListener(new SelectionListener()
+        {
+            @Override
+            public void widgetSelected(final SelectionEvent e)
+            {
+            }
+
+            @Override
+            public void widgetDefaultSelected(final SelectionEvent e)
+            {
+            }
+        });
+
+        minusButton.addSelectionListener(new SelectionListener()
+        {
+            @Override
+            public void widgetSelected(final SelectionEvent e)
+            {
+            }
+
+            @Override
+            public void widgetDefaultSelected(final SelectionEvent e)
+            {
+            }
+        });
+
+        freeTextField.addKeyListener(new KeyListener()
+        {
+            @Override
+            public void keyReleased(final KeyEvent e)
+            {
+                if (!validMetadataAssignablesSelected(false))
+                {
+                    resetButton.setEnabled(false);
+                    applyButton.setEnabled(false);
+                    return;
+                }
+
+                final MetadataValue metadataValue = metadataFreeTextFields.get(metadataCategory).getMetadataValue();
+                final String originalText = metadataValue == null ? "" : metadataValue.getValue();
+                final boolean enabled = !originalText.equals(freeTextField.getText());
+                resetButton.setEnabled(enabled);
+                applyButton.setEnabled(enabled);
+            }
+            
+            @Override
+            public void keyPressed(final KeyEvent e)
+            {
+            }
+        });
     }
 
     /**
@@ -762,11 +804,11 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
 
     /**
      * Sets the metadata values that are selected.
-     * @param metadataCollectionPair the metadata to select.
+     * @param metadataCollectionTrio the metadata to select.
      */
-    private void setMetadataValueWidgets(final Collection<Triplet<MetadataCategory, MetadataValue, MetadataAttributeValue>> metadataCollectionPair)
+    private void setMetadataValueWidgets(final Collection<Triplet<MetadataCategory, MetadataValue, MetadataAttributeValue>> metadataCollectionTrio)
     {
-        for (final Triplet<MetadataCategory, MetadataValue, MetadataAttributeValue> triplet : metadataCollectionPair)
+        for (final Triplet<MetadataCategory, MetadataValue, MetadataAttributeValue> triplet : metadataCollectionTrio)
         {
             final MetadataCategory metadataCategory = triplet.getFirst();
             if (metadataCategory.getType() == MetadataCategoryType.CONTROLLED_VOCABULARY)
