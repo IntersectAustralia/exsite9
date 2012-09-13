@@ -3,6 +3,7 @@ package au.org.intersect.exsite9.view;
 import java.io.File;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -14,6 +15,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import au.org.intersect.exsite9.domain.ResearchFile;
@@ -21,6 +23,7 @@ import au.org.intersect.exsite9.domain.ResearchFile;
 public final class ThumbnailView extends ViewPart implements ISelectionListener
 {
     public static final String ID = ThumbnailView.class.getName();
+    private static final Logger LOG = Logger.getLogger(ThumbnailView.class);
     private Composite parent;
     private Label imgLabel;
     private Image image;
@@ -35,7 +38,14 @@ public final class ThumbnailView extends ViewPart implements ISelectionListener
 
         imageUnavailable = new Image(parent.getDisplay(), getClass().getResourceAsStream(
                 "/icons/ThumbnailUnavailable.JPG"));
-        image = imageUnavailable;
+
+        final ProjectExplorerView projectExplorerView = (ProjectExplorerView) ViewUtils.getViewByID(PlatformUI
+                .getWorkbench().getActiveWorkbenchWindow(), ProjectExplorerView.ID);
+        projectExplorerView.refresh();
+        final ISelection currentSelection = projectExplorerView.getSelection();
+
+        createImageFromTreeSelection(currentSelection);
+
         imgLabel = new Label(parent, SWT.NONE);
         imgLabel.setImage(image);
         imgLabel.setLayoutData(layout);
@@ -63,8 +73,20 @@ public final class ThumbnailView extends ViewPart implements ISelectionListener
     }
 
     @Override
-    public void selectionChanged(IWorkbenchPart arg0, ISelection selection)
+    public void selectionChanged(IWorkbenchPart view, ISelection selection)
     {
+        createImageFromTreeSelection(selection);
+        createScaledImage();
+    }
+
+    private void createImageFromTreeSelection(ISelection selection)
+    {
+        if (!(selection instanceof IStructuredSelection))
+        {
+            LOG.error("Unknown selection type in project view");
+            return;
+        }
+
         final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
 
         @SuppressWarnings("unchecked")
@@ -82,20 +104,16 @@ public final class ThumbnailView extends ViewPart implements ISelectionListener
                             || fileExtension.equalsIgnoreCase("PNG") || fileExtension.equalsIgnoreCase("TIFF")))
             {
                 image = new Image(parent.getDisplay(), file.getAbsolutePath());
-                createScaledImage();
             }
             else
             {
                 image = imageUnavailable;
-                createScaledImage();
             }
         }
         else
         {
             image = imageUnavailable;
-            createScaledImage();
         }
-
     }
 
     private void createScaledImage()

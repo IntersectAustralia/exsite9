@@ -337,14 +337,17 @@ public class ResearchFileService implements IResearchFileService
             final ProjectDAO projectDAO = projectDAOFactory.createInstance(em);
             final FolderDAO folderDAO = folderDAOFactory.createInstance(em);
             
-            folderDAO.createFolder(folder);
-            
             em.getTransaction().begin();
             
-            importFolder(em, project, folder, project.getRootNode(), folder);
+            List<ResearchFile> folderResearchFiles = new ArrayList<ResearchFile>();
+            importFolder(em, project, folderResearchFiles, project.getRootNode(), folder.getFolder());
             
+            folder.getFiles().addAll(folderResearchFiles);
+            folderDAO.createFolder(folder);
             project.getFolders().add(folder);
             projectDAO.updateProject(project);
+            
+            em.getTransaction().commit();
         }
         catch(Exception e)
         {
@@ -352,14 +355,13 @@ public class ResearchFileService implements IResearchFileService
         }
         finally
         {
-            em.getTransaction().commit();
             em.close();
         }
     }
     
-    private void importFolder(EntityManager em, Project project, Folder parentFolder, Group parentGroup, Folder folder)
+    private void importFolder(EntityManager em, Project project, List<ResearchFile> folderResearchFiles, Group parentGroup, File folder)
     {
-        LOG.debug("Import Folder: " + folder.getFolder().getName());
+        LOG.debug("Import Folder: " + folder.getName());
         
         final ResearchFileDAO researchFileDAO = researchFileDAOFactory.createInstance(em);
         final GroupDAO groupDAO = groupDAOFactory.createInstance(em);
@@ -369,16 +371,16 @@ public class ResearchFileService implements IResearchFileService
         
         for(Group group : parentGroup.getGroups())
         {
-            if(group.getName().equalsIgnoreCase(folder.getFolder().getName()))
+            if(group.getName().equalsIgnoreCase(folder.getName()))
             {
-                newGroup = group;
+                newGroup = groupDAO.findById(group.getId());
                 break;
             }
         }
         
         if(newGroup == null)
         {
-            newGroup = new Group(folder.getFolder().getName());
+            newGroup = new Group(folder.getName());
             newGroup.setParentGroup(parentGroup);
             parentGroup.getGroups().add(newGroup);
             groupDAO.createGroup(newGroup);
@@ -387,7 +389,7 @@ public class ResearchFileService implements IResearchFileService
             
         // Create Research files for files
         List<File> folderList = new ArrayList<File>(0);
-        for(File file : folder.getFolder().listFiles())
+        for(File file : folder.listFiles())
         {
             if(file.isDirectory())
             {
@@ -401,38 +403,28 @@ public class ResearchFileService implements IResearchFileService
                     createFile = true;
                 }
                 
-                //for(ResearchFile researchFile : newGroup.getResearchFiles())
-                //{
-                //    if(researchFile.getFile().equals(file))
-                //    {
-                //        createFile = false;
-                //        break;
-                //    }
-                //}
-                
                 if (createFile)
                 {
                     ResearchFile researchFile = new ResearchFile(file);
                     researchFile.setProject(project);
                     researchFile.setParentGroup(newGroup);
                     researchFileDAO.createResearchFile(researchFile);
-                    parentFolder.getFiles().add(researchFile);
+                    folderResearchFiles.add(researchFile);
                     newGroup.getResearchFiles().add(researchFile);
                 }
             }
         }
-        groupDAO.updateGroup(newGroup);
 
         // Recurse through the folders
         if(! folderList.isEmpty())
         {
-            for(File folderOnDisk : folderList)
+            for(File newFolder : folderList)
             {
-                Folder newFolder = new Folder(folderOnDisk);
-                importFolder(em, project, parentFolder, newGroup, newFolder);
+                importFolder(em, project, folderResearchFiles, newGroup, newFolder);
             }
         }
         
+        groupDAO.updateGroup(newGroup);
     }
 
     @Override
