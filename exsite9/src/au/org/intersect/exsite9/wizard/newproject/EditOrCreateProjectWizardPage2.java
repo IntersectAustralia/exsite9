@@ -90,7 +90,7 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         this.container.setLayout(containerLayout);
 
         final Group localGroup = new Group(this.container, SWT.SHADOW_ETCHED_IN);
-        localGroup.setText("Local");
+        localGroup.setText(this.currentSchema == null ? "Create" : "Edit");
 
         final Group importGroup = new Group(this.container, SWT.SHADOW_ETCHED_IN);
         importGroup.setText("Import");
@@ -108,7 +108,7 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         importGroup.setLayoutData(importGroupLayoutData);
 
         this.localSchemaRadioButton = new Button(localGroup, SWT.RADIO);
-        this.localSchemaRadioButton.setText("Use a local Schema");
+        this.localSchemaRadioButton.setText(this.currentSchema == null ? "Create a new schema" : "Edit a local schema");
         this.localSchemaRadioButton.addSelectionListener(this);
         // Empty label in col2
         new Label(localGroup, SWT.NULL);
@@ -142,7 +142,7 @@ public final class EditOrCreateProjectWizardPage2 extends WizardPage implements 
         final Composite importSchemaRadioButtonContainer = new Composite(importGroup, SWT.NULL);
         importSchemaRadioButtonContainer.setLayout(new RowLayout(SWT.VERTICAL));
         this.importSchemaRadioButton = new Button(importSchemaRadioButtonContainer, SWT.RADIO);
-        this.importSchemaRadioButton.setText("Use an imported Schema");
+        this.importSchemaRadioButton.setText("Import an existing schema");
         this.importSchemaRadioButton.addSelectionListener(this);
 
         final Composite importSchemaContainer = new Composite(importGroup, SWT.NULL);
