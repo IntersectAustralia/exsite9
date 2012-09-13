@@ -4,7 +4,7 @@
  * This module contains Proprietary Information of Intersect,
  * and should be treated as Confidential.
  */
-package au.org.intersect.exsite9.startup;
+package au.org.intersect.exsite9.jobs;
 
 import static org.junit.Assert.*;
 
@@ -12,7 +12,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
@@ -22,9 +26,9 @@ import au.org.intersect.exsite9.dao.FieldOfResearchDAO;
 import au.org.intersect.exsite9.domain.FieldOfResearch;
 
 /**
- * Tests {@link InsertFieldsOfResearch}
+ * Tests {@link InsertFieldsOfResearchJob}
  */
-public final class InsertFieldsOfResearchUnitTest extends DAOTest
+public final class InsertFieldsOfResearchJobUnitTest extends DAOTest
 {
     private static final String NEW_LINE = System.getProperty("line.separator");
 
@@ -38,8 +42,11 @@ public final class InsertFieldsOfResearchUnitTest extends DAOTest
                               "INSERT INTO FIELDOFRESEARCH(code,name) VALUES('010100','Pure Mathematics')";
         Files.write(forSQL, sqlFile, Charsets.UTF_8);
 
-        final InsertFieldsOfResearch toTest = new InsertFieldsOfResearch(super.emf, sqlFile);
-        toTest.earlyStartup();
+        final IProgressMonitor progressMonitor = Mockito.mock(IProgressMonitor.class);
+        
+        final InsertFieldsOfResearchJob toTest = new InsertFieldsOfResearchJob(super.emf, sqlFile);
+        final IStatus status = toTest.run(progressMonitor);
+        assertEquals(Status.OK_STATUS, status);
 
         final FieldOfResearchDAO forDAO = new FieldOfResearchDAO(createEntityManager());
         final List<FieldOfResearch> inserted = forDAO.getAll();
