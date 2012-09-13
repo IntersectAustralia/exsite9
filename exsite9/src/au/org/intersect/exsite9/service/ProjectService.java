@@ -194,7 +194,7 @@ public class ProjectService implements IProjectService
     }
 
     @Override
-    public Project removeFoldersFromProject(Project project, List<Folder> deletedFolderList)
+    public Project removeFoldersFromProject(Project project, List<String> deletedFolderList)
     {
         EntityManager em = entityManagerFactory.createEntityManager();
         try
@@ -211,7 +211,7 @@ public class ProjectService implements IProjectService
             while (folderIter.hasNext())
             {
                 Folder folder = folderIter.next();
-                if (deletedFolderList.contains(folder))
+                if (deletedFolderList.contains(folder.getFolder().getAbsolutePath()))
                 {
                     LOG.info("Removing folder id= " + folder.getId());
 

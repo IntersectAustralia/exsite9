@@ -36,7 +36,7 @@ public class ListFoldersWizard extends Wizard
     @Override
     public boolean performFinish()
     {
-        final List<Folder> deletedFolderList = this.page1.getDeletedFolderList();
+        final List<String> deletedFolderList = this.page1.getDeletedFolderList();
         final Map<Folder, String> foldersThatNeedToBeUpdated = page1.getFoldersAndTheirUpdatedPaths();
 
         final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(

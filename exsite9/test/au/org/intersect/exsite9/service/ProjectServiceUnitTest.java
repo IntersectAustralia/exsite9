@@ -131,9 +131,9 @@ public final class ProjectServiceUnitTest extends DAOTest
         projectService.mapFolderToProject(project, folder1);
         projectService.mapFolderToProject(project, folder2);
 
-        List<Folder> deletedFolderList = new ArrayList<Folder>(0);
+        List<String> deletedFolderList = new ArrayList<String>(0);
 
-        deletedFolderList.add(folder2);
+        deletedFolderList.add(folder2.getFolder().getAbsolutePath());
 
         projectService.removeFoldersFromProject(project, deletedFolderList);
 
