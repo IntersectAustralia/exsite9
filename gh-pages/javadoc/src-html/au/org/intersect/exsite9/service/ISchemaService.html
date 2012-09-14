@@ -1,0 +1,157 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /**<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Copyright (C) Intersect 2012.<a name="line.2"></a>
+<FONT color="green">003</FONT>     *<a name="line.3"></a>
+<FONT color="green">004</FONT>     * This module contains Proprietary Information of Intersect,<a name="line.4"></a>
+<FONT color="green">005</FONT>     * and should be treated as Confidential.<a name="line.5"></a>
+<FONT color="green">006</FONT>     */<a name="line.6"></a>
+<FONT color="green">007</FONT>    package au.org.intersect.exsite9.service;<a name="line.7"></a>
+<FONT color="green">008</FONT>    <a name="line.8"></a>
+<FONT color="green">009</FONT>    import java.io.File;<a name="line.9"></a>
+<FONT color="green">010</FONT>    import java.io.IOException;<a name="line.10"></a>
+<FONT color="green">011</FONT>    <a name="line.11"></a>
+<FONT color="green">012</FONT>    import javax.xml.parsers.ParserConfigurationException;<a name="line.12"></a>
+<FONT color="green">013</FONT>    <a name="line.13"></a>
+<FONT color="green">014</FONT>    import org.xml.sax.SAXException;<a name="line.14"></a>
+<FONT color="green">015</FONT>    <a name="line.15"></a>
+<FONT color="green">016</FONT>    import au.org.intersect.exsite9.domain.MetadataCategory;<a name="line.16"></a>
+<FONT color="green">017</FONT>    import au.org.intersect.exsite9.domain.Schema;<a name="line.17"></a>
+<FONT color="green">018</FONT>    import au.org.intersect.exsite9.exception.InvalidSchemaException;<a name="line.18"></a>
+<FONT color="green">019</FONT>    <a name="line.19"></a>
+<FONT color="green">020</FONT>    /**<a name="line.20"></a>
+<FONT color="green">021</FONT>     * Provides services for manipulating Metadata {@link Schema}s<a name="line.21"></a>
+<FONT color="green">022</FONT>     */<a name="line.22"></a>
+<FONT color="green">023</FONT>    public interface ISchemaService<a name="line.23"></a>
+<FONT color="green">024</FONT>    {<a name="line.24"></a>
+<FONT color="green">025</FONT>        /**<a name="line.25"></a>
+<FONT color="green">026</FONT>         * Creates a new Local Schema<a name="line.26"></a>
+<FONT color="green">027</FONT>         * @param schemaName The name of the schema.<a name="line.27"></a>
+<FONT color="green">028</FONT>         * @param schemaDescription The description of the schema.<a name="line.28"></a>
+<FONT color="green">029</FONT>         * @param schemaNamespaceURL The namespace URL of the schema.<a name="line.29"></a>
+<FONT color="green">030</FONT>         * @return The newly created schema.<a name="line.30"></a>
+<FONT color="green">031</FONT>         */<a name="line.31"></a>
+<FONT color="green">032</FONT>        public Schema createLocalSchema(final String schemaName, final String schemaDescription, final String schemaNamespaceURL);<a name="line.32"></a>
+<FONT color="green">033</FONT>    <a name="line.33"></a>
+<FONT color="green">034</FONT>        /**<a name="line.34"></a>
+<FONT color="green">035</FONT>         * Persists an Imported Schema<a name="line.35"></a>
+<FONT color="green">036</FONT>         * @param schema The schema to persist.<a name="line.36"></a>
+<FONT color="green">037</FONT>         */<a name="line.37"></a>
+<FONT color="green">038</FONT>        public void createImportedSchema(final Schema schema);<a name="line.38"></a>
+<FONT color="green">039</FONT>    <a name="line.39"></a>
+<FONT color="green">040</FONT>        /**<a name="line.40"></a>
+<FONT color="green">041</FONT>         * Updates the details of the provided schema.<a name="line.41"></a>
+<FONT color="green">042</FONT>         * @param schema The schema to update.<a name="line.42"></a>
+<FONT color="green">043</FONT>         * @param schemaName The new name of the schema.<a name="line.43"></a>
+<FONT color="green">044</FONT>         * @param schemaDescription The new description of the schema.<a name="line.44"></a>
+<FONT color="green">045</FONT>         * @param schemaNamespaceURL The new namespace URL of the schema.<a name="line.45"></a>
+<FONT color="green">046</FONT>         */<a name="line.46"></a>
+<FONT color="green">047</FONT>        public void updateSchema(final Schema schema, final String schemaName, final String schemaDescription, final String schemaNamespaceURL);<a name="line.47"></a>
+<FONT color="green">048</FONT>    <a name="line.48"></a>
+<FONT color="green">049</FONT>        /**<a name="line.49"></a>
+<FONT color="green">050</FONT>         * Removes a schema, its association to a project, and its association to files/groups.<a name="line.50"></a>
+<FONT color="green">051</FONT>         * @param schema The schema to delete.<a name="line.51"></a>
+<FONT color="green">052</FONT>         */<a name="line.52"></a>
+<FONT color="green">053</FONT>        public void removeSchema(final Schema schema);<a name="line.53"></a>
+<FONT color="green">054</FONT>    <a name="line.54"></a>
+<FONT color="green">055</FONT>        /**<a name="line.55"></a>
+<FONT color="green">056</FONT>         * Adds a metadata category to a schema.<a name="line.56"></a>
+<FONT color="green">057</FONT>         * @param schema The schema.<a name="line.57"></a>
+<FONT color="green">058</FONT>         * @param metadataCategory The metadata category to add.<a name="line.58"></a>
+<FONT color="green">059</FONT>         */<a name="line.59"></a>
+<FONT color="green">060</FONT>        public void addMetadataCategoryToSchema(final Schema schema, final MetadataCategory metadataCategory);<a name="line.60"></a>
+<FONT color="green">061</FONT>    <a name="line.61"></a>
+<FONT color="green">062</FONT>        /**<a name="line.62"></a>
+<FONT color="green">063</FONT>         * Removes a metadata category from a schema.<a name="line.63"></a>
+<FONT color="green">064</FONT>         * @param schema The schema.<a name="line.64"></a>
+<FONT color="green">065</FONT>         * @param metadataCategory The metadata category to remove.<a name="line.65"></a>
+<FONT color="green">066</FONT>         */<a name="line.66"></a>
+<FONT color="green">067</FONT>        public void removeMetadataCategoryFromSchema(final Schema schema, final MetadataCategory metadataCategory);<a name="line.67"></a>
+<FONT color="green">068</FONT>    <a name="line.68"></a>
+<FONT color="green">069</FONT>        /**<a name="line.69"></a>
+<FONT color="green">070</FONT>         * Obtains the default directory on the file system that contains the pre-defined Schemas.<a name="line.70"></a>
+<FONT color="green">071</FONT>         * @return The default directory on the file system that contains the pre-defined Schemas. May be {@code null} if there is no default schema directory.<a name="line.71"></a>
+<FONT color="green">072</FONT>         */<a name="line.72"></a>
+<FONT color="green">073</FONT>        public File getDefaultSchemaDirectory();<a name="line.73"></a>
+<FONT color="green">074</FONT>    <a name="line.74"></a>
+<FONT color="green">075</FONT>        /**<a name="line.75"></a>
+<FONT color="green">076</FONT>         * Obtains the default Schema.<a name="line.76"></a>
+<FONT color="green">077</FONT>         * @return The default Schema to be used with new projects.<a name="line.77"></a>
+<FONT color="green">078</FONT>         */<a name="line.78"></a>
+<FONT color="green">079</FONT>        public File getDefaultSchema();<a name="line.79"></a>
+<FONT color="green">080</FONT>    <a name="line.80"></a>
+<FONT color="green">081</FONT>        /**<a name="line.81"></a>
+<FONT color="green">082</FONT>         * Parses the provides schema XML file to a schema object. &lt;em&gt;Does not persist the Schema to the database.&lt;/em&gt;<a name="line.82"></a>
+<FONT color="green">083</FONT>         * @param xmlFile The XML File to import.<a name="line.83"></a>
+<FONT color="green">084</FONT>         * @return The imported Schema.<a name="line.84"></a>
+<FONT color="green">085</FONT>         * @throws SAXException<a name="line.85"></a>
+<FONT color="green">086</FONT>         * @throws IOException<a name="line.86"></a>
+<FONT color="green">087</FONT>         * @throws ParserConfigurationException<a name="line.87"></a>
+<FONT color="green">088</FONT>         * @throws InvalidSchemaException <a name="line.88"></a>
+<FONT color="green">089</FONT>         */<a name="line.89"></a>
+<FONT color="green">090</FONT>        public Schema parseSchema(final File xmlFile) throws SAXException, IOException, ParserConfigurationException, InvalidSchemaException;<a name="line.90"></a>
+<FONT color="green">091</FONT>    }<a name="line.91"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

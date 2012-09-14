@@ -1,0 +1,108 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /**<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Copyright (C) Intersect 2012.<a name="line.2"></a>
+<FONT color="green">003</FONT>     *<a name="line.3"></a>
+<FONT color="green">004</FONT>     * This module contains Proprietary Information of Intersect,<a name="line.4"></a>
+<FONT color="green">005</FONT>     * and should be treated as Confidential.<a name="line.5"></a>
+<FONT color="green">006</FONT>     */<a name="line.6"></a>
+<FONT color="green">007</FONT>    package au.org.intersect.exsite9;<a name="line.7"></a>
+<FONT color="green">008</FONT>    <a name="line.8"></a>
+<FONT color="green">009</FONT>    import org.eclipse.swt.graphics.Point;<a name="line.9"></a>
+<FONT color="green">010</FONT>    import org.eclipse.ui.application.ActionBarAdvisor;<a name="line.10"></a>
+<FONT color="green">011</FONT>    import org.eclipse.ui.application.IActionBarConfigurer;<a name="line.11"></a>
+<FONT color="green">012</FONT>    import org.eclipse.ui.application.IWorkbenchWindowConfigurer;<a name="line.12"></a>
+<FONT color="green">013</FONT>    import org.eclipse.ui.application.WorkbenchWindowAdvisor;<a name="line.13"></a>
+<FONT color="green">014</FONT>    <a name="line.14"></a>
+<FONT color="green">015</FONT>    /**<a name="line.15"></a>
+<FONT color="green">016</FONT>     * <a name="line.16"></a>
+<FONT color="green">017</FONT>     */<a name="line.17"></a>
+<FONT color="green">018</FONT>    public final class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor<a name="line.18"></a>
+<FONT color="green">019</FONT>    {<a name="line.19"></a>
+<FONT color="green">020</FONT>    <a name="line.20"></a>
+<FONT color="green">021</FONT>        public ApplicationWorkbenchWindowAdvisor(final IWorkbenchWindowConfigurer configurer)<a name="line.21"></a>
+<FONT color="green">022</FONT>        {<a name="line.22"></a>
+<FONT color="green">023</FONT>            super(configurer);<a name="line.23"></a>
+<FONT color="green">024</FONT>        }<a name="line.24"></a>
+<FONT color="green">025</FONT>    <a name="line.25"></a>
+<FONT color="green">026</FONT>        public ActionBarAdvisor createActionBarAdvisor(final IActionBarConfigurer configurer)<a name="line.26"></a>
+<FONT color="green">027</FONT>        {<a name="line.27"></a>
+<FONT color="green">028</FONT>            return new ApplicationActionBarAdvisor(configurer);<a name="line.28"></a>
+<FONT color="green">029</FONT>        }<a name="line.29"></a>
+<FONT color="green">030</FONT>    <a name="line.30"></a>
+<FONT color="green">031</FONT>        public void preWindowOpen()<a name="line.31"></a>
+<FONT color="green">032</FONT>        {<a name="line.32"></a>
+<FONT color="green">033</FONT>            final IWorkbenchWindowConfigurer configurer = getWindowConfigurer();<a name="line.33"></a>
+<FONT color="green">034</FONT>    <a name="line.34"></a>
+<FONT color="green">035</FONT>            // TODO: we probably want to center it on the screen and have a larger initial size.<a name="line.35"></a>
+<FONT color="green">036</FONT>            configurer.setInitialSize(new Point(800, 600));<a name="line.36"></a>
+<FONT color="green">037</FONT>            configurer.setShowCoolBar(true);<a name="line.37"></a>
+<FONT color="green">038</FONT>            configurer.setShowStatusLine(false);<a name="line.38"></a>
+<FONT color="green">039</FONT>            configurer.setShowProgressIndicator(true);<a name="line.39"></a>
+<FONT color="green">040</FONT>            configurer.setTitle("ExSite9"); //$NON-NLS-1$<a name="line.40"></a>
+<FONT color="green">041</FONT>        }<a name="line.41"></a>
+<FONT color="green">042</FONT>    }<a name="line.42"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

@@ -1,0 +1,929 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /**<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Copyright (C) Intersect 2012.<a name="line.2"></a>
+<FONT color="green">003</FONT>     *<a name="line.3"></a>
+<FONT color="green">004</FONT>     * This module contains Proprietary Information of Intersect,<a name="line.4"></a>
+<FONT color="green">005</FONT>     * and should be treated as Confidential.<a name="line.5"></a>
+<FONT color="green">006</FONT>     */<a name="line.6"></a>
+<FONT color="green">007</FONT>    package au.org.intersect.exsite9.view;<a name="line.7"></a>
+<FONT color="green">008</FONT>    <a name="line.8"></a>
+<FONT color="green">009</FONT>    import java.util.ArrayList;<a name="line.9"></a>
+<FONT color="green">010</FONT>    import java.util.Collection;<a name="line.10"></a>
+<FONT color="green">011</FONT>    import java.util.Collections;<a name="line.11"></a>
+<FONT color="green">012</FONT>    import java.util.HashMap;<a name="line.12"></a>
+<FONT color="green">013</FONT>    import java.util.HashSet;<a name="line.13"></a>
+<FONT color="green">014</FONT>    import java.util.List;<a name="line.14"></a>
+<FONT color="green">015</FONT>    import java.util.Map;<a name="line.15"></a>
+<FONT color="green">016</FONT>    import java.util.Set;<a name="line.16"></a>
+<FONT color="green">017</FONT>    <a name="line.17"></a>
+<FONT color="green">018</FONT>    import org.apache.log4j.Logger;<a name="line.18"></a>
+<FONT color="green">019</FONT>    import org.eclipse.core.commands.Command;<a name="line.19"></a>
+<FONT color="green">020</FONT>    import org.eclipse.core.commands.ExecutionEvent;<a name="line.20"></a>
+<FONT color="green">021</FONT>    import org.eclipse.core.commands.ExecutionException;<a name="line.21"></a>
+<FONT color="green">022</FONT>    import org.eclipse.core.commands.IExecutionListener;<a name="line.22"></a>
+<FONT color="green">023</FONT>    import org.eclipse.core.commands.NotHandledException;<a name="line.23"></a>
+<FONT color="green">024</FONT>    import org.eclipse.jface.dialogs.MessageDialog;<a name="line.24"></a>
+<FONT color="green">025</FONT>    import org.eclipse.jface.viewers.ISelection;<a name="line.25"></a>
+<FONT color="green">026</FONT>    import org.eclipse.jface.viewers.IStructuredSelection;<a name="line.26"></a>
+<FONT color="green">027</FONT>    import org.eclipse.swt.SWT;<a name="line.27"></a>
+<FONT color="green">028</FONT>    import org.eclipse.swt.events.ControlAdapter;<a name="line.28"></a>
+<FONT color="green">029</FONT>    import org.eclipse.swt.events.ControlEvent;<a name="line.29"></a>
+<FONT color="green">030</FONT>    import org.eclipse.swt.events.KeyEvent;<a name="line.30"></a>
+<FONT color="green">031</FONT>    import org.eclipse.swt.events.KeyListener;<a name="line.31"></a>
+<FONT color="green">032</FONT>    import org.eclipse.swt.events.SelectionEvent;<a name="line.32"></a>
+<FONT color="green">033</FONT>    import org.eclipse.swt.events.SelectionListener;<a name="line.33"></a>
+<FONT color="green">034</FONT>    import org.eclipse.swt.graphics.Image;<a name="line.34"></a>
+<FONT color="green">035</FONT>    import org.eclipse.swt.layout.GridData;<a name="line.35"></a>
+<FONT color="green">036</FONT>    import org.eclipse.swt.layout.GridLayout;<a name="line.36"></a>
+<FONT color="green">037</FONT>    import org.eclipse.swt.layout.RowData;<a name="line.37"></a>
+<FONT color="green">038</FONT>    import org.eclipse.swt.layout.RowLayout;<a name="line.38"></a>
+<FONT color="green">039</FONT>    import org.eclipse.swt.widgets.Button;<a name="line.39"></a>
+<FONT color="green">040</FONT>    import org.eclipse.swt.widgets.Composite;<a name="line.40"></a>
+<FONT color="green">041</FONT>    import org.eclipse.swt.widgets.ExpandBar;<a name="line.41"></a>
+<FONT color="green">042</FONT>    import org.eclipse.swt.widgets.ExpandItem;<a name="line.42"></a>
+<FONT color="green">043</FONT>    import org.eclipse.swt.widgets.Label;<a name="line.43"></a>
+<FONT color="green">044</FONT>    import org.eclipse.swt.widgets.ToolBar;<a name="line.44"></a>
+<FONT color="green">045</FONT>    import org.eclipse.swt.widgets.ToolItem;<a name="line.45"></a>
+<FONT color="green">046</FONT>    import org.eclipse.ui.ISelectionListener;<a name="line.46"></a>
+<FONT color="green">047</FONT>    import org.eclipse.ui.ISharedImages;<a name="line.47"></a>
+<FONT color="green">048</FONT>    import org.eclipse.ui.IWorkbenchPart;<a name="line.48"></a>
+<FONT color="green">049</FONT>    import org.eclipse.ui.PlatformUI;<a name="line.49"></a>
+<FONT color="green">050</FONT>    import org.eclipse.ui.commands.ICommandService;<a name="line.50"></a>
+<FONT color="green">051</FONT>    import org.eclipse.ui.part.ViewPart;<a name="line.51"></a>
+<FONT color="green">052</FONT>    <a name="line.52"></a>
+<FONT color="green">053</FONT>    import com.google.common.base.Objects;<a name="line.53"></a>
+<FONT color="green">054</FONT>    import com.google.common.base.Predicates;<a name="line.54"></a>
+<FONT color="green">055</FONT>    import com.google.common.collect.Collections2;<a name="line.55"></a>
+<FONT color="green">056</FONT>    <a name="line.56"></a>
+<FONT color="green">057</FONT>    import au.org.intersect.exsite9.Activator;<a name="line.57"></a>
+<FONT color="green">058</FONT>    import au.org.intersect.exsite9.domain.Group;<a name="line.58"></a>
+<FONT color="green">059</FONT>    import au.org.intersect.exsite9.domain.IMetadataAssignable;<a name="line.59"></a>
+<FONT color="green">060</FONT>    import au.org.intersect.exsite9.domain.MetadataAttribute;<a name="line.60"></a>
+<FONT color="green">061</FONT>    import au.org.intersect.exsite9.domain.MetadataAttributeValue;<a name="line.61"></a>
+<FONT color="green">062</FONT>    import au.org.intersect.exsite9.domain.MetadataCategory;<a name="line.62"></a>
+<FONT color="green">063</FONT>    import au.org.intersect.exsite9.domain.MetadataCategoryType;<a name="line.63"></a>
+<FONT color="green">064</FONT>    import au.org.intersect.exsite9.domain.MetadataValue;<a name="line.64"></a>
+<FONT color="green">065</FONT>    import au.org.intersect.exsite9.domain.NewFilesGroup;<a name="line.65"></a>
+<FONT color="green">066</FONT>    import au.org.intersect.exsite9.domain.Project;<a name="line.66"></a>
+<FONT color="green">067</FONT>    import au.org.intersect.exsite9.domain.ResearchFile;<a name="line.67"></a>
+<FONT color="green">068</FONT>    import au.org.intersect.exsite9.domain.RootGroup;<a name="line.68"></a>
+<FONT color="green">069</FONT>    import au.org.intersect.exsite9.domain.utils.AlphabeticalMetadataValueComparator;<a name="line.69"></a>
+<FONT color="green">070</FONT>    import au.org.intersect.exsite9.domain.utils.IDMetadataCategoryComparator;<a name="line.70"></a>
+<FONT color="green">071</FONT>    import au.org.intersect.exsite9.domain.utils.MetadataAssignableUtils;<a name="line.71"></a>
+<FONT color="green">072</FONT>    import au.org.intersect.exsite9.service.IGroupService;<a name="line.72"></a>
+<FONT color="green">073</FONT>    import au.org.intersect.exsite9.service.IMetadataCategoryService;<a name="line.73"></a>
+<FONT color="green">074</FONT>    import au.org.intersect.exsite9.service.IProjectManager;<a name="line.74"></a>
+<FONT color="green">075</FONT>    import au.org.intersect.exsite9.service.IResearchFileService;<a name="line.75"></a>
+<FONT color="green">076</FONT>    import au.org.intersect.exsite9.util.Triplet;<a name="line.76"></a>
+<FONT color="green">077</FONT>    import au.org.intersect.exsite9.validators.MetadataValueValidator;<a name="line.77"></a>
+<FONT color="green">078</FONT>    import au.org.intersect.exsite9.view.listener.MetadataCategorySelectionListener;<a name="line.78"></a>
+<FONT color="green">079</FONT>    import au.org.intersect.exsite9.view.widgets.MetadataAttributeValuesComboWidget;<a name="line.79"></a>
+<FONT color="green">080</FONT>    import au.org.intersect.exsite9.view.widgets.MetadataButtonWidget;<a name="line.80"></a>
+<FONT color="green">081</FONT>    import au.org.intersect.exsite9.view.widgets.MetadataTextWidget;<a name="line.81"></a>
+<FONT color="green">082</FONT>    <a name="line.82"></a>
+<FONT color="green">083</FONT>    /**<a name="line.83"></a>
+<FONT color="green">084</FONT>     * View component used for browsing Metadata.<a name="line.84"></a>
+<FONT color="green">085</FONT>     */<a name="line.85"></a>
+<FONT color="green">086</FONT>    public final class MetadataBrowserView extends ViewPart implements IExecutionListener, SelectionListener,<a name="line.86"></a>
+<FONT color="green">087</FONT>            ISelectionListener<a name="line.87"></a>
+<FONT color="green">088</FONT>    {<a name="line.88"></a>
+<FONT color="green">089</FONT>        public static final String ID = MetadataBrowserView.class.getName();<a name="line.89"></a>
+<FONT color="green">090</FONT>    <a name="line.90"></a>
+<FONT color="green">091</FONT>        private static final Logger LOG = Logger.getLogger(MetadataBrowserView.class);<a name="line.91"></a>
+<FONT color="green">092</FONT>    <a name="line.92"></a>
+<FONT color="green">093</FONT>        private ExpandBar expandBar;<a name="line.93"></a>
+<FONT color="green">094</FONT>        private Composite parent;<a name="line.94"></a>
+<FONT color="green">095</FONT>        private Composite placeholder;<a name="line.95"></a>
+<FONT color="green">096</FONT>    <a name="line.96"></a>
+<FONT color="green">097</FONT>        private final List&lt;RowData&gt; rows = new ArrayList&lt;RowData&gt;();<a name="line.97"></a>
+<FONT color="green">098</FONT>    <a name="line.98"></a>
+<FONT color="green">099</FONT>        private final IGroupService groupService;<a name="line.99"></a>
+<FONT color="green">100</FONT>        private final IMetadataCategoryService metadataCategoryService;<a name="line.100"></a>
+<FONT color="green">101</FONT>        private final IResearchFileService researchFileService;<a name="line.101"></a>
+<FONT color="green">102</FONT>    <a name="line.102"></a>
+<FONT color="green">103</FONT>        /**<a name="line.103"></a>
+<FONT color="green">104</FONT>         * The list of currently selected (if any) groups on the RHS.<a name="line.104"></a>
+<FONT color="green">105</FONT>         */<a name="line.105"></a>
+<FONT color="green">106</FONT>        private final List&lt;IMetadataAssignable&gt; selectedMetadataAssignables = new ArrayList&lt;IMetadataAssignable&gt;();<a name="line.106"></a>
+<FONT color="green">107</FONT>    <a name="line.107"></a>
+<FONT color="green">108</FONT>        /**<a name="line.108"></a>
+<FONT color="green">109</FONT>         * The metadata buttons that are currently shown on the page - keyed by metadata category for easy lookup.<a name="line.109"></a>
+<FONT color="green">110</FONT>         */<a name="line.110"></a>
+<FONT color="green">111</FONT>        private final Map&lt;Triplet&lt;MetadataCategory, MetadataValue, MetadataAttributeValue&gt;, MetadataButtonWidget&gt; metadataButtons = new HashMap&lt;Triplet&lt;MetadataCategory, MetadataValue, MetadataAttributeValue&gt;, MetadataButtonWidget&gt;();<a name="line.111"></a>
+<FONT color="green">112</FONT>    <a name="line.112"></a>
+<FONT color="green">113</FONT>        private final Map&lt;MetadataCategory, MetadataTextWidget&gt; metadataFreeTextFields = new HashMap&lt;MetadataCategory, MetadataTextWidget&gt;();<a name="line.113"></a>
+<FONT color="green">114</FONT>    <a name="line.114"></a>
+<FONT color="green">115</FONT>        private final Map&lt;MetadataCategory, MetadataAttributeValuesComboWidget&gt; metadataAttributeValueCombos = new HashMap&lt;MetadataCategory, MetadataAttributeValuesComboWidget&gt;();<a name="line.115"></a>
+<FONT color="green">116</FONT>    <a name="line.116"></a>
+<FONT color="green">117</FONT>        /**<a name="line.117"></a>
+<FONT color="green">118</FONT>         * <a name="line.118"></a>
+<FONT color="green">119</FONT>         */<a name="line.119"></a>
+<FONT color="green">120</FONT>        public MetadataBrowserView()<a name="line.120"></a>
+<FONT color="green">121</FONT>        {<a name="line.121"></a>
+<FONT color="green">122</FONT>            this.groupService = (IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class);<a name="line.122"></a>
+<FONT color="green">123</FONT>            this.researchFileService = (IResearchFileService) PlatformUI.getWorkbench().getService(IResearchFileService.class);<a name="line.123"></a>
+<FONT color="green">124</FONT>            this.metadataCategoryService = (IMetadataCategoryService) PlatformUI.getWorkbench().getService(IMetadataCategoryService.class);<a name="line.124"></a>
+<FONT color="green">125</FONT>        }<a name="line.125"></a>
+<FONT color="green">126</FONT>    <a name="line.126"></a>
+<FONT color="green">127</FONT>        /**<a name="line.127"></a>
+<FONT color="green">128</FONT>         * @{inheritDoc<a name="line.128"></a>
+<FONT color="green">129</FONT>         */<a name="line.129"></a>
+<FONT color="green">130</FONT>        @Override<a name="line.130"></a>
+<FONT color="green">131</FONT>        public void createPartControl(final Composite parent)<a name="line.131"></a>
+<FONT color="green">132</FONT>        {<a name="line.132"></a>
+<FONT color="green">133</FONT>            final ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(<a name="line.133"></a>
+<FONT color="green">134</FONT>                    ICommandService.class);<a name="line.134"></a>
+<FONT color="green">135</FONT>    <a name="line.135"></a>
+<FONT color="green">136</FONT>            final Command newProjectCommand = commandService<a name="line.136"></a>
+<FONT color="green">137</FONT>                    .getCommand("au.org.intersect.exsite9.commands.NewProjectCommand");<a name="line.137"></a>
+<FONT color="green">138</FONT>            newProjectCommand.addExecutionListener(this);<a name="line.138"></a>
+<FONT color="green">139</FONT>    <a name="line.139"></a>
+<FONT color="green">140</FONT>            final Command openProjectCommand = commandService<a name="line.140"></a>
+<FONT color="green">141</FONT>                    .getCommand("au.org.intersect.exsite9.commands.OpenProjectCommand");<a name="line.141"></a>
+<FONT color="green">142</FONT>            openProjectCommand.addExecutionListener(this);<a name="line.142"></a>
+<FONT color="green">143</FONT>    <a name="line.143"></a>
+<FONT color="green">144</FONT>            final Command addMetadataCategoryCommand = commandService<a name="line.144"></a>
+<FONT color="green">145</FONT>                    .getCommand("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand");<a name="line.145"></a>
+<FONT color="green">146</FONT>            addMetadataCategoryCommand.addExecutionListener(this);<a name="line.146"></a>
+<FONT color="green">147</FONT>    <a name="line.147"></a>
+<FONT color="green">148</FONT>            final Command editProjectCommand = commandService.getCommand("au.org.intersect.exsite9.commands.EditProjectCommand");<a name="line.148"></a>
+<FONT color="green">149</FONT>            editProjectCommand.addExecutionListener(this);<a name="line.149"></a>
+<FONT color="green">150</FONT>    <a name="line.150"></a>
+<FONT color="green">151</FONT>            final Command importMetadataSchemaCommand = commandService.getCommand("au.org.intersect.exsite9.commands.ImportMetadataSchemaCommand");<a name="line.151"></a>
+<FONT color="green">152</FONT>            importMetadataSchemaCommand.addExecutionListener(this);<a name="line.152"></a>
+<FONT color="green">153</FONT>    <a name="line.153"></a>
+<FONT color="green">154</FONT>            final Command removeMetadataCategoryCommand = commandService.getCommand("au.org.intersect.exsite9.commands.RemoveMetadataCategoryCommand");<a name="line.154"></a>
+<FONT color="green">155</FONT>            removeMetadataCategoryCommand.addExecutionListener(this);<a name="line.155"></a>
+<FONT color="green">156</FONT>    <a name="line.156"></a>
+<FONT color="green">157</FONT>            final Command editMetadataCategoryCommand = commandService.getCommand("au.org.intersect.exsite9.commands.EditMetadataCategoryCommand");<a name="line.157"></a>
+<FONT color="green">158</FONT>            editMetadataCategoryCommand.addExecutionListener(this);<a name="line.158"></a>
+<FONT color="green">159</FONT>    <a name="line.159"></a>
+<FONT color="green">160</FONT>            final Command removeMetadataCategoryWithWizardCommand = commandService.getCommand("au.org.intersect.exsite9.commands.RemoveMetadataCategoryWithWizardCommand");<a name="line.160"></a>
+<FONT color="green">161</FONT>            removeMetadataCategoryWithWizardCommand.addExecutionListener(this);<a name="line.161"></a>
+<FONT color="green">162</FONT>    <a name="line.162"></a>
+<FONT color="green">163</FONT>            this.parent = parent;<a name="line.163"></a>
+<FONT color="green">164</FONT>    <a name="line.164"></a>
+<FONT color="green">165</FONT>            // So wrapping of the buttons in the rows will work<a name="line.165"></a>
+<FONT color="green">166</FONT>            this.parent.addControlListener(new ControlAdapter()<a name="line.166"></a>
+<FONT color="green">167</FONT>            {<a name="line.167"></a>
+<FONT color="green">168</FONT>                @Override<a name="line.168"></a>
+<FONT color="green">169</FONT>                public void controlResized(final ControlEvent e)<a name="line.169"></a>
+<FONT color="green">170</FONT>                {<a name="line.170"></a>
+<FONT color="green">171</FONT>                    super.controlResized(e);<a name="line.171"></a>
+<FONT color="green">172</FONT>                    for (final RowData rowData : rows)<a name="line.172"></a>
+<FONT color="green">173</FONT>                    {<a name="line.173"></a>
+<FONT color="green">174</FONT>                        rowData.width = parent.getClientArea().width;<a name="line.174"></a>
+<FONT color="green">175</FONT>                    }<a name="line.175"></a>
+<FONT color="green">176</FONT>                }<a name="line.176"></a>
+<FONT color="green">177</FONT>            });<a name="line.177"></a>
+<FONT color="green">178</FONT>    <a name="line.178"></a>
+<FONT color="green">179</FONT>            // So we can listen for selections in the project tree view<a name="line.179"></a>
+<FONT color="green">180</FONT>            getSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(ProjectExplorerView.ID, this);<a name="line.180"></a>
+<FONT color="green">181</FONT>        }<a name="line.181"></a>
+<FONT color="green">182</FONT>    <a name="line.182"></a>
+<FONT color="green">183</FONT>        private void initLayout(final List&lt;MetadataCategory&gt; metadataCategories)<a name="line.183"></a>
+<FONT color="green">184</FONT>        {<a name="line.184"></a>
+<FONT color="green">185</FONT>            if (this.expandBar != null)<a name="line.185"></a>
+<FONT color="green">186</FONT>            {<a name="line.186"></a>
+<FONT color="green">187</FONT>                this.expandBar.dispose();<a name="line.187"></a>
+<FONT color="green">188</FONT>            }<a name="line.188"></a>
+<FONT color="green">189</FONT>    <a name="line.189"></a>
+<FONT color="green">190</FONT>            if (this.placeholder != null)<a name="line.190"></a>
+<FONT color="green">191</FONT>            {<a name="line.191"></a>
+<FONT color="green">192</FONT>                this.placeholder.dispose();<a name="line.192"></a>
+<FONT color="green">193</FONT>            }<a name="line.193"></a>
+<FONT color="green">194</FONT>    <a name="line.194"></a>
+<FONT color="green">195</FONT>            this.metadataButtons.clear();<a name="line.195"></a>
+<FONT color="green">196</FONT>            this.metadataFreeTextFields.clear();<a name="line.196"></a>
+<FONT color="green">197</FONT>            this.metadataAttributeValueCombos.clear();<a name="line.197"></a>
+<FONT color="green">198</FONT>            this.rows.clear();<a name="line.198"></a>
+<FONT color="green">199</FONT>    <a name="line.199"></a>
+<FONT color="green">200</FONT>            if (metadataCategories.isEmpty())<a name="line.200"></a>
+<FONT color="green">201</FONT>            {<a name="line.201"></a>
+<FONT color="green">202</FONT>                this.placeholder = new Composite(this.parent, SWT.BORDER);<a name="line.202"></a>
+<FONT color="green">203</FONT>                return;<a name="line.203"></a>
+<FONT color="green">204</FONT>            }<a name="line.204"></a>
+<FONT color="green">205</FONT>    <a name="line.205"></a>
+<FONT color="green">206</FONT>            this.expandBar = new ExpandBar(this.parent, SWT.BORDER | SWT.V_SCROLL);<a name="line.206"></a>
+<FONT color="green">207</FONT>    <a name="line.207"></a>
+<FONT color="green">208</FONT>            final List&lt;MetadataCategory&gt; sorted = new ArrayList&lt;MetadataCategory&gt;(metadataCategories);<a name="line.208"></a>
+<FONT color="green">209</FONT>            Collections.sort(sorted, new IDMetadataCategoryComparator());<a name="line.209"></a>
+<FONT color="green">210</FONT>    <a name="line.210"></a>
+<FONT color="green">211</FONT>            for (final MetadataCategory metadataCategory : sorted)<a name="line.211"></a>
+<FONT color="green">212</FONT>            {<a name="line.212"></a>
+<FONT color="green">213</FONT>                final Composite expandBarComposite = new Composite(expandBar, SWT.NONE);<a name="line.213"></a>
+<FONT color="green">214</FONT>                final RowLayout expandBarLayout = new RowLayout(SWT.VERTICAL);<a name="line.214"></a>
+<FONT color="green">215</FONT>                expandBarLayout.wrap = true;<a name="line.215"></a>
+<FONT color="green">216</FONT>                expandBarLayout.pack = true;<a name="line.216"></a>
+<FONT color="green">217</FONT>                expandBarLayout.justify = false;<a name="line.217"></a>
+<FONT color="green">218</FONT>                expandBarComposite.setLayout(expandBarLayout);<a name="line.218"></a>
+<FONT color="green">219</FONT>                <a name="line.219"></a>
+<FONT color="green">220</FONT>                final Composite headerComposite = new Composite(expandBarComposite, SWT.NONE);<a name="line.220"></a>
+<FONT color="green">221</FONT>                final Composite contentComposite = new Composite(expandBarComposite, SWT.NONE);<a name="line.221"></a>
+<FONT color="green">222</FONT>                final ExpandItem expandItem = new ExpandItem(this.expandBar, SWT.NONE);<a name="line.222"></a>
+<FONT color="green">223</FONT>                expandItem.setText(metadataCategory.getName() + " (" + metadataCategory.getUse() + ")");<a name="line.223"></a>
+<FONT color="green">224</FONT>                expandItem.setControl(expandBarComposite);<a name="line.224"></a>
+<FONT color="green">225</FONT>                expandItem.setHeight(expandBarComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);<a name="line.225"></a>
+<FONT color="green">226</FONT>                <a name="line.226"></a>
+<FONT color="green">227</FONT>                expandBarComposite.addControlListener(new ControlAdapter()<a name="line.227"></a>
+<FONT color="green">228</FONT>                {<a name="line.228"></a>
+<FONT color="green">229</FONT>                    @Override<a name="line.229"></a>
+<FONT color="green">230</FONT>                    public void controlResized(ControlEvent e)<a name="line.230"></a>
+<FONT color="green">231</FONT>                    {<a name="line.231"></a>
+<FONT color="green">232</FONT>                        super.controlResized(e);<a name="line.232"></a>
+<FONT color="green">233</FONT>                        expandItem.setHeight(expandBarComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);<a name="line.233"></a>
+<FONT color="green">234</FONT>                    }<a name="line.234"></a>
+<FONT color="green">235</FONT>                });<a name="line.235"></a>
+<FONT color="green">236</FONT>    <a name="line.236"></a>
+<FONT color="green">237</FONT>                final ToolBar toolBar = new ToolBar(headerComposite, SWT.FLAT | SWT.WRAP | SWT.RIGHT);<a name="line.237"></a>
+<FONT color="green">238</FONT>                new ToolItem(toolBar, SWT.SEPARATOR);<a name="line.238"></a>
+<FONT color="green">239</FONT>    <a name="line.239"></a>
+<FONT color="green">240</FONT>                final ToolItem editButtonItem = new ToolItem(toolBar, SWT.NULL);<a name="line.240"></a>
+<FONT color="green">241</FONT>                final Image editImage = Activator.getImageDescriptor("/icons/icon_edit_16.png").createImage();<a name="line.241"></a>
+<FONT color="green">242</FONT>                editButtonItem.setImage(editImage);<a name="line.242"></a>
+<FONT color="green">243</FONT>                editButtonItem.addSelectionListener(new MetadataCategorySelectionListener(metadataCategory,<a name="line.243"></a>
+<FONT color="green">244</FONT>                        "au.org.intersect.exsite9.commands.AddMetadataCategoryCommand", "au.org.intersect.exsite9.commands.AddMetadataCategoryCommand.categoryParameter"));<a name="line.244"></a>
+<FONT color="green">245</FONT>                editButtonItem.setToolTipText("Edit category");<a name="line.245"></a>
+<FONT color="green">246</FONT>                <a name="line.246"></a>
+<FONT color="green">247</FONT>                final ToolItem removeButtonItem = new ToolItem(toolBar, SWT.NULL);<a name="line.247"></a>
+<FONT color="green">248</FONT>                final Image removeImage = Activator.getImageDescriptor("/icons/icon_exclude_16.png").createImage();<a name="line.248"></a>
+<FONT color="green">249</FONT>                removeButtonItem.setImage(removeImage);<a name="line.249"></a>
+<FONT color="green">250</FONT>                removeButtonItem.setToolTipText("Remove category");<a name="line.250"></a>
+<FONT color="green">251</FONT>                removeButtonItem.addSelectionListener(new MetadataCategorySelectionListener(metadataCategory,<a name="line.251"></a>
+<FONT color="green">252</FONT>                        "au.org.intersect.exsite9.commands.RemoveMetadataCategoryCommand", "au.org.intersect.exsite9.commands.RemoveMetadataCategoryCommand.categoryParameter"));<a name="line.252"></a>
+<FONT color="green">253</FONT>    <a name="line.253"></a>
+<FONT color="green">254</FONT>                if((metadataCategory.getDescription() != null) &amp;&amp; (!metadataCategory.getDescription().isEmpty())){<a name="line.254"></a>
+<FONT color="green">255</FONT>                    final ToolItem helpButtonItem = new ToolItem(toolBar, SWT.FLAT);<a name="line.255"></a>
+<FONT color="green">256</FONT>                    final Image helpImage = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_LCL_LINKTO_HELP);<a name="line.256"></a>
+<FONT color="green">257</FONT>                    helpButtonItem.setImage(helpImage);<a name="line.257"></a>
+<FONT color="green">258</FONT>                    helpButtonItem.setToolTipText(metadataCategory.getDescription());<a name="line.258"></a>
+<FONT color="green">259</FONT>                }<a name="line.259"></a>
+<FONT color="green">260</FONT>                <a name="line.260"></a>
+<FONT color="green">261</FONT>                new ToolItem(toolBar, SWT.SEPARATOR);<a name="line.261"></a>
+<FONT color="green">262</FONT>                toolBar.pack();<a name="line.262"></a>
+<FONT color="green">263</FONT>    <a name="line.263"></a>
+<FONT color="green">264</FONT>                final RowData rowData = new RowData();<a name="line.264"></a>
+<FONT color="green">265</FONT>                rowData.width = parent.getClientArea().width;<a name="line.265"></a>
+<FONT color="green">266</FONT>                contentComposite.setLayoutData(rowData);<a name="line.266"></a>
+<FONT color="green">267</FONT>                rows.add(rowData);<a name="line.267"></a>
+<FONT color="green">268</FONT>    <a name="line.268"></a>
+<FONT color="green">269</FONT>                if (metadataCategory.getType() == MetadataCategoryType.CONTROLLED_VOCABULARY)<a name="line.269"></a>
+<FONT color="green">270</FONT>                {<a name="line.270"></a>
+<FONT color="green">271</FONT>                    final RowLayout buttonLayout = new RowLayout(SWT.HORIZONTAL);<a name="line.271"></a>
+<FONT color="green">272</FONT>                    buttonLayout.marginLeft = 10;<a name="line.272"></a>
+<FONT color="green">273</FONT>                    buttonLayout.marginRight = 10;<a name="line.273"></a>
+<FONT color="green">274</FONT>                    buttonLayout.marginTop = 10;<a name="line.274"></a>
+<FONT color="green">275</FONT>                    buttonLayout.marginBottom = 10;<a name="line.275"></a>
+<FONT color="green">276</FONT>                    buttonLayout.wrap = true;<a name="line.276"></a>
+<FONT color="green">277</FONT>                    buttonLayout.pack = true;<a name="line.277"></a>
+<FONT color="green">278</FONT>                    buttonLayout.justify = false;<a name="line.278"></a>
+<FONT color="green">279</FONT>                    contentComposite.setLayout(buttonLayout);<a name="line.279"></a>
+<FONT color="green">280</FONT>        <a name="line.280"></a>
+<FONT color="green">281</FONT>                    // Sort the metadata values.<a name="line.281"></a>
+<FONT color="green">282</FONT>                    final List&lt;MetadataValue&gt; sortedMetadataValues = new ArrayList&lt;MetadataValue&gt;(metadataCategory.getValues());<a name="line.282"></a>
+<FONT color="green">283</FONT>                    Collections.sort(sortedMetadataValues, new AlphabeticalMetadataValueComparator());<a name="line.283"></a>
+<FONT color="green">284</FONT>        <a name="line.284"></a>
+<FONT color="green">285</FONT>                    for (final MetadataValue metadataValue : sortedMetadataValues)<a name="line.285"></a>
+<FONT color="green">286</FONT>                    {<a name="line.286"></a>
+<FONT color="green">287</FONT>                        final MetadataButtonWidget mdbw = new MetadataButtonWidget(contentComposite, SWT.TOGGLE, metadataCategory, metadataValue);<a name="line.287"></a>
+<FONT color="green">288</FONT>                        mdbw.setText(metadataValue.getValue());<a name="line.288"></a>
+<FONT color="green">289</FONT>                        mdbw.addSelectionListener(this);<a name="line.289"></a>
+<FONT color="green">290</FONT>                        final Triplet&lt;MetadataCategory, MetadataValue, MetadataAttributeValue&gt; triplet = new Triplet&lt;MetadataCategory, MetadataValue, MetadataAttributeValue&gt;(metadataCategory, metadataValue, null);<a name="line.290"></a>
+<FONT color="green">291</FONT>                        this.metadataButtons.put(triplet, mdbw);<a name="line.291"></a>
+<FONT color="green">292</FONT>                    }<a name="line.292"></a>
+<FONT color="green">293</FONT>                }<a name="line.293"></a>
+<FONT color="green">294</FONT>                else<a name="line.294"></a>
+<FONT color="green">295</FONT>                {<a name="line.295"></a>
+<FONT color="green">296</FONT>                    buildFreeTextRow(contentComposite, metadataCategory);<a name="line.296"></a>
+<FONT color="green">297</FONT>                }<a name="line.297"></a>
+<FONT color="green">298</FONT>    <a name="line.298"></a>
+<FONT color="green">299</FONT>                contentComposite.pack();<a name="line.299"></a>
+<FONT color="green">300</FONT>                contentComposite.layout(true);<a name="line.300"></a>
+<FONT color="green">301</FONT>                expandItem.setExpanded(true);<a name="line.301"></a>
+<FONT color="green">302</FONT>            }<a name="line.302"></a>
+<FONT color="green">303</FONT>    <a name="line.303"></a>
+<FONT color="green">304</FONT>            this.expandBar.pack();<a name="line.304"></a>
+<FONT color="green">305</FONT>            this.expandBar.layout();<a name="line.305"></a>
+<FONT color="green">306</FONT>    <a name="line.306"></a>
+<FONT color="green">307</FONT>            this.parent.layout();<a name="line.307"></a>
+<FONT color="green">308</FONT>        }<a name="line.308"></a>
+<FONT color="green">309</FONT>    <a name="line.309"></a>
+<FONT color="green">310</FONT>        /**<a name="line.310"></a>
+<FONT color="green">311</FONT>         * Builds a free text row.<a name="line.311"></a>
+<FONT color="green">312</FONT>         * @param contentComposite The composite to build the row with.<a name="line.312"></a>
+<FONT color="green">313</FONT>         * @param metadataCategory The metadata Category to use.<a name="line.313"></a>
+<FONT color="green">314</FONT>         */<a name="line.314"></a>
+<FONT color="green">315</FONT>        private void buildFreeTextRow(final Composite contentComposite, final MetadataCategory metadataCategory)<a name="line.315"></a>
+<FONT color="green">316</FONT>        {<a name="line.316"></a>
+<FONT color="green">317</FONT>            final MetadataAttribute metadataAttribute = metadataCategory.getMetadataAttribute();<a name="line.317"></a>
+<FONT color="green">318</FONT>            final boolean hasAttribute = metadataAttribute != null;<a name="line.318"></a>
+<FONT color="green">319</FONT>    <a name="line.319"></a>
+<FONT color="green">320</FONT>            final int numCols = hasAttribute ? 7 : 5;<a name="line.320"></a>
+<FONT color="green">321</FONT>    <a name="line.321"></a>
+<FONT color="green">322</FONT>            final GridLayout gridLayout = new GridLayout(numCols, false);<a name="line.322"></a>
+<FONT color="green">323</FONT>            contentComposite.setLayout(gridLayout);<a name="line.323"></a>
+<FONT color="green">324</FONT>    <a name="line.324"></a>
+<FONT color="green">325</FONT>            final MetadataAttributeValuesComboWidget combo;<a name="line.325"></a>
+<FONT color="green">326</FONT>            if (hasAttribute)<a name="line.326"></a>
+<FONT color="green">327</FONT>            {<a name="line.327"></a>
+<FONT color="green">328</FONT>                final Label attributeNameLabel = new Label(contentComposite, SWT.NULL);<a name="line.328"></a>
+<FONT color="green">329</FONT>                attributeNameLabel.setText(metadataAttribute.getName() + ":");<a name="line.329"></a>
+<FONT color="green">330</FONT>    <a name="line.330"></a>
+<FONT color="green">331</FONT>                combo = new MetadataAttributeValuesComboWidget(contentComposite, SWT.READ_ONLY);<a name="line.331"></a>
+<FONT color="green">332</FONT>                combo.setItems(metadataAttribute.getMetadataAttributeValues());<a name="line.332"></a>
+<FONT color="green">333</FONT>                this.metadataAttributeValueCombos.put(metadataCategory, combo);<a name="line.333"></a>
+<FONT color="green">334</FONT>            }<a name="line.334"></a>
+<FONT color="green">335</FONT>            else<a name="line.335"></a>
+<FONT color="green">336</FONT>            {<a name="line.336"></a>
+<FONT color="green">337</FONT>                combo = null;<a name="line.337"></a>
+<FONT color="green">338</FONT>            }<a name="line.338"></a>
+<FONT color="green">339</FONT>            <a name="line.339"></a>
+<FONT color="green">340</FONT>            final MetadataTextWidget freeTextField = new MetadataTextWidget(contentComposite, SWT.BORDER | SWT.SINGLE);<a name="line.340"></a>
+<FONT color="green">341</FONT>            this.metadataFreeTextFields.put(metadataCategory, freeTextField);<a name="line.341"></a>
+<FONT color="green">342</FONT>    <a name="line.342"></a>
+<FONT color="green">343</FONT>            final GridData multiLineGridData = new GridData(GridData.FILL_HORIZONTAL);<a name="line.343"></a>
+<FONT color="green">344</FONT>            freeTextField.setLayoutData(multiLineGridData);<a name="line.344"></a>
+<FONT color="green">345</FONT>    <a name="line.345"></a>
+<FONT color="green">346</FONT>            final Button resetButton = new Button(contentComposite, SWT.PUSH);<a name="line.346"></a>
+<FONT color="green">347</FONT>            resetButton.setText("Reset");<a name="line.347"></a>
+<FONT color="green">348</FONT>            resetButton.setEnabled(false);<a name="line.348"></a>
+<FONT color="green">349</FONT>    <a name="line.349"></a>
+<FONT color="green">350</FONT>            final Button applyButton = new Button(contentComposite, SWT.PUSH);<a name="line.350"></a>
+<FONT color="green">351</FONT>            applyButton.setText("Apply");<a name="line.351"></a>
+<FONT color="green">352</FONT>            applyButton.setEnabled(false);<a name="line.352"></a>
+<FONT color="green">353</FONT>    <a name="line.353"></a>
+<FONT color="green">354</FONT>            final Button minusButton = new Button(contentComposite, SWT.PUSH);<a name="line.354"></a>
+<FONT color="green">355</FONT>            minusButton.setText("-");<a name="line.355"></a>
+<FONT color="green">356</FONT>    <a name="line.356"></a>
+<FONT color="green">357</FONT>            final Button plusButton = new Button(contentComposite, SWT.PUSH);<a name="line.357"></a>
+<FONT color="green">358</FONT>            plusButton.setText("+");<a name="line.358"></a>
+<FONT color="green">359</FONT>    <a name="line.359"></a>
+<FONT color="green">360</FONT>            if (combo != null)<a name="line.360"></a>
+<FONT color="green">361</FONT>            {<a name="line.361"></a>
+<FONT color="green">362</FONT>                combo.addSelectionListener(new SelectionListener()<a name="line.362"></a>
+<FONT color="green">363</FONT>                {<a name="line.363"></a>
+<FONT color="green">364</FONT>                    @Override<a name="line.364"></a>
+<FONT color="green">365</FONT>                    public void widgetSelected(final SelectionEvent e)<a name="line.365"></a>
+<FONT color="green">366</FONT>                    {<a name="line.366"></a>
+<FONT color="green">367</FONT>                        if (!validMetadataAssignablesSelected(false))<a name="line.367"></a>
+<FONT color="green">368</FONT>                        {<a name="line.368"></a>
+<FONT color="green">369</FONT>                            resetButton.setEnabled(false);<a name="line.369"></a>
+<FONT color="green">370</FONT>                            applyButton.setEnabled(false);<a name="line.370"></a>
+<FONT color="green">371</FONT>                            return;<a name="line.371"></a>
+<FONT color="green">372</FONT>                        }<a name="line.372"></a>
+<FONT color="green">373</FONT>                        <a name="line.373"></a>
+<FONT color="green">374</FONT>                        final MetadataAttributeValue oldValue = metadataAttributeValueCombos.get(metadataCategory).getMetadataAttributeValue();<a name="line.374"></a>
+<FONT color="green">375</FONT>                        final MetadataAttributeValue currentValue = combo.getSelectedMetadataAttributeValue();<a name="line.375"></a>
+<FONT color="green">376</FONT>                        final boolean differentAttributeValue = !Objects.equal(oldValue, currentValue);<a name="line.376"></a>
+<FONT color="green">377</FONT>    <a name="line.377"></a>
+<FONT color="green">378</FONT>                        final MetadataValue metadataValue = metadataFreeTextFields.get(metadataCategory).getMetadataValue();<a name="line.378"></a>
+<FONT color="green">379</FONT>                        final String originalText = metadataValue == null ? "" : metadataValue.getValue();<a name="line.379"></a>
+<FONT color="green">380</FONT>                        final boolean differentTextValue = !Objects.equal(freeTextField.getText().trim(), originalText);<a name="line.380"></a>
+<FONT color="green">381</FONT>                        freeTextField.setToolTipText(freeTextField.getText());<a name="line.381"></a>
+<FONT color="green">382</FONT>                        resetButton.setEnabled(differentAttributeValue || differentTextValue);<a name="line.382"></a>
+<FONT color="green">383</FONT>                        applyButton.setEnabled(differentTextValue);<a name="line.383"></a>
+<FONT color="green">384</FONT>                    }<a name="line.384"></a>
+<FONT color="green">385</FONT>                    <a name="line.385"></a>
+<FONT color="green">386</FONT>                    @Override<a name="line.386"></a>
+<FONT color="green">387</FONT>                    public void widgetDefaultSelected(SelectionEvent e)<a name="line.387"></a>
+<FONT color="green">388</FONT>                    {<a name="line.388"></a>
+<FONT color="green">389</FONT>                    }<a name="line.389"></a>
+<FONT color="green">390</FONT>                });<a name="line.390"></a>
+<FONT color="green">391</FONT>            }<a name="line.391"></a>
+<FONT color="green">392</FONT>    <a name="line.392"></a>
+<FONT color="green">393</FONT>            resetButton.addSelectionListener(new SelectionListener()<a name="line.393"></a>
+<FONT color="green">394</FONT>            {<a name="line.394"></a>
+<FONT color="green">395</FONT>                @Override<a name="line.395"></a>
+<FONT color="green">396</FONT>                public void widgetSelected(final SelectionEvent e)<a name="line.396"></a>
+<FONT color="green">397</FONT>                {<a name="line.397"></a>
+<FONT color="green">398</FONT>                    final MetadataValue metadataValue = metadataFreeTextFields.get(metadataCategory).getMetadataValue();<a name="line.398"></a>
+<FONT color="green">399</FONT>                    final String originalText = metadataValue == null ? "" : metadataValue.getValue();<a name="line.399"></a>
+<FONT color="green">400</FONT>                    freeTextField.setText(originalText);<a name="line.400"></a>
+<FONT color="green">401</FONT>                    freeTextField.setSelection(originalText.length(), originalText.length());<a name="line.401"></a>
+<FONT color="green">402</FONT>                    freeTextField.setToolTipText(freeTextField.getText());<a name="line.402"></a>
+<FONT color="green">403</FONT>                    if (combo != null)<a name="line.403"></a>
+<FONT color="green">404</FONT>                    {<a name="line.404"></a>
+<FONT color="green">405</FONT>                        final MetadataAttributeValue metadataAttributeValue = metadataAttributeValueCombos.get(metadataCategory).getMetadataAttributeValue();<a name="line.405"></a>
+<FONT color="green">406</FONT>                        if (metadataAttributeValue != null)<a name="line.406"></a>
+<FONT color="green">407</FONT>                        {<a name="line.407"></a>
+<FONT color="green">408</FONT>                            combo.select(metadataAttributeValue);<a name="line.408"></a>
+<FONT color="green">409</FONT>                        }<a name="line.409"></a>
+<FONT color="green">410</FONT>                        else<a name="line.410"></a>
+<FONT color="green">411</FONT>                        {<a name="line.411"></a>
+<FONT color="green">412</FONT>                            combo.select(0);<a name="line.412"></a>
+<FONT color="green">413</FONT>                        }<a name="line.413"></a>
+<FONT color="green">414</FONT>                    }<a name="line.414"></a>
+<FONT color="green">415</FONT>                    resetButton.setEnabled(false);<a name="line.415"></a>
+<FONT color="green">416</FONT>                    applyButton.setEnabled(false);<a name="line.416"></a>
+<FONT color="green">417</FONT>                }<a name="line.417"></a>
+<FONT color="green">418</FONT>                <a name="line.418"></a>
+<FONT color="green">419</FONT>                @Override<a name="line.419"></a>
+<FONT color="green">420</FONT>                public void widgetDefaultSelected(final SelectionEvent e)<a name="line.420"></a>
+<FONT color="green">421</FONT>                {<a name="line.421"></a>
+<FONT color="green">422</FONT>                }<a name="line.422"></a>
+<FONT color="green">423</FONT>            });<a name="line.423"></a>
+<FONT color="green">424</FONT>    <a name="line.424"></a>
+<FONT color="green">425</FONT>            applyButton.addSelectionListener(new SelectionListener()<a name="line.425"></a>
+<FONT color="green">426</FONT>            {<a name="line.426"></a>
+<FONT color="green">427</FONT>                @Override<a name="line.427"></a>
+<FONT color="green">428</FONT>                public void widgetSelected(final SelectionEvent event)<a name="line.428"></a>
+<FONT color="green">429</FONT>                {<a name="line.429"></a>
+<FONT color="green">430</FONT>                    if (!validMetadataAssignablesSelected(true))<a name="line.430"></a>
+<FONT color="green">431</FONT>                    {<a name="line.431"></a>
+<FONT color="green">432</FONT>                        return;<a name="line.432"></a>
+<FONT color="green">433</FONT>                    }<a name="line.433"></a>
+<FONT color="green">434</FONT>    <a name="line.434"></a>
+<FONT color="green">435</FONT>                    // Handle the assignment.<a name="line.435"></a>
+<FONT color="green">436</FONT>                    if (selectedMetadataAssignables.size() &gt; 1)<a name="line.436"></a>
+<FONT color="green">437</FONT>                    {<a name="line.437"></a>
+<FONT color="green">438</FONT>                        final boolean performOperation = MessageDialog.openConfirm(getSite().getWorkbenchWindow().getShell(),<a name="line.438"></a>
+<FONT color="green">439</FONT>                            "Caution","The metadata operation is about to be performed on all selected items. Are you sure you wish to proceed?");<a name="line.439"></a>
+<FONT color="green">440</FONT>                        if (!performOperation)<a name="line.440"></a>
+<FONT color="green">441</FONT>                        {<a name="line.441"></a>
+<FONT color="green">442</FONT>                            return;<a name="line.442"></a>
+<FONT color="green">443</FONT>                        }<a name="line.443"></a>
+<FONT color="green">444</FONT>                    }<a name="line.444"></a>
+<FONT color="green">445</FONT>    <a name="line.445"></a>
+<FONT color="green">446</FONT>                    final String newValue = freeTextField.getText();<a name="line.446"></a>
+<FONT color="green">447</FONT>                    final MetadataAttributeValue metadataAttributeValue = combo != null ? combo.getSelectedMetadataAttributeValue() : null;<a name="line.447"></a>
+<FONT color="green">448</FONT>    <a name="line.448"></a>
+<FONT color="green">449</FONT>                    final MetadataValueValidator validtor = new MetadataValueValidator(Collections.&lt;MetadataValue&gt;emptyList(), true);<a name="line.449"></a>
+<FONT color="green">450</FONT>                    if (!validtor.isValid(newValue))<a name="line.450"></a>
+<FONT color="green">451</FONT>                    {<a name="line.451"></a>
+<FONT color="green">452</FONT>                        MessageDialog.openError(getSite().getWorkbenchWindow().getShell(), "Cannot apply metadata", "Cannot apply metadata. " + validtor.getErrorMessage());<a name="line.452"></a>
+<FONT color="green">453</FONT>                        return;<a name="line.453"></a>
+<FONT color="green">454</FONT>                    }<a name="line.454"></a>
+<FONT color="green">455</FONT>    <a name="line.455"></a>
+<FONT color="green">456</FONT>                    // We need to reload the metadata category.<a name="line.456"></a>
+<FONT color="green">457</FONT>                    final MetadataCategory updatedMetadataCategory = metadataCategoryService.findById(metadataCategory.getId());<a name="line.457"></a>
+<FONT color="green">458</FONT>    <a name="line.458"></a>
+<FONT color="green">459</FONT>                    // Disassociate old value<a name="line.459"></a>
+<FONT color="green">460</FONT>                    final MetadataValue oldAssociatedValue = freeTextField.getMetadataValue();<a name="line.460"></a>
+<FONT color="green">461</FONT>    <a name="line.461"></a>
+<FONT color="green">462</FONT>                    if (oldAssociatedValue != null)<a name="line.462"></a>
+<FONT color="green">463</FONT>                    {<a name="line.463"></a>
+<FONT color="green">464</FONT>                        for (final IMetadataAssignable metadataAssignable : selectedMetadataAssignables)<a name="line.464"></a>
+<FONT color="green">465</FONT>                        {<a name="line.465"></a>
+<FONT color="green">466</FONT>                            if (metadataAssignable instanceof Group)<a name="line.466"></a>
+<FONT color="green">467</FONT>                            {<a name="line.467"></a>
+<FONT color="green">468</FONT>                                // We need to reload the object model from the database because the user may have updated it's metadata associations<a name="line.468"></a>
+<FONT color="green">469</FONT>                                // and wishes to perform another action on it (without selecting another one in between, which would force a reload from the DB)<a name="line.469"></a>
+<FONT color="green">470</FONT>                                final Group freshGroup = groupService.findGroupByID(((Group)metadataAssignable).getId());<a name="line.470"></a>
+<FONT color="green">471</FONT>                                groupService.disassociateMetadata(freshGroup, updatedMetadataCategory, oldAssociatedValue);<a name="line.471"></a>
+<FONT color="green">472</FONT>                            }<a name="line.472"></a>
+<FONT color="green">473</FONT>                            else if (metadataAssignable instanceof ResearchFile)<a name="line.473"></a>
+<FONT color="green">474</FONT>                            {<a name="line.474"></a>
+<FONT color="green">475</FONT>                                final ResearchFile freshResearchFile = researchFileService.findResearchFileByID(((ResearchFile)metadataAssignable).getId());<a name="line.475"></a>
+<FONT color="green">476</FONT>                                researchFileService.disassociateMetadata(freshResearchFile, updatedMetadataCategory, oldAssociatedValue);<a name="line.476"></a>
+<FONT color="green">477</FONT>                            }<a name="line.477"></a>
+<FONT color="green">478</FONT>                        }<a name="line.478"></a>
+<FONT color="green">479</FONT>                    }<a name="line.479"></a>
+<FONT color="green">480</FONT>    <a name="line.480"></a>
+<FONT color="green">481</FONT>                    // Add &amp; Associate new value<a name="line.481"></a>
+<FONT color="green">482</FONT>                    if (!newValue.isEmpty())<a name="line.482"></a>
+<FONT color="green">483</FONT>                    {<a name="line.483"></a>
+<FONT color="green">484</FONT>                        // Persist the newly configured metadata category value.<a name="line.484"></a>
+<FONT color="green">485</FONT>                        final MetadataValue metadataValue = metadataCategoryService.addValueToMetadataCategory(updatedMetadataCategory, newValue);<a name="line.485"></a>
+<FONT color="green">486</FONT>                        for (final IMetadataAssignable metadataAssignable : selectedMetadataAssignables)<a name="line.486"></a>
+<FONT color="green">487</FONT>                        {<a name="line.487"></a>
+<FONT color="green">488</FONT>                            if (metadataAssignable instanceof Group)<a name="line.488"></a>
+<FONT color="green">489</FONT>                            {<a name="line.489"></a>
+<FONT color="green">490</FONT>                                // We need to reload the object model from the database because the user may have updated it's metadata associations<a name="line.490"></a>
+<FONT color="green">491</FONT>                                // and wishes to perform another action on it (without selecting another one in between, which would force a reload from the DB)<a name="line.491"></a>
+<FONT color="green">492</FONT>                                final Group freshGroup = groupService.findGroupByID(((Group)metadataAssignable).getId());<a name="line.492"></a>
+<FONT color="green">493</FONT>                                groupService.associateMetadata(freshGroup, updatedMetadataCategory, metadataValue, metadataAttributeValue);<a name="line.493"></a>
+<FONT color="green">494</FONT>                            }<a name="line.494"></a>
+<FONT color="green">495</FONT>                            else if (metadataAssignable instanceof ResearchFile)<a name="line.495"></a>
+<FONT color="green">496</FONT>                            {<a name="line.496"></a>
+<FONT color="green">497</FONT>                                final ResearchFile freshResearchFile = researchFileService.findResearchFileByID(((ResearchFile)metadataAssignable).getId());<a name="line.497"></a>
+<FONT color="green">498</FONT>                                researchFileService.associateMetadata(freshResearchFile, updatedMetadataCategory, metadataValue, metadataAttributeValue);<a name="line.498"></a>
+<FONT color="green">499</FONT>                            }<a name="line.499"></a>
+<FONT color="green">500</FONT>                        }<a name="line.500"></a>
+<FONT color="green">501</FONT>                    }<a name="line.501"></a>
+<FONT color="green">502</FONT>                    reloadView();<a name="line.502"></a>
+<FONT color="green">503</FONT>                    refreshRelatedViews();<a name="line.503"></a>
+<FONT color="green">504</FONT>                }<a name="line.504"></a>
+<FONT color="green">505</FONT>                <a name="line.505"></a>
+<FONT color="green">506</FONT>                @Override<a name="line.506"></a>
+<FONT color="green">507</FONT>                public void widgetDefaultSelected(final SelectionEvent event)<a name="line.507"></a>
+<FONT color="green">508</FONT>                {<a name="line.508"></a>
+<FONT color="green">509</FONT>                }<a name="line.509"></a>
+<FONT color="green">510</FONT>            });<a name="line.510"></a>
+<FONT color="green">511</FONT>    <a name="line.511"></a>
+<FONT color="green">512</FONT>            plusButton.addSelectionListener(new SelectionListener()<a name="line.512"></a>
+<FONT color="green">513</FONT>            {<a name="line.513"></a>
+<FONT color="green">514</FONT>                @Override<a name="line.514"></a>
+<FONT color="green">515</FONT>                public void widgetSelected(final SelectionEvent e)<a name="line.515"></a>
+<FONT color="green">516</FONT>                {<a name="line.516"></a>
+<FONT color="green">517</FONT>                }<a name="line.517"></a>
+<FONT color="green">518</FONT>    <a name="line.518"></a>
+<FONT color="green">519</FONT>                @Override<a name="line.519"></a>
+<FONT color="green">520</FONT>                public void widgetDefaultSelected(final SelectionEvent e)<a name="line.520"></a>
+<FONT color="green">521</FONT>                {<a name="line.521"></a>
+<FONT color="green">522</FONT>                }<a name="line.522"></a>
+<FONT color="green">523</FONT>            });<a name="line.523"></a>
+<FONT color="green">524</FONT>    <a name="line.524"></a>
+<FONT color="green">525</FONT>            minusButton.addSelectionListener(new SelectionListener()<a name="line.525"></a>
+<FONT color="green">526</FONT>            {<a name="line.526"></a>
+<FONT color="green">527</FONT>                @Override<a name="line.527"></a>
+<FONT color="green">528</FONT>                public void widgetSelected(final SelectionEvent e)<a name="line.528"></a>
+<FONT color="green">529</FONT>                {<a name="line.529"></a>
+<FONT color="green">530</FONT>                }<a name="line.530"></a>
+<FONT color="green">531</FONT>    <a name="line.531"></a>
+<FONT color="green">532</FONT>                @Override<a name="line.532"></a>
+<FONT color="green">533</FONT>                public void widgetDefaultSelected(final SelectionEvent e)<a name="line.533"></a>
+<FONT color="green">534</FONT>                {<a name="line.534"></a>
+<FONT color="green">535</FONT>                }<a name="line.535"></a>
+<FONT color="green">536</FONT>            });<a name="line.536"></a>
+<FONT color="green">537</FONT>    <a name="line.537"></a>
+<FONT color="green">538</FONT>            freeTextField.addKeyListener(new KeyListener()<a name="line.538"></a>
+<FONT color="green">539</FONT>            {<a name="line.539"></a>
+<FONT color="green">540</FONT>                @Override<a name="line.540"></a>
+<FONT color="green">541</FONT>                public void keyReleased(final KeyEvent e)<a name="line.541"></a>
+<FONT color="green">542</FONT>                {<a name="line.542"></a>
+<FONT color="green">543</FONT>                    if (!validMetadataAssignablesSelected(false))<a name="line.543"></a>
+<FONT color="green">544</FONT>                    {<a name="line.544"></a>
+<FONT color="green">545</FONT>                        resetButton.setEnabled(false);<a name="line.545"></a>
+<FONT color="green">546</FONT>                        applyButton.setEnabled(false);<a name="line.546"></a>
+<FONT color="green">547</FONT>                        return;<a name="line.547"></a>
+<FONT color="green">548</FONT>                    }<a name="line.548"></a>
+<FONT color="green">549</FONT>    <a name="line.549"></a>
+<FONT color="green">550</FONT>                    final MetadataValue metadataValue = metadataFreeTextFields.get(metadataCategory).getMetadataValue();<a name="line.550"></a>
+<FONT color="green">551</FONT>                    final String originalText = metadataValue == null ? "" : metadataValue.getValue();<a name="line.551"></a>
+<FONT color="green">552</FONT>                    final boolean enabled = !originalText.equals(freeTextField.getText());<a name="line.552"></a>
+<FONT color="green">553</FONT>                    freeTextField.setToolTipText(freeTextField.getText());<a name="line.553"></a>
+<FONT color="green">554</FONT>                    resetButton.setEnabled(enabled);<a name="line.554"></a>
+<FONT color="green">555</FONT>                    applyButton.setEnabled(enabled);<a name="line.555"></a>
+<FONT color="green">556</FONT>                }<a name="line.556"></a>
+<FONT color="green">557</FONT>                <a name="line.557"></a>
+<FONT color="green">558</FONT>                @Override<a name="line.558"></a>
+<FONT color="green">559</FONT>                public void keyPressed(final KeyEvent e)<a name="line.559"></a>
+<FONT color="green">560</FONT>                {<a name="line.560"></a>
+<FONT color="green">561</FONT>                }<a name="line.561"></a>
+<FONT color="green">562</FONT>            });<a name="line.562"></a>
+<FONT color="green">563</FONT>        }<a name="line.563"></a>
+<FONT color="green">564</FONT>    <a name="line.564"></a>
+<FONT color="green">565</FONT>        /**<a name="line.565"></a>
+<FONT color="green">566</FONT>         * @{inheritDoc<a name="line.566"></a>
+<FONT color="green">567</FONT>         */<a name="line.567"></a>
+<FONT color="green">568</FONT>        @Override<a name="line.568"></a>
+<FONT color="green">569</FONT>        public void setFocus()<a name="line.569"></a>
+<FONT color="green">570</FONT>        {<a name="line.570"></a>
+<FONT color="green">571</FONT>    <a name="line.571"></a>
+<FONT color="green">572</FONT>        }<a name="line.572"></a>
+<FONT color="green">573</FONT>    <a name="line.573"></a>
+<FONT color="green">574</FONT>        @Override<a name="line.574"></a>
+<FONT color="green">575</FONT>        public void notHandled(final String commandId, final NotHandledException exception)<a name="line.575"></a>
+<FONT color="green">576</FONT>        {<a name="line.576"></a>
+<FONT color="green">577</FONT>    <a name="line.577"></a>
+<FONT color="green">578</FONT>        }<a name="line.578"></a>
+<FONT color="green">579</FONT>    <a name="line.579"></a>
+<FONT color="green">580</FONT>        @Override<a name="line.580"></a>
+<FONT color="green">581</FONT>        public void postExecuteFailure(final String commandId, final ExecutionException exception)<a name="line.581"></a>
+<FONT color="green">582</FONT>        {<a name="line.582"></a>
+<FONT color="green">583</FONT>    <a name="line.583"></a>
+<FONT color="green">584</FONT>        }<a name="line.584"></a>
+<FONT color="green">585</FONT>    <a name="line.585"></a>
+<FONT color="green">586</FONT>        @Override<a name="line.586"></a>
+<FONT color="green">587</FONT>        public void postExecuteSuccess(final String commandId, final Object returnValue)<a name="line.587"></a>
+<FONT color="green">588</FONT>        {<a name="line.588"></a>
+<FONT color="green">589</FONT>            if (commandId.equals("au.org.intersect.exsite9.commands.NewProjectCommand")<a name="line.589"></a>
+<FONT color="green">590</FONT>                    || commandId.equals("au.org.intersect.exsite9.commands.OpenProjectCommand")<a name="line.590"></a>
+<FONT color="green">591</FONT>                    || commandId.equals("au.org.intersect.exsite9.commands.AddMetadataCategoryCommand")<a name="line.591"></a>
+<FONT color="green">592</FONT>                    || commandId.equals("au.org.intersect.exsite9.commands.EditProjectCommand")<a name="line.592"></a>
+<FONT color="green">593</FONT>                    || commandId.equals("au.org.intersect.exsite9.commands.ImportMetadataSchemaCommand")<a name="line.593"></a>
+<FONT color="green">594</FONT>                    || commandId.equals("au.org.intersect.exsite9.commands.RemoveMetadataCategoryCommand")<a name="line.594"></a>
+<FONT color="green">595</FONT>                    || commandId.equals("au.org.intersect.exsite9.commands.EditMetadataCategoryCommand")<a name="line.595"></a>
+<FONT color="green">596</FONT>                    || commandId.equals("au.org.intersect.exsite9.commands.RemoveMetadataCategoryWithWizardCommand"))<a name="line.596"></a>
+<FONT color="green">597</FONT>            {<a name="line.597"></a>
+<FONT color="green">598</FONT>                reloadView();<a name="line.598"></a>
+<FONT color="green">599</FONT>            }<a name="line.599"></a>
+<FONT color="green">600</FONT>        }<a name="line.600"></a>
+<FONT color="green">601</FONT>    <a name="line.601"></a>
+<FONT color="green">602</FONT>        private void reloadView()<a name="line.602"></a>
+<FONT color="green">603</FONT>        {<a name="line.603"></a>
+<FONT color="green">604</FONT>            final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);<a name="line.604"></a>
+<FONT color="green">605</FONT>            final Project project = projectManager.getCurrentProject();<a name="line.605"></a>
+<FONT color="green">606</FONT>            if (project != null)<a name="line.606"></a>
+<FONT color="green">607</FONT>            {<a name="line.607"></a>
+<FONT color="green">608</FONT>                initLayout(project.getSchema().getMetadataCategories());<a name="line.608"></a>
+<FONT color="green">609</FONT>    <a name="line.609"></a>
+<FONT color="green">610</FONT>                if (!project.getSchema().getMetadataCategories().isEmpty())<a name="line.610"></a>
+<FONT color="green">611</FONT>                {<a name="line.611"></a>
+<FONT color="green">612</FONT>                    // Refresh this page according to the currently selected items in the RHS.<a name="line.612"></a>
+<FONT color="green">613</FONT>                    final ProjectExplorerView projectExplorerView = (ProjectExplorerView) ViewUtils.getViewByID(<a name="line.613"></a>
+<FONT color="green">614</FONT>                        PlatformUI.getWorkbench().getActiveWorkbenchWindow(), ProjectExplorerView.ID);<a name="line.614"></a>
+<FONT color="green">615</FONT>                    projectExplorerView.refresh();<a name="line.615"></a>
+<FONT color="green">616</FONT>                    final ISelection currentSelection = projectExplorerView.getSelection();<a name="line.616"></a>
+<FONT color="green">617</FONT>                    selectionChanged(projectExplorerView, currentSelection);<a name="line.617"></a>
+<FONT color="green">618</FONT>                }<a name="line.618"></a>
+<FONT color="green">619</FONT>            }<a name="line.619"></a>
+<FONT color="green">620</FONT>        }<a name="line.620"></a>
+<FONT color="green">621</FONT>    <a name="line.621"></a>
+<FONT color="green">622</FONT>        @Override<a name="line.622"></a>
+<FONT color="green">623</FONT>        public void preExecute(final String commandId, final ExecutionEvent event)<a name="line.623"></a>
+<FONT color="green">624</FONT>        {<a name="line.624"></a>
+<FONT color="green">625</FONT>    <a name="line.625"></a>
+<FONT color="green">626</FONT>        }<a name="line.626"></a>
+<FONT color="green">627</FONT>    <a name="line.627"></a>
+<FONT color="green">628</FONT>        @Override<a name="line.628"></a>
+<FONT color="green">629</FONT>        public void widgetSelected(final SelectionEvent e)<a name="line.629"></a>
+<FONT color="green">630</FONT>        {<a name="line.630"></a>
+<FONT color="green">631</FONT>            final MetadataButtonWidget button = (MetadataButtonWidget) e.widget;<a name="line.631"></a>
+<FONT color="green">632</FONT>    <a name="line.632"></a>
+<FONT color="green">633</FONT>            if (!validMetadataAssignablesSelected(true))<a name="line.633"></a>
+<FONT color="green">634</FONT>            {<a name="line.634"></a>
+<FONT color="green">635</FONT>                button.setSelection(false);<a name="line.635"></a>
+<FONT color="green">636</FONT>                return;<a name="line.636"></a>
+<FONT color="green">637</FONT>            }<a name="line.637"></a>
+<FONT color="green">638</FONT>    <a name="line.638"></a>
+<FONT color="green">639</FONT>            final MetadataCategory metadataCategory = button.getMetadataCategory();<a name="line.639"></a>
+<FONT color="green">640</FONT>            final MetadataValue metadataValue = button.getMetadataValue();<a name="line.640"></a>
+<FONT color="green">641</FONT>    <a name="line.641"></a>
+<FONT color="green">642</FONT>            if (this.selectedMetadataAssignables.size() &gt; 1)<a name="line.642"></a>
+<FONT color="green">643</FONT>            {<a name="line.643"></a>
+<FONT color="green">644</FONT>                final boolean performOperation = MessageDialog.openConfirm(getSite().getWorkbenchWindow().getShell(),<a name="line.644"></a>
+<FONT color="green">645</FONT>                    "Caution","The metadata operation is about to be performed on all selected items. Are you sure you wish to proceed?");<a name="line.645"></a>
+<FONT color="green">646</FONT>                if (!performOperation)<a name="line.646"></a>
+<FONT color="green">647</FONT>                {<a name="line.647"></a>
+<FONT color="green">648</FONT>                    button.setSelection(!button.getSelection());<a name="line.648"></a>
+<FONT color="green">649</FONT>                    return;<a name="line.649"></a>
+<FONT color="green">650</FONT>                }<a name="line.650"></a>
+<FONT color="green">651</FONT>            }<a name="line.651"></a>
+<FONT color="green">652</FONT>    <a name="line.652"></a>
+<FONT color="green">653</FONT>            if (button.getSelection())<a name="line.653"></a>
+<FONT color="green">654</FONT>            {<a name="line.654"></a>
+<FONT color="green">655</FONT>                for (final IMetadataAssignable metadataAssignable : this.selectedMetadataAssignables)<a name="line.655"></a>
+<FONT color="green">656</FONT>                {<a name="line.656"></a>
+<FONT color="green">657</FONT>                    if (metadataAssignable instanceof Group)<a name="line.657"></a>
+<FONT color="green">658</FONT>                    {<a name="line.658"></a>
+<FONT color="green">659</FONT>                        // We need to reload the object model from the database because the user may have updated it's metadata associations<a name="line.659"></a>
+<FONT color="green">660</FONT>                        // and wishes to perform another action on it (without selecting another one in between, which would force a reload from the DB)<a name="line.660"></a>
+<FONT color="green">661</FONT>                        final Group freshGroup = this.groupService.findGroupByID(((Group)metadataAssignable).getId());<a name="line.661"></a>
+<FONT color="green">662</FONT>                        groupService.associateMetadata(freshGroup, metadataCategory, metadataValue, null);<a name="line.662"></a>
+<FONT color="green">663</FONT>                    }<a name="line.663"></a>
+<FONT color="green">664</FONT>                    else if (metadataAssignable instanceof ResearchFile)<a name="line.664"></a>
+<FONT color="green">665</FONT>                    {<a name="line.665"></a>
+<FONT color="green">666</FONT>                        final ResearchFile freshResearchFile = this.researchFileService.findResearchFileByID(((ResearchFile)metadataAssignable).getId());<a name="line.666"></a>
+<FONT color="green">667</FONT>                        researchFileService.associateMetadata(freshResearchFile, metadataCategory, metadataValue, null);<a name="line.667"></a>
+<FONT color="green">668</FONT>                    }<a name="line.668"></a>
+<FONT color="green">669</FONT>                }<a name="line.669"></a>
+<FONT color="green">670</FONT>            }<a name="line.670"></a>
+<FONT color="green">671</FONT>            else<a name="line.671"></a>
+<FONT color="green">672</FONT>            {<a name="line.672"></a>
+<FONT color="green">673</FONT>                for (final IMetadataAssignable metadataAssignable : this.selectedMetadataAssignables)<a name="line.673"></a>
+<FONT color="green">674</FONT>                {<a name="line.674"></a>
+<FONT color="green">675</FONT>                    if (metadataAssignable instanceof Group)<a name="line.675"></a>
+<FONT color="green">676</FONT>                    {<a name="line.676"></a>
+<FONT color="green">677</FONT>                        final Group freshGroup = this.groupService.findGroupByID(((Group)metadataAssignable).getId());<a name="line.677"></a>
+<FONT color="green">678</FONT>                        groupService.disassociateMetadata(freshGroup, metadataCategory, metadataValue);<a name="line.678"></a>
+<FONT color="green">679</FONT>                    }<a name="line.679"></a>
+<FONT color="green">680</FONT>                    else if (metadataAssignable instanceof ResearchFile)<a name="line.680"></a>
+<FONT color="green">681</FONT>                    {<a name="line.681"></a>
+<FONT color="green">682</FONT>                        final ResearchFile freshResearchFile = this.researchFileService.findResearchFileByID(((ResearchFile)metadataAssignable).getId());<a name="line.682"></a>
+<FONT color="green">683</FONT>                        researchFileService.disassociateMetadata(freshResearchFile, metadataCategory, metadataValue);<a name="line.683"></a>
+<FONT color="green">684</FONT>                    }<a name="line.684"></a>
+<FONT color="green">685</FONT>                }<a name="line.685"></a>
+<FONT color="green">686</FONT>            }<a name="line.686"></a>
+<FONT color="green">687</FONT>            refreshRelatedViews();<a name="line.687"></a>
+<FONT color="green">688</FONT>        }<a name="line.688"></a>
+<FONT color="green">689</FONT>    <a name="line.689"></a>
+<FONT color="green">690</FONT>        /**<a name="line.690"></a>
+<FONT color="green">691</FONT>         * Ensures the user has selected valid metadata assignables in the project explorer view.<a name="line.691"></a>
+<FONT color="green">692</FONT>         * @return {@code true} if selection is valid, {@code false} otherwise.<a name="line.692"></a>
+<FONT color="green">693</FONT>         */<a name="line.693"></a>
+<FONT color="green">694</FONT>        private boolean validMetadataAssignablesSelected(final boolean showErrors)<a name="line.694"></a>
+<FONT color="green">695</FONT>        {<a name="line.695"></a>
+<FONT color="green">696</FONT>            // Check that the selected groups does not contain a new files group OR the project node - we CANNOT assign metadata<a name="line.696"></a>
+<FONT color="green">697</FONT>            // to them.<a name="line.697"></a>
+<FONT color="green">698</FONT>            if (!Collections2.filter(this.selectedMetadataAssignables, Predicates.instanceOf(NewFilesGroup.class)).isEmpty())<a name="line.698"></a>
+<FONT color="green">699</FONT>            {<a name="line.699"></a>
+<FONT color="green">700</FONT>                if (showErrors)<a name="line.700"></a>
+<FONT color="green">701</FONT>                {<a name="line.701"></a>
+<FONT color="green">702</FONT>                    MessageDialog.openError(getSite().getWorkbenchWindow().getShell(), "Error", "Metadata cannot be assigned to the new files group.");<a name="line.702"></a>
+<FONT color="green">703</FONT>                }<a name="line.703"></a>
+<FONT color="green">704</FONT>                return false;<a name="line.704"></a>
+<FONT color="green">705</FONT>            }<a name="line.705"></a>
+<FONT color="green">706</FONT>            else if (!Collections2.filter(this.selectedMetadataAssignables, Predicates.instanceOf(RootGroup.class)).isEmpty())<a name="line.706"></a>
+<FONT color="green">707</FONT>            {<a name="line.707"></a>
+<FONT color="green">708</FONT>                if (showErrors)<a name="line.708"></a>
+<FONT color="green">709</FONT>                {<a name="line.709"></a>
+<FONT color="green">710</FONT>                    MessageDialog.openError(getSite().getWorkbenchWindow().getShell(), "Error", "Metadata cannot be assigned to a project.");<a name="line.710"></a>
+<FONT color="green">711</FONT>                }<a name="line.711"></a>
+<FONT color="green">712</FONT>                return false;<a name="line.712"></a>
+<FONT color="green">713</FONT>            }<a name="line.713"></a>
+<FONT color="green">714</FONT>            return true;<a name="line.714"></a>
+<FONT color="green">715</FONT>        }<a name="line.715"></a>
+<FONT color="green">716</FONT>    <a name="line.716"></a>
+<FONT color="green">717</FONT>        /**<a name="line.717"></a>
+<FONT color="green">718</FONT>         * Refreshes related views - performed after some action is performed on this view that other views may be interested in.<a name="line.718"></a>
+<FONT color="green">719</FONT>         */<a name="line.719"></a>
+<FONT color="green">720</FONT>        private static void refreshRelatedViews()<a name="line.720"></a>
+<FONT color="green">721</FONT>        {<a name="line.721"></a>
+<FONT color="green">722</FONT>            // Refresh the table in the Associated Metadata View when a value button is selected or de-selected<a name="line.722"></a>
+<FONT color="green">723</FONT>            final AssociatedMetadataView associatedMetadataView = (AssociatedMetadataView) ViewUtils.getViewByID(<a name="line.723"></a>
+<FONT color="green">724</FONT>                    PlatformUI.getWorkbench().getActiveWorkbenchWindow(), AssociatedMetadataView.ID);<a name="line.724"></a>
+<FONT color="green">725</FONT>            associatedMetadataView.refresh();<a name="line.725"></a>
+<FONT color="green">726</FONT>            <a name="line.726"></a>
+<FONT color="green">727</FONT>            // Refresh the Project Explorer View according to the currently selected items in the RHS.<a name="line.727"></a>
+<FONT color="green">728</FONT>            final ProjectExplorerView projectExplorerView = (ProjectExplorerView) ViewUtils.getViewByID(<a name="line.728"></a>
+<FONT color="green">729</FONT>                    PlatformUI.getWorkbench().getActiveWorkbenchWindow(), ProjectExplorerView.ID);<a name="line.729"></a>
+<FONT color="green">730</FONT>            projectExplorerView.refresh();        <a name="line.730"></a>
+<FONT color="green">731</FONT>            <a name="line.731"></a>
+<FONT color="green">732</FONT>        }<a name="line.732"></a>
+<FONT color="green">733</FONT>    <a name="line.733"></a>
+<FONT color="green">734</FONT>        @Override<a name="line.734"></a>
+<FONT color="green">735</FONT>        public void widgetDefaultSelected(final SelectionEvent e)<a name="line.735"></a>
+<FONT color="green">736</FONT>        {<a name="line.736"></a>
+<FONT color="green">737</FONT>    <a name="line.737"></a>
+<FONT color="green">738</FONT>        }<a name="line.738"></a>
+<FONT color="green">739</FONT>    <a name="line.739"></a>
+<FONT color="green">740</FONT>        /**<a name="line.740"></a>
+<FONT color="green">741</FONT>         * Listens to selection changes on the tree viewer in the project view on the LHS.<a name="line.741"></a>
+<FONT color="green">742</FONT>         * <a name="line.742"></a>
+<FONT color="green">743</FONT>         * @{inheritDoc<a name="line.743"></a>
+<FONT color="green">744</FONT>         */<a name="line.744"></a>
+<FONT color="green">745</FONT>        @Override<a name="line.745"></a>
+<FONT color="green">746</FONT>        public void selectionChanged(final IWorkbenchPart part, final ISelection selection)<a name="line.746"></a>
+<FONT color="green">747</FONT>        {<a name="line.747"></a>
+<FONT color="green">748</FONT>            if (!(selection instanceof IStructuredSelection))<a name="line.748"></a>
+<FONT color="green">749</FONT>            {<a name="line.749"></a>
+<FONT color="green">750</FONT>                LOG.error("Unknown selection type");<a name="line.750"></a>
+<FONT color="green">751</FONT>                return;<a name="line.751"></a>
+<FONT color="green">752</FONT>            }<a name="line.752"></a>
+<FONT color="green">753</FONT>    <a name="line.753"></a>
+<FONT color="green">754</FONT>            final IStructuredSelection structuredSelection = (IStructuredSelection) selection;<a name="line.754"></a>
+<FONT color="green">755</FONT>    <a name="line.755"></a>
+<FONT color="green">756</FONT>            @SuppressWarnings("unchecked")<a name="line.756"></a>
+<FONT color="green">757</FONT>            final List&lt;Object&gt; selectedObjects = structuredSelection.toList();<a name="line.757"></a>
+<FONT color="green">758</FONT>    <a name="line.758"></a>
+<FONT color="green">759</FONT>            this.selectedMetadataAssignables.clear();<a name="line.759"></a>
+<FONT color="green">760</FONT>    <a name="line.760"></a>
+<FONT color="green">761</FONT>            for (final Object selectedObject : selectedObjects)<a name="line.761"></a>
+<FONT color="green">762</FONT>            {<a name="line.762"></a>
+<FONT color="green">763</FONT>                if (selectedObject instanceof Group)<a name="line.763"></a>
+<FONT color="green">764</FONT>                {<a name="line.764"></a>
+<FONT color="green">765</FONT>                    final Group selectedGroup = this.groupService.findGroupByID(((Group) selectedObject).getId());<a name="line.765"></a>
+<FONT color="green">766</FONT>                    this.selectedMetadataAssignables.add(selectedGroup);<a name="line.766"></a>
+<FONT color="green">767</FONT>                }<a name="line.767"></a>
+<FONT color="green">768</FONT>                else if (selectedObject instanceof ResearchFile)<a name="line.768"></a>
+<FONT color="green">769</FONT>                {<a name="line.769"></a>
+<FONT color="green">770</FONT>                    final ResearchFile selectedResearchFile = this.researchFileService.findResearchFileByID(((ResearchFile) selectedObject).getId());<a name="line.770"></a>
+<FONT color="green">771</FONT>                    this.selectedMetadataAssignables.add(selectedResearchFile);<a name="line.771"></a>
+<FONT color="green">772</FONT>                }<a name="line.772"></a>
+<FONT color="green">773</FONT>                else if (selectedObject instanceof Project)<a name="line.773"></a>
+<FONT color="green">774</FONT>                {<a name="line.774"></a>
+<FONT color="green">775</FONT>                    Project project = ((Project) selectedObject);<a name="line.775"></a>
+<FONT color="green">776</FONT>                    final Group selectedGroup = this.groupService.findGroupByID(project.getRootNode().getId());<a name="line.776"></a>
+<FONT color="green">777</FONT>                    this.selectedMetadataAssignables.add(selectedGroup);<a name="line.777"></a>
+<FONT color="green">778</FONT>                }<a name="line.778"></a>
+<FONT color="green">779</FONT>            }<a name="line.779"></a>
+<FONT color="green">780</FONT>    <a name="line.780"></a>
+<FONT color="green">781</FONT>            resetMetadataValueWidgets();<a name="line.781"></a>
+<FONT color="green">782</FONT>            if (!this.selectedMetadataAssignables.isEmpty())<a name="line.782"></a>
+<FONT color="green">783</FONT>            {<a name="line.783"></a>
+<FONT color="green">784</FONT>                // Determine a common set of buttons that should be pressed and press them.<a name="line.784"></a>
+<FONT color="green">785</FONT>                final Set&lt;Triplet&lt;MetadataCategory, MetadataValue, MetadataAttributeValue&gt;&gt; intersection = new HashSet&lt;Triplet&lt;MetadataCategory, MetadataValue, MetadataAttributeValue&gt;&gt;(<a name="line.785"></a>
+<FONT color="green">786</FONT>                        MetadataAssignableUtils.getCategoryToValueMapping(this.selectedMetadataAssignables.get(0)));<a name="line.786"></a>
+<FONT color="green">787</FONT>    <a name="line.787"></a>
+<FONT color="green">788</FONT>                for (int i = 1; i &lt; this.selectedMetadataAssignables.size(); i++)<a name="line.788"></a>
+<FONT color="green">789</FONT>                {<a name="line.789"></a>
+<FONT color="green">790</FONT>                    intersection.retainAll(MetadataAssignableUtils.getCategoryToValueMapping(this.selectedMetadataAssignables.get(i)));<a name="line.790"></a>
+<FONT color="green">791</FONT>                }<a name="line.791"></a>
+<FONT color="green">792</FONT>                setMetadataValueWidgets(intersection);<a name="line.792"></a>
+<FONT color="green">793</FONT>            }<a name="line.793"></a>
+<FONT color="green">794</FONT>        }<a name="line.794"></a>
+<FONT color="green">795</FONT>    <a name="line.795"></a>
+<FONT color="green">796</FONT>        /**<a name="line.796"></a>
+<FONT color="green">797</FONT>         * Used to enable/disable this view from other views.<a name="line.797"></a>
+<FONT color="green">798</FONT>         * @param enabled {@code true} to enable this view.<a name="line.798"></a>
+<FONT color="green">799</FONT>         */<a name="line.799"></a>
+<FONT color="green">800</FONT>        public void setEnabled(final boolean enabled)<a name="line.800"></a>
+<FONT color="green">801</FONT>        {<a name="line.801"></a>
+<FONT color="green">802</FONT>            this.parent.setEnabled(enabled);<a name="line.802"></a>
+<FONT color="green">803</FONT>            this.parent.setVisible(enabled);<a name="line.803"></a>
+<FONT color="green">804</FONT>        }<a name="line.804"></a>
+<FONT color="green">805</FONT>    <a name="line.805"></a>
+<FONT color="green">806</FONT>        /**<a name="line.806"></a>
+<FONT color="green">807</FONT>         * Sets the metadata values that are selected.<a name="line.807"></a>
+<FONT color="green">808</FONT>         * @param metadataCollectionTrio the metadata to select.<a name="line.808"></a>
+<FONT color="green">809</FONT>         */<a name="line.809"></a>
+<FONT color="green">810</FONT>        private void setMetadataValueWidgets(final Collection&lt;Triplet&lt;MetadataCategory, MetadataValue, MetadataAttributeValue&gt;&gt; metadataCollectionTrio)<a name="line.810"></a>
+<FONT color="green">811</FONT>        {<a name="line.811"></a>
+<FONT color="green">812</FONT>            for (final Triplet&lt;MetadataCategory, MetadataValue, MetadataAttributeValue&gt; triplet : metadataCollectionTrio)<a name="line.812"></a>
+<FONT color="green">813</FONT>            {<a name="line.813"></a>
+<FONT color="green">814</FONT>                final MetadataCategory metadataCategory = triplet.getFirst();<a name="line.814"></a>
+<FONT color="green">815</FONT>                if (metadataCategory.getType() == MetadataCategoryType.CONTROLLED_VOCABULARY)<a name="line.815"></a>
+<FONT color="green">816</FONT>                {<a name="line.816"></a>
+<FONT color="green">817</FONT>                    final MetadataButtonWidget metadataButtonWidget = this.metadataButtons.get(triplet);<a name="line.817"></a>
+<FONT color="green">818</FONT>                    if (metadataButtonWidget != null)<a name="line.818"></a>
+<FONT color="green">819</FONT>                    {<a name="line.819"></a>
+<FONT color="green">820</FONT>                        metadataButtonWidget.setSelection(true);<a name="line.820"></a>
+<FONT color="green">821</FONT>                    }<a name="line.821"></a>
+<FONT color="green">822</FONT>                }<a name="line.822"></a>
+<FONT color="green">823</FONT>                else<a name="line.823"></a>
+<FONT color="green">824</FONT>                {<a name="line.824"></a>
+<FONT color="green">825</FONT>                    final MetadataValue metadataValue = triplet.getSecond();<a name="line.825"></a>
+<FONT color="green">826</FONT>                    final MetadataTextWidget freeTextField = this.metadataFreeTextFields.get(metadataCategory);<a name="line.826"></a>
+<FONT color="green">827</FONT>                    freeTextField.setText(metadataValue.getValue());<a name="line.827"></a>
+<FONT color="green">828</FONT>                    freeTextField.setMetadataValue(metadataValue);<a name="line.828"></a>
+<FONT color="green">829</FONT>                    freeTextField.setToolTipText(freeTextField.getText());<a name="line.829"></a>
+<FONT color="green">830</FONT>    <a name="line.830"></a>
+<FONT color="green">831</FONT>                    final MetadataAttributeValue metadataAttributeValue = triplet.getThird();<a name="line.831"></a>
+<FONT color="green">832</FONT>                    if (metadataAttributeValue != null)<a name="line.832"></a>
+<FONT color="green">833</FONT>                    {<a name="line.833"></a>
+<FONT color="green">834</FONT>                        final MetadataAttributeValuesComboWidget comboWidget = this.metadataAttributeValueCombos.get(metadataCategory);<a name="line.834"></a>
+<FONT color="green">835</FONT>                        comboWidget.select(metadataAttributeValue);<a name="line.835"></a>
+<FONT color="green">836</FONT>                        comboWidget.setMetadataAttributeValue(metadataAttributeValue);<a name="line.836"></a>
+<FONT color="green">837</FONT>                    }<a name="line.837"></a>
+<FONT color="green">838</FONT>                }<a name="line.838"></a>
+<FONT color="green">839</FONT>            }<a name="line.839"></a>
+<FONT color="green">840</FONT>        }<a name="line.840"></a>
+<FONT color="green">841</FONT>    <a name="line.841"></a>
+<FONT color="green">842</FONT>        /**<a name="line.842"></a>
+<FONT color="green">843</FONT>         * Depresses (i.e. makes them NOT clicked) all the metadata value buttons currently on the page.<a name="line.843"></a>
+<FONT color="green">844</FONT>         */<a name="line.844"></a>
+<FONT color="green">845</FONT>        private void resetMetadataValueWidgets()<a name="line.845"></a>
+<FONT color="green">846</FONT>        {<a name="line.846"></a>
+<FONT color="green">847</FONT>            for (final MetadataButtonWidget metadataButtonWidget : this.metadataButtons.values())<a name="line.847"></a>
+<FONT color="green">848</FONT>            {<a name="line.848"></a>
+<FONT color="green">849</FONT>                metadataButtonWidget.setSelection(false);<a name="line.849"></a>
+<FONT color="green">850</FONT>            }<a name="line.850"></a>
+<FONT color="green">851</FONT>            for (final MetadataTextWidget freeTextFields : this.metadataFreeTextFields.values())<a name="line.851"></a>
+<FONT color="green">852</FONT>            {<a name="line.852"></a>
+<FONT color="green">853</FONT>                freeTextFields.setMetadataValue(null);<a name="line.853"></a>
+<FONT color="green">854</FONT>                freeTextFields.setText("");<a name="line.854"></a>
+<FONT color="green">855</FONT>                freeTextFields.setToolTipText(freeTextFields.getText());<a name="line.855"></a>
+<FONT color="green">856</FONT>            }<a name="line.856"></a>
+<FONT color="green">857</FONT>            for (final MetadataAttributeValuesComboWidget comboWidget : this.metadataAttributeValueCombos.values())<a name="line.857"></a>
+<FONT color="green">858</FONT>            {<a name="line.858"></a>
+<FONT color="green">859</FONT>                comboWidget.setMetadataAttributeValue(null);<a name="line.859"></a>
+<FONT color="green">860</FONT>                comboWidget.select(0);<a name="line.860"></a>
+<FONT color="green">861</FONT>            }<a name="line.861"></a>
+<FONT color="green">862</FONT>        }<a name="line.862"></a>
+<FONT color="green">863</FONT>    }<a name="line.863"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>
