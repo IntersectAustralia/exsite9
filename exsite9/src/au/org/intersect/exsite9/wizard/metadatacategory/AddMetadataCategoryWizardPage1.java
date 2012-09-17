@@ -333,7 +333,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
             if (attribute != null)
             {
                 metadataAttributeNameField.setContents(attribute.getName());
-                for (MetadataAttributeValue attributeValue : attribute.getMetadataAttributeValues()) 
+                for (MetadataAttributeValue attributeValue : this.metadataAttributeValues) 
                 {
                     this.metadataAttributeValuesListWidget.add(attributeValue.getValue());
                 }

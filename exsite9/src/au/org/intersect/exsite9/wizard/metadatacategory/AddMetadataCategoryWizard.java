@@ -16,6 +16,7 @@ import au.org.intersect.exsite9.domain.MetadataCategoryUse;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
+import au.org.intersect.exsite9.domain.utils.AlphabeticalMetadataAttributeValueComparator;
 import au.org.intersect.exsite9.service.IGroupService;
 import au.org.intersect.exsite9.service.IMetadataCategoryService;
 import au.org.intersect.exsite9.service.IResearchFileService;
@@ -50,13 +51,11 @@ public class AddMetadataCategoryWizard extends Wizard
         else
         {
             final List<MetadataAttributeValue> metadataAttribtueValues;
-            if (metadataCategory.getMetadataAttribute() == null)
+            metadataAttribtueValues = new ArrayList<MetadataAttributeValue>();
+            if (metadataCategory.getMetadataAttribute() != null)
             {
-                metadataAttribtueValues = new ArrayList<MetadataAttributeValue>();
-            }
-            else
-            {
-                metadataAttribtueValues = metadataCategory.getMetadataAttribute().getMetadataAttributeValues();
+                metadataAttribtueValues.addAll(metadataCategory.getMetadataAttribute().getMetadataAttributeValues());
+                Collections.sort(metadataAttribtueValues, new AlphabeticalMetadataAttributeValueComparator());
             }
             page1 = new AddMetadataCategoryWizardPage1("Edit Metadata Category",
                     "Edit the details of the metadata category you have selected", project.getSchema(), metadataCategory,

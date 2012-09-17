@@ -22,8 +22,10 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import au.org.intersect.exsite9.domain.MetadataAttribute;
+import au.org.intersect.exsite9.domain.MetadataAttributeValue;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.Schema;
+import au.org.intersect.exsite9.domain.utils.AlphabeticalMetadataAttributeValueComparator;
 import au.org.intersect.exsite9.domain.utils.IDMetadataCategoryComparator;
 
 /**
@@ -147,7 +149,9 @@ public final class ListMetadataCategoriesWizardPage extends WizardPage implement
             final MetadataAttribute metadataAttribute = this.selectedMetadataCategory.getMetadataAttribute();
             if (metadataAttribute != null)
             {
-                editMetadataCategoryPage.setMetadataAttributeValues(metadataAttribute.getMetadataAttributeValues());
+                final List<MetadataAttributeValue> vals = new ArrayList<MetadataAttributeValue>(metadataAttribute.getMetadataAttributeValues());
+                Collections.sort(vals, new AlphabeticalMetadataAttributeValueComparator());
+                editMetadataCategoryPage.setMetadataAttributeValues(vals);
             }
             editMetadataCategoryPage.reload();
         }

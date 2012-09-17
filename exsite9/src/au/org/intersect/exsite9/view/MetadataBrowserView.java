@@ -67,10 +67,11 @@ import au.org.intersect.exsite9.domain.NewFilesGroup;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.RootGroup;
+import au.org.intersect.exsite9.domain.utils.AlphabeticalMetadataAttributeValueComparator;
 import au.org.intersect.exsite9.domain.utils.AlphabeticalMetadataValueComparator;
-import au.org.intersect.exsite9.domain.utils.MetadataAssociationTripletComparator;
 import au.org.intersect.exsite9.domain.utils.IDMetadataCategoryComparator;
 import au.org.intersect.exsite9.domain.utils.MetadataAssignableUtils;
+import au.org.intersect.exsite9.domain.utils.MetadataAssociationTripletComparator;
 import au.org.intersect.exsite9.service.IGroupService;
 import au.org.intersect.exsite9.service.IMetadataCategoryService;
 import au.org.intersect.exsite9.service.IMetadataCategoryViewConfigService;
@@ -694,7 +695,9 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                 final Label attributeNameLabel = new Label(contentComposite, SWT.NULL);
                 attributeNameLabel.setText(metadataAttribute.getName() + ":");
                 combo = new MetadataAttributeValuesComboWidget(contentComposite, SWT.READ_ONLY);
-                combo.setItems(metadataAttribute.getMetadataAttributeValues());
+                final List<MetadataAttributeValue> values = new ArrayList<MetadataAttributeValue>(metadataAttribute.getMetadataAttributeValues());
+                Collections.sort(values, new AlphabeticalMetadataAttributeValueComparator());
+                combo.setItems(values);
             }
             else
             {
