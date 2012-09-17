@@ -122,27 +122,32 @@ public class ResearchFileService implements IResearchFileService
             final MetadataAssociationDAO metadataAssociationDAO = this.metadataAssociationDAOFactory.createInstance(em);
     
             boolean addedAssociation = false;
-            for (final MetadataAssociation existingAssociation : existingAssociations)
-            {
-                if (existingAssociation.getMetadataCategory().equals(metadataCategory))
-                {
-                    if (existingAssociation.getMetadataValues().contains(metadataValue))
-                    {
-                        // nothing to do!
-                        return;
-                    }
 
-                    if (metadataCategory.getType() == MetadataCategoryType.FREETEXT)
+            if (metadataCategory.getType() == MetadataCategoryType.CONTROLLED_VOCABULARY)
+            {
+                for (final MetadataAssociation existingAssociation : existingAssociations)
+                {
+                    if (existingAssociation.getMetadataCategory().equals(metadataCategory))
                     {
-                        existingAssociation.getMetadataValues().clear();
+                        if (existingAssociation.getMetadataValues().contains(metadataValue))
+                        {
+                            // nothing to do!
+                            return;
+                        }
+    
+                        if (metadataCategory.getType() == MetadataCategoryType.FREETEXT)
+                        {
+                            existingAssociation.getMetadataValues().clear();
+                        }
+                        existingAssociation.getMetadataValues().add(metadataValue);
+                        existingAssociation.setMetadataAttributeValue(metadataAttributeValue);
+                        metadataAssociationDAO.updateMetadataAssociation(existingAssociation);
+                        addedAssociation = true;
                     }
-                    existingAssociation.getMetadataValues().add(metadataValue);
-                    metadataAssociationDAO.updateMetadataAssociation(existingAssociation);
-                    addedAssociation = true;
                 }
             }
 
-            if (!addedAssociation)
+            if (metadataCategory.getType() == MetadataCategoryType.FREETEXT || !addedAssociation)
             {
                 final MetadataAssociation metadataAssociation = new MetadataAssociation(metadataCategory);
                 metadataAssociation.getMetadataValues().add(metadataValue);

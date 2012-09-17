@@ -27,6 +27,8 @@ import au.org.intersect.exsite9.dao.ResearchFileDAO;
 import au.org.intersect.exsite9.dao.factory.FolderDAOFactory;
 import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
 import au.org.intersect.exsite9.dao.factory.MetadataAssociationDAOFactory;
+import au.org.intersect.exsite9.dao.factory.MetadataAttributeDAOFactory;
+import au.org.intersect.exsite9.dao.factory.MetadataCategoryDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ProjectDAOFactory;
 import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
 import au.org.intersect.exsite9.domain.Folder;
@@ -133,6 +135,7 @@ public final class ResearchFileServiceUnitTest extends DAOTest
         final ProjectDAOFactory projectDAOFactory = new ProjectDAOFactory();
         final FolderDAOFactory folderDAOFactory = new FolderDAOFactory();
         final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final MetadataCategoryService metadataCategoryService = new MetadataCategoryService(emf, new MetadataCategoryDAOFactory(), new MetadataAttributeDAOFactory());
         final ResearchFileService toTest = new ResearchFileService(emf, projectDAOFactory, researchFileDAOFactory, metadataAssocationDAOFactory, folderDAOFactory, groupDAOFactory);
 
         final MetadataCategory metadataCategory = new MetadataCategory("metadataCategory", MetadataCategoryType.FREETEXT, MetadataCategoryUse.optional);
@@ -152,14 +155,16 @@ public final class ResearchFileServiceUnitTest extends DAOTest
         assertEquals(1, metadataAssociation.getMetadataValues().size());
         assertEquals(metadataValue, metadataAssociation.getMetadataValues().get(0));
 
-        final MetadataValue newMetadataValue = new MetadataValue("new metadataValue");
-        metadataCategory.getValues().add(newMetadataValue);
-        metadataCategoryDAO.updateMetadataCategory(metadataCategory);
-        toTest.associateMetadata(rf, metadataCategory, newMetadataValue, null);
+        final MetadataValue newValue = metadataCategoryService.addValueToMetadataCategory(metadataCategory, "new metadataValue");
+        toTest.associateMetadata(rf, metadataCategory, newValue, null);
 
         metadataAssociations = rf.getMetadataAssociations();
-        assertEquals(1, metadataAssociations.size());
-        assertEquals(newMetadataValue, metadataAssociations.get(0).getMetadataValues().get(0));
+        assertEquals(2, metadataAssociations.size());
+        final MetadataAssociation metadataAssociation2 = metadataAssociations.get(1);
+        assertNotNull(metadataAssociation2);
+        assertEquals(metadataCategory, metadataAssociation2.getMetadataCategory());
+        assertEquals(1, metadataAssociation2.getMetadataValues().size());
+        assertEquals(newValue, metadataAssociation2.getMetadataValues().get(0));
     }
 
     @Test

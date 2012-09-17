@@ -49,7 +49,7 @@ public final class MetadataAttributeValuesComboWidget extends Combo
     public MetadataAttributeValue getSelectedMetadataAttributeValue()
     {
         final int selectedIndex = getSelectionIndex();
-        if (selectedIndex == 0)
+        if (selectedIndex <= 0)
         {
             return null;
         }

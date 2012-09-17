@@ -318,7 +318,7 @@ public final class GroupService implements IGroupService
     }
 
     @Override
-    public void associateMetadata(final Group group, final MetadataCategory metadataCategory, final MetadataValue metadataValue, final MetadataAttributeValue metadataAttribtueValue)
+    public void associateMetadata(final Group group, final MetadataCategory metadataCategory, final MetadataValue metadataValue, final MetadataAttributeValue metadataAttributeValue)
     {
         LOG.info("Assosciating metadata with group. " + group + " " + metadataCategory + " " + metadataValue);
 
@@ -330,32 +330,32 @@ public final class GroupService implements IGroupService
             final MetadataAssociationDAO metadataAssociationDAO = this.metadataAssociationDAOFactory.createInstance(em);
     
             boolean addedAssociation = false;
-            for (final MetadataAssociation existingAssociation : existingAssociations)
-            {
-                if (existingAssociation.getMetadataCategory().equals(metadataCategory))
-                {
-                    if (existingAssociation.getMetadataValues().contains(metadataValue))
-                    {
-                        // nothing to do!
-                        return;
-                    }
 
-                    if (metadataCategory.getType() == MetadataCategoryType.FREETEXT)
+            if (metadataCategory.getType() == MetadataCategoryType.CONTROLLED_VOCABULARY)
+            {
+                for (final MetadataAssociation existingAssociation : existingAssociations)
+                {
+                    if (existingAssociation.getMetadataCategory().equals(metadataCategory))
                     {
-                        // In a free-text metadata category type, there is only ever one value.
-                        existingAssociation.getMetadataValues().clear();
+                        if (existingAssociation.getMetadataValues().contains(metadataValue))
+                        {
+                            // nothing to do!
+                            return;
+                        }
+                        
+                        existingAssociation.getMetadataValues().add(metadataValue);
+                        existingAssociation.setMetadataAttributeValue(metadataAttributeValue);
+                        metadataAssociationDAO.updateMetadataAssociation(existingAssociation);
+                        addedAssociation = true;
                     }
-                    existingAssociation.getMetadataValues().add(metadataValue);
-                    metadataAssociationDAO.updateMetadataAssociation(existingAssociation);
-                    addedAssociation = true;
                 }
             }
 
-            if (!addedAssociation)
+            if (metadataCategory.getType() == MetadataCategoryType.FREETEXT || !addedAssociation)
             {
                 final MetadataAssociation metadataAssociation = new MetadataAssociation(metadataCategory);
                 metadataAssociation.getMetadataValues().add(metadataValue);
-                metadataAssociation.setMetadataAttributeValue(metadataAttribtueValue);
+                metadataAssociation.setMetadataAttributeValue(metadataAttributeValue);
                 metadataAssociationDAO.createMetadataAssociation(metadataAssociation);
                 group.getMetadataAssociations().add(metadataAssociation);
             }
