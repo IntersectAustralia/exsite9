@@ -27,6 +27,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ExpandEvent;
+import org.eclipse.swt.events.ExpandListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -39,7 +41,6 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ExpandBar;
-import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
@@ -72,6 +73,7 @@ import au.org.intersect.exsite9.domain.utils.IDMetadataCategoryComparator;
 import au.org.intersect.exsite9.domain.utils.MetadataAssignableUtils;
 import au.org.intersect.exsite9.service.IGroupService;
 import au.org.intersect.exsite9.service.IMetadataCategoryService;
+import au.org.intersect.exsite9.service.IMetadataCategoryViewConfigService;
 import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.service.IResearchFileService;
 import au.org.intersect.exsite9.util.Triplet;
@@ -79,6 +81,7 @@ import au.org.intersect.exsite9.validators.MetadataValueValidator;
 import au.org.intersect.exsite9.view.listener.MetadataCategorySelectionListener;
 import au.org.intersect.exsite9.view.widgets.MetadataAttributeValuesComboWidget;
 import au.org.intersect.exsite9.view.widgets.MetadataButtonWidget;
+import au.org.intersect.exsite9.view.widgets.MetadataCategoryExpandItem;
 import au.org.intersect.exsite9.view.widgets.MetadataTextWidget;
 
 /**
@@ -100,6 +103,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
     private final IGroupService groupService;
     private final IMetadataCategoryService metadataCategoryService;
     private final IResearchFileService researchFileService;
+    private final IMetadataCategoryViewConfigService metadataCategoryViewConfigService;
 
     /**
      * The list of currently selected (if any) groups on the RHS.
@@ -123,6 +127,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         this.groupService = (IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class);
         this.researchFileService = (IResearchFileService) PlatformUI.getWorkbench().getService(IResearchFileService.class);
         this.metadataCategoryService = (IMetadataCategoryService) PlatformUI.getWorkbench().getService(IMetadataCategoryService.class);
+        this.metadataCategoryViewConfigService = (IMetadataCategoryViewConfigService) PlatformUI.getWorkbench().getService(IMetadataCategoryViewConfigService.class);
     }
 
     /**
@@ -205,6 +210,24 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
         }
 
         this.expandBar = new ExpandBar(this.parent, SWT.BORDER | SWT.V_SCROLL);
+        this.expandBar.addExpandListener(new ExpandListener()
+        {
+            @Override
+            public void itemExpanded(final ExpandEvent e)
+            {
+                final MetadataCategoryExpandItem expandItem = (MetadataCategoryExpandItem) e.item;
+                final MetadataCategory metadataCategory = expandItem.getMetadataCategory();
+                metadataCategoryViewConfigService.setExpanded(metadataCategory, true);
+            }
+            
+            @Override
+            public void itemCollapsed(final ExpandEvent e)
+            {
+                final MetadataCategoryExpandItem expandItem = (MetadataCategoryExpandItem) e.item;
+                final MetadataCategory metadataCategory = expandItem.getMetadataCategory();
+                metadataCategoryViewConfigService.setExpanded(metadataCategory, false);
+            }
+        });
 
         final List<MetadataCategory> sorted = new ArrayList<MetadataCategory>(metadataCategories);
         Collections.sort(sorted, new IDMetadataCategoryComparator());
@@ -220,7 +243,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             
             final Composite headerComposite = new Composite(expandBarComposite, SWT.NONE);
 
-            final ExpandItem expandItem = new ExpandItem(this.expandBar, SWT.NONE);
+            final MetadataCategoryExpandItem expandItem = new MetadataCategoryExpandItem(this.expandBar, SWT.NONE, metadataCategory);
             expandItem.setText(metadataCategory.getName() + " (" + metadataCategory.getUse() + ")");
             expandItem.setControl(expandBarComposite);
             expandItem.setHeight(expandBarComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
@@ -295,7 +318,8 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             {
                 freeTextParentComposites.put(metadataCategory, expandBarComposite);
             }
-            expandItem.setExpanded(true);
+            final boolean expanded = metadataCategoryViewConfigService.isExpanded(metadataCategory);
+            expandItem.setExpanded(expanded);
         }
 
         packAndLayout();

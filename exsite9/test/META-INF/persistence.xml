@@ -20,6 +20,7 @@
         <class>au.org.intersect.exsite9.domain.FieldOfResearch</class>
         <class>au.org.intersect.exsite9.domain.MetadataAttribute</class>
         <class>au.org.intersect.exsite9.domain.MetadataAttributeValue</class>
+        <class>au.org.intersect.exsite9.domain.MetadataCategoryViewConfiguration</class>
 
        <properties/>
     </persistence-unit>

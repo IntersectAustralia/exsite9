@@ -1068,6 +1068,12 @@
          <service
                serviceClass="au.org.intersect.exsite9.service.IFieldOfResearchService"></service>
       </serviceFactory>
+      <serviceFactory
+            factoryClass="au.org.intersect.exsite9.service.factory.MetadataCategoryViewConfigServiceFactory">
+         <service
+               serviceClass="au.org.intersect.exsite9.service.IMetadataCategoryViewConfigService">
+         </service>
+      </serviceFactory>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">

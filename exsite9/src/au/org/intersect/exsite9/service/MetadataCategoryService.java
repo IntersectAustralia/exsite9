@@ -19,6 +19,7 @@ import au.org.intersect.exsite9.domain.MetadataAttribute;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataCategoryUse;
+import au.org.intersect.exsite9.domain.MetadataCategoryViewConfiguration;
 import au.org.intersect.exsite9.domain.MetadataValue;
 
 public final class MetadataCategoryService implements IMetadataCategoryService
@@ -87,6 +88,13 @@ public final class MetadataCategoryService implements IMetadataCategoryService
                 mdcDAO.updateMetadataCategory(metadataCategory);
                 mdaDAO.delete(mda);
             }
+
+            final MetadataCategoryViewConfiguration mcvc = MetadataCategoryViewConfigService.getMetadataCategoryViewConfiguration(em, metadataCategory);
+            if (mcvc != null)
+            {
+                em.remove(mcvc);
+            }
+
             mdcDAO.delete(metadataCategory);
         }
         finally
