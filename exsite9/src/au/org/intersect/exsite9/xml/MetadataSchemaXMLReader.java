@@ -106,7 +106,7 @@ public final class MetadataSchemaXMLReader
                 final MetadataAttributeNameValidator manValidator = new MetadataAttributeNameValidator(false);
                 if (!manValidator.isValid(attributeName))
                 {
-                    throw new InvalidSchemaException("Metadata attribute name '" + name + "' is invalid. " + validator.getErrorMessage());
+                    throw new InvalidSchemaException("Metadata attribute name for '" + name + "' is invalid. " + validator.getErrorMessage());
                 }
 
                 final MetadataAttribute metadataAttribute = new MetadataAttribute();

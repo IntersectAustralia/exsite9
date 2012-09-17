@@ -751,10 +751,11 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                         final boolean differentAttributeValue = !Objects.equal(metadataAttributeValue, currentValue);
 
                         final String originalText = metadataValue == null ? "" : metadataValue.getValue();
-                        final boolean differentTextValue = !Objects.equal(freeTextField.getText().trim(), originalText);
-                        freeTextField.setToolTipText(freeTextField.getText());
+                        final String newText = freeTextField.getText().trim();
+                        final boolean differentTextValue = !Objects.equal(newText, originalText);
+                        freeTextField.setToolTipText(newText);
                         resetButton.setEnabled(differentAttributeValue || differentTextValue);
-                        applyButton.setEnabled(differentAttributeValue || differentTextValue);
+                        applyButton.setEnabled((differentAttributeValue && !newText.isEmpty()) || (differentTextValue && !newText.isEmpty()));
                     }
                     
                     @Override
@@ -923,10 +924,11 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                     }
 
                     final String originalText = metadataValue == null ? "" : metadataValue.getValue();
-                    final boolean enabled = !originalText.equals(freeTextField.getText());
-                    freeTextField.setToolTipText(freeTextField.getText());
+                    final String newText = freeTextField.getText().trim();
+                    final boolean enabled = !originalText.equals(newText);
+                    freeTextField.setToolTipText(newText);
                     resetButton.setEnabled(enabled);
-                    applyButton.setEnabled(enabled);
+                    applyButton.setEnabled(enabled && !newText.isEmpty());
                 }
                 
                 @Override
