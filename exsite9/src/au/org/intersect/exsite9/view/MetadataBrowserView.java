@@ -178,7 +178,8 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                 super.controlResized(e);
                 for (final RowData rowData : rows)
                 {
-                    rowData.width = parent.getClientArea().width;
+                    // -50 to allow for the scrollbar - this is a bug with SWT.
+                    rowData.width = parent.getClientArea().width - 50;
                 }
             }
         });
@@ -329,7 +330,8 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
     private void layoutRow(final Composite contentComposite)
     {
         final RowData rowData = new RowData();
-        rowData.width = parent.getClientArea().width;
+        // -50 to allow for the scrollbar - this is a bug with SWT.
+        rowData.width = parent.getClientArea().width - 50;
         contentComposite.setLayoutData(rowData);
         rows.add(rowData);
     }
