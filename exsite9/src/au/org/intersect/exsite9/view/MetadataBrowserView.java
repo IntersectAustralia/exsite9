@@ -95,6 +95,8 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
 
     private static final Logger LOG = Logger.getLogger(MetadataBrowserView.class);
 
+    private static final int RIGHT_MARGIN = 30;
+
     private ExpandBar expandBar;
     private Composite parent;
     private Composite placeholder;
@@ -179,7 +181,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                 for (final RowData rowData : rows)
                 {
                     // -50 to allow for the scrollbar - this is a bug with SWT.
-                    rowData.width = parent.getClientArea().width - 50;
+                    rowData.width = parent.getClientArea().width - RIGHT_MARGIN;
                 }
             }
         });
@@ -331,7 +333,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
     {
         final RowData rowData = new RowData();
         // -50 to allow for the scrollbar - this is a bug with SWT.
-        rowData.width = parent.getClientArea().width - 50;
+        rowData.width = parent.getClientArea().width - RIGHT_MARGIN;
         contentComposite.setLayoutData(rowData);
         rows.add(rowData);
     }
