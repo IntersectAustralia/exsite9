@@ -834,7 +834,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
 
                     if (oldAssociatedValue != null)
                     {
-                        disassociate(updatedMetadataCategory, oldAssociatedValue);
+                        disassociateFreeText(updatedMetadataCategory, oldAssociatedValue);
                     }
 
                     // Add & Associate new value
@@ -857,8 +857,10 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                                 researchFileService.associateMetadata(freshResearchFile, updatedMetadataCategory, metadataValue, metadataAttributeValue);
                             }
                         }
+                        freeTextField.setMetadataValue(metadataValue);
+                        applyButton.setEnabled(false);
+                        resetButton.setEnabled(false);
                     }
-                    reloadView();
                     refreshRelatedViews();
                 }
                 
@@ -897,13 +899,13 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
 
                     if (oldAssociatedValue != null)
                     {
-                        disassociate(updatedMetadataCategory, metadataValue);
+                        disassociateFreeText(updatedMetadataCategory, metadataValue);
                     }
 
                     contentComposite.dispose();
                     packAndLayout();
                     refreshRelatedViews();
-                }
+                }   
 
                 @Override
                 public void widgetDefaultSelected(final SelectionEvent e)
@@ -938,7 +940,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             });
         }
 
-        private void disassociate(final MetadataCategory updatedMetadataCategory, final MetadataValue oldAssociatedValue)
+        private void disassociateFreeText(final MetadataCategory updatedMetadataCategory, final MetadataValue oldAssociatedValue)
         {
             for (final IMetadataAssignable metadataAssignable : selectedMetadataAssignables)
             {
