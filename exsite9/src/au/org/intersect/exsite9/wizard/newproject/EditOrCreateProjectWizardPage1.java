@@ -103,6 +103,12 @@ public final class EditOrCreateProjectWizardPage1 extends WizardPage implements 
         this.stringValidatorToolkit = new StringValidationToolkit(SWT.TOP | SWT.LEFT, 1, true);
         this.stringValidatorToolkit.setDefaultErrorMessageHandler(this.errorMessageHandler);
 
+        final Label identifierLabel = new Label(this.container, SWT.NULL);
+        identifierLabel.setText("Identifier");
+
+        this.identifierText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        this.identifierText.setText(this.incomingFieldValues.getIdentifier());
+
         final Label projectNameLabel = new Label(this.container, SWT.NULL);
         projectNameLabel.setText("Project Name");
 
@@ -183,12 +189,6 @@ public final class EditOrCreateProjectWizardPage1 extends WizardPage implements 
 
         this.licenceText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
         this.licenceText.setText(this.incomingFieldValues.getLicence());
-
-        final Label identifierLabel = new Label(this.container, SWT.NULL);
-        identifierLabel.setText("Identifier");
-
-        this.identifierText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
-        this.identifierText.setText(this.incomingFieldValues.getIdentifier());
 
         final Label subjectLabel = new Label(this.container, SWT.NULL);
         subjectLabel.setText("Subject");
