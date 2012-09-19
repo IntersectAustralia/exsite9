@@ -120,7 +120,7 @@ public final class MetadataCategoryService implements IMetadataCategoryService
 
     @Override
     public void updateMetadataCategory(final MetadataCategory existingMetadataCategoryToUpdate, final String name, final String description,
-            final MetadataCategoryUse use, final boolean inExtensible, final List<MetadataValue> values, final MetadataAttribute metadataAttribute)
+            final MetadataCategoryUse use, final boolean inExtensible, final List<MetadataValue> values, final MetadataAttribute newMetadataAttribute)
     {
         final EntityManager em = this.emf.createEntityManager();
         try
@@ -135,17 +135,19 @@ public final class MetadataCategoryService implements IMetadataCategoryService
             existingMetadataCategoryToUpdate.setValues(values);
 
             final MetadataAttribute oldMetadataAttribute = existingMetadataCategoryToUpdate.getMetadataAttribute();
-            existingMetadataCategoryToUpdate.setMetadataAttribute(metadataAttribute);
+            existingMetadataCategoryToUpdate.setMetadataAttribute(newMetadataAttribute);
             mdcDAO.updateMetadataCategory(existingMetadataCategoryToUpdate);
 
-            if (metadataAttribute != null)
+            if (oldMetadataAttribute != null)
             {
-                mdaDAO.updateMetadataAttribute(metadataAttribute);
-            }
-
-            if (oldMetadataAttribute != null && metadataAttribute == null)
-            {
-                mdaDAO.delete(oldMetadataAttribute);
+                if (newMetadataAttribute != null)
+                {
+                    mdaDAO.updateMetadataAttribute(newMetadataAttribute);
+                }
+                else
+                {
+                    mdaDAO.delete(oldMetadataAttribute);
+                }
             }
         }
         finally
