@@ -352,7 +352,7 @@
             </command>
             <command
                   commandId="au.org.intersect.exsite9.commands.MoveToNewGroup"
-                  label="Create Group from..."
+                  label="Create Group From..."
                   style="push">
             </command>
             <command
@@ -516,7 +516,7 @@
             </command>
             <command
                   commandId="au.org.intersect.exsite9.commands.ListFoldersCommand"
-                  label="Edit watched folders..."
+                  label="Edit Watched Folders..."
                   mnemonic="E"
                   style="push"
                   tooltip="Edit the watched folders">
@@ -680,7 +680,7 @@
          </command>
          <command
                commandId="au.org.intersect.exsite9.commands.MoveToNewGroup"
-               label="Create Group from..."
+               label="Create Group From..."
                style="push">
             <visibleWhen
                   checkEnabled="false">
@@ -991,7 +991,7 @@
             locationURI="popup:au.org.intersect.exsite9.view.SubmissionPackageBrowserView">
          <command
                commandId="au.org.intersect.exsite9.commands.EditSubmissionPackageCommand"
-               label="Edit..."
+               label="Edit Submission Package..."
                style="push">
             <visibleWhen
                   checkEnabled="false">
@@ -1002,7 +1002,7 @@
          </command>
          <command
                commandId="au.org.intersect.exsite9.commands.DeleteSubmissionPackageCommand"
-               label="Delete"
+               label="Delete Submission Package"
                style="push">
             <visibleWhen
                   checkEnabled="false">

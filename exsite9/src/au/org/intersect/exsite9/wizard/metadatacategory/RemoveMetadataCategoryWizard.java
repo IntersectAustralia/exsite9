@@ -35,7 +35,7 @@ public final class RemoveMetadataCategoryWizard extends Wizard
         super();
         setNeedsProgressMonitor(true);
         this.schema = schema;
-        this.listCategoriesPage = new ListMetadataCategoriesWizardPage("Remove Metadata Category", "Select metadata categories to be removed.", this.schema, true);
+        this.listCategoriesPage = new ListMetadataCategoriesWizardPage("Delete Metadata Category", "Select metadata categories to be deleted.", this.schema, true);
     }
 
     @Override

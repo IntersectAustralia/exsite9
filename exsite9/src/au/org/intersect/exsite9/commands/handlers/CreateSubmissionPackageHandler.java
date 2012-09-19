@@ -35,7 +35,7 @@ public final class CreateSubmissionPackageHandler implements IHandler
         final Project project = projectManager.getCurrentProject();
 
         final Shell shell = HandlerUtil.getActiveWorkbenchWindow(event).getShell();
-        final CreateSubmissionPackageWizard createSubmissionPackageWizard = new CreateSubmissionPackageWizard(null, project.getSubmissionPackages(), "Create Submission Package");
+        final CreateSubmissionPackageWizard createSubmissionPackageWizard = new CreateSubmissionPackageWizard(null, project.getSubmissionPackages(), "Define Submission Package");
         final WizardDialog wizardDialog = new WizardDialog(shell, createSubmissionPackageWizard);
         wizardDialog.open();
 
