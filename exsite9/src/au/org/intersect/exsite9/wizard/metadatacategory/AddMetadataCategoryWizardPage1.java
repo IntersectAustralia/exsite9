@@ -313,7 +313,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         final Label metadataAttributeLabel = new Label(this.container, SWT.NULL);
         metadataAttributeLabel.setText("Attribute Name");
 
-        this.metadataAttributeNameField = this.stringValidatorToolkit.createTextField(this.container, new MetadataAttributeNameValidator(true), true, "");
+        this.metadataAttributeNameField = this.stringValidatorToolkit.createTextField(this.container, new MetadataAttributeNameValidator(true), false, "");
         this.metadataAttributeNameField.getControl().addKeyListener(this);
 
         final GridData singleLineGridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -508,7 +508,7 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
             }
 
             this.metadataAttributeValuesListWidget.add(userInput.getValue().trim());
-            this.metadataAttributeValues.add(new MetadataAttributeValue(userInput.getValue().trim()));            
+            this.metadataAttributeValues.add(new MetadataAttributeValue(userInput.getValue().trim()));
         }
         else if (e.widget.equals(removeValueButton))
         {
@@ -629,6 +629,11 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
 
             removeAttributeValueButton.setEnabled(metadataAttributeValuesListWidget.getSelectionCount() > 0);
             editAttributeValueButton.setEnabled(metadataAttributeValuesListWidget.getSelectionCount() > 0);
+
+            if (this.metadataAttributeValues.isEmpty())
+            {
+                setErrorMessage(null);
+            }
         }
         else if (e.widget.equals(editValueButton))
         {
@@ -711,7 +716,12 @@ public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyLis
         }
         if (getMetadataCategoryType() == MetadataCategoryType.FREETEXT && !getMetadataAttributeValues().isEmpty())
         {
-            return !this.metadataAttributeNameField.getContents().isEmpty() && this.metadataAttributeNameField.isValid();
+            final boolean valid = !this.metadataAttributeNameField.getContents().isEmpty() && this.metadataAttributeNameField.isValid();
+            if (!valid)
+            {
+                setErrorMessage("Please provide an Attribute Name");
+            }
+            return valid;
         }
         return true;
     }

@@ -24,7 +24,7 @@ import au.org.intersect.exsite9.service.IGroupService;
 import au.org.intersect.exsite9.service.IProjectService;
 import au.org.intersect.exsite9.service.IResearchFileService;
 import au.org.intersect.exsite9.service.ISchemaService;
-import au.org.intersect.exsite9.wizard.newproject.EditOrCreateProjectWizardPage2;
+import au.org.intersect.exsite9.wizard.newproject.EditOrCreateProjectWizardPage3;
 
 /**
  * A Wizard that changes Metadata Schema.
@@ -32,7 +32,7 @@ import au.org.intersect.exsite9.wizard.newproject.EditOrCreateProjectWizardPage2
  */
 public abstract class MetadataSchemaEditingWizard extends Wizard
 {
-    private final EditOrCreateProjectWizardPage2 schemaEditPage;
+    private final EditOrCreateProjectWizardPage3 schemaEditPage;
 
     private final IProjectService projectService;
     private final ISchemaService  schemaService;
@@ -43,7 +43,7 @@ public abstract class MetadataSchemaEditingWizard extends Wizard
 
     public MetadataSchemaEditingWizard(final Project selectedProject, final String title)
     {
-        this.schemaEditPage = new EditOrCreateProjectWizardPage2(title, "Please select the schema to be used with your project", selectedProject.getSchema());
+        this.schemaEditPage = new EditOrCreateProjectWizardPage3(title, "Please select the schema to be used with your project", selectedProject.getSchema());
         this.currentProject = selectedProject;
 
         this.projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);

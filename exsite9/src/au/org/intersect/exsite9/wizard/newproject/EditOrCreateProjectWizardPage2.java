@@ -1,429 +1,279 @@
-/**
- * Copyright (C) Intersect 2012.
- *
- * This module contains Proprietary Information of Intersect,
- * and should be treated as Confidential.
- */
 package au.org.intersect.exsite9.wizard.newproject;
 
-import java.io.File;
-import java.io.IOException;
+import java.util.List;
 
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.apache.log4j.Logger;
-import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
-import org.xml.sax.SAXException;
 
-import com.richclientgui.toolbox.validation.IFieldErrorMessageHandler;
-import com.richclientgui.toolbox.validation.ValidatingField;
-import com.richclientgui.toolbox.validation.string.StringValidationToolkit;
-
-import au.org.intersect.exsite9.domain.Schema;
-import au.org.intersect.exsite9.exception.InvalidSchemaException;
-import au.org.intersect.exsite9.service.ISchemaService;
-import au.org.intersect.exsite9.wizard.MaximumLengthFieldValidator;
-import au.org.intersect.exsite9.wizard.WizardPageErrorHandler;
+import au.org.intersect.exsite9.domain.FieldOfResearch;
+import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
+import au.org.intersect.exsite9.service.IFieldOfResearchService;
+import au.org.intersect.exsite9.view.dialogs.ElementListSelectionDialog;
 
 /**
- * The second page of the new project wizard.
+ * Second page of the edit or create new project wizards.
  */
-public final class EditOrCreateProjectWizardPage2 extends WizardPage implements KeyListener, SelectionListener
+public final class EditOrCreateProjectWizardPage2 extends WizardPage
 {
-    private static final Logger LOG = Logger.getLogger(EditOrCreateProjectWizardPage2.class);
+    private final IFieldOfResearchService fieldOfResearchService;
+
+    private Text electronicLocationText;
+    private Text physicalLocationText;
+    private Text placeOrRegionNameText;
+    private Text geographicalCoverageText;
+    private Text datesOfCaptureText;
+    private Text citationInformationText;
+    private Text countriesText;
+    private Text languagesText;
+    private FieldOfResearch fieldOfResearch;
+    private Text fundingBodyText;
+    private Text grantIDText;
+    private Text relatedPartyText;
+    private Text relatedActivityText;
+    private Text relatedInformationText;
 
     private Composite container;
 
-    private StringValidationToolkit stringValidatorToolkit;
-    private final IFieldErrorMessageHandler errorMessageHandler = new WizardPageErrorHandler(this);
-
-    private ValidatingField<String> localSchemaNameField;
-    private Text localSchemaDescriptionField;
-    private Text localSchemaNamespaceURLField;
-
-    private Text importedSchemaNameField;
-    private Text importedSchemaDescriptionField;
-    private Text importedSchemaNamespaceURLField;
-
-    private Button localSchemaRadioButton;
-    private Button importSchemaRadioButton;
-    private Button importSchemaBrowseButton;
-
-    private Schema importedSchema;
-    private final Schema currentSchema;
-
-    private final ISchemaService schemaService;
+    private ProjectFieldsDTO incomingFieldValues;
 
     /**
      * Constructor
      */
-    public EditOrCreateProjectWizardPage2(final String pageTitle, final String pageDescription, final Schema currentSchema)
+    public EditOrCreateProjectWizardPage2(final String pageTitle, final String pageDescription, final ProjectFieldsDTO incomingFieldValues)
     {
         super(pageTitle);
         setTitle(pageTitle);
         setDescription(pageDescription);
-        this.currentSchema = currentSchema;
-        this.importedSchema = currentSchema;
-        this.schemaService = (ISchemaService) PlatformUI.getWorkbench().getService(ISchemaService.class);
+        this.incomingFieldValues = incomingFieldValues;
+        this.fieldOfResearchService = (IFieldOfResearchService) PlatformUI.getWorkbench().getService(IFieldOfResearchService.class);
     }
 
-    /**
-     * @{inheritDoc}
-     */
     @Override
     public void createControl(final Composite parent)
     {
         this.container = new Composite(parent, SWT.NULL);
-        final GridLayout containerLayout = new GridLayout(1, true);
-        this.container.setLayout(containerLayout);
+        final GridLayout layout = new GridLayout();
+        this.container.setLayout(layout);
+        layout.numColumns = 2;
 
-        final Group localGroup = new Group(this.container, SWT.SHADOW_ETCHED_IN);
-        localGroup.setText(this.currentSchema == null ? "Create" : "Edit");
+        final Label electronicLocationLabel = new Label(this.container, SWT.NULL);
+        electronicLocationLabel.setText("Electronic Location");
 
-        final Group importGroup = new Group(this.container, SWT.SHADOW_ETCHED_IN);
-        importGroup.setText("Import");
+        this.electronicLocationText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        this.electronicLocationText.setText(this.incomingFieldValues.getElectronicLocation());
 
-        final GridLayout localGroupLayout = new GridLayout();
-        final GridData localGroupLayoutData = new GridData(GridData.FILL_HORIZONTAL);
-        localGroupLayout.numColumns = 2;
-        localGroup.setLayout(localGroupLayout);
-        localGroup.setLayoutData(localGroupLayoutData);
+        final Label physicalLocationLabel = new Label(this.container, SWT.NULL);
+        physicalLocationLabel.setText("Physical Location");
 
-        final GridLayout importGroupLayout = new GridLayout();
-        final GridData importGroupLayoutData = new GridData(GridData.FILL_HORIZONTAL);
-        importGroupLayout.numColumns = 1;
-        importGroup.setLayout(importGroupLayout);
-        importGroup.setLayoutData(importGroupLayoutData);
+        this.physicalLocationText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        this.physicalLocationText.setText(this.incomingFieldValues.getPhysicalLocation());
 
-        this.localSchemaRadioButton = new Button(localGroup, SWT.RADIO);
-        this.localSchemaRadioButton.setText(this.currentSchema == null ? "Create a new schema" : "Edit a local schema");
-        this.localSchemaRadioButton.addSelectionListener(this);
-        // Empty label in col2
-        new Label(localGroup, SWT.NULL);
+        final Label placeOrRegionNameLabel = new Label(this.container, SWT.NULL);
+        placeOrRegionNameLabel.setText("Place or Region Name");
 
-        this.stringValidatorToolkit = new StringValidationToolkit(SWT.TOP | SWT.LEFT, 1, true);
-        this.stringValidatorToolkit.setDefaultErrorMessageHandler(this.errorMessageHandler);
+        this.placeOrRegionNameText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        this.placeOrRegionNameText.setText(this.incomingFieldValues.getPlaceOrRegionName());
 
-        final Label localSchemaNameLabel = new Label(localGroup, SWT.NULL);
-        localSchemaNameLabel.setText("Schema Name");
+        final Label latitudeLongitudeLabel = new Label(this.container, SWT.NULL);
+        latitudeLongitudeLabel.setText("Geographical Coverage");
 
-        this.localSchemaNameField = this.stringValidatorToolkit.createTextField(localGroup, new MaximumLengthFieldValidator("Schema Name", 255), true, "");
-        this.localSchemaNameField.getControl().addKeyListener(this);
+        this.geographicalCoverageText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        this.geographicalCoverageText.setText(this.incomingFieldValues.getGeographicalCoverage());
 
-        final Label localSchemaDescriptionLabel = new Label(localGroup, SWT.NULL);
-        localSchemaDescriptionLabel.setText("Schema Description");
+        final Label datesOfCaptureLabel = new Label(this.container, SWT.NULL);
+        datesOfCaptureLabel.setText("Dates of Capture");
 
-        this.localSchemaDescriptionField = new Text(localGroup, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL);
-        this.localSchemaDescriptionField.addKeyListener(this);
+        this.datesOfCaptureText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        this.datesOfCaptureText.setText(this.incomingFieldValues.getDatesOfCapture());
 
-        // 3 empty cells due to the description field spanning 4 rows below
-        new Label(localGroup, SWT.NULL);
-        new Label(localGroup, SWT.NULL);
-        new Label(localGroup, SWT.NULL);
+        final Label citationInformationLabel = new Label(this.container, SWT.NULL);
+        citationInformationLabel.setText("Citation Information");
 
-        final Label localSchemaNamespaceURLLabel = new Label(localGroup, SWT.NULL);
-        localSchemaNamespaceURLLabel.setText("Schema Namespace URL");
+        this.citationInformationText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        this.citationInformationText.setText(this.incomingFieldValues.getCitationInformation());
 
-        this.localSchemaNamespaceURLField = new Text(localGroup, SWT.SINGLE | SWT.BORDER);
-        this.localSchemaNamespaceURLField.addKeyListener(this);
+        final Label countriesLabel = new Label(this.container, SWT.NULL);
+        countriesLabel.setText("Countries");
 
-        final Composite importSchemaRadioButtonContainer = new Composite(importGroup, SWT.NULL);
-        importSchemaRadioButtonContainer.setLayout(new RowLayout(SWT.VERTICAL));
-        this.importSchemaRadioButton = new Button(importSchemaRadioButtonContainer, SWT.RADIO);
-        this.importSchemaRadioButton.setText("Import an existing schema");
-        this.importSchemaRadioButton.addSelectionListener(this);
+        this.countriesText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        this.countriesText.setText(this.incomingFieldValues.getCountries());
 
-        final Composite importSchemaContainer = new Composite(importGroup, SWT.NULL);
-        final GridLayout importSchemaLayout = new GridLayout();
-        final GridData importSchemaLayoutData = new GridData(GridData.FILL_HORIZONTAL);
-        importSchemaLayout.numColumns = 2;
-        importSchemaContainer.setLayout(importSchemaLayout);
-        importSchemaContainer.setLayoutData(importSchemaLayoutData);
+        final Label languagesLabel = new Label(this.container, SWT.NULL);
+        languagesLabel.setText("Languages");
 
-        final Label importedSchemaNameLabel = new Label(importSchemaContainer, SWT.NULL);
-        importedSchemaNameLabel.setText("Schema Name");
+        this.languagesText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        this.languagesText.setText(this.incomingFieldValues.getLanguages());
+        
+        final Label fieldOfResearchLabel = new Label(this.container, SWT.NULL);
+        fieldOfResearchLabel.setText("Field of Research");
 
-        this.importedSchemaNameField = new Text(importSchemaContainer, SWT.BORDER | SWT.SINGLE);
-        this.importedSchemaNameField.setEditable(false);
-        this.importedSchemaNameField.setEnabled(false);
+        final Text fieldOfResearchText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        fieldOfResearchText.setEditable(false);
+        fieldOfResearchText.setEnabled(false);
+        this.fieldOfResearch = this.incomingFieldValues.getFieldOfResearch();
+        if (this.fieldOfResearch != null)
+        {
+            fieldOfResearchText.setText(this.fieldOfResearch.toString());
+        }
 
-        final Label importedSchemaDescriptionLabel = new Label(importSchemaContainer, SWT.NULL);
-        importedSchemaDescriptionLabel.setText("Schema Description");
+        new Label(this.container, SWT.NULL);
 
-        this.importedSchemaDescriptionField = new Text(importSchemaContainer, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL);
-        this.importedSchemaDescriptionField.setEditable(false);
-        this.importedSchemaDescriptionField.setEnabled(false);
+        final Button browseButton = new Button(this.container, SWT.PUSH);
+        browseButton.setText("Select...");
+        browseButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
 
-        // 3 empty cells due to the description field spanning 4 rows below
-        new Label(importSchemaContainer, SWT.NULL);
-        new Label(importSchemaContainer, SWT.NULL);
-        new Label(importSchemaContainer, SWT.NULL);
-
-        final Label importedSchemaNamespaceURLLabel = new Label(importSchemaContainer, SWT.NULL);
-        importedSchemaNamespaceURLLabel.setText("Schema Namespace URL");
-
-        this.importedSchemaNamespaceURLField = new Text(importSchemaContainer, SWT.BORDER | SWT.SINGLE);
-        this.importedSchemaNamespaceURLField.setEditable(false);
-        this.importedSchemaNamespaceURLField.setEnabled(false);
-
-        // 1 empty cell to push the browse button to the right cell.
-        new Label(importSchemaContainer, SWT.NULL);
-
-        this.importSchemaBrowseButton = new Button(importSchemaContainer, SWT.PUSH);
-        this.importSchemaBrowseButton.setText("Browse");
-        this.importSchemaBrowseButton.addSelectionListener(new SelectionListener()
+        browseButton.addSelectionListener(new SelectionListener()
         {
             @Override
-            public void widgetSelected(final SelectionEvent event)
+            public void widgetSelected(final SelectionEvent e)
             {
-                final FileDialog fileDialog = new FileDialog(parent.getShell(), SWT.OPEN);
-                fileDialog.setFilterExtensions(new String[]{"*.xml"});
-                fileDialog.setFilterNames(new String[]{"Schema Files (*.xml)"});
-                final File schemaDir = schemaService.getDefaultSchemaDirectory();
-                if (schemaDir != null)
+                final ElementListSelectionDialog selectDialog = new ElementListSelectionDialog(getShell(), new LabelProvider());
+                final List<FieldOfResearch> fieldsOfResearch = fieldOfResearchService.getAll();
+                selectDialog.setElements(fieldsOfResearch.toArray());
+                final int response = selectDialog.open();
+                if (response != Window.OK)
                 {
-                    fileDialog.setFilterPath(schemaDir.getAbsolutePath());
+                    return;
                 }
-
-                final String filePath = fileDialog.open();
-                if (filePath != null)
-                {
-                    loadSchema(true, new File(filePath));
-                }
+                fieldOfResearch = (FieldOfResearch) selectDialog.getFirstResult();
+                fieldOfResearchText.setText(fieldOfResearch.toString());
             }
-
+            
             @Override
             public void widgetDefaultSelected(final SelectionEvent e)
             {
             }
         });
 
-        final GridData indentedGridData = new GridData();
-        indentedGridData.horizontalIndent = 10;
-        final GridData indentedGridData2 = new GridData();
-        indentedGridData2.horizontalIndent = 10;
+        final Label fundingBodyLabel = new Label(this.container, SWT.NULL);
+        fundingBodyLabel.setText("Funding Body");
+
+        this.fundingBodyText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        this.fundingBodyText.setText(this.incomingFieldValues.getFundingBody());
+        
+        final Label grantIDLabel = new Label(this.container, SWT.NULL);
+        grantIDLabel.setText("Grant ID");
+
+        this.grantIDText = new Text(this.container, SWT.NULL | SWT.BORDER);
+        grantIDText.setText(this.incomingFieldValues.getGrantID());
+
+        final Label relatedPartyLabel = new Label(this.container, SWT.NULL);
+        relatedPartyLabel.setText("Related Party");
+
+        this.relatedPartyText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        this.relatedPartyText.setText(this.incomingFieldValues.getRelatedParty());
+
+        final Label relatedActivityLabel = new Label(this.container, SWT.NULL);
+        relatedActivityLabel.setText("Related Grant");
+
+        this.relatedActivityText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        this.relatedActivityText.setText(this.incomingFieldValues.getRelatedGrant());
+
+        final Label relatedInformationLabel = new Label(this.container, SWT.NULL);
+        relatedInformationLabel.setText("Related Information");
+
+        this.relatedInformationText = new Text(this.container, SWT.SINGLE | SWT.BORDER);
+        this.relatedInformationText.setText(this.incomingFieldValues.getRelatedInformation());
+
         final GridData singleLineGridData = new GridData(GridData.FILL_HORIZONTAL);
-        final GridData multiLineGridData = new GridData(GridData.FILL_BOTH);
-        multiLineGridData.verticalSpan = 4;
 
-        this.localSchemaNameField.getControl().setLayoutData(singleLineGridData);
-        this.localSchemaDescriptionField.setLayoutData(multiLineGridData);
-        this.localSchemaNamespaceURLField.setLayoutData(singleLineGridData);
-        this.importedSchemaNameField.setLayoutData(singleLineGridData);
-        this.importedSchemaDescriptionField.setLayoutData(multiLineGridData);
-        this.importedSchemaNamespaceURLField.setLayoutData(singleLineGridData);
-        this.importSchemaBrowseButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
-
-        localSchemaNameLabel.setLayoutData(indentedGridData);
-        localSchemaDescriptionLabel.setLayoutData(indentedGridData);
-        localSchemaNamespaceURLLabel.setLayoutData(indentedGridData);
-
-        this.localSchemaNameField.getControl().setEnabled(false);
-        this.localSchemaDescriptionField.setEnabled(false);
-        this.localSchemaNamespaceURLField.setEnabled(false);
-        this.importSchemaBrowseButton.setEnabled(false);
-
-        if (this.currentSchema != null)
-        {
-            final boolean localSchema = this.currentSchema.getLocal();
-            final String schemaName = this.currentSchema.getName();
-            final String schemaDescription = this.currentSchema.getDescription();
-            final String schemaNamespaceURL = this.currentSchema.getNamespaceURL();
-            if (localSchema)
-            {
-                this.localSchemaNameField.setContents(schemaName);
-                this.localSchemaDescriptionField.setText(schemaDescription);
-                this.localSchemaNamespaceURLField.setText(schemaNamespaceURL);
-                enableLocalSchemaFields();
-            }
-            else
-            {
-                importedSchemaNameField.setText(schemaName);
-                importedSchemaDescriptionField.setText(schemaDescription);
-                importedSchemaNamespaceURLField.setText(schemaNamespaceURL);
-                enableImportedSchemaFields();
-            }
-        }
-        else
-        {
-            // Load the default Schema.
-            final File defaultSchema = this.schemaService.getDefaultSchema();
-            if (defaultSchema != null)
-            {
-                final boolean successLoad = loadSchema(false, defaultSchema);
-                if (successLoad)
-                {
-                    importSchemaRadioButton.setSelection(true);
-                    importSchemaBrowseButton.setEnabled(true);
-                }
-            }
-        }
+        this.electronicLocationText.setLayoutData(singleLineGridData);
+        this.physicalLocationText.setLayoutData(singleLineGridData);
+        this.placeOrRegionNameText.setLayoutData(singleLineGridData);
+        this.geographicalCoverageText.setLayoutData(singleLineGridData);
+        this.datesOfCaptureText.setLayoutData(singleLineGridData);
+        this.citationInformationText.setLayoutData(singleLineGridData);
+        this.countriesText.setLayoutData(singleLineGridData);
+        this.languagesText.setLayoutData(singleLineGridData);
+        fieldOfResearchText.setLayoutData(singleLineGridData);
+        this.fundingBodyText.setLayoutData(singleLineGridData);
+        this.grantIDText.setLayoutData(singleLineGridData);
+        this.relatedPartyText.setLayoutData(singleLineGridData);
+        this.relatedActivityText.setLayoutData(singleLineGridData);
+        this.relatedInformationText.setLayoutData(singleLineGridData);
 
         setControl(this.container);
-        setPageComplete(allFieldsAreValid());
-        this.errorMessageHandler.clearMessage();
+        setPageComplete(true);
     }
 
-    private boolean loadSchema(final boolean showErrors, final File schemaFile)
+    public String getElectronicLocation()
     {
-        try
-        {
-            importedSchema = schemaService.parseSchema(schemaFile);
-            importedSchemaNameField.setText(importedSchema.getName());
-            importedSchemaDescriptionField.setText(importedSchema.getDescription());
-            importedSchemaNamespaceURLField.setText(importedSchema.getNamespaceURL());
-            setPageComplete(allFieldsAreValid());
-            return true;
-        }
-        catch (final SAXException e)
-        {
-            if (showErrors)
-            {
-                MessageDialog.openError(getShell(), "Could not import Schema", "The XML file is an invalid metadata schema. Reason: " + e.getMessage());
-            }
-            LOG.error(e);
-        }
-        catch (final IOException e)
-        {
-            if (showErrors)
-            {
-                MessageDialog.openError(getShell(), "Could not import Schema", "Error reading the metadata schema. Reason: " + e.getMessage());
-            }
-            LOG.error(e);
-        }
-        catch (final ParserConfigurationException e)
-        {
-            if (showErrors)
-            {
-                MessageDialog.openError(getShell(), "Could not import Schema", "Error parsing the metadata schema. Reason: " + e.getMessage());
-            }
-            LOG.error(e);
-        }
-        catch (final InvalidSchemaException e)
-        {
-            if (showErrors)
-            {
-                MessageDialog.openError(getShell(), "Could not import Schema", "This XML file is an invalid metadata schema. Reason: " + e.getMessage());
-            }
-        }
-        return false;
+        return this.electronicLocationText.getText().trim();
     }
 
-    /**
-     * @{inheritDoc}
-     */
-    @Override
-    public void keyPressed(final KeyEvent e)
+    public String getPhysicalLocation()
     {
+        return this.physicalLocationText.getText().trim();
     }
 
-    /**
-     * @{inheritDoc
-     */
-    @Override
-    public void keyReleased(final KeyEvent e)
+    public String getPlaceOrRegionName()
     {
-        setPageComplete(allFieldsAreValid());
+        return this.placeOrRegionNameText.getText().trim();
     }
 
-    private void enableLocalSchemaFields()
+    public String getGeographicalCoverage()
     {
-        this.localSchemaRadioButton.setSelection(true);
-        this.importSchemaRadioButton.setSelection(false);
-        this.localSchemaNameField.getControl().setEnabled(true);
-        this.localSchemaDescriptionField.setEnabled(true);
-        this.localSchemaNamespaceURLField.setEnabled(true);
-        this.importSchemaBrowseButton.setEnabled(false);
+        return this.geographicalCoverageText.getText().trim();
     }
 
-    private void enableImportedSchemaFields()
+    public String getDatesOfCapture()
     {
-        this.localSchemaRadioButton.setSelection(false);
-        this.importSchemaRadioButton.setSelection(true);
-        this.localSchemaNameField.getControl().setEnabled(false);
-        this.localSchemaDescriptionField.setEnabled(false);
-        this.localSchemaNamespaceURLField.setEnabled(false);
-        this.importSchemaBrowseButton.setEnabled(true);
-        this.importSchemaBrowseButton.setFocus();
+        return this.datesOfCaptureText.getText().trim();
     }
 
-    /**
-     * @{inheritDoc
-     */
-    @Override
-    public void widgetSelected(final SelectionEvent e)
+    public String getCitationInformation()
     {
-        this.errorMessageHandler.clearMessage();
-        if (e.widget == this.localSchemaRadioButton)
-        {
-            enableLocalSchemaFields();
-        }
-        else if (e.widget == this.importSchemaRadioButton)
-        {
-            enableImportedSchemaFields();
-        }
-        setPageComplete(allFieldsAreValid());
+        return this.citationInformationText.getText().trim();
     }
 
-    /**
-     * @{inheritDoc
-     */
-    @Override
-    public void widgetDefaultSelected(final SelectionEvent e)
+    public String getCountries()
     {
+        return this.countriesText.getText().trim();
     }
 
-    private boolean allFieldsAreValid()
+    public String getLanguages()
     {
-        if (this.localSchemaRadioButton.getSelection())
-        {
-            return this.localSchemaNameField.isValid() && !this.localSchemaNameField.getContents().isEmpty();
-        }
-        if (this.importSchemaRadioButton.getSelection())
-        {
-            return (this.importedSchema != null) && (! this.importedSchema.getLocal());
-        }
-        return false;
+        return this.languagesText.getText().trim();
     }
 
-    public boolean getUseLocalSchema()
+    public FieldOfResearch getFieldOfResearch()
     {
-        return this.localSchemaRadioButton.getSelection();
+        return this.fieldOfResearch;
     }
 
-    public String getLocalSchemaName()
+    public String getFundingBody()
     {
-        return this.localSchemaNameField.getContents().trim();
+        return this.fundingBodyText.getText().trim();
     }
 
-    public String getLocalSchemaDescription()
+    public String getGrantID()
     {
-        return this.localSchemaDescriptionField.getText().trim();
+        return this.grantIDText.getText().trim();
     }
 
-    public String getLocalSchemaNamespaceURL()
+    public String getRelatedParty()
     {
-        return this.localSchemaNamespaceURLField.getText().trim();
+        return this.relatedPartyText.getText().trim();
     }
 
-    public Schema getImportedSchema()
+    public String getRelatedActivity()
     {
-        return this.importedSchema;
+        return this.relatedActivityText.getText().trim();
+    }
+
+    public String getRelatedInformation()
+    {
+        return this.relatedInformationText.getText().trim();
     }
 }

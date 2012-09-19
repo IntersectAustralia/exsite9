@@ -7,10 +7,13 @@ import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 import au.org.intersect.exsite9.service.IProjectService;
 import au.org.intersect.exsite9.wizard.importmetadataschema.MetadataSchemaEditingWizard;
 import au.org.intersect.exsite9.wizard.newproject.EditOrCreateProjectWizardPage1;
+import au.org.intersect.exsite9.wizard.newproject.EditOrCreateProjectWizardPage2;
+import au.org.intersect.exsite9.wizard.newproject.NewProjectWizard;
 
 public class EditProjectWizard extends MetadataSchemaEditingWizard
 {
     private final EditOrCreateProjectWizardPage1 page1;
+    private final EditOrCreateProjectWizardPage2 page2;
 
     private final IProjectService projectService;
 
@@ -23,19 +26,20 @@ public class EditProjectWizard extends MetadataSchemaEditingWizard
     {
         super(selectedProject, "Edit Project");
         setNeedsProgressMonitor(true);
-        this.page1 = new EditOrCreateProjectWizardPage1("Edit Project", "Please amend the details of your project",
-                new ProjectFieldsDTO(selectedProject.getName(), selectedProject.getOwner(),
-                        selectedProject.getInstitution(), selectedProject.getEmail(),
-                        selectedProject.getDescription(), selectedProject.getCollectionType(),
-                        selectedProject.getRightsStatement(), selectedProject.getAccessRights(),
-                        selectedProject.getLicence(), selectedProject.getIdentifier(), selectedProject.getSubject(),
-                        selectedProject.getElectronicLocation(), selectedProject.getPhysicalLocation(),
-                        selectedProject.getPlaceOrRegionName(), selectedProject.getGeographicalCoverage(),
-                        selectedProject.getDatesOfCapture(), selectedProject.getCitationInformation(),
-                        selectedProject.getCountries(), selectedProject.getLanguages(), selectedProject.getFieldOfResearch(),
-                        selectedProject.getFundingBody(), selectedProject.getGrantID(),
-                        selectedProject.getRelatedParty(), selectedProject.getRelatedGrant(),
-                        selectedProject.getRelatedInformation()));
+        final ProjectFieldsDTO projectFieldsDTO = new ProjectFieldsDTO(selectedProject.getName(), selectedProject.getOwner(),
+                selectedProject.getInstitution(), selectedProject.getEmail(),
+                selectedProject.getDescription(), selectedProject.getCollectionType(),
+                selectedProject.getRightsStatement(), selectedProject.getAccessRights(),
+                selectedProject.getLicence(), selectedProject.getIdentifier(), selectedProject.getSubject(),
+                selectedProject.getElectronicLocation(), selectedProject.getPhysicalLocation(),
+                selectedProject.getPlaceOrRegionName(), selectedProject.getGeographicalCoverage(),
+                selectedProject.getDatesOfCapture(), selectedProject.getCitationInformation(),
+                selectedProject.getCountries(), selectedProject.getLanguages(), selectedProject.getFieldOfResearch(),
+                selectedProject.getFundingBody(), selectedProject.getGrantID(),
+                selectedProject.getRelatedParty(), selectedProject.getRelatedGrant(),
+                selectedProject.getRelatedInformation());
+        this.page1 = new EditOrCreateProjectWizardPage1("Edit Project", "Please amend the details of your project", projectFieldsDTO);
+        this.page2 = new EditOrCreateProjectWizardPage2("Edit Project", "Please amend the details of your project", projectFieldsDTO);
 
         this.projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
     }
@@ -47,6 +51,7 @@ public class EditProjectWizard extends MetadataSchemaEditingWizard
     public void addPages()
     {
         addPage(this.page1);
+        addPage(this.page2);
         super.addPages();
     }
 
@@ -54,7 +59,8 @@ public class EditProjectWizard extends MetadataSchemaEditingWizard
     public boolean performFinish()
     {
         // Update project details
-        super.currentProject = projectService.editProject(page1.getProjectFields(), currentProject.getId());
+        final ProjectFieldsDTO projectFieldsDTO = NewProjectWizard.createProjectFieldsDTO(page1, page2);
+        super.currentProject = projectService.editProject(projectFieldsDTO, currentProject.getId());
 
         // Update schema details
         return super.performFinish();
