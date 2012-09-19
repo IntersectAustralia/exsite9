@@ -19,14 +19,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.richclientgui.toolbox.validation.IFieldErrorMessageHandler;
 import com.richclientgui.toolbox.validation.ValidatingField;
 import com.richclientgui.toolbox.validation.string.StringValidationToolkit;
+import com.richclientgui.toolbox.validation.validator.IFieldValidator;
 
 import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 import au.org.intersect.exsite9.validators.ProjectNameValidator;
-import au.org.intersect.exsite9.validators.TrueFieldValidator;
-import au.org.intersect.exsite9.wizard.WizardPageErrorHandler;
+import au.org.intersect.exsite9.validators.NonEmptyValidator;
 
 /**
  * The first page of the new project wizard.
@@ -34,9 +33,12 @@ import au.org.intersect.exsite9.wizard.WizardPageErrorHandler;
 public final class EditOrCreateProjectWizardPage1 extends WizardPage implements KeyListener
 {
     private ValidatingField<String> projectNameText;
+    private IFieldValidator<String> projectNameValidator;
     private ValidatingField<String> ownerText;
-    private Text institutionText;
+    private IFieldValidator<String> ownerValidator;
     private ValidatingField<String> emailText;
+    private IFieldValidator<String> emailValidator;
+    private Text institutionText;
     private Text descriptionText;
     private Combo collectionDropDown;
     private Text rightsStatementText;
@@ -48,7 +50,6 @@ public final class EditOrCreateProjectWizardPage1 extends WizardPage implements 
     private ProjectFieldsDTO incomingFieldValues;
 
     private StringValidationToolkit stringValidatorToolkit;
-    private final IFieldErrorMessageHandler errorMessageHandler = new WizardPageErrorHandler(this);
 
     private Composite container;
 
@@ -75,7 +76,6 @@ public final class EditOrCreateProjectWizardPage1 extends WizardPage implements 
         layout.numColumns = 2;
 
         this.stringValidatorToolkit = new StringValidationToolkit(SWT.TOP | SWT.LEFT, 1, true);
-        this.stringValidatorToolkit.setDefaultErrorMessageHandler(this.errorMessageHandler);
 
         final Label identifierLabel = new Label(this.container, SWT.NULL);
         identifierLabel.setText("Identifier");
@@ -86,13 +86,15 @@ public final class EditOrCreateProjectWizardPage1 extends WizardPage implements 
         final Label projectNameLabel = new Label(this.container, SWT.NULL);
         projectNameLabel.setText("Project Name");
 
-        this.projectNameText = this.stringValidatorToolkit.createTextField(this.container, new ProjectNameValidator(), true, this.incomingFieldValues.getName());
+        this.projectNameValidator = new ProjectNameValidator();
+        this.projectNameText = this.stringValidatorToolkit.createTextField(this.container, this.projectNameValidator, true, this.incomingFieldValues.getName());
         this.projectNameText.getControl().addKeyListener(this);
 
         final Label nameLabel = new Label(this.container, SWT.NULL);
         nameLabel.setText("Name");
 
-        this.ownerText = this.stringValidatorToolkit.createTextField(this.container, new TrueFieldValidator(), true, this.incomingFieldValues.getOwner());
+        this.ownerValidator = new NonEmptyValidator("Name");
+        this.ownerText = this.stringValidatorToolkit.createTextField(this.container, this.ownerValidator, true, this.incomingFieldValues.getOwner());
         this.ownerText.getControl().addKeyListener(this);
 
         final Label institutionLabel = new Label(this.container, SWT.NULL);
@@ -104,7 +106,8 @@ public final class EditOrCreateProjectWizardPage1 extends WizardPage implements 
         final Label emailLabel = new Label(this.container, SWT.NULL);
         emailLabel.setText("Email");
 
-        this.emailText = this.stringValidatorToolkit.createTextField(this.container, new TrueFieldValidator(), true, this.incomingFieldValues.getEmail());
+        this.emailValidator = new NonEmptyValidator("Email");
+        this.emailText = this.stringValidatorToolkit.createTextField(this.container, this.emailValidator, true, this.incomingFieldValues.getEmail());
         this.emailText.getControl().addKeyListener(this);
         
         final Label projectDescriptionLabel = new Label(this.container, SWT.NULL);
@@ -265,8 +268,23 @@ public final class EditOrCreateProjectWizardPage1 extends WizardPage implements 
     
     private boolean allFieldsAreValid()
     {
-        return this.projectNameText.isValid() && !this.projectNameText.getContents().trim().isEmpty() &&
-            this.ownerText.isValid() && !this.ownerText.getContents().trim().isEmpty() &&
-            this.emailText.isValid() && !this.emailText.getContents().trim().isEmpty();
+        if (!this.projectNameText.isValid())
+        {
+            setErrorMessage(this.projectNameValidator.getErrorMessage());
+            return false;
+        }
+        if (!this.ownerText.isValid())
+        {
+            setErrorMessage(this.ownerValidator.getErrorMessage());
+            return false;
+        }
+        if (!this.emailText.isValid())
+        {
+            setErrorMessage(this.emailValidator.getErrorMessage());
+            return false;
+        }
+
+        setErrorMessage(null);
+        return true;
     }
 }

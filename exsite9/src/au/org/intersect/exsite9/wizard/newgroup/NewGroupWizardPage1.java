@@ -57,6 +57,7 @@ public final class NewGroupWizardPage1 extends WizardPage implements KeyListener
         final GridLayout layout = new GridLayout();
         this.container.setLayout(layout);
         layout.numColumns = 2;
+        layout.horizontalSpacing = 20;
 
         this.stringValidatorToolkit = new StringValidationToolkit(SWT.TOP | SWT.LEFT, 1, true);
         this.stringValidatorToolkit.setDefaultErrorMessageHandler(this.errorMessageHandler);

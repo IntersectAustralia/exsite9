@@ -38,19 +38,19 @@ public final class ProjectNameValidator implements IFieldValidator<String>
     {
         if (contents.trim().isEmpty())
         {
-            this.errorMessage = "Project name must not be empty.";
+            this.errorMessage = "Project Name must not be empty.";
             return false;
         }
 
         if (contents.trim().length() >= 255)
         {
-            this.errorMessage = "Project name is too long.";
+            this.errorMessage = "Project Name is too long.";
             return false;
         }
 
         if (!DirectoryUtils.isValidDirectoryName(contents.trim()))
         {
-            this.errorMessage = "Project name must contain alpha-numeric characters only";
+            this.errorMessage = "Project Name must contain alpha-numeric characters only";
             return false;
         }
 

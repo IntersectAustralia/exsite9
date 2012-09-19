@@ -11,12 +11,19 @@ import com.richclientgui.toolbox.validation.validator.IFieldValidator;
 /**
  * Validator that always returns true.
  */
-public final class TrueFieldValidator implements IFieldValidator<String>
+public final class NonEmptyValidator implements IFieldValidator<String>
 {
+    private final String fieldName;
+
+    public NonEmptyValidator(final String fieldName)
+    {
+        this.fieldName = fieldName;
+    }
+
     @Override
     public String getErrorMessage()
     {
-        return "";
+        return this.fieldName + " must not be empty";
     }
 
     @Override
@@ -28,7 +35,7 @@ public final class TrueFieldValidator implements IFieldValidator<String>
     @Override
     public boolean isValid(final String contents)
     {
-        return true;
+        return !contents.trim().isEmpty();
     }
 
     @Override
