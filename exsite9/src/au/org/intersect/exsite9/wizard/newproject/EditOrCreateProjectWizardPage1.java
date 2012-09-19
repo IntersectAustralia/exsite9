@@ -346,7 +346,7 @@ public final class EditOrCreateProjectWizardPage1 extends WizardPage implements 
         this.relatedInformationText.setLayoutData(singleLineGridData);
 
         setControl(this.container);
-        setPageComplete(allFieldsAreValid());
+        setPageComplete(false);
     }
 
     /**

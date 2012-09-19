@@ -101,7 +101,8 @@ public final class ThumbnailView extends ViewPart implements ISelectionListener
             if (file.exists()
                     && (fileExtension.equalsIgnoreCase("GIF") || fileExtension.equalsIgnoreCase("BMP")
                             || fileExtension.equalsIgnoreCase("JPG") || fileExtension.equalsIgnoreCase("JPEG")
-                            || fileExtension.equalsIgnoreCase("PNG") || fileExtension.equalsIgnoreCase("TIFF")))
+                            || fileExtension.equalsIgnoreCase("PNG") || fileExtension.equalsIgnoreCase("TIF")
+                            || fileExtension.equalsIgnoreCase("TIFF")))
             {
                 image = new Image(parent.getDisplay(), file.getAbsolutePath());
             }
