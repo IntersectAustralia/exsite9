@@ -159,34 +159,29 @@ public final class MetadataCategoryService implements IMetadataCategoryService
     @Override
     public MetadataValue addValueToMetadataCategory(final MetadataCategory metadataCategory, final String metadataValue)
     {
-        for (final MetadataValue existingValue : metadataCategory.getValues())
+        if (metadataCategory.getType() == MetadataCategoryType.CONTROLLED_VOCABULARY)
         {
-            if (existingValue.getValue().equals(metadataValue))
+            for (final MetadataValue existingValue : metadataCategory.getValues())
             {
-                return existingValue;
+                if (existingValue.getValue().equals(metadataValue))
+                {
+                    return existingValue;
+                }
             }
         }
 
-        final MetadataValue newValue = new MetadataValue(metadataValue);
-        final List<MetadataValue> existingValues = metadataCategory.getValues();
-        existingValues.add(newValue);
-        metadataCategory.setValues(existingValues);
-
         final EntityManager em = this.emf.createEntityManager();
+
         try
         {
+            final MetadataValue newValue = new MetadataValue(metadataValue);
+
+            em.persist(newValue);
+            metadataCategory.getValues().add(newValue);
             final MetadataCategoryDAO mdcDAO = this.metadataCategoryDAOFactory.createInstance(em);
             mdcDAO.updateMetadataCategory(metadataCategory);
 
-            final MetadataCategory updatedMetadataCategory = mdcDAO.findById(metadataCategory.getId());
-            for (final MetadataValue updatedValue : updatedMetadataCategory.getValues())
-            {
-                if (updatedValue.getValue().equals(metadataValue))
-                {
-                    return updatedValue;
-                }
-            }
-            return null;
+            return newValue;
         }
         finally
         {
