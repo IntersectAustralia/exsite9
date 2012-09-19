@@ -82,7 +82,7 @@ public final class ListMetadataCategoriesWizardPage extends WizardPage implement
         rowComp.setLayout(rowLayout);
 
         this.removeButton = new Button(rowComp, SWT.PUSH);
-        this.removeButton.setText("Remove");
+        this.removeButton.setText("Delete");
         this.removeButton.addSelectionListener(new SelectionListener()
         {
             @Override
