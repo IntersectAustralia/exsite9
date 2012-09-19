@@ -34,6 +34,7 @@ import au.org.intersect.exsite9.dao.factory.MetadataCategoryDAOFactory;
 import au.org.intersect.exsite9.dao.factory.SchemaDAOFactory;
 import au.org.intersect.exsite9.domain.MetadataAttribute;
 import au.org.intersect.exsite9.domain.MetadataCategory;
+import au.org.intersect.exsite9.domain.MetadataCategoryViewConfiguration;
 import au.org.intersect.exsite9.domain.Schema;
 import au.org.intersect.exsite9.exception.InvalidSchemaException;
 import au.org.intersect.exsite9.xml.MetadataSchemaXMLReader;
@@ -158,6 +159,12 @@ public final class SchemaService implements ISchemaService
 
             for (final MetadataCategory mdc : mdcsToDelete)
             {
+                final MetadataCategoryViewConfiguration mcvc = MetadataCategoryViewConfigService.getMetadataCategoryViewConfiguration(em, mdc);
+                if (mcvc != null)
+                {
+                    em.remove(mcvc);
+                }
+
                 metadataCategoryDAO.delete(mdc);
 
                 final MetadataAttribute mda = mdc.getMetadataAttribute();
