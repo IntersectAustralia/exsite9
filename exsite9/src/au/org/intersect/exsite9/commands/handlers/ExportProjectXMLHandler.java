@@ -94,9 +94,7 @@ public final class ExportProjectXMLHandler implements IHandler
     @Override
     public boolean isEnabled()
     {
-        final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
-        final Project currentproject = projectManager.getCurrentProject();
-        return currentproject != null;
+        return true;
     }
 
     /**

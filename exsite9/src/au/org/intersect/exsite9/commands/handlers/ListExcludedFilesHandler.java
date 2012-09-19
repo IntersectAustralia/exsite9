@@ -13,11 +13,8 @@ import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import au.org.intersect.exsite9.domain.Project;
-import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.wizard.listexcludedfiles.ListExcludedFilesWizard;
 
 /**
@@ -64,9 +61,7 @@ public final class ListExcludedFilesHandler implements IHandler
     @Override
     public boolean isEnabled()
     {
-        final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
-        final Project currentproject = projectManager.getCurrentProject();
-        return currentproject != null;
+        return true;
     }
 
     /**

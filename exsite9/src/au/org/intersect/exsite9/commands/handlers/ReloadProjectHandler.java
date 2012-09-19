@@ -5,11 +5,8 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.ui.PlatformUI;
 
-import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.jobs.IdentifyAllNewFilesForProjectJob;
-import au.org.intersect.exsite9.service.IProjectManager;
 
 public class ReloadProjectHandler implements IHandler
 {
@@ -37,10 +34,7 @@ public class ReloadProjectHandler implements IHandler
     @Override
     public boolean isEnabled()
     {
-        final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
-        final Project currentproject = projectManager.getCurrentProject();
-        
-        return (currentproject == null) ? false : true;
+        return true;
     }
 
     @Override

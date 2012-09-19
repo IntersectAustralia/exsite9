@@ -63,10 +63,7 @@ public class EditProjectHandler implements IHandler
     @Override
     public boolean isEnabled()
     {
-        final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
-        final Project currentProject = projectManager.getCurrentProject();
-       
-        return (currentProject == null) ? false : true;
+        return true;
     }
 
     @Override

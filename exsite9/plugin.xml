@@ -303,6 +303,7 @@
             <command
                   commandId="au.org.intersect.exsite9.commands.EditProjectCommand"
                   icon="icons/icon_edit_16.png"
+                  id="au.org.intersect.exsite9.menu.project.edit"
                   label="Edit..."
                   mnemonic="d"
                   style="push"
@@ -311,6 +312,7 @@
             <command
                   commandId="au.org.intersect.exsite9.commands.ExportProjectXMLCommand"
                   icon="icons/icon_export_16.png"
+                  id="au.org.intersect.exsite9.menu.project.export"
                   label="Export..."
                   mnemonic="x"
                   style="push"
@@ -318,6 +320,7 @@
             </command>
             <command
                   commandId="au.org.intersect.exsite9.commands.ListExcludedFilesCommand"
+                  id="au.org.intersect.exsite9.menu.project.excludedFiles"
                   label="Excluded Files..."
                   mnemonic="E"
                   style="push"
@@ -326,6 +329,7 @@
             <command
                   commandId="au.org.intersect.exsite9.commands.ReloadProjectCommand"
                   icon="icons/icon_refresh_16.png"
+                  id="au.org.intersect.exsite9.menu.project.refresh"
                   label="Refresh"
                   mnemonic="R"
                   style="push"
@@ -333,6 +337,7 @@
             </command>
             <command
                   commandId="au.org.intersect.exsite9.commands.SearchCommand"
+                  id="au.org.intersect.exsite9.menu.project.search"
                   label="Search"
                   mnemonic="S"
                   style="push"
@@ -1473,6 +1478,26 @@
       <activityPatternBinding
             activityId="au.org.intersect.exsite9.activity.showProject"
             pattern="au.org.intersect.exsite9/au.org.intersect.exsite9.menu.group">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="au.org.intersect.exsite9.activity.showProject"
+            pattern="au.org.intersect.exsite9/au.org.intersect.exsite9.menu.project.edit">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="au.org.intersect.exsite9.activity.showProject"
+            pattern="au.org.intersect.exsite9/au.org.intersect.exsite9.menu.project.export">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="au.org.intersect.exsite9.activity.showProject"
+            pattern="au.org.intersect.exsite9/au.org.intersect.exsite9.menu.project.excludedFiles">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="au.org.intersect.exsite9.activity.showProject"
+            pattern="au.org.intersect.exsite9/au.org.intersect.exsite9.menu.project.refresh">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="au.org.intersect.exsite9.activity.showProject"
+            pattern="au.org.intersect.exsite9/au.org.intersect.exsite9.menu.project.search">
       </activityPatternBinding>
    </extension>
    <extension
