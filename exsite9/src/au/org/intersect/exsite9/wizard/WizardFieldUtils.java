@@ -5,6 +5,8 @@ import org.eclipse.swt.widgets.Composite;
 import com.richclientgui.toolbox.validation.ValidatingField;
 import com.richclientgui.toolbox.validation.ValidationToolkit;
 
+import au.org.intersect.exsite9.validators.MaximumLengthFieldValidator;
+
 /**
  * Utilities for fields in Wizards.
  */

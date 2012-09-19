@@ -24,8 +24,8 @@ import com.richclientgui.toolbox.validation.ValidatingField;
 import com.richclientgui.toolbox.validation.string.StringValidationToolkit;
 
 import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
-import au.org.intersect.exsite9.wizard.MaximumLengthFieldValidator;
-import au.org.intersect.exsite9.wizard.TrueFieldValidator;
+import au.org.intersect.exsite9.validators.ProjectNameValidator;
+import au.org.intersect.exsite9.validators.TrueFieldValidator;
 import au.org.intersect.exsite9.wizard.WizardPageErrorHandler;
 
 /**
@@ -86,8 +86,7 @@ public final class EditOrCreateProjectWizardPage1 extends WizardPage implements 
         final Label projectNameLabel = new Label(this.container, SWT.NULL);
         projectNameLabel.setText("Project Name");
 
-        this.projectNameText = this.stringValidatorToolkit.createTextField(this.container, new MaximumLengthFieldValidator("Project Name", 255),
-                true, this.incomingFieldValues.getName());
+        this.projectNameText = this.stringValidatorToolkit.createTextField(this.container, new ProjectNameValidator(), true, this.incomingFieldValues.getName());
         this.projectNameText.getControl().addKeyListener(this);
 
         final Label nameLabel = new Label(this.container, SWT.NULL);

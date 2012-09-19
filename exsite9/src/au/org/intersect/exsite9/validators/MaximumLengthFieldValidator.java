@@ -4,7 +4,7 @@
  * This module contains Proprietary Information of Intersect,
  * and should be treated as Confidential.
  */
-package au.org.intersect.exsite9.wizard;
+package au.org.intersect.exsite9.validators;
 
 import com.richclientgui.toolbox.validation.validator.IFieldValidator;
 

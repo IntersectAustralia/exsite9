@@ -38,7 +38,7 @@ import com.richclientgui.toolbox.validation.string.StringValidationToolkit;
 import au.org.intersect.exsite9.domain.Schema;
 import au.org.intersect.exsite9.exception.InvalidSchemaException;
 import au.org.intersect.exsite9.service.ISchemaService;
-import au.org.intersect.exsite9.wizard.MaximumLengthFieldValidator;
+import au.org.intersect.exsite9.validators.MaximumLengthFieldValidator;
 import au.org.intersect.exsite9.wizard.WizardPageErrorHandler;
 
 /**
