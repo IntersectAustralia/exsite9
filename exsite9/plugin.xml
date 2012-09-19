@@ -245,6 +245,11 @@
           optional="true">
     </commandParameter>
  </command>
+ <command
+       defaultHandler="au.org.intersect.exsite9.commands.handlers.SearchHandler"
+       id="au.org.intersect.exsite9.commands.SearchCommand"
+       name="Search">
+ </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -325,6 +330,13 @@
                   mnemonic="R"
                   style="push"
                   tooltip="Refresh the project&apos;s folders">
+            </command>
+            <command
+                  commandId="au.org.intersect.exsite9.commands.SearchCommand"
+                  label="Search"
+                  mnemonic="S"
+                  style="push"
+                  tooltip="Search across all files within this project">
             </command>
          </menu>
          <menu
@@ -960,6 +972,19 @@
                </reference>
             </visibleWhen>
          </menu>
+         <command
+               commandId="au.org.intersect.exsite9.commands.SearchCommand"
+               label="Search..."
+               mnemonic="S"
+               style="push"
+               tooltip="Search across all files within this project">
+            <visibleWhen
+                  checkEnabled="false">
+               <reference
+                     definitionId="au.org.intersect.exsite9.expression.InstanceOfProject">
+               </reference>
+            </visibleWhen>
+         </command>
       </menuContribution>
       <menuContribution
             allPopups="false"
@@ -1072,6 +1097,12 @@
             factoryClass="au.org.intersect.exsite9.service.factory.MetadataCategoryViewConfigServiceFactory">
          <service
                serviceClass="au.org.intersect.exsite9.service.IMetadataCategoryViewConfigService">
+         </service>
+      </serviceFactory>
+	  <serviceFactory
+            factoryClass="au.org.intersect.exsite9.service.factory.SearchServiceFactory">
+         <service
+               serviceClass="au.org.intersect.exsite9.service.ISearchService">
          </service>
       </serviceFactory>
    </extension>

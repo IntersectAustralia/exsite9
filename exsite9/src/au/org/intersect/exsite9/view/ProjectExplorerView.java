@@ -6,6 +6,7 @@
  */
 package au.org.intersect.exsite9.view;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -15,6 +16,7 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
@@ -30,8 +32,8 @@ import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.view.listener.ProjectExplorerDragListener;
 import au.org.intersect.exsite9.view.listener.ProjectExplorerDropListener;
 import au.org.intersect.exsite9.view.provider.ProjectExplorerViewContentProvider;
-import au.org.intersect.exsite9.view.provider.ProjectViewInputWrapper;
 import au.org.intersect.exsite9.view.provider.ProjectExplorerViewLabelProvider;
+import au.org.intersect.exsite9.view.provider.ProjectViewInputWrapper;
 
 /**
  * This is the ViewPart that will hold the Project Explorer UI component.
@@ -40,6 +42,7 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
 {
     // This needs to match what is defined in the plugin.xml
     public static final String ID = ProjectExplorerView.class.getName();
+    private static final Logger LOG = Logger.getLogger(ProjectExplorerView.class);
 
     private TreeViewer treeViewer;
 
@@ -224,6 +227,16 @@ public final class ProjectExplorerView extends ViewPart implements IExecutionLis
     public ISelection getSelection()
     {
         return this.treeViewer.getSelection();
+    }
+    
+    public void setSelection(ISelection selection)
+    {
+        if (!(selection instanceof IStructuredSelection))
+        {
+            LOG.error("Unknown selection type");
+            return;
+        }
+        this.treeViewer.setSelection(selection, true);        
     }
 
     private void displayProjectAndExpand()
