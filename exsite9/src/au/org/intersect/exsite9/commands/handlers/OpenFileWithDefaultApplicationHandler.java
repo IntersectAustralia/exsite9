@@ -1,6 +1,5 @@
 package au.org.intersect.exsite9.commands.handlers;
 
-import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 
@@ -16,6 +15,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import au.org.intersect.exsite9.domain.ResearchFile;
+import au.org.intersect.exsite9.util.DesktopUtils;
 
 public class OpenFileWithDefaultApplicationHandler implements IHandler
 {
@@ -45,7 +45,7 @@ public class OpenFileWithDefaultApplicationHandler implements IHandler
         final File file = ((ResearchFile)selectionObject).getFile();
         try
         {
-            Desktop.getDesktop().open(file);
+            DesktopUtils.openWithDefaultApplication(file);
         }
         catch (IOException e)
         {
