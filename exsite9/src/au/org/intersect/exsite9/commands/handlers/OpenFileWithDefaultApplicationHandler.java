@@ -1,6 +1,7 @@
 package au.org.intersect.exsite9.commands.handlers;
 
 import java.awt.Desktop;
+import java.io.File;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
@@ -18,13 +19,12 @@ import au.org.intersect.exsite9.domain.ResearchFile;
 
 public class OpenFileWithDefaultApplicationHandler implements IHandler
 {
+    private static final String NEW_LINE = System.getProperty("line.separator");
     private static final Logger LOG = Logger.getLogger(OpenFileWithDefaultApplicationHandler.class);
     
     @Override
     public void addHandlerListener(IHandlerListener arg0)
     {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override
@@ -41,18 +41,18 @@ public class OpenFileWithDefaultApplicationHandler implements IHandler
         final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getActiveWorkbenchWindow(event)
                 .getActivePage().getSelection();
         final Object selectionObject = selection.getFirstElement();
-        
+
+        final File file = ((ResearchFile)selectionObject).getFile();
         try
         {
-            Desktop.getDesktop().open(((ResearchFile)selectionObject).getFile());
+            Desktop.getDesktop().open(file);
         }
         catch (IOException e)
         {
-            LOG.error("The user's computer does not recognise this file or does not have a default application for it.");
-            MessageDialog.openError(shell, "", "Unable to open this file.");
+            LOG.error("Unable to open file " + file.getAbsolutePath(), e);
+            MessageDialog.openError(shell, "", "Unable to open file " + file.getAbsolutePath() + NEW_LINE + "Reason: " + e.getMessage());
         }
 
-        
         return null;
     }
 
