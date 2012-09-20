@@ -86,7 +86,7 @@ public final class NewProjectWizard extends Wizard
 
     public static ProjectFieldsDTO createProjectFieldsDTO(final EditOrCreateProjectWizardPage1 page1, final EditOrCreateProjectWizardPage2 page2)
     {
-        final String name = page1.getName();
+        final String name = page1.getProjectName();
         final String owner = page1.getOwner();
         final String institution = page1.getInstitution();
         final String email = page1.getEmail();

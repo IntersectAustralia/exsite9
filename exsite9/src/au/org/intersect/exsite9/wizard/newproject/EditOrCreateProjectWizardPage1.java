@@ -210,6 +210,7 @@ public final class EditOrCreateProjectWizardPage1 extends WizardPage implements 
         setPageComplete(allFieldsAreValid());
     }
 
+    // Not to override super.getName()
     public String getProjectName()
     {
         return this.projectNameText.getContents().trim();
