@@ -641,21 +641,6 @@
       </menuContribution>
       <menuContribution
             allPopups="false"
-            locationURI="toolbar:org.eclipse.ui.main.toolbar">
-         <toolbar
-               id="au.org.intersect.exsite9.toolbar"
-               label="ToolBar">
-            <command
-                  commandId="au.org.intersect.exsite9.commands.NewProjectCommand"
-                  icon="icons/icon_new_16.png"
-                  label="New Project"
-                  style="push"
-                  tooltip="Create a new project">
-            </command>
-         </toolbar>
-      </menuContribution>
-      <menuContribution
-            allPopups="false"
             locationURI="popup:au.org.intersect.exsite9.view.ProjectExplorerView">
          <command
                commandId="au.org.intersect.exsite9.commands.EditProjectCommand"
