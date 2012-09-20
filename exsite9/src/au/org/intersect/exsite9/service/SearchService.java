@@ -16,9 +16,9 @@ import au.org.intersect.exsite9.domain.ResearchFileSearchDefinition;
 
 public class SearchService implements ISearchService
 {
-    private static final String METADATA_CATEGORY_ATTRIBUTE_QUERY_STRING = "SELECT DISTINCT f FROM ResearchFile f JOIN f.metadataAssociations a WHERE f.project = :project AND a.metadataAttributeValue.value LIKE :searchTerm";
-    private static final String METADATA_CATEGORY_VALUE_QUERY_STRING = "SELECT DISTINCT f FROM ResearchFile f JOIN f.metadataAssociations a JOIN a.metadataValues va WHERE f.project = :project AND a.metadataCategory.type = :categoryType AND va.value LIKE :searchTerm";
-    private static final String METADATA_CATEGORY_NAME_QUERY_STRING = "SELECT DISTINCT f FROM ResearchFile f JOIN f.metadataAssociations a WHERE f.project = :project AND a.metadataCategory.name LIKE :searchTerm";
+    private static final String METADATA_CATEGORY_ATTRIBUTE_QUERY_STRING = "SELECT DISTINCT f FROM ResearchFile f JOIN f.metadataAssociations a WHERE f.project = :project AND LOWER(a.metadataAttributeValue.value) LIKE LOWER(:searchTerm)";
+    private static final String METADATA_CATEGORY_VALUE_QUERY_STRING = "SELECT DISTINCT f FROM ResearchFile f JOIN f.metadataAssociations a JOIN a.metadataValues va WHERE f.project = :project AND a.metadataCategory.type = :categoryType AND LOWER(va.value) LIKE LOWER(:searchTerm)";
+    private static final String METADATA_CATEGORY_NAME_QUERY_STRING = "SELECT DISTINCT f FROM ResearchFile f JOIN f.metadataAssociations a WHERE f.project = :project AND LOWER(a.metadataCategory.name) LIKE LOWER(:searchTerm)";
     private final EntityManagerFactory entityManagerFactory;
 
     public SearchService(EntityManagerFactory emf)
@@ -46,7 +46,7 @@ public class SearchService implements ISearchService
                     query = em.createQuery(METADATA_CATEGORY_NAME_QUERY_STRING, ResearchFile.class);
                     query.setParameter("searchTerm", sb.toString());
                     query.setParameter("project", currentProject);
-                    TypedQuery<ResearchFile> query2 = em.createQuery("SELECT DISTINCT f FROM ResearchFile f JOIN f.metadataAssociations a JOIN a.metadataValues va WHERE f.project = :project AND va.value LIKE :searchTerm", ResearchFile.class);
+                    TypedQuery<ResearchFile> query2 = em.createQuery("SELECT DISTINCT f FROM ResearchFile f JOIN f.metadataAssociations a JOIN a.metadataValues va WHERE f.project = :project AND LOWER(va.value) LIKE LOWER(:searchTerm)", ResearchFile.class);
                     query2.setParameter("searchTerm", sb.toString());
                     query2.setParameter("project", currentProject);
                     TypedQuery<ResearchFile> query3 = em.createQuery(METADATA_CATEGORY_ATTRIBUTE_QUERY_STRING, ResearchFile.class);
