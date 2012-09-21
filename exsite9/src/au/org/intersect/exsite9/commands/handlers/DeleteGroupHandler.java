@@ -59,8 +59,11 @@ public final class DeleteGroupHandler implements IHandler
         final Group groupToDelete = (Group) selectedObject;
 
         final Shell shell = HandlerUtil.getActiveWorkbenchWindow(event).getShell();
-        final boolean confirm = MessageDialog.openConfirm(shell, "Are you sure?", "Are you sure you want to delete group '" + groupToDelete.getName() +
-                "'? All child groups and files will be moved to the parent.");
+        final String dialogText = "Are you sure you want to delete group '" + groupToDelete.getName() +
+                "'? All child groups and files will be moved to the parent.";
+
+        final MessageDialog messageDialog = new MessageDialog(shell, "Are you sure?", null, dialogText, MessageDialog.CONFIRM, new String[]{"OK", "Cancel"}, 1);
+        final boolean confirm = messageDialog.open() == 0;
 
         if (confirm)
         {

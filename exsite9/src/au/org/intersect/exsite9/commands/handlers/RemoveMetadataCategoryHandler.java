@@ -68,8 +68,9 @@ public final class RemoveMetadataCategoryHandler implements IHandler
         final MetadataCategory metadataCategory = metadataCategoryService.findById(id);
 
         final Shell shell = HandlerUtil.getActiveWorkbenchWindow(event).getShell();
-        final boolean confirm = MessageDialog.openConfirm(shell, "Are you sure?", "Are you sure you wish to delete metadata category '" +
-                metadataCategory.getName() + "'? Associations with Groups and Files will also be removed.");
+        final String dialogText = "Are you sure you wish to delete metadata category '" + metadataCategory.getName() + "'? Associations with Groups and Files will also be removed.";
+        final MessageDialog messageDialog = new MessageDialog(shell, "Are you sure?", null, dialogText, MessageDialog.CONFIRM, new String[]{"OK", "Cancel"}, 1);
+        final boolean confirm = messageDialog.open() == 0;
         if (!confirm)
         {
             return null;

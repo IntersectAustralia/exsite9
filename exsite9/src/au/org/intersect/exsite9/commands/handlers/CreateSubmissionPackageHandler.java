@@ -10,6 +10,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
@@ -17,6 +18,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.service.IProjectManager;
+import au.org.intersect.exsite9.wizard.CustomButtonFocusWizardDialog;
 import au.org.intersect.exsite9.wizard.createsubmissionpackage.CreateSubmissionPackageWizard;
 
 /**
@@ -36,7 +38,7 @@ public final class CreateSubmissionPackageHandler implements IHandler
 
         final Shell shell = HandlerUtil.getActiveWorkbenchWindow(event).getShell();
         final CreateSubmissionPackageWizard createSubmissionPackageWizard = new CreateSubmissionPackageWizard(null, project.getSubmissionPackages(), "Define Submission Package");
-        final WizardDialog wizardDialog = new WizardDialog(shell, createSubmissionPackageWizard);
+        final WizardDialog wizardDialog = new CustomButtonFocusWizardDialog(shell, createSubmissionPackageWizard, IDialogConstants.NEXT_ID);
         wizardDialog.open();
 
         return createSubmissionPackageWizard.getSubmissionPackage();
