@@ -214,7 +214,13 @@ public class ResearchFileService implements IResearchFileService
             final List<MetadataAssociation> associations = file.getMetadataAssociations();
             for (final MetadataAssociation association : associations)
             {
-                if (association.getMetadataCategory().equals(metadataCategory) && association.getMetadataAttributeValue().equals(metadataAttributeValue))
+                final MetadataAttributeValue currentMetadataAttributeValue = association.getMetadataAttributeValue();
+                if (currentMetadataAttributeValue == null)
+                {
+                    continue;
+                }
+
+                if (association.getMetadataCategory().equals(metadataCategory) && currentMetadataAttributeValue.equals(metadataAttributeValue))
                 {
                     association.setMetadataAttributeValue(null);
                     final EntityManager em = this.entityManagerFactory.createEntityManager();
