@@ -4,8 +4,11 @@
 <product name="ExSite9" id="au.org.intersect.exsite9.product1" application="au.org.intersect.exsite9.application" version="1.0.0" useFeatures="false" includeLaunchers="true">
 
    <aboutInfo>
+      <image path="/exsite9/icons/ands_logo.png"/>
       <text>
-         This project is supported by the Australian National Data Service (ANDS). ANDS is supported by the Australian Government through the National Collaborative Research Infrastructure Strategy Program and the Education Investment Fund (EIF) Super Science Initiative.
+         This project is supported by the Australian National Data Service (ANDS).
+
+ANDS is supported by the Australian Government through the National Collaborative Research Infrastructure Strategy Program and the Education Investment Fund (EIF) Super Science Initiative.
       </text>
    </aboutInfo>
 
