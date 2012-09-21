@@ -21,6 +21,7 @@ public class SearchWizard extends Wizard
         super();
         this.currentProject = selectedProject;
         setNeedsProgressMonitor(true);
+        setWindowTitle("Search");
         this.page1 = new SearchWizardPage1(ResearchFileSearchDefinition.toArray());
     }
 

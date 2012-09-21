@@ -275,7 +275,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             final ToolItem removeButtonItem = new ToolItem(toolBar, SWT.NULL);
             final Image removeImage = Activator.getImageDescriptor("/icons/icon_exclude_16.png").createImage();
             removeButtonItem.setImage(removeImage);
-            removeButtonItem.setToolTipText("Remove category");
+            removeButtonItem.setToolTipText("Delete category");
             removeButtonItem.addSelectionListener(new MetadataCategorySelectionListener(metadataCategory,
                     "au.org.intersect.exsite9.commands.RemoveMetadataCategoryCommand", "au.org.intersect.exsite9.commands.RemoveMetadataCategoryCommand.categoryParameter"));
 

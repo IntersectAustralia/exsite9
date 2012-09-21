@@ -40,11 +40,11 @@ public class AddMetadataCategoryWizard extends Wizard
     {
         super();
         setNeedsProgressMonitor(true);
-        setWindowTitle("New Metadata Category");
         this.project = project;
         this.metadataCategory = metadataCategory;
         if (metadataCategory == null)
         {
+            setWindowTitle("New Metadata Category");
             page1 = new AddMetadataCategoryWizardPage1("New Metadata Category",
                     "Please enter the details of the metadata category you wish to create", project.getSchema(), null,
                     new ArrayList<MetadataValue>(), new ArrayList<MetadataAttributeValue>());
@@ -53,14 +53,15 @@ public class AddMetadataCategoryWizard extends Wizard
         {
             final List<MetadataAttributeValue> metadataAttribtueValues;
             metadataAttribtueValues = new ArrayList<MetadataAttributeValue>();
+            setWindowTitle("Edit Metadata Category");
             if (metadataCategory.getMetadataAttribute() != null)
             {
                 metadataAttribtueValues.addAll(metadataCategory.getMetadataAttribute().getMetadataAttributeValues());
                 Collections.sort(metadataAttribtueValues, new AlphabeticalMetadataAttributeValueComparator());
             }
             page1 = new AddMetadataCategoryWizardPage1("Edit Metadata Category",
-                    "Edit the details of the metadata category you have selected", project.getSchema(), metadataCategory,
-                    metadataCategory.getValues(), metadataAttribtueValues);
+                    "Edit the details of the metadata category you have selected", project.getSchema(),
+                    metadataCategory, metadataCategory.getValues(), metadataAttribtueValues);
         }
     }
 
@@ -85,16 +86,19 @@ public class AddMetadataCategoryWizard extends Wizard
         final IGroupService groupService = (IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class);
         final IResearchFileService fileService = (IResearchFileService) PlatformUI.getWorkbench().getService(
                 IResearchFileService.class);
-        final ISchemaService schemaService = (ISchemaService) PlatformUI.getWorkbench().getService(ISchemaService.class);
+        final ISchemaService schemaService = (ISchemaService) PlatformUI.getWorkbench()
+                .getService(ISchemaService.class);
 
         for (final ResearchFile assignedFile : page1.getAssignedFiles())
         {
-            fileService.disassociateMultipleMetadataValues(assignedFile, metadataCategory, page1.getMetadataValuesToBeDisassociated());
+            fileService.disassociateMultipleMetadataValues(assignedFile, metadataCategory,
+                    page1.getMetadataValuesToBeDisassociated());
         }
-        
+
         for (final Group assignedGroup : page1.getAssignedGroups())
         {
-            groupService.disassociateMultipleMetadataValues(assignedGroup, metadataCategory, page1.getMetadataValuesToBeDisassociated());
+            groupService.disassociateMultipleMetadataValues(assignedGroup, metadataCategory,
+                    page1.getMetadataValuesToBeDisassociated());
         }
 
         for (final MetadataAttributeValue mdav : page1.getMetadataAttributeValuesToBeDisassociated())
@@ -102,7 +106,7 @@ public class AddMetadataCategoryWizard extends Wizard
             groupService.disassociateMetadataAttributeValue(metadataCategory, mdav);
             fileService.disassociateMetadataAttributeValue(metadataCategory, mdav);
         }
-        
+
         if (this.metadataCategory == null)
         {
             final List<MetadataValue> metadataValues;
@@ -125,8 +129,9 @@ public class AddMetadataCategoryWizard extends Wizard
                     metadataAttribute = null;
                 }
             }
-            final MetadataCategory newCategory = metadataCategoryService.createNewMetadataCategory(categoryTitle, categoryDescription, categoryType,
-                    categoryUse, inextensible, false, metadataValues, metadataAttribute);
+            final MetadataCategory newCategory = metadataCategoryService.createNewMetadataCategory(categoryTitle,
+                    categoryDescription, categoryType, categoryUse, inextensible, false, metadataValues,
+                    metadataAttribute);
             schemaService.addMetadataCategoryToSchema(this.project.getSchema(), newCategory);
         }
         else
@@ -161,7 +166,8 @@ public class AddMetadataCategoryWizard extends Wizard
                 }
             }
 
-            metadataCategoryService.updateMetadataCategory(this.metadataCategory, categoryTitle, categoryDescription, categoryUse, inextensible, page1.getMetadataCategoryValues(), newMDA);
+            metadataCategoryService.updateMetadataCategory(this.metadataCategory, categoryTitle, categoryDescription,
+                    categoryUse, inextensible, page1.getMetadataCategoryValues(), newMDA);
         }
 
         return this.project != null;

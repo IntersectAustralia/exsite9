@@ -78,15 +78,17 @@
             restorable="false">
       </view>
 	  <view
-			allowMultiple="false"
-            class="au.org.intersect.exsite9.view.AssociatedMetadataView"
-            id="au.org.intersect.exsite9.view.AssociatedMetadataView"
-            name="Associated Metadata View"
-            restorable="false">
+         allowMultiple="false"
+         class="au.org.intersect.exsite9.view.AssociatedMetadataView"
+         icon="icons/icon_category_16.png"
+         id="au.org.intersect.exsite9.view.AssociatedMetadataView"
+         name="Associated Metadata View"
+         restorable="false">
       </view>
    <view
          allowMultiple="false"
          class="au.org.intersect.exsite9.view.ThumbnailView"
+         icon="icons/icon_thumbnail_16.png"
          id="au.org.intersect.exsite9.view.ThumbnailView"
          name="Thumbnail"
          restorable="false">
@@ -283,7 +285,7 @@
             <command
                   commandId="au.org.intersect.exsite9.commands.ExitCommand"
                   label="Exit"
-                  mnemonic="x"
+                  mnemonic="E"
                   style="push"
                   tooltip="Exits the application">
             </command>
@@ -294,7 +296,6 @@
                mnemonic="P">
             <command
                   commandId="au.org.intersect.exsite9.commands.NewProjectCommand"
-                  icon="icons/icon_new_16.png"
                   label="New..."
                   mnemonic="N"
                   style="push"
@@ -302,7 +303,6 @@
             </command>
             <command
                   commandId="au.org.intersect.exsite9.commands.OpenProjectCommand"
-                  icon="icons/icon_open_16.png"
                   label="Open..."
                   mnemonic="O"
                   style="push"
@@ -310,7 +310,6 @@
             </command>
             <command
                   commandId="au.org.intersect.exsite9.commands.EditProjectCommand"
-                  icon="icons/icon_edit_16.png"
                   id="au.org.intersect.exsite9.menu.project.edit"
                   label="Edit..."
                   mnemonic="d"
@@ -319,7 +318,6 @@
             </command>
             <command
                   commandId="au.org.intersect.exsite9.commands.ExportProjectXMLCommand"
-                  icon="icons/icon_export_16.png"
                   id="au.org.intersect.exsite9.menu.project.export"
                   label="Export..."
                   mnemonic="x"
@@ -336,7 +334,6 @@
             </command>
             <command
                   commandId="au.org.intersect.exsite9.commands.ReloadProjectCommand"
-                  icon="icons/icon_refresh_16.png"
                   id="au.org.intersect.exsite9.menu.project.refresh"
                   label="Refresh"
                   mnemonic="R"
@@ -366,6 +363,7 @@
             <command
                   commandId="au.org.intersect.exsite9.commands.MoveToNewGroup"
                   label="Create Group From..."
+                  mnemonic="C"
                   style="push">
             </command>
             <command
@@ -383,8 +381,9 @@
                   tooltip="Delete Group">
             </command>
                         <menu
-                  id="S"
-                  label="Sort Files By...">
+                              id="S"
+                              label="Sort Files By..."
+                              mnemonic="S">
                <menu
                      label="Name..."
                      mnemonic="F">
@@ -566,7 +565,6 @@
             </menu>
             <command
                   commandId="au.org.intersect.exsite9.commands.AddMetadataCategoryCommand"
-                  icon="icons/icon_newcategory_16.png"
                   label="New Category..."
                   mnemonic="N"
                   style="push"
@@ -574,7 +572,6 @@
             </command>
             <command
                   commandId="au.org.intersect.exsite9.commands.EditMetadataCategoryCommand"
-                  icon="icons/icon_edit_16.png"
                   label="Edit Category..."
                   mnemonic="E"
                   style="push"
@@ -582,7 +579,6 @@
             </command>
             <command
                   commandId="au.org.intersect.exsite9.commands.RemoveMetadataCategoryWithWizardCommand"
-                  icon="icons/icon_exclude_16.png"
                   label="Delete Category..."
                   mnemonic="D"
                   style="push"
@@ -595,7 +591,6 @@
                mnemonic="S">
             <command
                   commandId="au.org.intersect.exsite9.commands.CreateSubmissionPackageCommand"
-                  icon="icons/icon_new_16.png"
                   label="Define Submission Package..."
                   mnemonic="C"
                   style="push"
@@ -604,6 +599,7 @@
             <command
                   commandId="au.org.intersect.exsite9.commands.EditSubmissionPackageCommand"
                   label="Edit Submission Package..."
+                  mnemonic="E"
                   style="push">
                <visibleWhen
                      checkEnabled="false">
@@ -615,6 +611,7 @@
             <command
                   commandId="au.org.intersect.exsite9.commands.DeleteSubmissionPackageCommand"
                   label="Delete Submission Package"
+                  mnemonic="D"
                   style="push">
                <visibleWhen
                      checkEnabled="false">
@@ -626,6 +623,7 @@
             <command
                   commandId="au.org.intersect.exsite9.commands.ExportSubmissionPackageXMLCommand"
                   label="Export XML"
+                  mnemonic="X"
                   style="push">
                <visibleWhen
                      checkEnabled="false">
@@ -637,6 +635,7 @@
             <command
                   commandId="au.org.intersect.exsite9.commands.ExportSubmissionPackageZIPCommand"
                   label="Export ZIP"
+                  mnemonic="Z"
                   style="push">
                <visibleWhen
                      checkEnabled="false">
@@ -679,6 +678,7 @@
          <command
                commandId="au.org.intersect.exsite9.commands.MoveToNewGroup"
                label="Create Group From..."
+               mnemonic="C"
                style="push">
             <visibleWhen
                   checkEnabled="false">
@@ -702,7 +702,6 @@
          </command>
          <command
                commandId="au.org.intersect.exsite9.commands.ListFoldersCommand"
-               icon="icons/icon-folder.png"
                label="Edit Watched Folders..."
                mnemonic="W"
                style="push"
@@ -717,7 +716,7 @@
          <command
                commandId="au.org.intersect.exsite9.commands.ListExcludedFilesCommand"
                label="Excluded Files..."
-               mnemonic="c"
+               mnemonic="L"
                style="push"
                tooltip="Lists the files that have been excluded from this project">
             <visibleWhen
@@ -729,7 +728,6 @@
          </command>              
          <command
                commandId="au.org.intersect.exsite9.commands.ReloadProjectCommand"
-               icon="icons/icon_refresh_16.png"
                label="Refresh"
                mnemonic="R"
                style="push"
@@ -756,7 +754,6 @@
          </command>
          <command
                commandId="au.org.intersect.exsite9.commands.ExportProjectXMLCommand"
-               icon="icons/icon_export_16.png"
                label="Export..."
                mnemonic="x"
                style="push"
@@ -772,6 +769,7 @@
          <command
                commandId="au.org.intersect.exsite9.commands.RenameGroupCommand"
                label="Rename Group..."
+               mnemonic="G"
                style="push"
                tooltip="Rename the group">
             <visibleWhen
@@ -783,9 +781,8 @@
          </command>
          <command
                commandId="au.org.intersect.exsite9.commands.ExcludeResearchFiles"
-               icon="icons/icon_exclude_16.png"
                label="Exclude File"
-               mnemonic="x"
+               mnemonic="U"
                style="push"
                tooltip="Exclude the file">
             <visibleWhen
@@ -811,7 +808,7 @@
          <command
                commandId="au.org.intersect.exsite9.commands.ShowInFileSystem"
                label="Show In File System..."
-               mnemonic="S"
+               mnemonic="I"
                style="push"
                tooltip="Show the file in the file system">
                <visibleWhen
@@ -824,6 +821,7 @@
          <command
                commandId="au.org.intersect.exsite9.commands.OpenFileWithDefaultApplication"
                label="Open File With Default Application"
+               mnemonic="O"
                style="push">
             <visibleWhen
                   checkEnabled="false">
@@ -834,7 +832,8 @@
          </command>
          <menu
                id="S"
-               label="Sort Files By...">
+               label="Sort Files By..."
+               mnemonic="B">
             <menu
                   label="Name..."
                   mnemonic="F">
@@ -990,6 +989,7 @@
          <command
                commandId="au.org.intersect.exsite9.commands.EditSubmissionPackageCommand"
                label="Edit Submission Package..."
+               mnemonic="E"
                style="push">
             <visibleWhen
                   checkEnabled="false">
@@ -1001,6 +1001,7 @@
          <command
                commandId="au.org.intersect.exsite9.commands.DeleteSubmissionPackageCommand"
                label="Delete Submission Package"
+               mnemonic="D"
                style="push">
             <visibleWhen
                   checkEnabled="false">
@@ -1012,6 +1013,7 @@
          <command
                commandId="au.org.intersect.exsite9.commands.CreateSubmissionPackageCommand"
                label="Define Submission Package..."
+               mnemonic="F"
                style="push">
             <visibleWhen
                   checkEnabled="false">
@@ -1023,6 +1025,7 @@
          <command
                commandId="au.org.intersect.exsite9.commands.ExportSubmissionPackageXMLCommand"
                label="Export XML..."
+               mnemonic="X"
                style="push">
             <visibleWhen
                   checkEnabled="false">
@@ -1034,6 +1037,7 @@
          <command
                commandId="au.org.intersect.exsite9.commands.ExportSubmissionPackageZIPCommand"
                label="Export ZIP..."
+               mnemonic="Z"
                style="push">
             <visibleWhen
                   checkEnabled="false">
