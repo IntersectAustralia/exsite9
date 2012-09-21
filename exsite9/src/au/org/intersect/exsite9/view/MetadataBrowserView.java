@@ -476,6 +476,15 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
      */
     private boolean validMetadataAssignablesSelected(final boolean showErrors)
     {
+        if (this.selectedMetadataAssignables.isEmpty())
+        {
+            if (showErrors)
+            {
+                MessageDialog.openError(getSite().getWorkbenchWindow().getShell(), "Error", "Please select an item to assign metadata with.");
+            }
+            return false;
+        }
+
         // Check that the selected groups does not contain a new files group OR the project node - we CANNOT assign metadata
         // to them.
         if (!Collections2.filter(this.selectedMetadataAssignables, Predicates.instanceOf(NewFilesGroup.class)).isEmpty())
@@ -567,6 +576,20 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             }
             setMetadataValueWidgets(new ArrayList<Triplet<MetadataCategory, MetadataValue, MetadataAttributeValue>>(intersection));
         }
+        else
+        {
+            for (final MetadataCategory mdc : this.freeTextParentComposites.keySet())
+            {
+                if (!this.freeTextRows.containsKey(mdc))
+                {
+                    final Composite composite = freeTextParentComposites.get(mdc);
+                    final FreeTextRowComposite row = new FreeTextRowComposite(composite, SWT.NULL, mdc, null, null, true);
+                    this.freeTextRows.put(mdc, new ArrayList<MetadataBrowserView.FreeTextRowComposite>(Arrays.asList(row)));
+                    layoutRow(row.getComposite());
+                }
+            }
+            packAndLayout();
+        }
     }
 
     /**
@@ -653,6 +676,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
             }
         }
         this.freeTextRows.clear();
+
         packAndLayout();
     }
 
