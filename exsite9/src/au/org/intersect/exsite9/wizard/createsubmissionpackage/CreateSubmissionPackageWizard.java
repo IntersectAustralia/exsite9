@@ -36,6 +36,7 @@ public final class CreateSubmissionPackageWizard extends Wizard
     {
         super();
         setNeedsProgressMonitor(true);
+        setWindowTitle(wizardTitle);
         this.submissionPackage = submissionPackage;
         this.page1 = new CreateSubmissionPackageWizardPage1(submissionPackage, existingSubmissionPackages, wizardTitle);
         this.page2 = new CreateSubmissionPackageWizardPage2(submissionPackage, wizardTitle);

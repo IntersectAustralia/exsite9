@@ -40,6 +40,7 @@ public class AddMetadataCategoryWizard extends Wizard
     {
         super();
         setNeedsProgressMonitor(true);
+        setWindowTitle("New Metadata Category");
         this.project = project;
         this.metadataCategory = metadataCategory;
         if (metadataCategory == null)

@@ -26,6 +26,7 @@ public class EditProjectWizard extends MetadataSchemaEditingWizard
     {
         super(selectedProject, "Edit Project");
         setNeedsProgressMonitor(true);
+        setWindowTitle("Edit Project");
         final ProjectFieldsDTO projectFieldsDTO = new ProjectFieldsDTO(selectedProject.getName(), selectedProject.getOwner(),
                 selectedProject.getInstitution(), selectedProject.getEmail(),
                 selectedProject.getDescription(), selectedProject.getCollectionType(),
