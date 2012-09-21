@@ -95,7 +95,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
 
     private static final Logger LOG = Logger.getLogger(MetadataBrowserView.class);
 
-    private static final int RIGHT_MARGIN = 30;
+    private static final int RIGHT_MARGIN = 40;
 
     private ExpandBar expandBar;
     private Composite parent;
