@@ -903,7 +903,7 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
 
                     if (oldAssociatedValue != null)
                     {
-                        disassociateFreeText(updatedMetadataCategory, metadataValue);
+                        disassociateFreeText(updatedMetadataCategory, oldAssociatedValue);
                     }
 
                     contentComposite.dispose();
