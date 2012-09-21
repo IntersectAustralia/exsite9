@@ -8,7 +8,9 @@
       <text>
          This project is supported by the Australian National Data Service (ANDS).
 
-ANDS is supported by the Australian Government through the National Collaborative Research Infrastructure Strategy Program and the Education Investment Fund (EIF) Super Science Initiative.
+ANDS is supported by the Australian Government through the National Collaborative
+Research Infrastructure Strategy Program and the Education Investment Fund (EIF)
+Super Science Initiative.
       </text>
    </aboutInfo>
 
@@ -20,6 +22,7 @@ ANDS is supported by the Australian Government through the National Collaborativ
    </launcherArgs>
 
    <windowImages/>
+
 
    <launcher name="ExSite9">
       <linux icon="/exsite9/icons/ex9logo.xpm"/>

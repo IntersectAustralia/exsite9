@@ -43,7 +43,11 @@
          </property>
          <property
                name="aboutText"
-               value="This project is supported by the Australian National Data Service (ANDS). ANDS is supported by the Australian Government through the National Collaborative Research Infrastructure Strategy Program and the Education Investment Fund (EIF) Super Science Initiative.">
+               value="This project is supported by the Australian National Data Service (ANDS).&#x0A;&#x0A;ANDS is supported by the Australian Government through the National Collaborative&#x0A;Research Infrastructure Strategy Program and the Education Investment Fund (EIF)&#x0A;Super Science Initiative.">
+         </property>
+         <property
+               name="aboutImage"
+               value="icons/ands_logo.png">
          </property>
       </product>
    </extension>
