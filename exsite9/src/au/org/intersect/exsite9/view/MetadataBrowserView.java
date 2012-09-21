@@ -907,7 +907,9 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                     final FreeTextRowComposite row = new FreeTextRowComposite(composite, SWT.NULL, metadataCategory, null, null, false);
                     freeTextRows.get(metadataCategory).add(row);
                     layoutRow(row.getComposite());
-                    packAndLayout();
+                    final Composite parent = contentComposite.getParent();
+                    parent.pack();
+                    parent.layout();
                 }
 
                 @Override
@@ -930,8 +932,10 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
                         disassociateFreeText(updatedMetadataCategory, oldAssociatedValue);
                     }
 
+                    final Composite parent = contentComposite.getParent();
                     contentComposite.dispose();
-                    packAndLayout();
+                    parent.pack();
+                    parent.layout();
                     refreshRelatedViews();
                 }   
 
