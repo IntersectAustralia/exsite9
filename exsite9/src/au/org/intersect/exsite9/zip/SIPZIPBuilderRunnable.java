@@ -110,12 +110,13 @@ public final class SIPZIPBuilderRunnable implements IRunnableWithProgress
             try
             {
                 // Add the groups and files to the zip
-                createDirForGroup(project.getRootNode(), zipStream, zipByteChannel, "", selectedGroups, submissionPackage);
+                final String rootFolder = submissionPackage.getName();
+                createDirForGroup(rootFolder, project.getRootNode(), zipStream, zipByteChannel, "", selectedGroups, submissionPackage);
 
                 // Put the SIP XML in place.
                 final String xml = SIPXMLBuilder.buildXML(project, selectedGroups, submissionPackage, true);
-                
-                final ZipArchiveEntry sipXMLZipEntry = new ZipArchiveEntry(project.getRootNode().getName() + "/" + project.getName() + ".xml");
+
+                final ZipArchiveEntry sipXMLZipEntry = new ZipArchiveEntry(rootFolder + "/" + submissionPackage.getName() + ".xml");
                 zipStream.putArchiveEntry(sipXMLZipEntry);
     
                 final ReadableByteChannel sipXmlByteChannel = Channels.newChannel(new ByteArrayInputStream(xml.getBytes(Charsets.UTF_8)));
@@ -131,7 +132,7 @@ public final class SIPZIPBuilderRunnable implements IRunnableWithProgress
     
                 // Also put the SIP Inventory in place.
                 final String inventoryInput = SIPZIPInventoryFileBuilder.buildInventoryFile(project, submissionPackage);
-                final ZipArchiveEntry inventoryFileZipEntry = new ZipArchiveEntry(project.getRootNode().getName() + "/inventory.txt");
+                final ZipArchiveEntry inventoryFileZipEntry = new ZipArchiveEntry(rootFolder + "/" + submissionPackage.getName() + "_Inventory.txt");
                 zipStream.putArchiveEntry(inventoryFileZipEntry);
                 final ReadableByteChannel inventoryChannel = Channels.newChannel(new ByteArrayInputStream(inventoryInput.getBytes(Charsets.UTF_8)));
 
@@ -169,9 +170,9 @@ public final class SIPZIPBuilderRunnable implements IRunnableWithProgress
         }
     }
 
-    private void createDirForGroup(final Group group, final ZipArchiveOutputStream zipStream, final WritableByteChannel zipByteChannel, final String parentPath, final List<Group> selectedGroups, final SubmissionPackage submissionPackage) throws IOException, InterruptedException
+    private void createDirForGroup(final String dirName, final Group group, final ZipArchiveOutputStream zipStream, final WritableByteChannel zipByteChannel, final String parentPath, final List<Group> selectedGroups, final SubmissionPackage submissionPackage) throws IOException, InterruptedException
     {
-        final String groupPath = parentPath + group.getName() + "/";
+        final String groupPath = parentPath + dirName + "/";
         final ZipArchiveEntry groupDirZipEntry = new ZipArchiveEntry(groupPath);
         zipStream.putArchiveEntry(groupDirZipEntry);
         zipStream.closeArchiveEntry();
@@ -182,7 +183,7 @@ public final class SIPZIPBuilderRunnable implements IRunnableWithProgress
         {
             if (selectedGroups.contains(child))
             {
-                createDirForGroup(child, zipStream, zipByteChannel, groupPath, selectedGroups, submissionPackage);
+                createDirForGroup(child.getName(), child, zipStream, zipByteChannel, groupPath, selectedGroups, submissionPackage);
             }
         }
     }

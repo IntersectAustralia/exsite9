@@ -24,6 +24,7 @@ import com.richclientgui.toolbox.validation.string.StringValidationToolkit;
 import com.richclientgui.toolbox.validation.validator.IFieldValidator;
 
 import au.org.intersect.exsite9.domain.SubmissionPackage;
+import au.org.intersect.exsite9.util.DirectoryUtils;
 import au.org.intersect.exsite9.wizard.WizardPageErrorHandler;
 
 /**
@@ -89,6 +90,11 @@ public final class CreateSubmissionPackageWizardPage1 extends WizardPage impleme
                 if (contents.trim().length() >= 255)
                 {
                     this.errorMessage = "Submission package name must be less than 255 characters in length";
+                    return false;
+                }
+                if (!DirectoryUtils.isValidDirectoryName(contents.trim()))
+                {
+                    this.errorMessage = "Submission package name must contain alpha-numeric characters only";
                     return false;
                 }
                 for (final SubmissionPackage existingSubmissionPackage : existingSubmissionPackages)
