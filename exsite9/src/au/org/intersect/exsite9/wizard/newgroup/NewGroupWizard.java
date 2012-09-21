@@ -30,6 +30,7 @@ public final class NewGroupWizard extends Wizard
     {
         super();
         setNeedsProgressMonitor(true);
+        setWindowTitle("New Group");
         this.parentGroup = parentGroup;
         this.page1 = new NewGroupWizardPage1(parentGroup);
     }

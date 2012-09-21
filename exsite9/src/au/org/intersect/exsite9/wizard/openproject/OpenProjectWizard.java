@@ -22,6 +22,7 @@ public class OpenProjectWizard extends Wizard
     {
         super();
         setNeedsProgressMonitor(true);
+        setWindowTitle("Open Project");
     }
 
     /**

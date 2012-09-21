@@ -38,6 +38,7 @@ public final class EditMetadataCategoryWizard extends Wizard
     {
         super();
         setNeedsProgressMonitor(true);
+        setWindowTitle("Edit Metadata Category");
         this.schema = schema;
         this.listCategoriesPage = new ListMetadataCategoriesWizardPage("Edit Metadata Category", "Choose a metadata category to edit.", this.schema, false);
         this.editCategoryPage = new AddMetadataCategoryWizardPage1("Edit Metadata Category",

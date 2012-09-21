@@ -27,6 +27,7 @@ public class ListFoldersWizard extends Wizard
                 IProjectManager.class);
         final Project project = projectManager.getCurrentProject();
         final List<Folder> folders = project.getFolders();
+        setWindowTitle("Folders");
 
         this.page1 = new ListFoldersWizardPage1(folders);
 

@@ -33,6 +33,7 @@ public final class ListExcludedFilesWizard extends Wizard
      */
     public ListExcludedFilesWizard()
     {
+        setWindowTitle("Excluded Files");
     }
 
     /**

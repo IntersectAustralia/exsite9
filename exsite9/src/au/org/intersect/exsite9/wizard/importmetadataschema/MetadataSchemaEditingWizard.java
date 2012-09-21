@@ -45,7 +45,7 @@ public abstract class MetadataSchemaEditingWizard extends Wizard
     {
         this.schemaEditPage = new EditOrCreateProjectWizardPage3(title, "Please select the schema to be used with your project", selectedProject.getSchema());
         this.currentProject = selectedProject;
-
+        setWindowTitle(title);
         this.projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
         this.schemaService = (ISchemaService) PlatformUI.getWorkbench().getService(ISchemaService.class);
         this.groupService = (IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class);

@@ -34,6 +34,7 @@ public final class NewProjectWizard extends Wizard
     {
         super();
         setNeedsProgressMonitor(true);
+        setWindowTitle("New Project");
         final ProjectFieldsDTO projectFieldsDTO = new ProjectFieldsDTO("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", null, "", "", "", "", "");
         page1 = new EditOrCreateProjectWizardPage1("New Project", "Please enter the details of your new project.", projectFieldsDTO);
         page2 = new EditOrCreateProjectWizardPage2("New Project", "Please enter the details of your new project.", projectFieldsDTO);
