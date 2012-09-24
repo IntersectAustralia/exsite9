@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.graphics.Image;
@@ -96,20 +97,22 @@ public final class ThumbnailView extends ViewPart implements ISelectionListener
         {
             File file = ((ResearchFile) selectedObjects.get(0)).getFile();
 
-            String[] fileNameSplitAtPeriods = file.getName().split("\\.");
-            String fileExtension = fileNameSplitAtPeriods[fileNameSplitAtPeriods.length - 1].trim();
-            if (file.exists()
-                    && (fileExtension.equalsIgnoreCase("GIF") || fileExtension.equalsIgnoreCase("BMP")
-                            || fileExtension.equalsIgnoreCase("JPG") || fileExtension.equalsIgnoreCase("JPEG")
-                            || fileExtension.equalsIgnoreCase("PNG") || fileExtension.equalsIgnoreCase("TIF")
-                            || fileExtension.equalsIgnoreCase("TIFF")))
+            if (file.exists())
             {
-                image = new Image(parent.getDisplay(), file.getAbsolutePath());
+                try
+                {
+                    image = new Image(parent.getDisplay(), file.getAbsolutePath());
+                }
+                catch (SWTException e)
+                {
+                    image = imageUnavailable;
+                }
             }
             else
             {
                 image = imageUnavailable;
             }
+
         }
         else
         {
