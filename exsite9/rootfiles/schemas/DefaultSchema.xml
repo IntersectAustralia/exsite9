@@ -1,23 +1,560 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<schema name="foo" description="This is the foo schema" namespace_url="This is the foo namespace URL">
-
-  <metadata_category inextensible="true" name="cat1" use="optional" type="Controlled Vocabulary">
-    <value>Value One</value>
-    <value> Value Two</value>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<schema description="PARADISEC Schema" name="PARADISEC" namespace_url="http://www.paradisec.org.au/home.html">
+  <metadata_category inextensible="false" name="Title" type="Free Text" use="required"/>
+  <metadata_category inextensible="false" name="Description" type="Free Text" use="required"/>
+  <metadata_category inextensible="false" name="Private" type="Controlled Vocabulary" use="required">
+    <value>True</value>
+    <value>False</value>
   </metadata_category>
-
-  <metadata_category inextensible="true" name="cat2" use="recommended" type="Controlled Vocabulary">
-    <value>Value One</value>
-  </metadata_category>
-
-  <metadata_category inextensible="false" name="cat3" use="required" type="Free Text">
-  </metadata_category>
-
-  <metadata_category inextensible="false" name="cat4" use="required" type="Free Text">
-    <attribute name="attribute">
-    	<value>Value One</value>
-    	<value>Value Two</value>
+  <metadata_category inextensible="false" name="originationDate" type="Free Text" use="required"/>
+  <metadata_category inextensible="false" name="originationDateNarrative" type="Free Text" use="optional"/>
+  <metadata_category inextensible="false" name="Agent" type="Free Text" use="optional">
+    <attribute name="Role">
+      <value>Compiler</value>
+      <value>Research Participant</value>
+      <value>Speaker</value>
+      <value>Signer</value>
+      <value>Data Inputter</value>
+      <value>Editor</value>
+      <value>Interpreter</value>
+      <value>Photographer</value>
+      <value>Translator</value>
+      <value>Depositor</value>
+      <value>Researcher</value>
+      <value>Transcriber</value>
+      <value>Annotator</value>
+      <value>Consultant</value>
+      <value>Singer</value>
+      <value>Responder</value>
+      <value>Sponsor</value>
+      <value>Participant</value>
+      <value>Developer</value>
+      <value>Author</value>
+      <value>Recorder</value>
+      <value>Interviewer</value>
+      <value>Illustrator</value>
+      <value>Performer</value>
     </attribute>
   </metadata_category>
-
+  <metadata_category inextensible="false" name="Linguistic_Data_Type" type="Controlled Vocabulary" use="optional">
+    <value>Primary Text</value>
+    <value>Language Description</value>
+    <value>Lexicon</value>
+  </metadata_category>
+  <metadata_category inextensible="false" name="Discourse_Type" type="Controlled Vocabulary" use="required">
+    <value>Formulaic</value>
+    <value>Unintelligible speech</value>
+    <value>Dialogue</value>
+    <value>Narrative</value>
+    <value>Drama</value>
+    <value>Report</value>
+    <value>Oratory</value>
+    <value>Procedural</value>
+    <value>Ludic</value>
+    <value>Singing</value>
+  </metadata_category>
+  <metadata_category inextensible="false" name="Linguistic_Subject" type="Controlled Vocabulary" use="optional">
+    <value>Linguistics And Literature</value>
+    <value>Historical Linguistics</value>
+    <value>History Of Linguistics</value>
+    <value>Applied Linguistics</value>
+    <value>Mathematical Linguistics</value>
+    <value>Language Documentation</value>
+    <value>Philosophy Of Language</value>
+    <value>Discourse Analysis</value>
+    <value>Linguistic Theories</value>
+    <value>Language Acquisition</value>
+    <value>Syntax</value>
+    <value>Lexicography</value>
+    <value>Psycholinguistics</value>
+    <value>Text And Corpus Linguistics</value>
+    <value>General Linguistics</value>
+    <value>Sociolinguistics</value>
+    <value>Phonetics</value>
+    <value>Computational Linguistics</value>
+    <value>Pragmatics</value>
+    <value>Neurolinguistics</value>
+    <value>Typology</value>
+    <value>Translating And Interpreting</value>
+    <value>Phonology</value>
+    <value>Anthropological Linguistics</value>
+    <value>Morphology</value>
+    <value>Semantics</value>
+    <value>Writing Systems</value>
+    <value>Forensic Linguistics</value>
+    <value>Cognitive Science</value>
+  </metadata_category>
+  <metadata_category inextensible="false" name="Country" type="Controlled Vocabulary" use="required">
+    <value>MY - Malaysia - Asia</value>
+    <value>NZ - New Zealand - Pacific</value>
+    <value>NR - Nauru - Pacific</value>
+    <value>PH - Philippines - Asia</value>
+    <value>ID - Indonesia - Asia</value>
+    <value>AU - Australia - Pacific</value>
+  </metadata_category>
+  <metadata_category inextensible="false" name="RegionVillage" type="Controlled Vocabulary" use="required">
+    <value>Nauiyu Nambiyu</value>
+    <value>Warruwi</value>
+    <value>Wadeye NT</value>
+    <value>Borroloola</value>
+    <value>Groote Eylandt</value>
+  </metadata_category>
+  <metadata_category inextensible="false" name="LanguageLocalName" type="Controlled Vocabulary" use="required">
+    <value>Ngangikurrunggurr</value>
+    <value>Doolboong</value>
+    <value>Payungu</value>
+    <value>Kija</value>
+    <value>Kuluwarrang</value>
+    <value>Murrinh-patha</value>
+    <value>Ngunawal</value>
+    <value>Kalaku</value>
+    <value>Wik-Mungkan</value>
+    <value>Winyjarrumi</value>
+    <value>Bunurong</value>
+    <value>Lower Burdekin</value>
+    <value>Larrakia</value>
+    <value>Uradhi</value>
+    <value>Alyawarre</value>
+    <value>Kuyani</value>
+    <value>Toogee</value>
+    <value>Plangermaireener</value>
+    <value>Dhauwurdwurung</value>
+    <value>Martuthunira</value>
+    <value>Burduna</value>
+    <value>Bandjalang</value>
+    <value>Wambaya</value>
+    <value>Wurla</value>
+    <value>Ngarluma</value>
+    <value>Yandruwandha</value>
+    <value>Kariyarra</value>
+    <value>Wik Me'nh</value>
+    <value>Walangama</value>
+    <value>Gurindji</value>
+    <value>Mbabaram</value>
+    <value>Nauo</value>
+    <value>Thaua</value>
+    <value>Ngarrindjeri</value>
+    <value>Kuku Yalanji</value>
+    <value>Dyirbal</value>
+    <value>Lardil</value>
+    <value>Ngardi</value>
+    <value>Ngarinyman</value>
+    <value>Kalaamaya</value>
+    <value>Wirangu</value>
+    <value>Walbanga</value>
+    <value>Aghu Tharrnggala</value>
+    <value>Marra</value>
+    <value>Kukatj</value>
+    <value>Kukatja</value>
+    <value>Ngarnka</value>
+    <value>Gooniyandi</value>
+    <value>Barrow Point language</value>
+    <value>Tharawal</value>
+    <value>Ndjébbana</value>
+    <value>Ngarla</value>
+    <value>Noongar</value>
+    <value>Wandandian</value>
+    <value>Bardi</value>
+    <value>Nyininy</value>
+    <value>Dharawal</value>
+    <value>Djabugay</value>
+    <value>Badimaya</value>
+    <value>Gubbi Gubbi</value>
+    <value>Damin</value>
+    <value>Yinhawangka</value>
+    <value>Thiin</value>
+    <value>Kala Lagaw Ya</value>
+    <value>Peerapper</value>
+    <value>Muruwari</value>
+    <value>Ngan'gityemerri</value>
+    <value>Umpila</value>
+    <value>Bunuba</value>
+    <value>Maya</value>
+    <value>Kaantju</value>
+    <value>Wolyamidi</value>
+    <value>Tommeginne</value>
+    <value>Unggumi</value>
+    <value>Ngarnawu</value>
+    <value>Ngalakan</value>
+    <value>Yiiji</value>
+    <value>Arabana</value>
+    <value>Kawarrangg</value>
+    <value>Nyangumarta</value>
+    <value>Kurrama</value>
+    <value>Kunja</value>
+    <value>Djabwurung</value>
+    <value>Nuenonne</value>
+    <value>Aritinngithigh</value>
+    <value>Mpalityanh</value>
+    <value>Yorta Yorta</value>
+    <value>Munumburru</value>
+    <value>Paredarerme</value>
+    <value>Umiida</value>
+    <value>Darling</value>
+    <value>Waanyi</value>
+    <value>Yir-Thangedl</value>
+    <value>Kalaw Kawaw Ya</value>
+    <value>Wunambal</value>
+    <value>Awabakal</value>
+    <value>Wangkumara</value>
+    <value>Kaniyang</value>
+    <value>Gundungurra</value>
+    <value>Jingulu</value>
+    <value>Nyikina</value>
+    <value>Yanyuwa</value>
+    <value>Gunin/Kwini</value>
+    <value>Wagiman</value>
+    <value>Kuuk Thaayorre</value>
+    <value>Yuwaaliyaay</value>
+    <value>Worimi</value>
+    <value>Kok-Nar</value>
+    <value>Wangai</value>
+    <value>Narangga</value>
+    <value>Yinggarda</value>
+    <value>Bidjara</value>
+    <value>Wilawila</value>
+    <value>Torres Strait Creole</value>
+    <value>Garawa</value>
+    <value>Gulunggulu</value>
+    <value>Ayapathu</value>
+    <value>Jurruru</value>
+    <value>Pitjantjatjara</value>
+    <value>Anjumarla</value>
+    <value>Andajin</value>
+    <value>Warrwa</value>
+    <value>Yir-Yoront</value>
+    <value>Nungali</value>
+    <value>Darug</value>
+    <value>Juwaliny</value>
+    <value>Uw Olkola</value>
+    <value>Jukun</value>
+    <value>Panyjima</value>
+    <value>Unggarangu</value>
+    <value>Nhanta</value>
+    <value>Gamilaraay</value>
+    <value>Djiringanj</value>
+    <value>Jawi</value>
+    <value>Warlpiri</value>
+    <value>Wiradjuri</value>
+    <value>Mbara</value>
+    <value>Yindjibarndi</value>
+    <value>Dalabon</value>
+    <value>Yankunytjatjara</value>
+    <value>Wik Muminh</value>
+    <value>Pintupi</value>
+    <value>Luthigh</value>
+    <value>Lairmairrener</value>
+    <value>Jardwadjai</value>
+    <value>Wanyjirra</value>
+    <value>Guwij</value>
+    <value>Petryschuk</value>
+    <value>Kaurna</value>
+    <value>Wik Ngathrr</value>
+    <value>Tyerremotepanner</value>
+    <value>Ngumbarl</value>
+    <value>Wardaman</value>
+    <value>Gumbaynggir</value>
+    <value>Wangkajunga</value>
+    <value>Yawijibaya</value>
+    <value>Gajirrabeng</value>
+    <value>Thargarri</value>
+    <value>Anmatyerre</value>
+    <value>Ngkoth</value>
+    <value>Darkinjung</value>
+    <value>Kuthant</value>
+    <value>Warriyangka</value>
+    <value>Malgana</value>
+    <value>Nimanburru</value>
+    <value>Diyari</value>
+    <value>Yinwum</value>
+    <value>Kurrtjar</value>
+    <value>Malyangaba</value>
+    <value>Barngarla</value>
+    <value>Yuwaalaraay</value>
+    <value>Jaru</value>
+    <value>Gurindji Kriol</value>
+    <value>Nyamal</value>
+    <value>Kuuku Ya'u</value>
+    <value>Anguthimri language</value>
+    <value>Ngaatjatjarra</value>
+    <value>Ngadjuri</value>
+    <value>Uw Oykangand</value>
+    <value>Yidiny</value>
+    <value>Kriol</value>
+    <value>Wajarri</value>
+    <value>Ngarinyin</value>
+    <value>Popham Bay</value>
+    <value>Worrorra</value>
+    <value>Broome Pearling Lugger Pidgin</value>
+    <value>Bidjigal</value>
+    <value>Ntra'ngith</value>
+    <value>Miriwoong</value>
+    <value>Karajarri</value>
+    <value>Nukunu</value>
+    <value>Jaminjung</value>
+    <value>Linngithigh</value>
+    <value>Adnyamathanha</value>
+    <value>Jabirrjabirr</value>
+    <value>Western Desert language</value>
+    <value>Matngele</value>
+    <value>Pinikura</value>
+    <value>Jiwarli</value>
+    <value>Nhuwala</value>
+    <value>Mpakwithi</value>
+    <value>Gambera</value>
+    <value>Andegerebinha</value>
+    <value>Guugu Yimithirr</value>
+    <value>Kullili</value>
+    <value>Miwa</value>
+    <value>Thalanyji</value>
+    <value>Gupapuyngu</value>
+    <value>Nyulnyul</value>
+    <value>Yawarawarga</value>
+    <value>Kayardild</value>
+    <value>Mangala</value>
+    <value>Yukulta</value>
+    <value>Walmajarri</value>
+    <value>Mbiywom</value>
+    <value>Woiwurrung</value>
+    <value>Kuku Thaypan</value>
+    <value>Yawuru</value>
+    <value>Amurdag</value>
+    <value>Yulparija</value>
+    <value>Pyemmaire</value>
+    <value>Peramangk</value>
+    <value>Koko-Bera</value>
+    <value>Warrungu</value>
+  </metadata_category>
+  <metadata_category inextensible="false" name="LanguageContentISO639-3" type="Controlled Vocabulary" use="optional">
+    <value>kky - Guugu Yimithirr</value>
+    <value>amx - Anmatyerre</value>
+    <value>kdd - Yankunytjatjara</value>
+    <value>wub - Wunambal</value>
+    <value>wbp - Warlpiri</value>
+    <value>urf - Uradhi</value>
+    <value>ddj - Jaru</value>
+    <value>yij - Yindjibarndi</value>
+    <value>djl - Jiwarli</value>
+    <value>dyd - Jukun</value>
+    <value>bdy - Bandjalang</value>
+    <value>ynd - Yandruwandha</value>
+    <value>kul - Kullili</value>
+    <value>gdh - Gajirrabeng</value>
+    <value>mem - Mangala</value>
+    <value>dyy - Djabugay</value>
+    <value>ump - Umpila</value>
+    <value>djw - Jawi</value>
+    <value>nay - Ngarrindjeri</value>
+    <value>gia - Kija</value>
+    <value>ggr - Aghu Tharrnggala</value>
+    <value>jao - Yanyuwa</value>
+    <value>thd - Kuuk Thaayorre</value>
+    <value>gvy - Kuyani</value>
+    <value>Uncoded languages - mis</value>
+    <value>bym - Bidjara</value>
+    <value>wiw - Wirangu</value>
+    <value>kbe - Kaantju</value>
+    <value>vmi - Miwa</value>
+    <value>wmt - Walmajarri</value>
+    <value>ggd - Kukatj</value>
+    <value>zku - Kaurna</value>
+    <value>nbj - Ngarinyman</value>
+    <value>vku - Kurrama</value>
+    <value>mec - Marra</value>
+    <value>dyb - Jabirrjabirr</value>
+    <value>dhl - Thalanyji</value>
+    <value>kba - Kalaku</value>
+    <value>vml - Malgana</value>
+    <value>kux - Kukatja</value>
+    <value>djd - Jaminjung</value>
+    <value>Multiple languages - mul</value>
+    <value>bck - Bunuba</value>
+    <value>kgs - Gumbaynggir</value>
+    <value>dbl - Dyirbal</value>
+    <value>gyd - Kayardild</value>
+    <value>wwr - Warrwa</value>
+    <value>yiy - Yir-Yoront</value>
+    <value>gdj - Kurrtjar</value>
+    <value>gbd - Karajarri</value>
+    <value>aly - Alyawarre</value>
+    <value>adg - Andegerebinha</value>
+    <value>nnr - Narangga</value>
+    <value>Mairead New Language</value>
+    <value>mep - Miriwoong</value>
+    <value>wim - Wik-Mungkan</value>
+    <value>nig - Ngalakan</value>
+    <value>yia - Yinggarda</value>
+    <value>dhr - Thargarri</value>
+    <value>bpt - Barrow Point language</value>
+    <value>zmu - Muruwari</value>
+    <value>gww - Gunin/Kwini</value>
+    <value>nnv - Nukunu</value>
+    <value>kkp - Koko-Bera</value>
+    <value>nlr - Ngarla</value>
+    <value>mwf - Murrinh-patha</value>
+    <value>lnj - Linngithigh</value>
+    <value>nly - Nyamal</value>
+    <value>wrh - Wiradjuri</value>
+    <value>vka - Kariyarra</value>
+    <value>gue - Gurindji</value>
+    <value>gma - Gambera</value>
+    <value>xmh - Wik Muminh</value>
+    <value>No linguistic content - zxx</value>
+    <value>wil - Wilawila</value>
+    <value>gni - Gooniyandi</value>
+    <value>typ - Kuku Thaypan</value>
+    <value>adt - Adnyamathanha</value>
+    <value>vmb - Mbabaram</value>
+    <value>yii - Yidiny</value>
+    <value>nna - Nyangumarta</value>
+    <value>Undetermined languages - und</value>
+    <value>bxn - Burduna</value>
+    <value>ung - Ngarinyin</value>
+    <value>yww - Yawarawarga</value>
+    <value>nyv - Nyulnyul</value>
+    <value>nmp - Nimanburru</value>
+    <value>mfr - Marithiel</value>
+    <value>nyh - Nyikina</value>
+    <value>bjb - Barngarla</value>
+    <value>wbv - Wajarri</value>
+    <value>tju - Jurruru</value>
+    <value>wri - Warriyangka</value>
+    <value>tbh - Tharawal</value>
+    <value>ywr - Yawuru</value>
+    <value>nrl - Ngarluma</value>
+    <value>guf - Gupapuyngu</value>
+    <value>xut - Kuthant</value>
+    <value>bia - Badimaya</value>
+    <value>kld - Gamilaraay</value>
+    <value>waq - Wagiman</value>
+    <value>mvl - Mbara</value>
+    <value>noo - Noongar</value>
+    <value>gvn - Kuku Yalanji</value>
+    <value>unp - Worrorra</value>
+    <value>zml - Matngele</value>
+    <value>mph - Maung</value>
+    <value>bcj - Bardi</value>
+    <value>vma - Martuthunira</value>
+    <value>wrr - Wardaman</value>
+    <value>tbh - Dharawal</value>
+    <value>kyu - Kuuku Ya'u</value>
+    <value>nhf - Nhuwala</value>
+    <value>drl - Darling</value>
+  </metadata_category>
+  <metadata_category inextensible="false" name="LanguageSubjectISO639-3" type="Controlled Vocabulary" use="optional">
+    <value>gdh - Gajirrabeng</value>
+    <value>guf - Gupapuyngu</value>
+    <value>Multiple languages - mul</value>
+    <value>nmp - Nimanburru</value>
+    <value>kba - Kalaku</value>
+    <value>gvn - Kuku Yalanji</value>
+    <value>gvy - Kuyani</value>
+    <value>gma - Gambera</value>
+    <value>wim - Wik-Mungkan</value>
+    <value>dhl - Thalanyji</value>
+    <value>vmi - Miwa</value>
+    <value>vku - Kurrama</value>
+    <value>noo - Noongar</value>
+    <value>djd - Jaminjung</value>
+    <value>nig - Ngalakan</value>
+    <value>kgs - Gumbaynggir</value>
+    <value>nlr - Ngarla</value>
+    <value>bcj - Bardi</value>
+    <value>nyh - Nyikina</value>
+    <value>typ - Kuku Thaypan</value>
+    <value>wbv - Wajarri</value>
+    <value>yia - Yinggarda</value>
+    <value>yij - Yindjibarndi</value>
+    <value>kld - Gamilaraay</value>
+    <value>wrr - Wardaman</value>
+    <value>mec - Marra</value>
+    <value>kux - Kukatja</value>
+    <value>nay - Ngarrindjeri</value>
+    <value>urf - Uradhi</value>
+    <value>xut - Kuthant</value>
+    <value>lnj - Linngithigh</value>
+    <value>wrh - Wiradjuri</value>
+    <value>adg - Andegerebinha</value>
+    <value>bxn - Burduna</value>
+    <value>thd - Kuuk Thaayorre</value>
+    <value>vka - Kariyarra</value>
+    <value>zml - Matngele</value>
+    <value>yww - Yawarawarga</value>
+    <value>dyd - Jukun</value>
+    <value>unp - Worrorra</value>
+    <value>gdj - Kurrtjar</value>
+    <value>djw - Jawi</value>
+    <value>nna - Nyangumarta</value>
+    <value>tbh - Tharawal</value>
+    <value>gyd - Kayardild</value>
+    <value>ump - Umpila</value>
+    <value>ddj - Jaru</value>
+    <value>gue - Gurindji</value>
+    <value>Mairead New Language</value>
+    <value>nnr - Narangga</value>
+    <value>nbj - Ngarinyman</value>
+    <value>ywr - Yawuru</value>
+    <value>bck - Bunuba</value>
+    <value>No linguistic content - zxx</value>
+    <value>tbh - Dharawal</value>
+    <value>Uncoded languages - mis</value>
+    <value>xmh - Wik Muminh</value>
+    <value>amx - Anmatyerre</value>
+    <value>nly - Nyamal</value>
+    <value>wub - Wunambal</value>
+    <value>drl - Darling</value>
+    <value>djl - Jiwarli</value>
+    <value>wri - Warriyangka</value>
+    <value>gww - Gunin/Kwini</value>
+    <value>ggd - Kukatj</value>
+    <value>bpt - Barrow Point language</value>
+    <value>mem - Mangala</value>
+    <value>ung - Ngarinyin</value>
+    <value>wwr - Warrwa</value>
+    <value>bjb - Barngarla</value>
+    <value>dyy - Djabugay</value>
+    <value>wbp - Warlpiri</value>
+    <value>adt - Adnyamathanha</value>
+    <value>kky - Guugu Yimithirr</value>
+    <value>bdy - Bandjalang</value>
+    <value>nyv - Nyulnyul</value>
+    <value>dbl - Dyirbal</value>
+    <value>nnv - Nukunu</value>
+    <value>vml - Malgana</value>
+    <value>vma - Martuthunira</value>
+    <value>gbd - Karajarri</value>
+    <value>gia - Kija</value>
+    <value>bym - Bidjara</value>
+    <value>aly - Alyawarre</value>
+    <value>waq - Wagiman</value>
+    <value>wil - Wilawila</value>
+    <value>bia - Badimaya</value>
+    <value>ggr - Aghu Tharrnggala</value>
+    <value>zku - Kaurna</value>
+    <value>mfr - Marithiel</value>
+    <value>wiw - Wirangu</value>
+    <value>yii - Yidiny</value>
+    <value>gni - Gooniyandi</value>
+    <value>ynd - Yandruwandha</value>
+    <value>kul - Kullili</value>
+    <value>mvl - Mbara</value>
+    <value>mep - Miriwoong</value>
+    <value>mph - Maung</value>
+    <value>nhf - Nhuwala</value>
+    <value>tju - Jurruru</value>
+    <value>kbe - Kaantju</value>
+    <value>nrl - Ngarluma</value>
+    <value>zmu - Muruwari</value>
+    <value>Undetermined languages - und</value>
+    <value>dyb - Jabirrjabirr</value>
+    <value>wmt - Walmajarri</value>
+    <value>yiy - Yir-Yoront</value>
+    <value>kyu - Kuuku Ya'u</value>
+    <value>dhr - Thargarri</value>
+    <value>kdd - Yankunytjatjara</value>
+    <value>mwf - Murrinh-patha</value>
+    <value>jao - Yanyuwa</value>
+    <value>vmb - Mbabaram</value>
+    <value>kkp - Koko-Bera</value>
+  </metadata_category>
 </schema>
