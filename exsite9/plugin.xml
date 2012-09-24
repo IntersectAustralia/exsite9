@@ -283,6 +283,16 @@
                   visible="true">
             </separator>
             <command
+                  commandId="org.eclipse.ui.help.aboutAction"
+                  label="About ExSite9"
+                  mnemonic="A"
+                  style="push">
+            </command>
+            <separator
+                  name="au.org.intersect.exsite9.menu.file.separator2"
+                  visible="true">
+            </separator>
+            <command
                   commandId="au.org.intersect.exsite9.commands.ExitCommand"
                   label="Exit"
                   mnemonic="E"
