@@ -28,4 +28,10 @@ public final class MetadataCategoryExpandItem extends ExpandItem
     {
         return this.metadataCategory;
     }
+
+    @Override
+    protected void checkSubclass()
+    {
+        // screw you SWT!
+    }
 }
