@@ -29,15 +29,11 @@ public class RenameGroupHandler implements IHandler
     @Override
     public void addHandlerListener(final IHandlerListener handlerListener)
     {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void dispose()
     {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -110,8 +106,6 @@ public class RenameGroupHandler implements IHandler
     @Override
     public void removeHandlerListener(final IHandlerListener handlerListener)
     {
-        // TODO Auto-generated method stub
-
     }
 
 }

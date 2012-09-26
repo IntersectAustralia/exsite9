@@ -78,8 +78,6 @@ public final class ThumbnailView extends ViewPart implements ISelectionListener
     @Override
     public void setFocus()
     {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
