@@ -33,7 +33,7 @@ public class SearchWizardPage1 extends WizardPage
     {
         super("Search");
         setTitle("Search");
-        setDescription("Search across all files within this project.");
+        setDescription("Search across the metadata which is associated with the files within this project.");
         this.searchFields = searchFields;
     }
 

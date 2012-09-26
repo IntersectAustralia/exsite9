@@ -11,7 +11,7 @@ package au.org.intersect.exsite9.domain;
  */
 public enum ResearchFileSearchDefinition
 {
-    ALL_FIELDS("All Fields"), 
+    ALL_FIELDS("All Metadata Fields"), 
     METADATA_CATEGORY_NAME("Metadata Category Name"),
     METADATA_VALUE("Metadata Value"), 
     FREETEXT_METADATA_VALUE("Freetext Metadata Value"),
