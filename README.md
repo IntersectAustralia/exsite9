@@ -7,3 +7,4 @@ ExSite9 is a cross-platform Java desktop application, built using Eclipse RCP, t
 Head over to [the wiki](https://github.com/IntersectAustralia/exsite9/wiki) for project documentation.
 
 This code is licensed under the GNU GPL v3 license - see LICENSE.txt
+
