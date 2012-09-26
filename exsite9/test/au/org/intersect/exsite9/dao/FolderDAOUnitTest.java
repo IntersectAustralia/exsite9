@@ -20,6 +20,9 @@ import au.org.intersect.exsite9.dao.FolderDAO;
 import au.org.intersect.exsite9.dao.factory.FolderDAOFactory;
 import au.org.intersect.exsite9.domain.Folder;
 
+/**
+ * Tests {@link FolderDAO}
+ */
 public class FolderDAOUnitTest extends DAOTest
 {
     private static FolderDAOFactory folderDAOFactory = null;

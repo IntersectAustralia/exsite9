@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.wizard.metadatacategory;
 
 import java.util.ArrayList;
@@ -45,6 +51,9 @@ import au.org.intersect.exsite9.validators.MetadataCategoryNameValidator;
 import au.org.intersect.exsite9.validators.MetadataValueValidator;
 import au.org.intersect.exsite9.wizard.WizardPageErrorHandler;
 
+/**
+ * Wizard page that is shown to the user for them to create a new {@link MetadataCategory}
+ */
 public class AddMetadataCategoryWizardPage1 extends WizardPage implements KeyListener, SelectionListener
 {
     private StringValidationToolkit stringValidatorToolkit;

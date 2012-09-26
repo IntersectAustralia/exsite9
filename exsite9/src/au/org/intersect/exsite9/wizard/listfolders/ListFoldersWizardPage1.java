@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.wizard.listfolders;
 
 import java.io.File;
@@ -24,6 +30,9 @@ import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.service.IProjectManager;
 
+/**
+ * displays list of existing watched folders to the user
+ */
 public class ListFoldersWizardPage1 extends WizardPage implements SelectionListener
 {
     private org.eclipse.swt.widgets.List folderList;

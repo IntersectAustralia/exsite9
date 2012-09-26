@@ -14,6 +14,9 @@ import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.Schema;
 import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 
+/**
+ * Provides access to {@link ProjectService}.
+ */
 public interface IProjectService
 {
     /**

@@ -28,6 +28,9 @@ import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.dto.HierarchyMoveDTO;
 import au.org.intersect.exsite9.service.IGroupService;
 
+/**
+ * Custom listener for listening for drop events on the tree viewer of the project view
+ */
 public class ProjectExplorerDropListener extends ViewerDropAdapter
 {
     private TreeViewer treeViewer;

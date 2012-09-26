@@ -15,6 +15,9 @@ import au.org.intersect.exsite9.dao.FieldOfResearchDAO;
 import au.org.intersect.exsite9.dao.factory.FieldOfResearchDAOFactory;
 import au.org.intersect.exsite9.domain.FieldOfResearch;
 
+/**
+ * uses {@link FieldOfResearchDAO} to access the {@link FieldOfResearch}s in the database
+ */
 public final class FieldOfResearchService implements IFieldOfResearchService
 {
     private final EntityManagerFactory emf;

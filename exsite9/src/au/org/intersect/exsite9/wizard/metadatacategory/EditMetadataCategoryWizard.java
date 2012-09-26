@@ -25,7 +25,7 @@ import au.org.intersect.exsite9.service.IMetadataCategoryService;
 import au.org.intersect.exsite9.service.IResearchFileService;
 
 /**
- * Wizard used to Edit a Metadata Category.
+ * Wizard used to Edit a {@link MetadataCategory}
  */
 public final class EditMetadataCategoryWizard extends Wizard
 {

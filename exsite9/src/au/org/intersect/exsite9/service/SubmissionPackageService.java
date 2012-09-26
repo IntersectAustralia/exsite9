@@ -27,7 +27,7 @@ import au.org.intersect.exsite9.xml.SIPXMLBuilder;
 import au.org.intersect.exsite9.zip.SIPZIPBuilderRunnable;
 
 /**
- * 
+ * A service for manipulating {@link SubmissionPackage}s
  */
 public final class SubmissionPackageService implements ISubmissionPackageService
 {

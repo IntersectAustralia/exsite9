@@ -1,6 +1,16 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
 
@@ -37,6 +47,9 @@ import au.org.intersect.exsite9.domain.ResearchFileSortField;
 import au.org.intersect.exsite9.domain.SortFieldDirection;
 import au.org.intersect.exsite9.dto.HierarchyMoveDTO;
 
+/**
+ * Tests {@link GroupService}
+ */
 public class GroupServiceUnitTest extends DAOTest
 {
 

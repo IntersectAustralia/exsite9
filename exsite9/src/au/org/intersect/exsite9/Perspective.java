@@ -23,7 +23,7 @@ import au.org.intersect.exsite9.view.SubmissionPackageBrowserView;
 import au.org.intersect.exsite9.view.ThumbnailView;
 
 /**
- * A Perspective holds the configuration of configuration of views.
+ * A Perspective holds the configuration and layout of the application's views.
  */
 public final class Perspective implements IPerspectiveFactory
 {

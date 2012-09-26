@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.wizard.editproject;
 
 import org.eclipse.ui.PlatformUI;
@@ -10,6 +16,9 @@ import au.org.intersect.exsite9.wizard.newproject.EditOrCreateProjectWizardPage1
 import au.org.intersect.exsite9.wizard.newproject.EditOrCreateProjectWizardPage2;
 import au.org.intersect.exsite9.wizard.newproject.NewProjectWizard;
 
+/**
+ * The wizard that is used to edit an existing project. It creates a {@link EditOrCreateProjectWizardPage1} and {@link EditOrCreateProjectWizardPage2}
+ */
 public class EditProjectWizard extends MetadataSchemaEditingWizard
 {
     private final EditOrCreateProjectWizardPage1 page1;

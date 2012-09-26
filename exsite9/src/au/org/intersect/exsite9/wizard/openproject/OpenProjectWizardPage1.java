@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.wizard.openproject;
 
 import java.util.List;
@@ -13,6 +19,9 @@ import org.eclipse.swt.widgets.Label;
 
 import au.org.intersect.exsite9.domain.Project;
 
+/**
+ * Wizard page that is shown to the user when opening an existing {@link Project}
+ */
 public class OpenProjectWizardPage1 extends WizardPage implements SelectionListener
 {
     private org.eclipse.swt.widgets.List projectList;

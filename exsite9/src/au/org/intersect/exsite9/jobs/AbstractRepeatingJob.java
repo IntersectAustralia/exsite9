@@ -1,7 +1,16 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.jobs;
 
 import org.eclipse.core.runtime.jobs.Job;
 
+/**
+ * for jobs that need repeating
+ */
 public abstract class AbstractRepeatingJob extends Job
 {
     /**

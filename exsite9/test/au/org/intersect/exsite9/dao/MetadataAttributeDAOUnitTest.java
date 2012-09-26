@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.dao;
 
 import static org.mockito.Mockito.verify;
@@ -14,6 +20,9 @@ import org.mockito.Mockito;
 import au.org.intersect.exsite9.domain.MetadataAttribute;
 import au.org.intersect.exsite9.domain.MetadataAttributeValue;
 
+/**
+ * Tests {@link MetadataAttributeDAO}
+ */
 public final class MetadataAttributeDAOUnitTest
 {
     @Test

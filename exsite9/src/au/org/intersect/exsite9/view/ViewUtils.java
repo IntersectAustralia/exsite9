@@ -11,7 +11,7 @@ import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchWindow;
 
 /**
- * 
+ * Used to perform actions on exsite9 views
  */
 public final class ViewUtils
 {

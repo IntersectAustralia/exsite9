@@ -17,7 +17,7 @@ import au.org.intersect.exsite9.dao.factory.MetadataCategoryDAOFactory;
 import au.org.intersect.exsite9.service.MetadataCategoryService;
 
 /**
- * 
+ * Factory responsible for creating {@link MetadataCategoryService}
  */
 public final class MetadataCategoryServiceFactory extends AbstractServiceFactory
 {

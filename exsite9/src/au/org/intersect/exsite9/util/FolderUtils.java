@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.util;
 
 import java.io.File;
@@ -12,6 +18,9 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 
 import au.org.intersect.exsite9.domain.Folder;
 
+/**
+ * Performs utilities on watched folders {@link Folder}
+ */
 public final class FolderUtils
 {
     private FolderUtils()

@@ -22,8 +22,7 @@ import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.wizard.editproject.EditProjectWizard;
 
 /**
- *
- * @version $Rev: 29 $
+ * Command handler to edit a project, via the plugin.xml
  */
 public class EditProjectHandler implements IHandler
 {

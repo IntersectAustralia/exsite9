@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.xml;
 
 import org.w3c.dom.Document;
@@ -19,6 +25,9 @@ import au.org.intersect.exsite9.validators.MetadataValueValidator;
 
 import static au.org.intersect.exsite9.xml.MetadataSchemaXMLUtils.*;
 
+/**
+ * Used to read the XML when a {@link Schema} is imported
+ */
 public final class MetadataSchemaXMLReader
 {
     /**

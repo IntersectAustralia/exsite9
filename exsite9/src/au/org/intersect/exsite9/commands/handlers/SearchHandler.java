@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.commands.handlers;
 
 import java.util.List;
@@ -20,6 +26,9 @@ import au.org.intersect.exsite9.view.ProjectExplorerView;
 import au.org.intersect.exsite9.view.ViewUtils;
 import au.org.intersect.exsite9.wizard.search.SearchWizard;
 
+/**
+ * Command handler to initiate a search of research file metadata within the current project, via the plugin.xml
+ */
 public class SearchHandler implements IHandler
 {
 

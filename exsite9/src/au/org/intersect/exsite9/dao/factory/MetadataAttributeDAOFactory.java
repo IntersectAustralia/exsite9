@@ -11,7 +11,7 @@ import javax.persistence.EntityManager;
 import au.org.intersect.exsite9.dao.MetadataAttributeDAO;
 
 /**
- * 
+ * Creates an instance of a {@link MetadataAttributeDAO}
  */
 public final class MetadataAttributeDAOFactory
 {

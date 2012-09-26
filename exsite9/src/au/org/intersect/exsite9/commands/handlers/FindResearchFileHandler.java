@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.commands.handlers;
 
 import java.io.File;
@@ -30,6 +36,9 @@ import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.service.IProjectService;
 import au.org.intersect.exsite9.service.IResearchFileService;
 
+/**
+ * Command handler to allow a user to locate a file on disk that is flagged as missing in the project, via the plugin.xml
+ */
 public class FindResearchFileHandler implements IHandler
 {
     private static final Logger LOG = Logger.getLogger(FindResearchFileHandler.class);

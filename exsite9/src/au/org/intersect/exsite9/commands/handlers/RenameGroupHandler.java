@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.commands.handlers;
 
 import org.eclipse.core.commands.ExecutionEvent;
@@ -14,6 +20,9 @@ import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.service.IGroupService;
 import au.org.intersect.exsite9.util.DirectoryUtils;
 
+/**
+ * Command handler to rename a group, via the plugin.xml
+ */
 public class RenameGroupHandler implements IHandler
 {
 

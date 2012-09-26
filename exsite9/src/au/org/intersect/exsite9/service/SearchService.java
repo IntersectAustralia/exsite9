@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.service;
 
 import java.util.Arrays;
@@ -14,6 +20,9 @@ import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.ResearchFileSearchDefinition;
 
+/**
+ * A service for forming and executing a search on the database
+ */
 public class SearchService implements ISearchService
 {
     private static final String METADATA_CATEGORY_ATTRIBUTE_QUERY_STRING = "SELECT DISTINCT f FROM ResearchFile f JOIN f.metadataAssociations a WHERE f.project = :project AND LOWER(a.metadataAttributeValue.value) LIKE LOWER(:searchTerm)";

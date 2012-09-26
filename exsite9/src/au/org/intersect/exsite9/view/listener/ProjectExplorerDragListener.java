@@ -16,6 +16,9 @@ import org.eclipse.swt.dnd.DragSourceListener;
 import au.org.intersect.exsite9.domain.NewFilesGroup;
 import au.org.intersect.exsite9.domain.Project;
 
+/**
+ * Custom listener for listening for drag events on the tree viewer of the project view
+ */
 public class ProjectExplorerDragListener implements DragSourceListener
 {
     private final TreeViewer treeViewer;

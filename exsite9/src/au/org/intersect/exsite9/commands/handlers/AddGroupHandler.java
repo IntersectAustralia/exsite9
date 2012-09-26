@@ -20,7 +20,7 @@ import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.wizard.newgroup.NewGroupWizard;
 
 /**
- * The handler to add a group to a node.
+ * Command handler to add a group to a project, via the plugin.xml
  */
 public final class AddGroupHandler implements IHandler
 {

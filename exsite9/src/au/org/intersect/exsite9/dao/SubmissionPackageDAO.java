@@ -14,6 +14,9 @@ import javax.persistence.TypedQuery;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.SubmissionPackage;
 
+/**
+ * Data Access Object for {@link SubmissionPackage} instances
+ */
 public final class SubmissionPackageDAO
 {
     private EntityManager em;

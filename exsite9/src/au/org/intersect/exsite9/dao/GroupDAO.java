@@ -18,6 +18,9 @@ import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.ResearchFile;
 
+/**
+ * Data Access Object for {@link Group} instances
+ */
 public final class GroupDAO
 {
     private EntityManager em;

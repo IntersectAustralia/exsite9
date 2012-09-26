@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.wizard.metadatacategory;
 
 import java.util.ArrayList;
@@ -22,6 +28,9 @@ import au.org.intersect.exsite9.service.IMetadataCategoryService;
 import au.org.intersect.exsite9.service.IResearchFileService;
 import au.org.intersect.exsite9.service.ISchemaService;
 
+/**
+ * Wizard for adding a {@link MetadataCategory} via the {@link AddMetadataCategoryWizardPage1} that is shown to the user
+ */
 public class AddMetadataCategoryWizard extends Wizard
 {
     private final AddMetadataCategoryWizardPage1 page1;

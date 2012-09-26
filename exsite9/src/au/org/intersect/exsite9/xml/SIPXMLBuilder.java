@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.xml;
 
 import java.util.List;
@@ -16,6 +22,9 @@ import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.SubmissionPackage;
 
+/**
+ * Creates the XML that will be contained in a {@link SubmissionPackage} 
+ */
 public class SIPXMLBuilder extends BaseXMLBuilder
 {
     private static final Logger LOG = Logger.getLogger(SIPXMLBuilder.class);

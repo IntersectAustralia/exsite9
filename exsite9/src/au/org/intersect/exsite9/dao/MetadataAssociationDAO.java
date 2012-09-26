@@ -11,7 +11,7 @@ import javax.persistence.EntityManager;
 import au.org.intersect.exsite9.domain.MetadataAssociation;
 
 /**
- * 
+ * Data Access Object for {@link MetadataAssociation} instances
  */
 public final class MetadataAssociationDAO
 {

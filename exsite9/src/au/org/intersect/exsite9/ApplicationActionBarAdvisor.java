@@ -12,7 +12,7 @@ import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 
 /**
- *
+ * Advisor for the application action bar
  */
 public final class ApplicationActionBarAdvisor extends ActionBarAdvisor
 {

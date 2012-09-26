@@ -19,6 +19,9 @@ import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 
+/**
+ * Data Access Object for {@link ResearchFile} instances
+ */
 public class ResearchFileDAO
 {
     private static final Logger LOG = Logger.getLogger(ResearchFileDAO.class);

@@ -24,6 +24,9 @@ import org.hsqldb.jdbcDriver;
 import org.junit.After;
 import org.junit.Before;
 
+/**
+ * Creates an entity manager for the DAO tests
+ */
 public abstract class DAOTest
 {
     protected EntityManagerFactory emf;

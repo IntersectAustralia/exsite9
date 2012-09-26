@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.view;
 
 import java.util.ArrayList;
@@ -46,6 +52,9 @@ import au.org.intersect.exsite9.util.AlphabeticalPairComparator;
 import au.org.intersect.exsite9.util.Pair;
 import au.org.intersect.exsite9.util.Triplet;
 
+/**
+ * Creates the contents of the associated metadata tab and determines what actions are taken when selections are made or commands are executed
+ */
 public final class AssociatedMetadataView extends ViewPart implements ISelectionListener, IExecutionListener
 {
     public static final String ID = AssociatedMetadataView.class.getName();

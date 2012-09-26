@@ -7,7 +7,9 @@
 
 package au.org.intersect.exsite9.dao;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.io.File;
 
@@ -16,13 +18,15 @@ import javax.persistence.EntityManager;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import au.org.intersect.exsite9.dao.ResearchFileDAO;
 import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
 import au.org.intersect.exsite9.domain.Folder;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 
+/**
+ * Tests {@link ResearchFileDAO}
+ */
 public class ResearchFileDAOUnitTest extends DAOTest
 {
 

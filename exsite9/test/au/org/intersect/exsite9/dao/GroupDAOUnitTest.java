@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.dao;
 
 import static org.junit.Assert.*;
@@ -23,6 +29,9 @@ import au.org.intersect.exsite9.domain.MetadataCategoryUse;
 import au.org.intersect.exsite9.domain.MetadataValue;
 import au.org.intersect.exsite9.domain.ResearchFile;
 
+/**
+ * Tests {@link GroupDAO}
+ */
 public class GroupDAOUnitTest extends DAOTest
 {
     private static GroupDAOFactory groupDAOFactory;

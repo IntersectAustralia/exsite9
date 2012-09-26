@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.service;
 
 import static org.junit.Assert.assertEquals;
@@ -29,6 +35,9 @@ import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.Schema;
 import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 
+/**
+ * Tests {@link ProjectService}
+ */
 public final class ProjectServiceUnitTest extends DAOTest
 {
     private ProjectService projectService;

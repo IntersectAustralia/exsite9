@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.commands.handlers;
 
 import java.io.File;
@@ -17,6 +23,9 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.util.DesktopUtils;
 
+/**
+ * Command handler opens the selected file with the systems default application for that file type, via the plugin.xml
+ */
 public class OpenFileWithDefaultApplicationHandler implements IHandler
 {
     private static final String NEW_LINE = System.getProperty("line.separator");

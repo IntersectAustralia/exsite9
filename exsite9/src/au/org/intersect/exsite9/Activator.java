@@ -18,7 +18,7 @@ import org.osgi.framework.BundleContext;
 import au.org.intersect.exsite9.logging.StdOutErrLog;
 
 /**
- *
+ * Activates the application
  */
 public final class Activator extends AbstractUIPlugin
 {

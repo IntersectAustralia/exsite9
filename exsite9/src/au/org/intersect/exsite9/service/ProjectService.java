@@ -35,6 +35,9 @@ import au.org.intersect.exsite9.domain.SubmissionPackage;
 import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 import au.org.intersect.exsite9.xml.MetadataSchemaXMLBuilder;
 
+/**
+ * A service for manipulating {@link Project}s
+ */
 public class ProjectService implements IProjectService
 {
     private final Logger LOG = Logger.getLogger(ProjectService.class);

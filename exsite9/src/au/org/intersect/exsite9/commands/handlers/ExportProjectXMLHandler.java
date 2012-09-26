@@ -31,7 +31,7 @@ import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.xml.ProjectXMLBuilder;
 
 /**
- * 
+ * Command handler to export the xml from a project, via the plugin.xml
  */
 public final class ExportProjectXMLHandler implements IHandler
 {

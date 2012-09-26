@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.jobs;
 
 import org.apache.log4j.Logger;
@@ -15,6 +21,9 @@ import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.view.ProjectExplorerView;
 import au.org.intersect.exsite9.view.ViewUtils;
 
+/**
+ * job for importing a folder structure into a project
+ */
 public class ImportFolderStructureIntoProjectJob extends Job
 {
     

@@ -27,9 +27,10 @@ import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.Schema;
 import au.org.intersect.exsite9.domain.utils.AlphabeticalMetadataAttributeValueComparator;
 import au.org.intersect.exsite9.domain.utils.IDMetadataCategoryComparator;
+import au.org.intersect.exsite9.view.MetadataBrowserView;
 
 /**
- * 
+ * Wizard page that lists the existing {@link MetadataCategory}s to the user, this page is only used if they select edit from the metadata menu and is not if they click one of the edit buttons in the {@link MetadataBrowserView} 
  */
 public final class ListMetadataCategoriesWizardPage extends WizardPage implements SelectionListener
 {

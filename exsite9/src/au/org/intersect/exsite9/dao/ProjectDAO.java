@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.dao;
 
 import java.util.List;
@@ -8,6 +14,9 @@ import javax.persistence.TypedQuery;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.SubmissionPackage;
 
+/**
+ * Data Access Object for {@link Project} instances
+ */
 public class ProjectDAO
 {
     private final EntityManager em;

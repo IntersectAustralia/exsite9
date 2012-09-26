@@ -30,7 +30,7 @@ import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.service.IProjectService;
 
 /**
- * 
+ * Command handler to add a folder to the watched folder list of a project, via the plugin.xml
  */
 public final class AddFolderToProjectHandler implements IHandler
 {

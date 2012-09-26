@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.domain;
 
 import java.io.Serializable;
@@ -14,6 +20,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.google.common.base.Objects;
 
+/**
+ * the values within a {@link MetadataCategory}
+ */
 @Entity
 @Table(name="METADATA_VALUE")
 public class MetadataValue implements Serializable

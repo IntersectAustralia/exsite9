@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.zip;
 
 import java.io.ByteArrayInputStream;
@@ -30,6 +36,9 @@ import au.org.intersect.exsite9.domain.SubmissionPackage;
 import au.org.intersect.exsite9.exception.NotEnoughSpaceForZIPException;
 import au.org.intersect.exsite9.xml.SIPXMLBuilder;
 
+/**
+ * Used to build the ZIP file that contains the submission information package of a project
+ */
 public final class SIPZIPBuilderRunnable implements IRunnableWithProgress
 {
     private static final int BUF_SIZE = 0x1000; // 4K

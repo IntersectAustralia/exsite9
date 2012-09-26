@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.wizard.listfolders;
 
 import java.io.File;
@@ -12,6 +18,9 @@ import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.service.IProjectService;
 
+/**
+ * The wizard used to display the list of existing watched folders via {@link ListFoldersWizardPage1}
+ */
 public class ListFoldersWizard extends Wizard
 {
 

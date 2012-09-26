@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.wizard.search;
 
 import java.util.List;
@@ -10,6 +16,9 @@ import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.ResearchFileSearchDefinition;
 import au.org.intersect.exsite9.service.ISearchService;
 
+/**
+ * Wizard used to allow a user to do a search, the user is shown the wizard page {@link SearchWizardPage1}
+ */
 public class SearchWizard extends Wizard
 {
     private SearchWizardPage1 page1;

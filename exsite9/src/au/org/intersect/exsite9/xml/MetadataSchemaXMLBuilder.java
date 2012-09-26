@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.xml;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -18,6 +24,9 @@ import au.org.intersect.exsite9.domain.Schema;
 
 import static au.org.intersect.exsite9.xml.MetadataSchemaXMLUtils.*;
 
+/**
+ * Used to build the XML when the project {@link Schema} is exported
+ */
 public final class MetadataSchemaXMLBuilder extends BaseXMLBuilder
 {
     private static final Logger LOG = Logger.getLogger(MetadataSchemaXMLBuilder.class);

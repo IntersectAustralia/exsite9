@@ -18,7 +18,7 @@ import au.org.intersect.exsite9.dao.factory.ResearchFileDAOFactory;
 import au.org.intersect.exsite9.service.GroupService;
 
 /**
- * 
+ * Factory responsible for creating {@link GroupService}
  */
 public final class GroupServiceFactory extends AbstractServiceFactory
 {

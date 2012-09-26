@@ -29,7 +29,7 @@ import au.org.intersect.exsite9.jobs.ImportFolderStructureIntoProjectJob;
 import au.org.intersect.exsite9.service.IProjectManager;
 
 /**
- * 
+ * Command handler to watch a folder in a project, via the plugin.xml
  */
 public final class ImportFolderToProjectHandler implements IHandler
 {

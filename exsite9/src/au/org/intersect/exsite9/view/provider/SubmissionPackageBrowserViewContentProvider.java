@@ -18,9 +18,10 @@ import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.SubmissionPackage;
 import au.org.intersect.exsite9.service.IProjectService;
 import au.org.intersect.exsite9.service.ISubmissionPackageService;
+import au.org.intersect.exsite9.view.SubmissionPackageBrowserView;
 
 /**
- * 
+ * Provides content to {@link SubmissionPackageBrowserView}
  */
 public final class SubmissionPackageBrowserViewContentProvider implements ITreeContentProvider
 {

@@ -15,9 +15,10 @@ import org.eclipse.ui.PlatformUI;
 import au.org.intersect.exsite9.Activator;
 import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.SubmissionPackage;
+import au.org.intersect.exsite9.view.SubmissionPackageBrowserView;
 
 /**
- * 
+ * Provides labels to {@link SubmissionPackageBrowserView}
  */
 public final class SubmissionPackageBrowserViewLabelProvider extends StyledCellLabelProvider
 {

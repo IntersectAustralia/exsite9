@@ -6,6 +6,9 @@
  */
 package au.org.intersect.exsite9.dto;
 
+/**
+ * Data Transfer Object to cut down on the parameters that have to be passed around when a node in the tree is moved (dragged and dropped)
+ */
 public final class HierarchyMoveDTO
 {
     private final Object child;

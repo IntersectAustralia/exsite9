@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.commands.handlers;
 
 import java.io.File;
@@ -31,6 +37,9 @@ import au.org.intersect.exsite9.domain.SubmissionPackage;
 import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.service.ISubmissionPackageService;
 
+/**
+ * Command handler to export a submission package xml from a project, via the plugin.xml
+ */
 public class ExportSubmissionPackageXMLHandler implements IHandler
 {
     private static final String NEW_LINE = System.getProperty("line.separator");

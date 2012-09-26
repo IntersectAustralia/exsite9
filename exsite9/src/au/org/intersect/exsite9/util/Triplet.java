@@ -12,7 +12,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import com.google.common.base.Objects;
 
 /**
- * 
+ * A Triplet. May be used generically to associate three items together.
  */
 public final class Triplet<F, S, T> extends Pair<F, S>
 {

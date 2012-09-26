@@ -1,5 +1,14 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.xml;
 
+/**
+ * Utilities used by exsite9 XML builders and parsers
+ */
 public class XMLUtils
 {
 

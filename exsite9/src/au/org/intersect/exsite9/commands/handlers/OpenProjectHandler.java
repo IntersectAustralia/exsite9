@@ -25,8 +25,7 @@ import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.wizard.openproject.OpenProjectWizard;
 
 /**
- *
- * @version $Rev: 29 $
+ * Command handler to open an existing project, via the plugin.xml
  */
 public class OpenProjectHandler implements IHandler
 {

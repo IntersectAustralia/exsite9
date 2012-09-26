@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.jobs;
 
 import org.apache.log4j.Logger;
@@ -11,6 +17,9 @@ import org.eclipse.jface.util.PropertyChangeEvent;
 import au.org.intersect.exsite9.Activator;
 import au.org.intersect.exsite9.initialization.ConfigurationInitializer;
 
+/**
+ * For repeating {@link IdentifyAllNewFilesForProjectJob}
+ */
 public class IdentifyAllNewFilesForProjectRepeatingJob extends AbstractRepeatingJob implements IPropertyChangeListener
 {
     private static final Logger LOG = Logger.getLogger(IdentifyAllNewFilesForProjectRepeatingJob.class);

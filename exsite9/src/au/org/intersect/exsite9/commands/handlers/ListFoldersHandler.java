@@ -28,6 +28,9 @@ import au.org.intersect.exsite9.jobs.SemaphoreManager;
 import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.wizard.listfolders.ListFoldersWizard;
 
+/**
+ * Command handler to list the folders that a project is currently watching, via the plugin.xml
+ */
 public class ListFoldersHandler implements IHandler
 {
     private static final Logger LOG = Logger.getLogger(ListFoldersHandler.class);

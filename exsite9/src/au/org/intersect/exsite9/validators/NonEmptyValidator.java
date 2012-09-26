@@ -9,7 +9,7 @@ package au.org.intersect.exsite9.validators;
 import com.richclientgui.toolbox.validation.validator.IFieldValidator;
 
 /**
- * Validator that always returns true.
+ * Validator that always returns true if the string is not empty.
  */
 public final class NonEmptyValidator implements IFieldValidator<String>
 {

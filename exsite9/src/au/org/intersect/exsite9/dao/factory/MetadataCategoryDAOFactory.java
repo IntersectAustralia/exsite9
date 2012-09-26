@@ -11,7 +11,7 @@ import javax.persistence.EntityManager;
 import au.org.intersect.exsite9.dao.MetadataCategoryDAO;
 
 /**
- * 
+ * Creates an instance of a {@link MetadataCategoryDAO}
  */
 public final class MetadataCategoryDAOFactory
 {

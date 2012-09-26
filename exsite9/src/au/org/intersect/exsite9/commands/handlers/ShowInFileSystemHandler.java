@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.commands.handlers;
 
 import java.awt.Desktop;
@@ -16,6 +22,9 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 import au.org.intersect.exsite9.domain.ResearchFile;
 
+/**
+ * Command handler to open the containing directory of a file on disk, via the plugin.xml
+ */
 public class ShowInFileSystemHandler implements IHandler
 {
     private static final Logger LOG = Logger.getLogger(ShowInFileSystemHandler.class);

@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.wizard.search;
 
 import org.eclipse.jface.wizard.WizardPage;
@@ -13,6 +19,9 @@ import org.eclipse.swt.widgets.Text;
 
 import au.org.intersect.exsite9.domain.ResearchFileSearchDefinition;
 
+/**
+ * Wizard page that is shown to the user when they want to search the project
+ */
 public class SearchWizardPage1 extends WizardPage
 {
     private Composite container;

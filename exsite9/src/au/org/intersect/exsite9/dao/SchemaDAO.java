@@ -11,7 +11,7 @@ import javax.persistence.EntityManager;
 import au.org.intersect.exsite9.domain.Schema;
 
 /**
- * Schema DAO.
+ * Data Access Object for {@link Schema} instances
  */
 public final class SchemaDAO
 {

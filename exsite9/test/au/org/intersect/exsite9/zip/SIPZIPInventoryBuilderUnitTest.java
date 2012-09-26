@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.zip;
 
 import static org.junit.Assert.assertEquals;
@@ -13,6 +19,9 @@ import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.SubmissionPackage;
 import au.org.intersect.exsite9.dto.ProjectFieldsDTO;
 
+/**
+ * Tests {@link SIPZIPInventoryFileBuilder}
+ */
 public class SIPZIPInventoryBuilderUnitTest
 {
     private static final String NEW_LINE = System.getProperty("line.separator");

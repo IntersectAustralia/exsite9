@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.commands.handlers;
 
 import java.io.File;
@@ -24,6 +30,9 @@ import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.service.IProjectService;
 
+/**
+ * Command handler to export a metadata schema from a project, via the plugin.xml
+ */
 public class ExportMetadataSchemaHandler implements IHandler
 {
 

@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.commands.handlers;
 
 import org.eclipse.core.commands.ExecutionEvent;
@@ -17,6 +23,9 @@ import au.org.intersect.exsite9.service.IMetadataCategoryService;
 import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.wizard.metadatacategory.AddMetadataCategoryWizard;
 
+/**
+ * Command handler to add a metadata category to a project, via the plugin.xml
+ */
 public class AddMetadataCategoryHandler implements IHandler
 {
 

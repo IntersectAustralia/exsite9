@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.test.utils;
 
 import java.io.File;
@@ -6,6 +12,9 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Random;
 
+/**
+ * Used by tests to generate mock files of various sizes for testing purposes
+ */
 public final class FileGenerator
 {
     public static final BigInteger GB120 = new BigInteger("128849018880");

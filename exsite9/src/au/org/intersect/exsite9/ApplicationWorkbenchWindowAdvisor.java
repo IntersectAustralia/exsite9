@@ -13,7 +13,7 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
 /**
- * 
+ * Advisor for the application workbench window
  */
 public final class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
 {

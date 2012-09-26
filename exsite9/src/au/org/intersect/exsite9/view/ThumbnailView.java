@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.view;
 
 import java.io.File;
@@ -21,6 +27,9 @@ import org.eclipse.ui.part.ViewPart;
 
 import au.org.intersect.exsite9.domain.ResearchFile;
 
+/**
+ * Creates the contents of the thumbnail tab and determines what actions are taken when selections are made
+ */
 public final class ThumbnailView extends ViewPart implements ISelectionListener
 {
     public static final String ID = ThumbnailView.class.getName();

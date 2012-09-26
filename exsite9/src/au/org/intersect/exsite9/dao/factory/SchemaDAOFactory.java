@@ -11,7 +11,7 @@ import javax.persistence.EntityManager;
 import au.org.intersect.exsite9.dao.SchemaDAO;
 
 /**
- * 
+ * Creates an instance of a {@link SchemaDAO}
  */
 public final class SchemaDAOFactory
 {

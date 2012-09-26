@@ -8,6 +8,9 @@ package au.org.intersect.exsite9.dto;
 
 import au.org.intersect.exsite9.domain.FieldOfResearch;
 
+/**
+* Data Transfer Object to cut down on the parameters that have to be passed around when a creating or editing a project
+*/
 public class ProjectFieldsDTO
 {
     private final String name;

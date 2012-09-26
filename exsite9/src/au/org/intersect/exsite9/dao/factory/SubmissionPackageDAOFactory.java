@@ -11,7 +11,7 @@ import javax.persistence.EntityManager;
 import au.org.intersect.exsite9.dao.SubmissionPackageDAO;
 
 /**
- * 
+ * Creates an instance of a {@link SubmissionPackageDAO}
  */
 public final class SubmissionPackageDAOFactory
 {

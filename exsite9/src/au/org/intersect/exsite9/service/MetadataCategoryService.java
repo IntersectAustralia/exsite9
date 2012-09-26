@@ -22,6 +22,9 @@ import au.org.intersect.exsite9.domain.MetadataCategoryUse;
 import au.org.intersect.exsite9.domain.MetadataCategoryViewConfiguration;
 import au.org.intersect.exsite9.domain.MetadataValue;
 
+/**
+ * A service for manipulating {@link MetadataCategory}s
+ */
 public final class MetadataCategoryService implements IMetadataCategoryService
 {
     private final EntityManagerFactory emf;

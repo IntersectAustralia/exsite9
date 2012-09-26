@@ -1,3 +1,9 @@
+/**
+ * Copyright (C) Intersect 2012.
+ *
+ * This module contains Proprietary Information of Intersect,
+ * and should be treated as Confidential.
+ */
 package au.org.intersect.exsite9.jobs;
 
 import java.util.List;
@@ -16,6 +22,9 @@ import au.org.intersect.exsite9.service.IResearchFileService;
 import au.org.intersect.exsite9.view.ProjectExplorerView;
 import au.org.intersect.exsite9.view.ViewUtils;
 
+/**
+ * Consolidates folders if a newly watched folder has sub folders that are already being watched in the system
+ */
 public class ConsolidateFoldersJob extends Job
 {
 
