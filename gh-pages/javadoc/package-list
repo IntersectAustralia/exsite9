@@ -31,6 +31,7 @@ au.org.intersect.exsite9.wizard.metadatacategory
 au.org.intersect.exsite9.wizard.newgroup
 au.org.intersect.exsite9.wizard.newproject
 au.org.intersect.exsite9.wizard.openproject
+au.org.intersect.exsite9.wizard.search
 au.org.intersect.exsite9.xml
 au.org.intersect.exsite9.zip
 org.eclipse.persistence.logging

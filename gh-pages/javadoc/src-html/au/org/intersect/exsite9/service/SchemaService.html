@@ -37,225 +37,232 @@
 <FONT color="green">034</FONT>    import au.org.intersect.exsite9.dao.factory.SchemaDAOFactory;<a name="line.34"></a>
 <FONT color="green">035</FONT>    import au.org.intersect.exsite9.domain.MetadataAttribute;<a name="line.35"></a>
 <FONT color="green">036</FONT>    import au.org.intersect.exsite9.domain.MetadataCategory;<a name="line.36"></a>
-<FONT color="green">037</FONT>    import au.org.intersect.exsite9.domain.Schema;<a name="line.37"></a>
-<FONT color="green">038</FONT>    import au.org.intersect.exsite9.exception.InvalidSchemaException;<a name="line.38"></a>
-<FONT color="green">039</FONT>    import au.org.intersect.exsite9.xml.MetadataSchemaXMLReader;<a name="line.39"></a>
-<FONT color="green">040</FONT>    <a name="line.40"></a>
-<FONT color="green">041</FONT>    /**<a name="line.41"></a>
-<FONT color="green">042</FONT>     * Handles working with Metadata Schemas.<a name="line.42"></a>
-<FONT color="green">043</FONT>     */<a name="line.43"></a>
-<FONT color="green">044</FONT>    public final class SchemaService implements ISchemaService<a name="line.44"></a>
-<FONT color="green">045</FONT>    {<a name="line.45"></a>
-<FONT color="green">046</FONT>        private final EntityManagerFactory emf;<a name="line.46"></a>
-<FONT color="green">047</FONT>        private final SchemaDAOFactory schemaDAOFactory;<a name="line.47"></a>
-<FONT color="green">048</FONT>        private final MetadataCategoryDAOFactory metadataCategoryDAOFactory;<a name="line.48"></a>
-<FONT color="green">049</FONT>        private final MetadataAttributeDAOFactory metadataAttributeDAOFactory;<a name="line.49"></a>
-<FONT color="green">050</FONT>        private final File defaultSchemaDirectory;<a name="line.50"></a>
-<FONT color="green">051</FONT>        private final File defaultSchema;<a name="line.51"></a>
-<FONT color="green">052</FONT>        private final File metadataSchemaSchema;<a name="line.52"></a>
-<FONT color="green">053</FONT>    <a name="line.53"></a>
-<FONT color="green">054</FONT>        /**<a name="line.54"></a>
-<FONT color="green">055</FONT>         * @param defaultSchemaDirectory The default directory that metadata schema's will lie in.<a name="line.55"></a>
-<FONT color="green">056</FONT>         * @param defaultSchema The default metadata schema - loaded by default for new projects.<a name="line.56"></a>
-<FONT color="green">057</FONT>         * @param metadataSchemaSchema The RELAX-NG format schema, used to validate metadata schemas.<a name="line.57"></a>
-<FONT color="green">058</FONT>         * @param emf<a name="line.58"></a>
-<FONT color="green">059</FONT>         * @param schemaDAOFactory<a name="line.59"></a>
-<FONT color="green">060</FONT>         */<a name="line.60"></a>
-<FONT color="green">061</FONT>        public SchemaService(final File defaultSchemaDirectory, final File defaultSchema, final File metadataSchemaSchema, final EntityManagerFactory emf,<a name="line.61"></a>
-<FONT color="green">062</FONT>                             final SchemaDAOFactory schemaDAOFactory, final MetadataCategoryDAOFactory metadataCategoryDAOFactory,<a name="line.62"></a>
-<FONT color="green">063</FONT>                             final MetadataAttributeDAOFactory metadataAttributeDAOFactory)<a name="line.63"></a>
-<FONT color="green">064</FONT>        {<a name="line.64"></a>
-<FONT color="green">065</FONT>            this.emf = emf;<a name="line.65"></a>
-<FONT color="green">066</FONT>            this.schemaDAOFactory = schemaDAOFactory;<a name="line.66"></a>
-<FONT color="green">067</FONT>            this.defaultSchema = defaultSchema;<a name="line.67"></a>
-<FONT color="green">068</FONT>            this.metadataCategoryDAOFactory = metadataCategoryDAOFactory;<a name="line.68"></a>
-<FONT color="green">069</FONT>            this.defaultSchemaDirectory = defaultSchemaDirectory;<a name="line.69"></a>
-<FONT color="green">070</FONT>            this.metadataSchemaSchema = metadataSchemaSchema;<a name="line.70"></a>
-<FONT color="green">071</FONT>            this.metadataAttributeDAOFactory = metadataAttributeDAOFactory;<a name="line.71"></a>
-<FONT color="green">072</FONT>        }<a name="line.72"></a>
-<FONT color="green">073</FONT>    <a name="line.73"></a>
-<FONT color="green">074</FONT>        /**<a name="line.74"></a>
-<FONT color="green">075</FONT>         * {@inheritDoc}<a name="line.75"></a>
-<FONT color="green">076</FONT>         */<a name="line.76"></a>
-<FONT color="green">077</FONT>        @Override<a name="line.77"></a>
-<FONT color="green">078</FONT>        public Schema createLocalSchema(final String schemaName, final String schemaDescription, final String schemaNamespaceURL)<a name="line.78"></a>
-<FONT color="green">079</FONT>        {<a name="line.79"></a>
-<FONT color="green">080</FONT>            final EntityManager em = this.emf.createEntityManager();<a name="line.80"></a>
-<FONT color="green">081</FONT>            try<a name="line.81"></a>
-<FONT color="green">082</FONT>            {<a name="line.82"></a>
-<FONT color="green">083</FONT>                final SchemaDAO schemaDAO = this.schemaDAOFactory.createInstance(em);<a name="line.83"></a>
-<FONT color="green">084</FONT>                final Schema schema = new Schema(schemaName, schemaDescription, schemaNamespaceURL, Boolean.TRUE);<a name="line.84"></a>
-<FONT color="green">085</FONT>                schemaDAO.createSchema(schema);<a name="line.85"></a>
-<FONT color="green">086</FONT>                return schema;<a name="line.86"></a>
-<FONT color="green">087</FONT>            }<a name="line.87"></a>
-<FONT color="green">088</FONT>            finally<a name="line.88"></a>
-<FONT color="green">089</FONT>            {<a name="line.89"></a>
-<FONT color="green">090</FONT>                em.close();<a name="line.90"></a>
-<FONT color="green">091</FONT>            }<a name="line.91"></a>
-<FONT color="green">092</FONT>        }<a name="line.92"></a>
-<FONT color="green">093</FONT>    <a name="line.93"></a>
-<FONT color="green">094</FONT>        /**<a name="line.94"></a>
-<FONT color="green">095</FONT>         * {@inheritDoc}<a name="line.95"></a>
-<FONT color="green">096</FONT>         */<a name="line.96"></a>
-<FONT color="green">097</FONT>        public void createImportedSchema(final Schema schema)<a name="line.97"></a>
-<FONT color="green">098</FONT>        {<a name="line.98"></a>
-<FONT color="green">099</FONT>            final EntityManager em = this.emf.createEntityManager();<a name="line.99"></a>
-<FONT color="green">100</FONT>            try<a name="line.100"></a>
-<FONT color="green">101</FONT>            {<a name="line.101"></a>
-<FONT color="green">102</FONT>                final MetadataCategoryDAO metadataCategoryDAO = this.metadataCategoryDAOFactory.createInstance(em);<a name="line.102"></a>
-<FONT color="green">103</FONT>                final MetadataAttributeDAO metadataAttribtueDAO = this.metadataAttributeDAOFactory.createInstance(em);<a name="line.103"></a>
-<FONT color="green">104</FONT>    <a name="line.104"></a>
-<FONT color="green">105</FONT>                for (final MetadataCategory metadataCategory : schema.getMetadataCategories())<a name="line.105"></a>
-<FONT color="green">106</FONT>                {<a name="line.106"></a>
-<FONT color="green">107</FONT>                    final MetadataAttribute metadataAttribute = metadataCategory.getMetadataAttribute();<a name="line.107"></a>
-<FONT color="green">108</FONT>                    if (metadataAttribute != null)<a name="line.108"></a>
-<FONT color="green">109</FONT>                    {<a name="line.109"></a>
-<FONT color="green">110</FONT>                        metadataAttribtueDAO.createMetadataAttribute(metadataAttribute);<a name="line.110"></a>
-<FONT color="green">111</FONT>                    }<a name="line.111"></a>
-<FONT color="green">112</FONT>                    metadataCategoryDAO.createMetadataCategory(metadataCategory);<a name="line.112"></a>
-<FONT color="green">113</FONT>                }<a name="line.113"></a>
-<FONT color="green">114</FONT>    <a name="line.114"></a>
-<FONT color="green">115</FONT>                final SchemaDAO schemaDAO = this.schemaDAOFactory.createInstance(em);<a name="line.115"></a>
-<FONT color="green">116</FONT>                schemaDAO.createSchema(schema);<a name="line.116"></a>
-<FONT color="green">117</FONT>            }<a name="line.117"></a>
-<FONT color="green">118</FONT>            finally<a name="line.118"></a>
-<FONT color="green">119</FONT>            {<a name="line.119"></a>
-<FONT color="green">120</FONT>                em.close();<a name="line.120"></a>
-<FONT color="green">121</FONT>            }<a name="line.121"></a>
-<FONT color="green">122</FONT>        }<a name="line.122"></a>
-<FONT color="green">123</FONT>    <a name="line.123"></a>
-<FONT color="green">124</FONT>        @Override<a name="line.124"></a>
-<FONT color="green">125</FONT>        public void updateSchema(final Schema schema, final String schemaName, final String schemaDescription, final String schemaNamespaceURL)<a name="line.125"></a>
-<FONT color="green">126</FONT>        {<a name="line.126"></a>
-<FONT color="green">127</FONT>            schema.setName(schemaName);<a name="line.127"></a>
-<FONT color="green">128</FONT>            schema.setDescription(schemaDescription);<a name="line.128"></a>
-<FONT color="green">129</FONT>            schema.setNamespaceURL(schemaNamespaceURL);<a name="line.129"></a>
-<FONT color="green">130</FONT>    <a name="line.130"></a>
-<FONT color="green">131</FONT>            final EntityManager em = this.emf.createEntityManager();<a name="line.131"></a>
-<FONT color="green">132</FONT>            try<a name="line.132"></a>
-<FONT color="green">133</FONT>            {<a name="line.133"></a>
-<FONT color="green">134</FONT>                final SchemaDAO schemaDAO = this.schemaDAOFactory.createInstance(em);<a name="line.134"></a>
-<FONT color="green">135</FONT>                schemaDAO.updateSchema(schema);<a name="line.135"></a>
-<FONT color="green">136</FONT>            }<a name="line.136"></a>
-<FONT color="green">137</FONT>            finally<a name="line.137"></a>
-<FONT color="green">138</FONT>            {<a name="line.138"></a>
-<FONT color="green">139</FONT>                em.close();<a name="line.139"></a>
-<FONT color="green">140</FONT>            }<a name="line.140"></a>
-<FONT color="green">141</FONT>        }<a name="line.141"></a>
-<FONT color="green">142</FONT>    <a name="line.142"></a>
-<FONT color="green">143</FONT>        @Override<a name="line.143"></a>
-<FONT color="green">144</FONT>        public void removeSchema(final Schema schema)<a name="line.144"></a>
-<FONT color="green">145</FONT>        {<a name="line.145"></a>
-<FONT color="green">146</FONT>            final EntityManager em = this.emf.createEntityManager();<a name="line.146"></a>
-<FONT color="green">147</FONT>    <a name="line.147"></a>
-<FONT color="green">148</FONT>            try<a name="line.148"></a>
-<FONT color="green">149</FONT>            {<a name="line.149"></a>
-<FONT color="green">150</FONT>                final List&lt;MetadataCategory&gt; mdcsToDelete = new ArrayList&lt;MetadataCategory&gt;(schema.getMetadataCategories());<a name="line.150"></a>
-<FONT color="green">151</FONT>    <a name="line.151"></a>
-<FONT color="green">152</FONT>                final SchemaDAO schemaDAO = this.schemaDAOFactory.createInstance(em);<a name="line.152"></a>
-<FONT color="green">153</FONT>                schema.getMetadataCategories().clear();<a name="line.153"></a>
-<FONT color="green">154</FONT>                schemaDAO.delete(schema);<a name="line.154"></a>
-<FONT color="green">155</FONT>    <a name="line.155"></a>
-<FONT color="green">156</FONT>                final MetadataCategoryDAO metadataCategoryDAO = this.metadataCategoryDAOFactory.createInstance(em);<a name="line.156"></a>
-<FONT color="green">157</FONT>                final MetadataAttributeDAO metadataAttributeDAO = this.metadataAttributeDAOFactory.createInstance(em);<a name="line.157"></a>
-<FONT color="green">158</FONT>    <a name="line.158"></a>
-<FONT color="green">159</FONT>                for (final MetadataCategory mdc : mdcsToDelete)<a name="line.159"></a>
-<FONT color="green">160</FONT>                {<a name="line.160"></a>
-<FONT color="green">161</FONT>                    metadataCategoryDAO.delete(mdc);<a name="line.161"></a>
-<FONT color="green">162</FONT>    <a name="line.162"></a>
-<FONT color="green">163</FONT>                    final MetadataAttribute mda = mdc.getMetadataAttribute();<a name="line.163"></a>
-<FONT color="green">164</FONT>                    if (mda != null)<a name="line.164"></a>
-<FONT color="green">165</FONT>                    {<a name="line.165"></a>
-<FONT color="green">166</FONT>                        metadataAttributeDAO.delete(mda);<a name="line.166"></a>
-<FONT color="green">167</FONT>                    }<a name="line.167"></a>
-<FONT color="green">168</FONT>                }<a name="line.168"></a>
-<FONT color="green">169</FONT>            }<a name="line.169"></a>
-<FONT color="green">170</FONT>            finally<a name="line.170"></a>
-<FONT color="green">171</FONT>            {<a name="line.171"></a>
-<FONT color="green">172</FONT>                em.close();<a name="line.172"></a>
-<FONT color="green">173</FONT>            }<a name="line.173"></a>
-<FONT color="green">174</FONT>        }<a name="line.174"></a>
-<FONT color="green">175</FONT>    <a name="line.175"></a>
-<FONT color="green">176</FONT>        /**<a name="line.176"></a>
-<FONT color="green">177</FONT>         * @{inheritDoc}<a name="line.177"></a>
-<FONT color="green">178</FONT>         */<a name="line.178"></a>
-<FONT color="green">179</FONT>        @Override<a name="line.179"></a>
-<FONT color="green">180</FONT>        public void addMetadataCategoryToSchema(final Schema schema, final MetadataCategory metadataCategory)<a name="line.180"></a>
-<FONT color="green">181</FONT>        {<a name="line.181"></a>
-<FONT color="green">182</FONT>            final EntityManager em = this.emf.createEntityManager();<a name="line.182"></a>
-<FONT color="green">183</FONT>            try<a name="line.183"></a>
-<FONT color="green">184</FONT>            {<a name="line.184"></a>
-<FONT color="green">185</FONT>                final SchemaDAO schemaDAO = this.schemaDAOFactory.createInstance(em);<a name="line.185"></a>
-<FONT color="green">186</FONT>                schema.getMetadataCategories().add(metadataCategory);<a name="line.186"></a>
-<FONT color="green">187</FONT>                schemaDAO.updateSchema(schema);<a name="line.187"></a>
-<FONT color="green">188</FONT>            }<a name="line.188"></a>
-<FONT color="green">189</FONT>            finally<a name="line.189"></a>
-<FONT color="green">190</FONT>            {<a name="line.190"></a>
-<FONT color="green">191</FONT>                em.close();<a name="line.191"></a>
-<FONT color="green">192</FONT>            }<a name="line.192"></a>
-<FONT color="green">193</FONT>        }<a name="line.193"></a>
-<FONT color="green">194</FONT>    <a name="line.194"></a>
-<FONT color="green">195</FONT>        @Override<a name="line.195"></a>
-<FONT color="green">196</FONT>        public void removeMetadataCategoryFromSchema(final Schema schema, final MetadataCategory metadataCategory)<a name="line.196"></a>
-<FONT color="green">197</FONT>        {<a name="line.197"></a>
-<FONT color="green">198</FONT>            final EntityManager em = this.emf.createEntityManager();<a name="line.198"></a>
-<FONT color="green">199</FONT>            try<a name="line.199"></a>
-<FONT color="green">200</FONT>            {<a name="line.200"></a>
-<FONT color="green">201</FONT>                final SchemaDAO schemaDAO = this.schemaDAOFactory.createInstance(em);<a name="line.201"></a>
-<FONT color="green">202</FONT>                schema.getMetadataCategories().remove(metadataCategory);<a name="line.202"></a>
-<FONT color="green">203</FONT>                schemaDAO.updateSchema(schema);<a name="line.203"></a>
-<FONT color="green">204</FONT>            }<a name="line.204"></a>
-<FONT color="green">205</FONT>            finally<a name="line.205"></a>
-<FONT color="green">206</FONT>            {<a name="line.206"></a>
-<FONT color="green">207</FONT>                em.close();<a name="line.207"></a>
-<FONT color="green">208</FONT>            }<a name="line.208"></a>
-<FONT color="green">209</FONT>        }<a name="line.209"></a>
-<FONT color="green">210</FONT>    <a name="line.210"></a>
-<FONT color="green">211</FONT>        /**<a name="line.211"></a>
-<FONT color="green">212</FONT>         * @{inheritDoc}<a name="line.212"></a>
-<FONT color="green">213</FONT>         */<a name="line.213"></a>
-<FONT color="green">214</FONT>        @Override<a name="line.214"></a>
-<FONT color="green">215</FONT>        public File getDefaultSchemaDirectory()<a name="line.215"></a>
-<FONT color="green">216</FONT>        {<a name="line.216"></a>
-<FONT color="green">217</FONT>            return this.defaultSchemaDirectory;<a name="line.217"></a>
-<FONT color="green">218</FONT>        }<a name="line.218"></a>
-<FONT color="green">219</FONT>    <a name="line.219"></a>
-<FONT color="green">220</FONT>        /**<a name="line.220"></a>
-<FONT color="green">221</FONT>         * {@inheritDoc}<a name="line.221"></a>
-<FONT color="green">222</FONT>         */<a name="line.222"></a>
-<FONT color="green">223</FONT>        @Override<a name="line.223"></a>
-<FONT color="green">224</FONT>        public File getDefaultSchema()<a name="line.224"></a>
-<FONT color="green">225</FONT>        {<a name="line.225"></a>
-<FONT color="green">226</FONT>            return this.defaultSchema;<a name="line.226"></a>
-<FONT color="green">227</FONT>        }<a name="line.227"></a>
-<FONT color="green">228</FONT>    <a name="line.228"></a>
-<FONT color="green">229</FONT>        /**<a name="line.229"></a>
-<FONT color="green">230</FONT>         * @{inheritDoc}<a name="line.230"></a>
-<FONT color="green">231</FONT>         */<a name="line.231"></a>
-<FONT color="green">232</FONT>        @Override<a name="line.232"></a>
-<FONT color="green">233</FONT>        public Schema parseSchema(final File xmlFile) throws SAXException, IOException, ParserConfigurationException, InvalidSchemaException<a name="line.233"></a>
-<FONT color="green">234</FONT>        {<a name="line.234"></a>
-<FONT color="green">235</FONT>            // Configure validator for RELAX NG Schema Support<a name="line.235"></a>
-<FONT color="green">236</FONT>            System.setProperty(SchemaFactory.class.getName() + ":" + XMLConstants.RELAXNG_NS_URI, "com.thaiopensource.relaxng.jaxp.XMLSyntaxSchemaFactory");<a name="line.236"></a>
-<FONT color="green">237</FONT>            final SchemaFactory validationSchemaFactory = SchemaFactory.newInstance(XMLConstants.RELAXNG_NS_URI);<a name="line.237"></a>
-<FONT color="green">238</FONT>    <a name="line.238"></a>
-<FONT color="green">239</FONT>            final Source validationSchemaFile = new StreamSource(this.metadataSchemaSchema);<a name="line.239"></a>
-<FONT color="green">240</FONT>            final javax.xml.validation.Schema validationSchema = validationSchemaFactory.newSchema(validationSchemaFile);<a name="line.240"></a>
-<FONT color="green">241</FONT>            final Validator validator = validationSchema.newValidator();<a name="line.241"></a>
-<FONT color="green">242</FONT>    <a name="line.242"></a>
-<FONT color="green">243</FONT>            // Throws SAXException if the schema is not valid.<a name="line.243"></a>
-<FONT color="green">244</FONT>            // This needs to be a Stream Source, as validating a String isn't implemented :(<a name="line.244"></a>
-<FONT color="green">245</FONT>            validator.validate(new StreamSource(xmlFile));<a name="line.245"></a>
-<FONT color="green">246</FONT>    <a name="line.246"></a>
-<FONT color="green">247</FONT>            final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();<a name="line.247"></a>
-<FONT color="green">248</FONT>            final DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();<a name="line.248"></a>
-<FONT color="green">249</FONT>            final Document document = documentBuilder.parse(new FileInputStream(xmlFile));<a name="line.249"></a>
-<FONT color="green">250</FONT>    <a name="line.250"></a>
-<FONT color="green">251</FONT>            // Schema is valid, continue the parse.<a name="line.251"></a>
-<FONT color="green">252</FONT>            final Schema schema = MetadataSchemaXMLReader.readXML(document);<a name="line.252"></a>
-<FONT color="green">253</FONT>            return schema;<a name="line.253"></a>
-<FONT color="green">254</FONT>        }<a name="line.254"></a>
-<FONT color="green">255</FONT>    }<a name="line.255"></a>
+<FONT color="green">037</FONT>    import au.org.intersect.exsite9.domain.MetadataCategoryViewConfiguration;<a name="line.37"></a>
+<FONT color="green">038</FONT>    import au.org.intersect.exsite9.domain.Schema;<a name="line.38"></a>
+<FONT color="green">039</FONT>    import au.org.intersect.exsite9.exception.InvalidSchemaException;<a name="line.39"></a>
+<FONT color="green">040</FONT>    import au.org.intersect.exsite9.xml.MetadataSchemaXMLReader;<a name="line.40"></a>
+<FONT color="green">041</FONT>    <a name="line.41"></a>
+<FONT color="green">042</FONT>    /**<a name="line.42"></a>
+<FONT color="green">043</FONT>     * Handles working with Metadata Schemas.<a name="line.43"></a>
+<FONT color="green">044</FONT>     */<a name="line.44"></a>
+<FONT color="green">045</FONT>    public final class SchemaService implements ISchemaService<a name="line.45"></a>
+<FONT color="green">046</FONT>    {<a name="line.46"></a>
+<FONT color="green">047</FONT>        private final EntityManagerFactory emf;<a name="line.47"></a>
+<FONT color="green">048</FONT>        private final SchemaDAOFactory schemaDAOFactory;<a name="line.48"></a>
+<FONT color="green">049</FONT>        private final MetadataCategoryDAOFactory metadataCategoryDAOFactory;<a name="line.49"></a>
+<FONT color="green">050</FONT>        private final MetadataAttributeDAOFactory metadataAttributeDAOFactory;<a name="line.50"></a>
+<FONT color="green">051</FONT>        private final File defaultSchemaDirectory;<a name="line.51"></a>
+<FONT color="green">052</FONT>        private final File defaultSchema;<a name="line.52"></a>
+<FONT color="green">053</FONT>        private final File metadataSchemaSchema;<a name="line.53"></a>
+<FONT color="green">054</FONT>    <a name="line.54"></a>
+<FONT color="green">055</FONT>        /**<a name="line.55"></a>
+<FONT color="green">056</FONT>         * @param defaultSchemaDirectory The default directory that metadata schema's will lie in.<a name="line.56"></a>
+<FONT color="green">057</FONT>         * @param defaultSchema The default metadata schema - loaded by default for new projects.<a name="line.57"></a>
+<FONT color="green">058</FONT>         * @param metadataSchemaSchema The RELAX-NG format schema, used to validate metadata schemas.<a name="line.58"></a>
+<FONT color="green">059</FONT>         * @param emf<a name="line.59"></a>
+<FONT color="green">060</FONT>         * @param schemaDAOFactory<a name="line.60"></a>
+<FONT color="green">061</FONT>         */<a name="line.61"></a>
+<FONT color="green">062</FONT>        public SchemaService(final File defaultSchemaDirectory, final File defaultSchema, final File metadataSchemaSchema, final EntityManagerFactory emf,<a name="line.62"></a>
+<FONT color="green">063</FONT>                             final SchemaDAOFactory schemaDAOFactory, final MetadataCategoryDAOFactory metadataCategoryDAOFactory,<a name="line.63"></a>
+<FONT color="green">064</FONT>                             final MetadataAttributeDAOFactory metadataAttributeDAOFactory)<a name="line.64"></a>
+<FONT color="green">065</FONT>        {<a name="line.65"></a>
+<FONT color="green">066</FONT>            this.emf = emf;<a name="line.66"></a>
+<FONT color="green">067</FONT>            this.schemaDAOFactory = schemaDAOFactory;<a name="line.67"></a>
+<FONT color="green">068</FONT>            this.defaultSchema = defaultSchema;<a name="line.68"></a>
+<FONT color="green">069</FONT>            this.metadataCategoryDAOFactory = metadataCategoryDAOFactory;<a name="line.69"></a>
+<FONT color="green">070</FONT>            this.defaultSchemaDirectory = defaultSchemaDirectory;<a name="line.70"></a>
+<FONT color="green">071</FONT>            this.metadataSchemaSchema = metadataSchemaSchema;<a name="line.71"></a>
+<FONT color="green">072</FONT>            this.metadataAttributeDAOFactory = metadataAttributeDAOFactory;<a name="line.72"></a>
+<FONT color="green">073</FONT>        }<a name="line.73"></a>
+<FONT color="green">074</FONT>    <a name="line.74"></a>
+<FONT color="green">075</FONT>        /**<a name="line.75"></a>
+<FONT color="green">076</FONT>         * {@inheritDoc}<a name="line.76"></a>
+<FONT color="green">077</FONT>         */<a name="line.77"></a>
+<FONT color="green">078</FONT>        @Override<a name="line.78"></a>
+<FONT color="green">079</FONT>        public Schema createLocalSchema(final String schemaName, final String schemaDescription, final String schemaNamespaceURL)<a name="line.79"></a>
+<FONT color="green">080</FONT>        {<a name="line.80"></a>
+<FONT color="green">081</FONT>            final EntityManager em = this.emf.createEntityManager();<a name="line.81"></a>
+<FONT color="green">082</FONT>            try<a name="line.82"></a>
+<FONT color="green">083</FONT>            {<a name="line.83"></a>
+<FONT color="green">084</FONT>                final SchemaDAO schemaDAO = this.schemaDAOFactory.createInstance(em);<a name="line.84"></a>
+<FONT color="green">085</FONT>                final Schema schema = new Schema(schemaName, schemaDescription, schemaNamespaceURL, Boolean.TRUE);<a name="line.85"></a>
+<FONT color="green">086</FONT>                schemaDAO.createSchema(schema);<a name="line.86"></a>
+<FONT color="green">087</FONT>                return schema;<a name="line.87"></a>
+<FONT color="green">088</FONT>            }<a name="line.88"></a>
+<FONT color="green">089</FONT>            finally<a name="line.89"></a>
+<FONT color="green">090</FONT>            {<a name="line.90"></a>
+<FONT color="green">091</FONT>                em.close();<a name="line.91"></a>
+<FONT color="green">092</FONT>            }<a name="line.92"></a>
+<FONT color="green">093</FONT>        }<a name="line.93"></a>
+<FONT color="green">094</FONT>    <a name="line.94"></a>
+<FONT color="green">095</FONT>        /**<a name="line.95"></a>
+<FONT color="green">096</FONT>         * {@inheritDoc}<a name="line.96"></a>
+<FONT color="green">097</FONT>         */<a name="line.97"></a>
+<FONT color="green">098</FONT>        public void createImportedSchema(final Schema schema)<a name="line.98"></a>
+<FONT color="green">099</FONT>        {<a name="line.99"></a>
+<FONT color="green">100</FONT>            final EntityManager em = this.emf.createEntityManager();<a name="line.100"></a>
+<FONT color="green">101</FONT>            try<a name="line.101"></a>
+<FONT color="green">102</FONT>            {<a name="line.102"></a>
+<FONT color="green">103</FONT>                final MetadataCategoryDAO metadataCategoryDAO = this.metadataCategoryDAOFactory.createInstance(em);<a name="line.103"></a>
+<FONT color="green">104</FONT>                final MetadataAttributeDAO metadataAttribtueDAO = this.metadataAttributeDAOFactory.createInstance(em);<a name="line.104"></a>
+<FONT color="green">105</FONT>    <a name="line.105"></a>
+<FONT color="green">106</FONT>                for (final MetadataCategory metadataCategory : schema.getMetadataCategories())<a name="line.106"></a>
+<FONT color="green">107</FONT>                {<a name="line.107"></a>
+<FONT color="green">108</FONT>                    final MetadataAttribute metadataAttribute = metadataCategory.getMetadataAttribute();<a name="line.108"></a>
+<FONT color="green">109</FONT>                    if (metadataAttribute != null)<a name="line.109"></a>
+<FONT color="green">110</FONT>                    {<a name="line.110"></a>
+<FONT color="green">111</FONT>                        metadataAttribtueDAO.createMetadataAttribute(metadataAttribute);<a name="line.111"></a>
+<FONT color="green">112</FONT>                    }<a name="line.112"></a>
+<FONT color="green">113</FONT>                    metadataCategoryDAO.createMetadataCategory(metadataCategory);<a name="line.113"></a>
+<FONT color="green">114</FONT>                }<a name="line.114"></a>
+<FONT color="green">115</FONT>    <a name="line.115"></a>
+<FONT color="green">116</FONT>                final SchemaDAO schemaDAO = this.schemaDAOFactory.createInstance(em);<a name="line.116"></a>
+<FONT color="green">117</FONT>                schemaDAO.createSchema(schema);<a name="line.117"></a>
+<FONT color="green">118</FONT>            }<a name="line.118"></a>
+<FONT color="green">119</FONT>            finally<a name="line.119"></a>
+<FONT color="green">120</FONT>            {<a name="line.120"></a>
+<FONT color="green">121</FONT>                em.close();<a name="line.121"></a>
+<FONT color="green">122</FONT>            }<a name="line.122"></a>
+<FONT color="green">123</FONT>        }<a name="line.123"></a>
+<FONT color="green">124</FONT>    <a name="line.124"></a>
+<FONT color="green">125</FONT>        @Override<a name="line.125"></a>
+<FONT color="green">126</FONT>        public void updateSchema(final Schema schema, final String schemaName, final String schemaDescription, final String schemaNamespaceURL)<a name="line.126"></a>
+<FONT color="green">127</FONT>        {<a name="line.127"></a>
+<FONT color="green">128</FONT>            schema.setName(schemaName);<a name="line.128"></a>
+<FONT color="green">129</FONT>            schema.setDescription(schemaDescription);<a name="line.129"></a>
+<FONT color="green">130</FONT>            schema.setNamespaceURL(schemaNamespaceURL);<a name="line.130"></a>
+<FONT color="green">131</FONT>    <a name="line.131"></a>
+<FONT color="green">132</FONT>            final EntityManager em = this.emf.createEntityManager();<a name="line.132"></a>
+<FONT color="green">133</FONT>            try<a name="line.133"></a>
+<FONT color="green">134</FONT>            {<a name="line.134"></a>
+<FONT color="green">135</FONT>                final SchemaDAO schemaDAO = this.schemaDAOFactory.createInstance(em);<a name="line.135"></a>
+<FONT color="green">136</FONT>                schemaDAO.updateSchema(schema);<a name="line.136"></a>
+<FONT color="green">137</FONT>            }<a name="line.137"></a>
+<FONT color="green">138</FONT>            finally<a name="line.138"></a>
+<FONT color="green">139</FONT>            {<a name="line.139"></a>
+<FONT color="green">140</FONT>                em.close();<a name="line.140"></a>
+<FONT color="green">141</FONT>            }<a name="line.141"></a>
+<FONT color="green">142</FONT>        }<a name="line.142"></a>
+<FONT color="green">143</FONT>    <a name="line.143"></a>
+<FONT color="green">144</FONT>        @Override<a name="line.144"></a>
+<FONT color="green">145</FONT>        public void removeSchema(final Schema schema)<a name="line.145"></a>
+<FONT color="green">146</FONT>        {<a name="line.146"></a>
+<FONT color="green">147</FONT>            final EntityManager em = this.emf.createEntityManager();<a name="line.147"></a>
+<FONT color="green">148</FONT>    <a name="line.148"></a>
+<FONT color="green">149</FONT>            try<a name="line.149"></a>
+<FONT color="green">150</FONT>            {<a name="line.150"></a>
+<FONT color="green">151</FONT>                final List&lt;MetadataCategory&gt; mdcsToDelete = new ArrayList&lt;MetadataCategory&gt;(schema.getMetadataCategories());<a name="line.151"></a>
+<FONT color="green">152</FONT>    <a name="line.152"></a>
+<FONT color="green">153</FONT>                final SchemaDAO schemaDAO = this.schemaDAOFactory.createInstance(em);<a name="line.153"></a>
+<FONT color="green">154</FONT>                schema.getMetadataCategories().clear();<a name="line.154"></a>
+<FONT color="green">155</FONT>                schemaDAO.delete(schema);<a name="line.155"></a>
+<FONT color="green">156</FONT>    <a name="line.156"></a>
+<FONT color="green">157</FONT>                final MetadataCategoryDAO metadataCategoryDAO = this.metadataCategoryDAOFactory.createInstance(em);<a name="line.157"></a>
+<FONT color="green">158</FONT>                final MetadataAttributeDAO metadataAttributeDAO = this.metadataAttributeDAOFactory.createInstance(em);<a name="line.158"></a>
+<FONT color="green">159</FONT>    <a name="line.159"></a>
+<FONT color="green">160</FONT>                for (final MetadataCategory mdc : mdcsToDelete)<a name="line.160"></a>
+<FONT color="green">161</FONT>                {<a name="line.161"></a>
+<FONT color="green">162</FONT>                    final MetadataCategoryViewConfiguration mcvc = MetadataCategoryViewConfigService.getMetadataCategoryViewConfiguration(em, mdc);<a name="line.162"></a>
+<FONT color="green">163</FONT>                    if (mcvc != null)<a name="line.163"></a>
+<FONT color="green">164</FONT>                    {<a name="line.164"></a>
+<FONT color="green">165</FONT>                        em.remove(mcvc);<a name="line.165"></a>
+<FONT color="green">166</FONT>                    }<a name="line.166"></a>
+<FONT color="green">167</FONT>    <a name="line.167"></a>
+<FONT color="green">168</FONT>                    metadataCategoryDAO.delete(mdc);<a name="line.168"></a>
+<FONT color="green">169</FONT>    <a name="line.169"></a>
+<FONT color="green">170</FONT>                    final MetadataAttribute mda = mdc.getMetadataAttribute();<a name="line.170"></a>
+<FONT color="green">171</FONT>                    if (mda != null)<a name="line.171"></a>
+<FONT color="green">172</FONT>                    {<a name="line.172"></a>
+<FONT color="green">173</FONT>                        metadataAttributeDAO.delete(mda);<a name="line.173"></a>
+<FONT color="green">174</FONT>                    }<a name="line.174"></a>
+<FONT color="green">175</FONT>                }<a name="line.175"></a>
+<FONT color="green">176</FONT>            }<a name="line.176"></a>
+<FONT color="green">177</FONT>            finally<a name="line.177"></a>
+<FONT color="green">178</FONT>            {<a name="line.178"></a>
+<FONT color="green">179</FONT>                em.close();<a name="line.179"></a>
+<FONT color="green">180</FONT>            }<a name="line.180"></a>
+<FONT color="green">181</FONT>        }<a name="line.181"></a>
+<FONT color="green">182</FONT>    <a name="line.182"></a>
+<FONT color="green">183</FONT>        /**<a name="line.183"></a>
+<FONT color="green">184</FONT>         * @{inheritDoc}<a name="line.184"></a>
+<FONT color="green">185</FONT>         */<a name="line.185"></a>
+<FONT color="green">186</FONT>        @Override<a name="line.186"></a>
+<FONT color="green">187</FONT>        public void addMetadataCategoryToSchema(final Schema schema, final MetadataCategory metadataCategory)<a name="line.187"></a>
+<FONT color="green">188</FONT>        {<a name="line.188"></a>
+<FONT color="green">189</FONT>            final EntityManager em = this.emf.createEntityManager();<a name="line.189"></a>
+<FONT color="green">190</FONT>            try<a name="line.190"></a>
+<FONT color="green">191</FONT>            {<a name="line.191"></a>
+<FONT color="green">192</FONT>                final SchemaDAO schemaDAO = this.schemaDAOFactory.createInstance(em);<a name="line.192"></a>
+<FONT color="green">193</FONT>                schema.getMetadataCategories().add(metadataCategory);<a name="line.193"></a>
+<FONT color="green">194</FONT>                schemaDAO.updateSchema(schema);<a name="line.194"></a>
+<FONT color="green">195</FONT>            }<a name="line.195"></a>
+<FONT color="green">196</FONT>            finally<a name="line.196"></a>
+<FONT color="green">197</FONT>            {<a name="line.197"></a>
+<FONT color="green">198</FONT>                em.close();<a name="line.198"></a>
+<FONT color="green">199</FONT>            }<a name="line.199"></a>
+<FONT color="green">200</FONT>        }<a name="line.200"></a>
+<FONT color="green">201</FONT>    <a name="line.201"></a>
+<FONT color="green">202</FONT>        @Override<a name="line.202"></a>
+<FONT color="green">203</FONT>        public void removeMetadataCategoryFromSchema(final Schema schema, final MetadataCategory metadataCategory)<a name="line.203"></a>
+<FONT color="green">204</FONT>        {<a name="line.204"></a>
+<FONT color="green">205</FONT>            final EntityManager em = this.emf.createEntityManager();<a name="line.205"></a>
+<FONT color="green">206</FONT>            try<a name="line.206"></a>
+<FONT color="green">207</FONT>            {<a name="line.207"></a>
+<FONT color="green">208</FONT>                final SchemaDAO schemaDAO = this.schemaDAOFactory.createInstance(em);<a name="line.208"></a>
+<FONT color="green">209</FONT>                schema.getMetadataCategories().remove(metadataCategory);<a name="line.209"></a>
+<FONT color="green">210</FONT>                schemaDAO.updateSchema(schema);<a name="line.210"></a>
+<FONT color="green">211</FONT>            }<a name="line.211"></a>
+<FONT color="green">212</FONT>            finally<a name="line.212"></a>
+<FONT color="green">213</FONT>            {<a name="line.213"></a>
+<FONT color="green">214</FONT>                em.close();<a name="line.214"></a>
+<FONT color="green">215</FONT>            }<a name="line.215"></a>
+<FONT color="green">216</FONT>        }<a name="line.216"></a>
+<FONT color="green">217</FONT>    <a name="line.217"></a>
+<FONT color="green">218</FONT>        /**<a name="line.218"></a>
+<FONT color="green">219</FONT>         * @{inheritDoc}<a name="line.219"></a>
+<FONT color="green">220</FONT>         */<a name="line.220"></a>
+<FONT color="green">221</FONT>        @Override<a name="line.221"></a>
+<FONT color="green">222</FONT>        public File getDefaultSchemaDirectory()<a name="line.222"></a>
+<FONT color="green">223</FONT>        {<a name="line.223"></a>
+<FONT color="green">224</FONT>            return this.defaultSchemaDirectory;<a name="line.224"></a>
+<FONT color="green">225</FONT>        }<a name="line.225"></a>
+<FONT color="green">226</FONT>    <a name="line.226"></a>
+<FONT color="green">227</FONT>        /**<a name="line.227"></a>
+<FONT color="green">228</FONT>         * {@inheritDoc}<a name="line.228"></a>
+<FONT color="green">229</FONT>         */<a name="line.229"></a>
+<FONT color="green">230</FONT>        @Override<a name="line.230"></a>
+<FONT color="green">231</FONT>        public File getDefaultSchema()<a name="line.231"></a>
+<FONT color="green">232</FONT>        {<a name="line.232"></a>
+<FONT color="green">233</FONT>            return this.defaultSchema;<a name="line.233"></a>
+<FONT color="green">234</FONT>        }<a name="line.234"></a>
+<FONT color="green">235</FONT>    <a name="line.235"></a>
+<FONT color="green">236</FONT>        /**<a name="line.236"></a>
+<FONT color="green">237</FONT>         * @{inheritDoc}<a name="line.237"></a>
+<FONT color="green">238</FONT>         */<a name="line.238"></a>
+<FONT color="green">239</FONT>        @Override<a name="line.239"></a>
+<FONT color="green">240</FONT>        public Schema parseSchema(final File xmlFile) throws SAXException, IOException, ParserConfigurationException, InvalidSchemaException<a name="line.240"></a>
+<FONT color="green">241</FONT>        {<a name="line.241"></a>
+<FONT color="green">242</FONT>            // Configure validator for RELAX NG Schema Support<a name="line.242"></a>
+<FONT color="green">243</FONT>            System.setProperty(SchemaFactory.class.getName() + ":" + XMLConstants.RELAXNG_NS_URI, "com.thaiopensource.relaxng.jaxp.XMLSyntaxSchemaFactory");<a name="line.243"></a>
+<FONT color="green">244</FONT>            final SchemaFactory validationSchemaFactory = SchemaFactory.newInstance(XMLConstants.RELAXNG_NS_URI);<a name="line.244"></a>
+<FONT color="green">245</FONT>    <a name="line.245"></a>
+<FONT color="green">246</FONT>            final Source validationSchemaFile = new StreamSource(this.metadataSchemaSchema);<a name="line.246"></a>
+<FONT color="green">247</FONT>            final javax.xml.validation.Schema validationSchema = validationSchemaFactory.newSchema(validationSchemaFile);<a name="line.247"></a>
+<FONT color="green">248</FONT>            final Validator validator = validationSchema.newValidator();<a name="line.248"></a>
+<FONT color="green">249</FONT>    <a name="line.249"></a>
+<FONT color="green">250</FONT>            // Throws SAXException if the schema is not valid.<a name="line.250"></a>
+<FONT color="green">251</FONT>            // This needs to be a Stream Source, as validating a String isn't implemented :(<a name="line.251"></a>
+<FONT color="green">252</FONT>            validator.validate(new StreamSource(xmlFile));<a name="line.252"></a>
+<FONT color="green">253</FONT>    <a name="line.253"></a>
+<FONT color="green">254</FONT>            final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();<a name="line.254"></a>
+<FONT color="green">255</FONT>            final DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();<a name="line.255"></a>
+<FONT color="green">256</FONT>            final Document document = documentBuilder.parse(new FileInputStream(xmlFile));<a name="line.256"></a>
+<FONT color="green">257</FONT>    <a name="line.257"></a>
+<FONT color="green">258</FONT>            // Schema is valid, continue the parse.<a name="line.258"></a>
+<FONT color="green">259</FONT>            final Schema schema = MetadataSchemaXMLReader.readXML(document);<a name="line.259"></a>
+<FONT color="green">260</FONT>            return schema;<a name="line.260"></a>
+<FONT color="green">261</FONT>        }<a name="line.261"></a>
+<FONT color="green">262</FONT>    }<a name="line.262"></a>
 
 
 

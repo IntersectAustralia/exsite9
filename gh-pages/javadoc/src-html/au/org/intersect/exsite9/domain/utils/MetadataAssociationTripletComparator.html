@@ -1,0 +1,143 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /**<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Copyright (C) Intersect 2012.<a name="line.2"></a>
+<FONT color="green">003</FONT>     *<a name="line.3"></a>
+<FONT color="green">004</FONT>     * This module contains Proprietary Information of Intersect,<a name="line.4"></a>
+<FONT color="green">005</FONT>     * and should be treated as Confidential.<a name="line.5"></a>
+<FONT color="green">006</FONT>     */<a name="line.6"></a>
+<FONT color="green">007</FONT>    package au.org.intersect.exsite9.domain.utils;<a name="line.7"></a>
+<FONT color="green">008</FONT>    <a name="line.8"></a>
+<FONT color="green">009</FONT>    import java.util.Comparator;<a name="line.9"></a>
+<FONT color="green">010</FONT>    <a name="line.10"></a>
+<FONT color="green">011</FONT>    import au.org.intersect.exsite9.domain.MetadataAttributeValue;<a name="line.11"></a>
+<FONT color="green">012</FONT>    import au.org.intersect.exsite9.domain.MetadataCategory;<a name="line.12"></a>
+<FONT color="green">013</FONT>    import au.org.intersect.exsite9.domain.MetadataValue;<a name="line.13"></a>
+<FONT color="green">014</FONT>    import au.org.intersect.exsite9.util.Triplet;<a name="line.14"></a>
+<FONT color="green">015</FONT>    <a name="line.15"></a>
+<FONT color="green">016</FONT>    /**<a name="line.16"></a>
+<FONT color="green">017</FONT>     * Comparator that can be used to sort MetadataAssociation Triplets<a name="line.17"></a>
+<FONT color="green">018</FONT>     */<a name="line.18"></a>
+<FONT color="green">019</FONT>    public final class MetadataAssociationTripletComparator implements Comparator&lt;Triplet&lt;MetadataCategory, MetadataValue, MetadataAttributeValue&gt;&gt;<a name="line.19"></a>
+<FONT color="green">020</FONT>    {<a name="line.20"></a>
+<FONT color="green">021</FONT>    <a name="line.21"></a>
+<FONT color="green">022</FONT>        @Override<a name="line.22"></a>
+<FONT color="green">023</FONT>        public int compare(final Triplet&lt;MetadataCategory, MetadataValue, MetadataAttributeValue&gt; t1, final Triplet&lt;MetadataCategory, MetadataValue, MetadataAttributeValue&gt; t2)<a name="line.23"></a>
+<FONT color="green">024</FONT>        {<a name="line.24"></a>
+<FONT color="green">025</FONT>            final long mcId1 = t1.getFirst().getId();<a name="line.25"></a>
+<FONT color="green">026</FONT>            final long mcId2 = t2.getFirst().getId();<a name="line.26"></a>
+<FONT color="green">027</FONT>    <a name="line.27"></a>
+<FONT color="green">028</FONT>            if (mcId1 &lt; mcId2)<a name="line.28"></a>
+<FONT color="green">029</FONT>            {<a name="line.29"></a>
+<FONT color="green">030</FONT>                return -1;<a name="line.30"></a>
+<FONT color="green">031</FONT>            }<a name="line.31"></a>
+<FONT color="green">032</FONT>            if (mcId1 &gt; mcId2)<a name="line.32"></a>
+<FONT color="green">033</FONT>            {<a name="line.33"></a>
+<FONT color="green">034</FONT>                return 1;<a name="line.34"></a>
+<FONT color="green">035</FONT>            }<a name="line.35"></a>
+<FONT color="green">036</FONT>    <a name="line.36"></a>
+<FONT color="green">037</FONT>            final long mvId1 = t1.getSecond().getId();<a name="line.37"></a>
+<FONT color="green">038</FONT>            final long mvId2 = t2.getSecond().getId();<a name="line.38"></a>
+<FONT color="green">039</FONT>    <a name="line.39"></a>
+<FONT color="green">040</FONT>            if (mvId1 &lt; mvId2)<a name="line.40"></a>
+<FONT color="green">041</FONT>            {<a name="line.41"></a>
+<FONT color="green">042</FONT>                return -1;<a name="line.42"></a>
+<FONT color="green">043</FONT>            }<a name="line.43"></a>
+<FONT color="green">044</FONT>            if (mvId1 &gt; mvId2)<a name="line.44"></a>
+<FONT color="green">045</FONT>            {<a name="line.45"></a>
+<FONT color="green">046</FONT>                return 1;<a name="line.46"></a>
+<FONT color="green">047</FONT>            }<a name="line.47"></a>
+<FONT color="green">048</FONT>    <a name="line.48"></a>
+<FONT color="green">049</FONT>            // MetadataAttributeValues can be null.<a name="line.49"></a>
+<FONT color="green">050</FONT>            if (t1.getThird() == null &amp;&amp; t2.getThird() == null)<a name="line.50"></a>
+<FONT color="green">051</FONT>            {<a name="line.51"></a>
+<FONT color="green">052</FONT>                return 0;<a name="line.52"></a>
+<FONT color="green">053</FONT>            }<a name="line.53"></a>
+<FONT color="green">054</FONT>            if (t1.getThird() == null)<a name="line.54"></a>
+<FONT color="green">055</FONT>            {<a name="line.55"></a>
+<FONT color="green">056</FONT>                return 1;<a name="line.56"></a>
+<FONT color="green">057</FONT>            }<a name="line.57"></a>
+<FONT color="green">058</FONT>            if (t2.getThird() == null)<a name="line.58"></a>
+<FONT color="green">059</FONT>            {<a name="line.59"></a>
+<FONT color="green">060</FONT>                return -1;<a name="line.60"></a>
+<FONT color="green">061</FONT>            }<a name="line.61"></a>
+<FONT color="green">062</FONT>            <a name="line.62"></a>
+<FONT color="green">063</FONT>            final long mavId1 = t1.getThird().getId();<a name="line.63"></a>
+<FONT color="green">064</FONT>            final long mavId2 = t2.getThird().getId();<a name="line.64"></a>
+<FONT color="green">065</FONT>    <a name="line.65"></a>
+<FONT color="green">066</FONT>            if (mavId1 &lt; mavId2)<a name="line.66"></a>
+<FONT color="green">067</FONT>            {<a name="line.67"></a>
+<FONT color="green">068</FONT>                return -1;<a name="line.68"></a>
+<FONT color="green">069</FONT>            }<a name="line.69"></a>
+<FONT color="green">070</FONT>            if (mavId1 &gt; mavId2)<a name="line.70"></a>
+<FONT color="green">071</FONT>            {<a name="line.71"></a>
+<FONT color="green">072</FONT>                return 1;<a name="line.72"></a>
+<FONT color="green">073</FONT>            }<a name="line.73"></a>
+<FONT color="green">074</FONT>    <a name="line.74"></a>
+<FONT color="green">075</FONT>            return 0;<a name="line.75"></a>
+<FONT color="green">076</FONT>        }<a name="line.76"></a>
+<FONT color="green">077</FONT>    }<a name="line.77"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

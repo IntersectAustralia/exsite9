@@ -321,7 +321,7 @@
 <FONT color="green">318</FONT>        }<a name="line.318"></a>
 <FONT color="green">319</FONT>    <a name="line.319"></a>
 <FONT color="green">320</FONT>        @Override<a name="line.320"></a>
-<FONT color="green">321</FONT>        public void associateMetadata(final Group group, final MetadataCategory metadataCategory, final MetadataValue metadataValue, final MetadataAttributeValue metadataAttribtueValue)<a name="line.321"></a>
+<FONT color="green">321</FONT>        public void associateMetadata(final Group group, final MetadataCategory metadataCategory, final MetadataValue metadataValue, final MetadataAttributeValue metadataAttributeValue)<a name="line.321"></a>
 <FONT color="green">322</FONT>        {<a name="line.322"></a>
 <FONT color="green">323</FONT>            LOG.info("Assosciating metadata with group. " + group + " " + metadataCategory + " " + metadataValue);<a name="line.323"></a>
 <FONT color="green">324</FONT>    <a name="line.324"></a>
@@ -333,32 +333,32 @@
 <FONT color="green">330</FONT>                final MetadataAssociationDAO metadataAssociationDAO = this.metadataAssociationDAOFactory.createInstance(em);<a name="line.330"></a>
 <FONT color="green">331</FONT>        <a name="line.331"></a>
 <FONT color="green">332</FONT>                boolean addedAssociation = false;<a name="line.332"></a>
-<FONT color="green">333</FONT>                for (final MetadataAssociation existingAssociation : existingAssociations)<a name="line.333"></a>
-<FONT color="green">334</FONT>                {<a name="line.334"></a>
-<FONT color="green">335</FONT>                    if (existingAssociation.getMetadataCategory().equals(metadataCategory))<a name="line.335"></a>
-<FONT color="green">336</FONT>                    {<a name="line.336"></a>
-<FONT color="green">337</FONT>                        if (existingAssociation.getMetadataValues().contains(metadataValue))<a name="line.337"></a>
-<FONT color="green">338</FONT>                        {<a name="line.338"></a>
-<FONT color="green">339</FONT>                            // nothing to do!<a name="line.339"></a>
-<FONT color="green">340</FONT>                            return;<a name="line.340"></a>
-<FONT color="green">341</FONT>                        }<a name="line.341"></a>
-<FONT color="green">342</FONT>    <a name="line.342"></a>
-<FONT color="green">343</FONT>                        if (metadataCategory.getType() == MetadataCategoryType.FREETEXT)<a name="line.343"></a>
-<FONT color="green">344</FONT>                        {<a name="line.344"></a>
-<FONT color="green">345</FONT>                            // In a free-text metadata category type, there is only ever one value.<a name="line.345"></a>
-<FONT color="green">346</FONT>                            existingAssociation.getMetadataValues().clear();<a name="line.346"></a>
-<FONT color="green">347</FONT>                        }<a name="line.347"></a>
-<FONT color="green">348</FONT>                        existingAssociation.getMetadataValues().add(metadataValue);<a name="line.348"></a>
-<FONT color="green">349</FONT>                        metadataAssociationDAO.updateMetadataAssociation(existingAssociation);<a name="line.349"></a>
-<FONT color="green">350</FONT>                        addedAssociation = true;<a name="line.350"></a>
+<FONT color="green">333</FONT>    <a name="line.333"></a>
+<FONT color="green">334</FONT>                if (metadataCategory.getType() == MetadataCategoryType.CONTROLLED_VOCABULARY)<a name="line.334"></a>
+<FONT color="green">335</FONT>                {<a name="line.335"></a>
+<FONT color="green">336</FONT>                    for (final MetadataAssociation existingAssociation : existingAssociations)<a name="line.336"></a>
+<FONT color="green">337</FONT>                    {<a name="line.337"></a>
+<FONT color="green">338</FONT>                        if (existingAssociation.getMetadataCategory().equals(metadataCategory))<a name="line.338"></a>
+<FONT color="green">339</FONT>                        {<a name="line.339"></a>
+<FONT color="green">340</FONT>                            if (existingAssociation.getMetadataValues().contains(metadataValue))<a name="line.340"></a>
+<FONT color="green">341</FONT>                            {<a name="line.341"></a>
+<FONT color="green">342</FONT>                                // nothing to do!<a name="line.342"></a>
+<FONT color="green">343</FONT>                                return;<a name="line.343"></a>
+<FONT color="green">344</FONT>                            }<a name="line.344"></a>
+<FONT color="green">345</FONT>                            <a name="line.345"></a>
+<FONT color="green">346</FONT>                            existingAssociation.getMetadataValues().add(metadataValue);<a name="line.346"></a>
+<FONT color="green">347</FONT>                            existingAssociation.setMetadataAttributeValue(metadataAttributeValue);<a name="line.347"></a>
+<FONT color="green">348</FONT>                            metadataAssociationDAO.updateMetadataAssociation(existingAssociation);<a name="line.348"></a>
+<FONT color="green">349</FONT>                            addedAssociation = true;<a name="line.349"></a>
+<FONT color="green">350</FONT>                        }<a name="line.350"></a>
 <FONT color="green">351</FONT>                    }<a name="line.351"></a>
 <FONT color="green">352</FONT>                }<a name="line.352"></a>
 <FONT color="green">353</FONT>    <a name="line.353"></a>
-<FONT color="green">354</FONT>                if (!addedAssociation)<a name="line.354"></a>
+<FONT color="green">354</FONT>                if (metadataCategory.getType() == MetadataCategoryType.FREETEXT || !addedAssociation)<a name="line.354"></a>
 <FONT color="green">355</FONT>                {<a name="line.355"></a>
 <FONT color="green">356</FONT>                    final MetadataAssociation metadataAssociation = new MetadataAssociation(metadataCategory);<a name="line.356"></a>
 <FONT color="green">357</FONT>                    metadataAssociation.getMetadataValues().add(metadataValue);<a name="line.357"></a>
-<FONT color="green">358</FONT>                    metadataAssociation.setMetadataAttributeValue(metadataAttribtueValue);<a name="line.358"></a>
+<FONT color="green">358</FONT>                    metadataAssociation.setMetadataAttributeValue(metadataAttributeValue);<a name="line.358"></a>
 <FONT color="green">359</FONT>                    metadataAssociationDAO.createMetadataAssociation(metadataAssociation);<a name="line.359"></a>
 <FONT color="green">360</FONT>                    group.getMetadataAssociations().add(metadataAssociation);<a name="line.360"></a>
 <FONT color="green">361</FONT>                }<a name="line.361"></a>
@@ -421,147 +421,153 @@
 <FONT color="green">418</FONT>                final List&lt;MetadataAssociation&gt; associations = group.getMetadataAssociations();<a name="line.418"></a>
 <FONT color="green">419</FONT>                for (final MetadataAssociation association : associations)<a name="line.419"></a>
 <FONT color="green">420</FONT>                {<a name="line.420"></a>
-<FONT color="green">421</FONT>                    if (association.getMetadataCategory().equals(metadataCategory) &amp;&amp; association.getMetadataAttributeValue().equals(metadataAttributeValue))<a name="line.421"></a>
-<FONT color="green">422</FONT>                    {<a name="line.422"></a>
-<FONT color="green">423</FONT>                        association.setMetadataAttributeValue(null);<a name="line.423"></a>
-<FONT color="green">424</FONT>                        final EntityManager em = this.entityManagerFactory.createEntityManager();<a name="line.424"></a>
-<FONT color="green">425</FONT>                        try<a name="line.425"></a>
-<FONT color="green">426</FONT>                        {<a name="line.426"></a>
-<FONT color="green">427</FONT>                            final MetadataAssociationDAO metadataAssociationDAO = this.metadataAssociationDAOFactory.createInstance(em);<a name="line.427"></a>
-<FONT color="green">428</FONT>                            metadataAssociationDAO.updateMetadataAssociation(association);<a name="line.428"></a>
-<FONT color="green">429</FONT>                        }<a name="line.429"></a>
-<FONT color="green">430</FONT>                        finally<a name="line.430"></a>
-<FONT color="green">431</FONT>                        {<a name="line.431"></a>
-<FONT color="green">432</FONT>                            em.close();<a name="line.432"></a>
-<FONT color="green">433</FONT>                        }<a name="line.433"></a>
-<FONT color="green">434</FONT>                    }<a name="line.434"></a>
-<FONT color="green">435</FONT>                }<a name="line.435"></a>
-<FONT color="green">436</FONT>            }<a name="line.436"></a>
-<FONT color="green">437</FONT>        }<a name="line.437"></a>
-<FONT color="green">438</FONT>    <a name="line.438"></a>
-<FONT color="green">439</FONT>        private boolean moveGroupToNewGroup(Group child, Group oldParent, Group newParent)<a name="line.439"></a>
-<FONT color="green">440</FONT>        {<a name="line.440"></a>
-<FONT color="green">441</FONT>            if(oldParent.getGroups().remove(child))<a name="line.441"></a>
-<FONT color="green">442</FONT>            {<a name="line.442"></a>
-<FONT color="green">443</FONT>                if(newParent.getGroups().add(child))<a name="line.443"></a>
-<FONT color="green">444</FONT>                {<a name="line.444"></a>
-<FONT color="green">445</FONT>                    child.setParentGroup(newParent);<a name="line.445"></a>
-<FONT color="green">446</FONT>                    return true;<a name="line.446"></a>
-<FONT color="green">447</FONT>                }<a name="line.447"></a>
-<FONT color="green">448</FONT>            }<a name="line.448"></a>
-<FONT color="green">449</FONT>            return false;<a name="line.449"></a>
-<FONT color="green">450</FONT>        }<a name="line.450"></a>
-<FONT color="green">451</FONT>        <a name="line.451"></a>
-<FONT color="green">452</FONT>        private boolean moveFileToNewGroup(ResearchFile child, Group oldParent, Group newParent)<a name="line.452"></a>
-<FONT color="green">453</FONT>        {<a name="line.453"></a>
-<FONT color="green">454</FONT>            if(oldParent.getResearchFiles().remove(child))<a name="line.454"></a>
-<FONT color="green">455</FONT>            {<a name="line.455"></a>
-<FONT color="green">456</FONT>                if(newParent.getResearchFiles().add(child))<a name="line.456"></a>
-<FONT color="green">457</FONT>                {<a name="line.457"></a>
-<FONT color="green">458</FONT>                    child.setParentGroup(newParent);<a name="line.458"></a>
-<FONT color="green">459</FONT>                    return true;<a name="line.459"></a>
-<FONT color="green">460</FONT>                }<a name="line.460"></a>
-<FONT color="green">461</FONT>            }<a name="line.461"></a>
-<FONT color="green">462</FONT>            return false;<a name="line.462"></a>
-<FONT color="green">463</FONT>        }<a name="line.463"></a>
-<FONT color="green">464</FONT>    <a name="line.464"></a>
-<FONT color="green">465</FONT>        @Override<a name="line.465"></a>
-<FONT color="green">466</FONT>        public void renameGroup(final Group groupToBeRenamed, final String newName)<a name="line.466"></a>
-<FONT color="green">467</FONT>        {<a name="line.467"></a>
-<FONT color="green">468</FONT>            final EntityManager em = entityManagerFactory.createEntityManager();<a name="line.468"></a>
-<FONT color="green">469</FONT>            try<a name="line.469"></a>
-<FONT color="green">470</FONT>            {<a name="line.470"></a>
-<FONT color="green">471</FONT>                final GroupDAO groupDAO = groupDAOFactory.createInstance(em);<a name="line.471"></a>
-<FONT color="green">472</FONT>                groupToBeRenamed.setName(newName);<a name="line.472"></a>
-<FONT color="green">473</FONT>                groupDAO.updateGroup(groupToBeRenamed);<a name="line.473"></a>
-<FONT color="green">474</FONT>            }<a name="line.474"></a>
-<FONT color="green">475</FONT>            finally<a name="line.475"></a>
+<FONT color="green">421</FONT>                    final MetadataAttributeValue currentMetadataAttributeValue = association.getMetadataAttributeValue();<a name="line.421"></a>
+<FONT color="green">422</FONT>                    if (currentMetadataAttributeValue == null)<a name="line.422"></a>
+<FONT color="green">423</FONT>                    {<a name="line.423"></a>
+<FONT color="green">424</FONT>                        continue;<a name="line.424"></a>
+<FONT color="green">425</FONT>                    }<a name="line.425"></a>
+<FONT color="green">426</FONT>    <a name="line.426"></a>
+<FONT color="green">427</FONT>                    if (association.getMetadataCategory().equals(metadataCategory) &amp;&amp; currentMetadataAttributeValue.equals(metadataAttributeValue))<a name="line.427"></a>
+<FONT color="green">428</FONT>                    {<a name="line.428"></a>
+<FONT color="green">429</FONT>                        association.setMetadataAttributeValue(null);<a name="line.429"></a>
+<FONT color="green">430</FONT>                        final EntityManager em = this.entityManagerFactory.createEntityManager();<a name="line.430"></a>
+<FONT color="green">431</FONT>                        try<a name="line.431"></a>
+<FONT color="green">432</FONT>                        {<a name="line.432"></a>
+<FONT color="green">433</FONT>                            final MetadataAssociationDAO metadataAssociationDAO = this.metadataAssociationDAOFactory.createInstance(em);<a name="line.433"></a>
+<FONT color="green">434</FONT>                            metadataAssociationDAO.updateMetadataAssociation(association);<a name="line.434"></a>
+<FONT color="green">435</FONT>                        }<a name="line.435"></a>
+<FONT color="green">436</FONT>                        finally<a name="line.436"></a>
+<FONT color="green">437</FONT>                        {<a name="line.437"></a>
+<FONT color="green">438</FONT>                            em.close();<a name="line.438"></a>
+<FONT color="green">439</FONT>                        }<a name="line.439"></a>
+<FONT color="green">440</FONT>                    }<a name="line.440"></a>
+<FONT color="green">441</FONT>                }<a name="line.441"></a>
+<FONT color="green">442</FONT>            }<a name="line.442"></a>
+<FONT color="green">443</FONT>        }<a name="line.443"></a>
+<FONT color="green">444</FONT>    <a name="line.444"></a>
+<FONT color="green">445</FONT>        private boolean moveGroupToNewGroup(Group child, Group oldParent, Group newParent)<a name="line.445"></a>
+<FONT color="green">446</FONT>        {<a name="line.446"></a>
+<FONT color="green">447</FONT>            if(oldParent.getGroups().remove(child))<a name="line.447"></a>
+<FONT color="green">448</FONT>            {<a name="line.448"></a>
+<FONT color="green">449</FONT>                if(newParent.getGroups().add(child))<a name="line.449"></a>
+<FONT color="green">450</FONT>                {<a name="line.450"></a>
+<FONT color="green">451</FONT>                    child.setParentGroup(newParent);<a name="line.451"></a>
+<FONT color="green">452</FONT>                    return true;<a name="line.452"></a>
+<FONT color="green">453</FONT>                }<a name="line.453"></a>
+<FONT color="green">454</FONT>            }<a name="line.454"></a>
+<FONT color="green">455</FONT>            return false;<a name="line.455"></a>
+<FONT color="green">456</FONT>        }<a name="line.456"></a>
+<FONT color="green">457</FONT>        <a name="line.457"></a>
+<FONT color="green">458</FONT>        private boolean moveFileToNewGroup(ResearchFile child, Group oldParent, Group newParent)<a name="line.458"></a>
+<FONT color="green">459</FONT>        {<a name="line.459"></a>
+<FONT color="green">460</FONT>            if(oldParent.getResearchFiles().remove(child))<a name="line.460"></a>
+<FONT color="green">461</FONT>            {<a name="line.461"></a>
+<FONT color="green">462</FONT>                if(newParent.getResearchFiles().add(child))<a name="line.462"></a>
+<FONT color="green">463</FONT>                {<a name="line.463"></a>
+<FONT color="green">464</FONT>                    child.setParentGroup(newParent);<a name="line.464"></a>
+<FONT color="green">465</FONT>                    return true;<a name="line.465"></a>
+<FONT color="green">466</FONT>                }<a name="line.466"></a>
+<FONT color="green">467</FONT>            }<a name="line.467"></a>
+<FONT color="green">468</FONT>            return false;<a name="line.468"></a>
+<FONT color="green">469</FONT>        }<a name="line.469"></a>
+<FONT color="green">470</FONT>    <a name="line.470"></a>
+<FONT color="green">471</FONT>        @Override<a name="line.471"></a>
+<FONT color="green">472</FONT>        public void renameGroup(final Group groupToBeRenamed, final String newName)<a name="line.472"></a>
+<FONT color="green">473</FONT>        {<a name="line.473"></a>
+<FONT color="green">474</FONT>            final EntityManager em = entityManagerFactory.createEntityManager();<a name="line.474"></a>
+<FONT color="green">475</FONT>            try<a name="line.475"></a>
 <FONT color="green">476</FONT>            {<a name="line.476"></a>
-<FONT color="green">477</FONT>                em.close();<a name="line.477"></a>
-<FONT color="green">478</FONT>            }<a name="line.478"></a>
-<FONT color="green">479</FONT>        }<a name="line.479"></a>
-<FONT color="green">480</FONT>    <a name="line.480"></a>
-<FONT color="green">481</FONT>        @Override<a name="line.481"></a>
-<FONT color="green">482</FONT>        public List&lt;Group&gt; getGroupsWithAssociatedMetadata(final MetadataCategory metadataCategory, final MetadataValue metadataValue)<a name="line.482"></a>
-<FONT color="green">483</FONT>        {<a name="line.483"></a>
-<FONT color="green">484</FONT>            final EntityManager em = entityManagerFactory.createEntityManager();<a name="line.484"></a>
-<FONT color="green">485</FONT>            try<a name="line.485"></a>
-<FONT color="green">486</FONT>            {<a name="line.486"></a>
-<FONT color="green">487</FONT>                final GroupDAO groupDAO = groupDAOFactory.createInstance(em);<a name="line.487"></a>
-<FONT color="green">488</FONT>                return groupDAO.getGroupsWithAssociatedMetadata(metadataCategory, metadataValue);<a name="line.488"></a>
-<FONT color="green">489</FONT>            }<a name="line.489"></a>
-<FONT color="green">490</FONT>            finally<a name="line.490"></a>
-<FONT color="green">491</FONT>            {<a name="line.491"></a>
-<FONT color="green">492</FONT>                em.close();<a name="line.492"></a>
-<FONT color="green">493</FONT>            }<a name="line.493"></a>
-<FONT color="green">494</FONT>        }<a name="line.494"></a>
-<FONT color="green">495</FONT>    <a name="line.495"></a>
-<FONT color="green">496</FONT>        @Override<a name="line.496"></a>
-<FONT color="green">497</FONT>        public List&lt;Group&gt; getGroupsWithAssociatedMetadataAttribute(final MetadataCategory metadataCategory, final MetadataAttributeValue metadataAttributeValue)<a name="line.497"></a>
-<FONT color="green">498</FONT>        {<a name="line.498"></a>
-<FONT color="green">499</FONT>            final EntityManager em = entityManagerFactory.createEntityManager();<a name="line.499"></a>
-<FONT color="green">500</FONT>            try<a name="line.500"></a>
-<FONT color="green">501</FONT>            {<a name="line.501"></a>
-<FONT color="green">502</FONT>                final GroupDAO groupDAO = groupDAOFactory.createInstance(em);<a name="line.502"></a>
-<FONT color="green">503</FONT>                return groupDAO.getGroupsWithAssociatedMetadataAttribute(metadataCategory, metadataAttributeValue);<a name="line.503"></a>
-<FONT color="green">504</FONT>            }<a name="line.504"></a>
-<FONT color="green">505</FONT>            finally<a name="line.505"></a>
-<FONT color="green">506</FONT>            {<a name="line.506"></a>
-<FONT color="green">507</FONT>                em.close();<a name="line.507"></a>
-<FONT color="green">508</FONT>            }<a name="line.508"></a>
-<FONT color="green">509</FONT>        }<a name="line.509"></a>
-<FONT color="green">510</FONT>    <a name="line.510"></a>
-<FONT color="green">511</FONT>        @Override<a name="line.511"></a>
-<FONT color="green">512</FONT>        public Group findGroupByID(final Long groupID)<a name="line.512"></a>
-<FONT color="green">513</FONT>        {<a name="line.513"></a>
-<FONT color="green">514</FONT>            final EntityManager em = entityManagerFactory.createEntityManager();<a name="line.514"></a>
-<FONT color="green">515</FONT>            try<a name="line.515"></a>
-<FONT color="green">516</FONT>            {<a name="line.516"></a>
-<FONT color="green">517</FONT>                final GroupDAO gropDAO = groupDAOFactory.createInstance(em);<a name="line.517"></a>
-<FONT color="green">518</FONT>                return gropDAO.findById(groupID);<a name="line.518"></a>
-<FONT color="green">519</FONT>            }<a name="line.519"></a>
-<FONT color="green">520</FONT>            finally<a name="line.520"></a>
-<FONT color="green">521</FONT>            {<a name="line.521"></a>
-<FONT color="green">522</FONT>                em.close();<a name="line.522"></a>
-<FONT color="green">523</FONT>            }<a name="line.523"></a>
-<FONT color="green">524</FONT>        }<a name="line.524"></a>
-<FONT color="green">525</FONT>    <a name="line.525"></a>
-<FONT color="green">526</FONT>        @Override<a name="line.526"></a>
-<FONT color="green">527</FONT>        public void disassociateMultipleMetadataValues(Group group, MetadataCategory metadataCategory, List&lt;MetadataValue&gt; metadataValues)<a name="line.527"></a>
-<FONT color="green">528</FONT>        {<a name="line.528"></a>
-<FONT color="green">529</FONT>            for(MetadataValue metadataValue : metadataValues)<a name="line.529"></a>
-<FONT color="green">530</FONT>            {<a name="line.530"></a>
-<FONT color="green">531</FONT>                disassociateMetadata(group, metadataCategory, metadataValue);<a name="line.531"></a>
-<FONT color="green">532</FONT>            }<a name="line.532"></a>
-<FONT color="green">533</FONT>        }<a name="line.533"></a>
-<FONT color="green">534</FONT>    <a name="line.534"></a>
-<FONT color="green">535</FONT>        @Override<a name="line.535"></a>
-<FONT color="green">536</FONT>        public void sortResearchFilesInGroup(final Group group, final ResearchFileSortField sortField, final SortFieldDirection sortDirection)<a name="line.536"></a>
-<FONT color="green">537</FONT>        {<a name="line.537"></a>
-<FONT color="green">538</FONT>            final EntityManager em = entityManagerFactory.createEntityManager();<a name="line.538"></a>
-<FONT color="green">539</FONT>            final GroupDAO groupDAO = new GroupDAO(em);<a name="line.539"></a>
-<FONT color="green">540</FONT>            try<a name="line.540"></a>
-<FONT color="green">541</FONT>            {<a name="line.541"></a>
-<FONT color="green">542</FONT>                configureReserachFileSortParams(groupDAO, group, sortField, sortDirection);<a name="line.542"></a>
-<FONT color="green">543</FONT>            }<a name="line.543"></a>
-<FONT color="green">544</FONT>            finally<a name="line.544"></a>
-<FONT color="green">545</FONT>            {<a name="line.545"></a>
-<FONT color="green">546</FONT>                em.close();<a name="line.546"></a>
-<FONT color="green">547</FONT>            }<a name="line.547"></a>
-<FONT color="green">548</FONT>        }<a name="line.548"></a>
-<FONT color="green">549</FONT>    <a name="line.549"></a>
-<FONT color="green">550</FONT>        private static void configureReserachFileSortParams(final GroupDAO groupDAO, final Group group, final ResearchFileSortField sortField, final SortFieldDirection sortDirection)<a name="line.550"></a>
-<FONT color="green">551</FONT>        {<a name="line.551"></a>
-<FONT color="green">552</FONT>            group.setResearchFileSortDirection(sortDirection);<a name="line.552"></a>
-<FONT color="green">553</FONT>            group.setResearchFileSortField(sortField);<a name="line.553"></a>
-<FONT color="green">554</FONT>            for (final Group childGroup : group.getGroups())<a name="line.554"></a>
-<FONT color="green">555</FONT>            {<a name="line.555"></a>
-<FONT color="green">556</FONT>                // Recursion<a name="line.556"></a>
-<FONT color="green">557</FONT>                configureReserachFileSortParams(groupDAO, childGroup, sortField, sortDirection);<a name="line.557"></a>
-<FONT color="green">558</FONT>            }<a name="line.558"></a>
-<FONT color="green">559</FONT>            groupDAO.updateGroup(group);<a name="line.559"></a>
-<FONT color="green">560</FONT>        }<a name="line.560"></a>
-<FONT color="green">561</FONT>    }<a name="line.561"></a>
+<FONT color="green">477</FONT>                final GroupDAO groupDAO = groupDAOFactory.createInstance(em);<a name="line.477"></a>
+<FONT color="green">478</FONT>                groupToBeRenamed.setName(newName);<a name="line.478"></a>
+<FONT color="green">479</FONT>                groupDAO.updateGroup(groupToBeRenamed);<a name="line.479"></a>
+<FONT color="green">480</FONT>            }<a name="line.480"></a>
+<FONT color="green">481</FONT>            finally<a name="line.481"></a>
+<FONT color="green">482</FONT>            {<a name="line.482"></a>
+<FONT color="green">483</FONT>                em.close();<a name="line.483"></a>
+<FONT color="green">484</FONT>            }<a name="line.484"></a>
+<FONT color="green">485</FONT>        }<a name="line.485"></a>
+<FONT color="green">486</FONT>    <a name="line.486"></a>
+<FONT color="green">487</FONT>        @Override<a name="line.487"></a>
+<FONT color="green">488</FONT>        public List&lt;Group&gt; getGroupsWithAssociatedMetadata(final MetadataCategory metadataCategory, final MetadataValue metadataValue)<a name="line.488"></a>
+<FONT color="green">489</FONT>        {<a name="line.489"></a>
+<FONT color="green">490</FONT>            final EntityManager em = entityManagerFactory.createEntityManager();<a name="line.490"></a>
+<FONT color="green">491</FONT>            try<a name="line.491"></a>
+<FONT color="green">492</FONT>            {<a name="line.492"></a>
+<FONT color="green">493</FONT>                final GroupDAO groupDAO = groupDAOFactory.createInstance(em);<a name="line.493"></a>
+<FONT color="green">494</FONT>                return groupDAO.getGroupsWithAssociatedMetadata(metadataCategory, metadataValue);<a name="line.494"></a>
+<FONT color="green">495</FONT>            }<a name="line.495"></a>
+<FONT color="green">496</FONT>            finally<a name="line.496"></a>
+<FONT color="green">497</FONT>            {<a name="line.497"></a>
+<FONT color="green">498</FONT>                em.close();<a name="line.498"></a>
+<FONT color="green">499</FONT>            }<a name="line.499"></a>
+<FONT color="green">500</FONT>        }<a name="line.500"></a>
+<FONT color="green">501</FONT>    <a name="line.501"></a>
+<FONT color="green">502</FONT>        @Override<a name="line.502"></a>
+<FONT color="green">503</FONT>        public List&lt;Group&gt; getGroupsWithAssociatedMetadataAttribute(final MetadataCategory metadataCategory, final MetadataAttributeValue metadataAttributeValue)<a name="line.503"></a>
+<FONT color="green">504</FONT>        {<a name="line.504"></a>
+<FONT color="green">505</FONT>            final EntityManager em = entityManagerFactory.createEntityManager();<a name="line.505"></a>
+<FONT color="green">506</FONT>            try<a name="line.506"></a>
+<FONT color="green">507</FONT>            {<a name="line.507"></a>
+<FONT color="green">508</FONT>                final GroupDAO groupDAO = groupDAOFactory.createInstance(em);<a name="line.508"></a>
+<FONT color="green">509</FONT>                return groupDAO.getGroupsWithAssociatedMetadataAttribute(metadataCategory, metadataAttributeValue);<a name="line.509"></a>
+<FONT color="green">510</FONT>            }<a name="line.510"></a>
+<FONT color="green">511</FONT>            finally<a name="line.511"></a>
+<FONT color="green">512</FONT>            {<a name="line.512"></a>
+<FONT color="green">513</FONT>                em.close();<a name="line.513"></a>
+<FONT color="green">514</FONT>            }<a name="line.514"></a>
+<FONT color="green">515</FONT>        }<a name="line.515"></a>
+<FONT color="green">516</FONT>    <a name="line.516"></a>
+<FONT color="green">517</FONT>        @Override<a name="line.517"></a>
+<FONT color="green">518</FONT>        public Group findGroupByID(final Long groupID)<a name="line.518"></a>
+<FONT color="green">519</FONT>        {<a name="line.519"></a>
+<FONT color="green">520</FONT>            final EntityManager em = entityManagerFactory.createEntityManager();<a name="line.520"></a>
+<FONT color="green">521</FONT>            try<a name="line.521"></a>
+<FONT color="green">522</FONT>            {<a name="line.522"></a>
+<FONT color="green">523</FONT>                final GroupDAO gropDAO = groupDAOFactory.createInstance(em);<a name="line.523"></a>
+<FONT color="green">524</FONT>                return gropDAO.findById(groupID);<a name="line.524"></a>
+<FONT color="green">525</FONT>            }<a name="line.525"></a>
+<FONT color="green">526</FONT>            finally<a name="line.526"></a>
+<FONT color="green">527</FONT>            {<a name="line.527"></a>
+<FONT color="green">528</FONT>                em.close();<a name="line.528"></a>
+<FONT color="green">529</FONT>            }<a name="line.529"></a>
+<FONT color="green">530</FONT>        }<a name="line.530"></a>
+<FONT color="green">531</FONT>    <a name="line.531"></a>
+<FONT color="green">532</FONT>        @Override<a name="line.532"></a>
+<FONT color="green">533</FONT>        public void disassociateMultipleMetadataValues(Group group, MetadataCategory metadataCategory, List&lt;MetadataValue&gt; metadataValues)<a name="line.533"></a>
+<FONT color="green">534</FONT>        {<a name="line.534"></a>
+<FONT color="green">535</FONT>            for(MetadataValue metadataValue : metadataValues)<a name="line.535"></a>
+<FONT color="green">536</FONT>            {<a name="line.536"></a>
+<FONT color="green">537</FONT>                disassociateMetadata(group, metadataCategory, metadataValue);<a name="line.537"></a>
+<FONT color="green">538</FONT>            }<a name="line.538"></a>
+<FONT color="green">539</FONT>        }<a name="line.539"></a>
+<FONT color="green">540</FONT>    <a name="line.540"></a>
+<FONT color="green">541</FONT>        @Override<a name="line.541"></a>
+<FONT color="green">542</FONT>        public void sortResearchFilesInGroup(final Group group, final ResearchFileSortField sortField, final SortFieldDirection sortDirection)<a name="line.542"></a>
+<FONT color="green">543</FONT>        {<a name="line.543"></a>
+<FONT color="green">544</FONT>            final EntityManager em = entityManagerFactory.createEntityManager();<a name="line.544"></a>
+<FONT color="green">545</FONT>            final GroupDAO groupDAO = new GroupDAO(em);<a name="line.545"></a>
+<FONT color="green">546</FONT>            try<a name="line.546"></a>
+<FONT color="green">547</FONT>            {<a name="line.547"></a>
+<FONT color="green">548</FONT>                configureReserachFileSortParams(groupDAO, group, sortField, sortDirection);<a name="line.548"></a>
+<FONT color="green">549</FONT>            }<a name="line.549"></a>
+<FONT color="green">550</FONT>            finally<a name="line.550"></a>
+<FONT color="green">551</FONT>            {<a name="line.551"></a>
+<FONT color="green">552</FONT>                em.close();<a name="line.552"></a>
+<FONT color="green">553</FONT>            }<a name="line.553"></a>
+<FONT color="green">554</FONT>        }<a name="line.554"></a>
+<FONT color="green">555</FONT>    <a name="line.555"></a>
+<FONT color="green">556</FONT>        private static void configureReserachFileSortParams(final GroupDAO groupDAO, final Group group, final ResearchFileSortField sortField, final SortFieldDirection sortDirection)<a name="line.556"></a>
+<FONT color="green">557</FONT>        {<a name="line.557"></a>
+<FONT color="green">558</FONT>            group.setResearchFileSortDirection(sortDirection);<a name="line.558"></a>
+<FONT color="green">559</FONT>            group.setResearchFileSortField(sortField);<a name="line.559"></a>
+<FONT color="green">560</FONT>            for (final Group childGroup : group.getGroups())<a name="line.560"></a>
+<FONT color="green">561</FONT>            {<a name="line.561"></a>
+<FONT color="green">562</FONT>                // Recursion<a name="line.562"></a>
+<FONT color="green">563</FONT>                configureReserachFileSortParams(groupDAO, childGroup, sortField, sortDirection);<a name="line.563"></a>
+<FONT color="green">564</FONT>            }<a name="line.564"></a>
+<FONT color="green">565</FONT>            groupDAO.updateGroup(group);<a name="line.565"></a>
+<FONT color="green">566</FONT>        }<a name="line.566"></a>
+<FONT color="green">567</FONT>    }<a name="line.567"></a>
 
 
 
