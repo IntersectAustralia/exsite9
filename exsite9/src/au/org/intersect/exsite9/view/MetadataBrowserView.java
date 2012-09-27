@@ -340,8 +340,11 @@ public final class MetadataBrowserView extends ViewPart implements IExecutionLis
 
     private void packAndLayout()
     {
-        expandBar.pack();
-        expandBar.layout();
+        if (this.expandBar != null)
+        {
+            expandBar.pack();
+            expandBar.layout();
+        }
         parent.layout();
     }
 
