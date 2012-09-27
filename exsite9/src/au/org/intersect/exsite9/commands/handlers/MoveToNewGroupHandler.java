@@ -61,6 +61,9 @@ public final class MoveToNewGroupHandler implements IHandler
         final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
         final Project project = projectManager.getCurrentProject();
 
+        final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
+        final List<HierarchyMoveDTO> moveItems = new ArrayList<HierarchyMoveDTO>(selection.size());
+        
         // Create the new group under the root node.
         final Shell shell = HandlerUtil.getActiveWorkbenchWindow(event).getShell();
         final NewGroupWizard newGroupWizard = new NewGroupWizard(project.getRootNode());
@@ -74,9 +77,6 @@ public final class MoveToNewGroupHandler implements IHandler
         }
 
         final Group newGroup = newGroupWizard.getNewGroup();
-
-        final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
-        final List<HierarchyMoveDTO> moveItems = new ArrayList<HierarchyMoveDTO>(selection.size());
 
         final IGroupService groupService = (IGroupService) PlatformUI.getWorkbench().getService(IGroupService.class);
         final Iterator<?> iter = selection.iterator();
