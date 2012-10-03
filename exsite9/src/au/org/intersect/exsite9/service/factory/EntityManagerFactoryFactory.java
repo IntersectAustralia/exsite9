@@ -63,10 +63,11 @@ public final class EntityManagerFactoryFactory extends AbstractServiceFactory
         
         // Turn off shared cache - EXSITE-167
         properties.put("eclipselink.cache.shared.default", "false");
-        
-        // Rewire eclipselink to log via log4j
+
+        // Rewire eclipselink to log via log4j.
+        // See http://wiki.eclipse.org/EclipseLink/Examples/JPA/Logging
         properties.put("eclipselink.logging.logger", "org.eclipse.persistence.logging.CommonsLoggingSessionLog");
-        properties.put("eclipselink.logging.level", "FINE");
+        properties.put("eclipselink.logging.level", "SEVERE");
         properties.put("eclipselink.logging.exceptions", "true");
 
         return new PersistenceProvider().createEntityManagerFactory("jpa", properties);
