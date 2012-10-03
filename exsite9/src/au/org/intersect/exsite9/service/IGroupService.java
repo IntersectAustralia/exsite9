@@ -12,6 +12,7 @@ import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.MetadataAttributeValue;
 import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataValue;
+import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFileSortField;
 import au.org.intersect.exsite9.domain.SortFieldDirection;
 import au.org.intersect.exsite9.dto.HierarchyMoveDTO;
@@ -24,10 +25,10 @@ public interface IGroupService
     /**
      * Creates a new group.
      * @param groupName The name of the new group to created.
-     * @param parentGroup The parent of this new group.
+     * @param project the current project
      * @return The newly created Group.
      */
-    Group createNewGroup(final String groupName);
+    Group createNewGroup(final String groupName, final Project project);
 
     /**
      * Deletes a group. Moves all the child groups and files to the provided group's parent.

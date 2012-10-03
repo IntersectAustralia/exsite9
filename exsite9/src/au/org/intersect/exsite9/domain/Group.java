@@ -52,6 +52,9 @@ public class Group implements Serializable, IMetadataAssignable
 
     @OneToMany
     private final List<MetadataAssociation> metadataAssociations = new ArrayList<MetadataAssociation>();
+    
+    @ManyToOne
+    private Project project;
 
     /**
      * The field to sort child research files on.
@@ -138,6 +141,16 @@ public class Group implements Serializable, IMetadataAssignable
     public void setResearchFileSortDirection(final SortFieldDirection sortDirection)
     {
         this.researchFileSortDirection = sortDirection;
+    }
+    
+    public Project getProject()
+    {
+        return project;
+    }
+
+    public void setProject(final Project project)
+    {
+        this.project = project;
     }
 
     /**

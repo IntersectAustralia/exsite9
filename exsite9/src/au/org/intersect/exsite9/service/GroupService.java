@@ -62,13 +62,14 @@ public final class GroupService implements IGroupService
      * @{inheritDoc}
      */
     @Override
-    public Group createNewGroup(final String groupName)
+    public Group createNewGroup(final String groupName, final Project project)
     {
         EntityManager em = entityManagerFactory.createEntityManager();
         try
         {
             final GroupDAO groupDAO = groupDAOFactory.createInstance(em);
             final Group group = new Group(groupName);
+            group.setProject(project);
             groupDAO.createGroup(group);
             return group;
         }

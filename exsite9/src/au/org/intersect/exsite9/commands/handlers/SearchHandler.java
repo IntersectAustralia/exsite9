@@ -20,7 +20,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import au.org.intersect.exsite9.domain.Project;
-import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.view.ProjectExplorerView;
 import au.org.intersect.exsite9.view.ViewUtils;
@@ -59,7 +58,7 @@ public class SearchHandler implements IHandler
         final WizardDialog wizardDialog = new WizardDialog(shell, wizard);
         wizardDialog.open();
 
-        List<ResearchFile> searchResults = wizard.getSearchResults();
+        List<Object> searchResults = wizard.getSearchResults();
         
         final ProjectExplorerView projectExplorerView = (ProjectExplorerView) ViewUtils.getViewByID(PlatformUI
                 .getWorkbench().getActiveWorkbenchWindow(), ProjectExplorerView.ID);

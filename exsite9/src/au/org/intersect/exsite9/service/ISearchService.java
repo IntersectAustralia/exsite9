@@ -9,13 +9,12 @@ package au.org.intersect.exsite9.service;
 import java.util.List;
 
 import au.org.intersect.exsite9.domain.Project;
-import au.org.intersect.exsite9.domain.ResearchFile;
-import au.org.intersect.exsite9.domain.ResearchFileSearchDefinition;
+import au.org.intersect.exsite9.domain.SearchDefinition;
 
 /**
  * Provides access to {@link SearchService}.
  */
 public interface ISearchService
 {
-    List<ResearchFile> getResearchFilesUsingSearchTerm(String searchTerm, ResearchFileSearchDefinition selectedField, Project currentProject);
+    List<Object> getSearchResults(String searchTerm, SearchDefinition selectedField, Project currentProject);
 }

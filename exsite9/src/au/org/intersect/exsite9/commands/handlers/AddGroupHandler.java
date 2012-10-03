@@ -13,10 +13,12 @@ import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import au.org.intersect.exsite9.domain.Group;
 import au.org.intersect.exsite9.domain.Project;
+import au.org.intersect.exsite9.service.IProjectManager;
 import au.org.intersect.exsite9.wizard.newgroup.NewGroupWizard;
 
 /**
@@ -50,6 +52,13 @@ public final class AddGroupHandler implements IHandler
         final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
         final Object selectedObject = selection.getFirstElement();
         
+        final IProjectManager projectManager = (IProjectManager) PlatformUI.getWorkbench().getService(IProjectManager.class);
+        final Project currentProject = projectManager.getCurrentProject();
+        if (currentProject == null)
+        {
+            throw new IllegalStateException("Trying to create a group when there isn't an active project");
+        }
+        
         final Group parentGroup;
         if (selectedObject instanceof Group)
         {
@@ -67,7 +76,7 @@ public final class AddGroupHandler implements IHandler
         }
 
         final Shell shell = HandlerUtil.getActiveWorkbenchWindow(event).getShell();
-        final NewGroupWizard newGroupWizard = new NewGroupWizard(parentGroup);
+        final NewGroupWizard newGroupWizard = new NewGroupWizard(parentGroup, currentProject);
         final WizardDialog wizardDialog = new WizardDialog(shell, newGroupWizard);
         wizardDialog.open();
 

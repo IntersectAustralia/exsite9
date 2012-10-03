@@ -12,8 +12,7 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.PlatformUI;
 
 import au.org.intersect.exsite9.domain.Project;
-import au.org.intersect.exsite9.domain.ResearchFile;
-import au.org.intersect.exsite9.domain.ResearchFileSearchDefinition;
+import au.org.intersect.exsite9.domain.SearchDefinition;
 import au.org.intersect.exsite9.service.ISearchService;
 
 /**
@@ -23,7 +22,7 @@ public class SearchWizard extends Wizard
 {
     private SearchWizardPage1 page1;
     private Project currentProject;
-    List<ResearchFile> searchResults;
+    List<Object> searchResults;
 
     public SearchWizard(Project selectedProject)
     {
@@ -31,7 +30,7 @@ public class SearchWizard extends Wizard
         this.currentProject = selectedProject;
         setNeedsProgressMonitor(true);
         setWindowTitle("Search");
-        this.page1 = new SearchWizardPage1(ResearchFileSearchDefinition.toArray());
+        this.page1 = new SearchWizardPage1(SearchDefinition.toArray());
     }
 
     @Override
@@ -43,16 +42,17 @@ public class SearchWizard extends Wizard
     @Override
     public boolean performFinish()
     {
-        final ResearchFileSearchDefinition selectedField = page1.getSearchCategory();
+        final SearchDefinition selectedField = page1.getSearchCategory();
         final String searchTerm = page1.getSearchTerm();
         final ISearchService searchService = (ISearchService) PlatformUI.getWorkbench()
                 .getService(ISearchService.class);
-        this.searchResults = searchService.getResearchFilesUsingSearchTerm(searchTerm, selectedField, this.currentProject);
+
+        this.searchResults = searchService.getSearchResults(searchTerm, selectedField, this.currentProject);
+
         return true;
     }
-    
-    
-    public List<ResearchFile> getSearchResults()
+
+    public List<Object> getSearchResults()
     {
         return searchResults;
     }

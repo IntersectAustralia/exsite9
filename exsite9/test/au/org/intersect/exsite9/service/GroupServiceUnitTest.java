@@ -42,6 +42,7 @@ import au.org.intersect.exsite9.domain.MetadataCategory;
 import au.org.intersect.exsite9.domain.MetadataCategoryType;
 import au.org.intersect.exsite9.domain.MetadataCategoryUse;
 import au.org.intersect.exsite9.domain.MetadataValue;
+import au.org.intersect.exsite9.domain.Project;
 import au.org.intersect.exsite9.domain.ResearchFile;
 import au.org.intersect.exsite9.domain.ResearchFileSortField;
 import au.org.intersect.exsite9.domain.SortFieldDirection;
@@ -68,7 +69,7 @@ public class GroupServiceUnitTest extends DAOTest
         
         groupService = new GroupService(emf, groupDAOFactory, metadataAssocationDAOFactory, researchFileDAOFactory);
         
-        Group group = groupService.createNewGroup("Group One");
+        Group group = groupService.createNewGroup("Group One", new Project());
         
         Group newGroup = groupDAOFactory.createInstance(createEntityManager()).findById(group.getId());
         
@@ -391,7 +392,7 @@ public class GroupServiceUnitTest extends DAOTest
         metadataCategory2.getValues().add(metadataValue3);
         metadataCategoryDAO.createMetadataCategory(metadataCategory2);
 
-        final Group group = groupService.createNewGroup("group name");
+        final Group group = groupService.createNewGroup("group name", new Project());
         groupService.disassociateMetadata(group, metadataCategory1, metadataValue1);
         assertTrue(group.getMetadataAssociations().isEmpty());
         groupService.associateMetadata(group, metadataCategory1, metadataValue1, null);
@@ -453,7 +454,7 @@ public class GroupServiceUnitTest extends DAOTest
         final MetadataAttribute metadataAttribute1 = new MetadataAttribute("attribute", Arrays.asList(metadataAttributeValue1));
         metadataAttributeDAO.createMetadataAttribute(metadataAttribute1);
 
-        final Group group = groupService.createNewGroup("group name");
+        final Group group = groupService.createNewGroup("group name", new Project());
         groupService.disassociateMetadataAttributeValue(metadataCategory1, metadataAttributeValue1);
         assertTrue(group.getMetadataAssociations().isEmpty());
         groupService.associateMetadata(group, metadataCategory1, metadataValue1, metadataAttributeValue1);
@@ -493,8 +494,9 @@ public class GroupServiceUnitTest extends DAOTest
         final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         groupService = new GroupService(emf, groupDAOFactory, metadataAssocationDAOFactory, researchFileDAOFactory);
 
-        final Group parentGroup = groupService.createNewGroup("parent");
-        final Group childGroup = groupService.createNewGroup("child");
+        final Project project = new Project();
+        final Group parentGroup = groupService.createNewGroup("parent", project);
+        final Group childGroup = groupService.createNewGroup("child", project);
         groupService.addChildGroup(parentGroup, childGroup);
         assertTrue(parentGroup.getGroups().contains(childGroup));
 
@@ -536,7 +538,7 @@ public class GroupServiceUnitTest extends DAOTest
         final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         groupService = new GroupService(emf, groupDAOFactory, metadataAssocationDAOFactory, researchFileDAOFactory);
 
-        final Group myGroup = groupService.createNewGroup("testRenameGroup");
+        final Group myGroup = groupService.createNewGroup("testRenameGroup", new Project());
 
         groupService.renameGroup(myGroup, "myNewGroupName");
         final Group groupOut = groupDAO.findById(myGroup.getId());
@@ -560,7 +562,7 @@ public class GroupServiceUnitTest extends DAOTest
         final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         groupService = new GroupService(emf, groupDAOFactory, metadataAssociationDAOFactory, researchFileDAOFactory);
 
-        final Group myGroup = groupService.createNewGroup("testGetGroupsWithAssociatedMetadata");
+        final Group myGroup = groupService.createNewGroup("testGetGroupsWithAssociatedMetadata", new Project());
 
         final MetadataCategory mdc = new MetadataCategory("mdc-testGetGroupsWithAssociatedMetadata", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
         final MetadataValue mdv = new MetadataValue("mdv-testGetGroupsWithAssociatedMetadata");
@@ -590,7 +592,7 @@ public class GroupServiceUnitTest extends DAOTest
         final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         groupService = new GroupService(emf, groupDAOFactory, metadataAssociationDAOFactory, researchFileDAOFactory);
 
-        final Group myGroup = groupService.createNewGroup("testGetGroupsWithAssociatedMetadata");
+        final Group myGroup = groupService.createNewGroup("testGetGroupsWithAssociatedMetadata", new Project());
         assertNotNull(myGroup.getId());
 
         assertNull(groupService.findGroupByID(myGroup.getId() + 1000l));
@@ -722,8 +724,9 @@ public class GroupServiceUnitTest extends DAOTest
         final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         groupService = new GroupService(emf, groupDAOFactory, metadataAssociationDAOFactory, researchFileDAOFactory);
 
-        final Group parent = groupService.createNewGroup("parent");
-        final Group child = groupService.createNewGroup("child");
+        final Project project = new Project();
+        final Group parent = groupService.createNewGroup("parent", project);
+        final Group child = groupService.createNewGroup("child", project);
         groupService.addChildGroup(parent, child);
 
         assertEquals(ResearchFileSortField.NAME, parent.getResearchFileSortField());

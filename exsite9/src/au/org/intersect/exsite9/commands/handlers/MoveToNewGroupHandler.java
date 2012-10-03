@@ -66,7 +66,7 @@ public final class MoveToNewGroupHandler implements IHandler
         
         // Create the new group under the root node.
         final Shell shell = HandlerUtil.getActiveWorkbenchWindow(event).getShell();
-        final NewGroupWizard newGroupWizard = new NewGroupWizard(project.getRootNode());
+        final NewGroupWizard newGroupWizard = new NewGroupWizard(project.getRootNode(), project);
         final WizardDialog wizardDialog = new WizardDialog(shell, newGroupWizard);
         final int returnCode = wizardDialog.open();
 

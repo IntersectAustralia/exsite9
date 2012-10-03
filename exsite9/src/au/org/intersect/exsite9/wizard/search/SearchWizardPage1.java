@@ -17,7 +17,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import au.org.intersect.exsite9.domain.ResearchFileSearchDefinition;
+import au.org.intersect.exsite9.domain.SearchDefinition;
 
 /**
  * Wizard page that is shown to the user when they want to search the project
@@ -33,7 +33,7 @@ public class SearchWizardPage1 extends WizardPage
     {
         super("Search");
         setTitle("Search");
-        setDescription("Search across the metadata which is associated with the files within this project.");
+        setDescription("Search across the metadata which is associated with the groups and files within this project.");
         this.searchFields = searchFields;
     }
 
@@ -85,8 +85,8 @@ public class SearchWizardPage1 extends WizardPage
         return this.searchTerm.getText().trim();
     }
     
-    public ResearchFileSearchDefinition getSearchCategory()
+    public SearchDefinition getSearchCategory()
     {
-        return ResearchFileSearchDefinition.fromString(this.searchCategories.getItem(this.searchCategories.getSelectionIndex()));
+        return SearchDefinition.fromString(this.searchCategories.getItem(this.searchCategories.getSelectionIndex()));
     }
 }
