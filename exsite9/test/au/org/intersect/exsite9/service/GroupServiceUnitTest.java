@@ -28,6 +28,7 @@ import au.org.intersect.exsite9.dao.GroupDAO;
 import au.org.intersect.exsite9.dao.MetadataAssociationDAO;
 import au.org.intersect.exsite9.dao.MetadataAttributeDAO;
 import au.org.intersect.exsite9.dao.MetadataCategoryDAO;
+import au.org.intersect.exsite9.dao.ProjectDAO;
 import au.org.intersect.exsite9.dao.ResearchFileDAO;
 import au.org.intersect.exsite9.dao.factory.GroupDAOFactory;
 import au.org.intersect.exsite9.dao.factory.MetadataAssociationDAOFactory;
@@ -64,12 +65,15 @@ public class GroupServiceUnitTest extends DAOTest
         stub(emf.createEntityManager()).toReturn(createEntityManager());
         
         GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final ProjectDAO projectDAO = new ProjectDAO(emf.createEntityManager());
         MetadataAssociationDAOFactory metadataAssocationDAOFactory = new MetadataAssociationDAOFactory();
         ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         
         groupService = new GroupService(emf, groupDAOFactory, metadataAssocationDAOFactory, researchFileDAOFactory);
         
-        Group group = groupService.createNewGroup("Group One", new Project());
+        final Project project = new Project();
+        projectDAO.createProject(project);
+        Group group = groupService.createNewGroup("Group One", project);
         
         Group newGroup = groupDAOFactory.createInstance(createEntityManager()).findById(group.getId());
         
@@ -371,9 +375,11 @@ public class GroupServiceUnitTest extends DAOTest
                                     .toReturn(createEntityManager())
                                     .toReturn(createEntityManager())
                                     .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
                                     .toReturn(createEntityManager());
 
         final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final ProjectDAO projectDAO = new ProjectDAO(emf.createEntityManager());
         final MetadataAssociationDAOFactory metadataAssocationDAOFactory = new MetadataAssociationDAOFactory();
         final MetadataCategoryDAO metadataCategoryDAO = new MetadataCategoryDAO(emf.createEntityManager());
         final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
@@ -392,7 +398,9 @@ public class GroupServiceUnitTest extends DAOTest
         metadataCategory2.getValues().add(metadataValue3);
         metadataCategoryDAO.createMetadataCategory(metadataCategory2);
 
-        final Group group = groupService.createNewGroup("group name", new Project());
+        final Project project = new Project();
+        projectDAO.createProject(project);
+        final Group group = groupService.createNewGroup("group name", project);
         groupService.disassociateMetadata(group, metadataCategory1, metadataValue1);
         assertTrue(group.getMetadataAssociations().isEmpty());
         groupService.associateMetadata(group, metadataCategory1, metadataValue1, null);
@@ -428,9 +436,11 @@ public class GroupServiceUnitTest extends DAOTest
                                     .toReturn(createEntityManager())
                                     .toReturn(createEntityManager())
                                     .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
                                     .toReturn(createEntityManager());
 
         final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final ProjectDAO projectDAO = new ProjectDAO(emf.createEntityManager());
         final MetadataAssociationDAOFactory metadataAssocationDAOFactory = new MetadataAssociationDAOFactory();
         final MetadataCategoryDAO metadataCategoryDAO = new MetadataCategoryDAO(emf.createEntityManager());
         final MetadataAttributeDAO metadataAttributeDAO = new MetadataAttributeDAO(emf.createEntityManager());
@@ -454,7 +464,9 @@ public class GroupServiceUnitTest extends DAOTest
         final MetadataAttribute metadataAttribute1 = new MetadataAttribute("attribute", Arrays.asList(metadataAttributeValue1));
         metadataAttributeDAO.createMetadataAttribute(metadataAttribute1);
 
-        final Group group = groupService.createNewGroup("group name", new Project());
+        final Project project = new Project();
+        projectDAO.createProject(project);
+        final Group group = groupService.createNewGroup("group name", project);
         groupService.disassociateMetadataAttributeValue(metadataCategory1, metadataAttributeValue1);
         assertTrue(group.getMetadataAssociations().isEmpty());
         groupService.associateMetadata(group, metadataCategory1, metadataValue1, metadataAttributeValue1);
@@ -483,10 +495,12 @@ public class GroupServiceUnitTest extends DAOTest
                                     .toReturn(createEntityManager())
                                     .toReturn(createEntityManager())
                                     .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
                                     .toReturn(createEntityManager());
 
         final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
         final GroupDAO groupDAO = new GroupDAO(emf.createEntityManager());
+        final ProjectDAO projectDAO = new ProjectDAO(emf.createEntityManager());
         final MetadataAssociationDAOFactory metadataAssocationDAOFactory = new MetadataAssociationDAOFactory();
         final MetadataAssociationDAO metadataAssociationDAO = new MetadataAssociationDAO(emf.createEntityManager());
         final MetadataCategoryDAO metadataCategoryDAO = new MetadataCategoryDAO(emf.createEntityManager());
@@ -494,7 +508,9 @@ public class GroupServiceUnitTest extends DAOTest
         final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         groupService = new GroupService(emf, groupDAOFactory, metadataAssocationDAOFactory, researchFileDAOFactory);
 
+        
         final Project project = new Project();
+        projectDAO.createProject(project);
         final Group parentGroup = groupService.createNewGroup("parent", project);
         final Group childGroup = groupService.createNewGroup("child", project);
         groupService.addChildGroup(parentGroup, childGroup);
@@ -530,15 +546,19 @@ public class GroupServiceUnitTest extends DAOTest
         final EntityManagerFactory emf = mock(EntityManagerFactory.class);
         stub(emf.createEntityManager()).toReturn(createEntityManager())
                                     .toReturn(createEntityManager())
+                                    .toReturn(createEntityManager())
                                     .toReturn(createEntityManager());
 
         final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final ProjectDAO projectDAO = new ProjectDAO(emf.createEntityManager());
         final GroupDAO groupDAO = new GroupDAO(emf.createEntityManager());
         final MetadataAssociationDAOFactory metadataAssocationDAOFactory = new MetadataAssociationDAOFactory();
         final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         groupService = new GroupService(emf, groupDAOFactory, metadataAssocationDAOFactory, researchFileDAOFactory);
 
-        final Group myGroup = groupService.createNewGroup("testRenameGroup", new Project());
+        final Project project = new Project();
+        projectDAO.createProject(project);
+        final Group myGroup = groupService.createNewGroup("testRenameGroup", project);
 
         groupService.renameGroup(myGroup, "myNewGroupName");
         final Group groupOut = groupDAO.findById(myGroup.getId());
@@ -557,12 +577,15 @@ public class GroupServiceUnitTest extends DAOTest
                                        .toReturn(createEntityManager());
 
         final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final ProjectDAO projectDAO = new ProjectDAO(emf.createEntityManager());
         final MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         final MetadataCategoryDAO metadataCategoryDAO = new MetadataCategoryDAO(emf.createEntityManager());
         final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         groupService = new GroupService(emf, groupDAOFactory, metadataAssociationDAOFactory, researchFileDAOFactory);
 
-        final Group myGroup = groupService.createNewGroup("testGetGroupsWithAssociatedMetadata", new Project());
+        final Project project = new Project();
+        projectDAO.createProject(project);
+        final Group myGroup = groupService.createNewGroup("testGetGroupsWithAssociatedMetadata", project);
 
         final MetadataCategory mdc = new MetadataCategory("mdc-testGetGroupsWithAssociatedMetadata", MetadataCategoryType.CONTROLLED_VOCABULARY, MetadataCategoryUse.optional);
         final MetadataValue mdv = new MetadataValue("mdv-testGetGroupsWithAssociatedMetadata");
@@ -588,11 +611,14 @@ public class GroupServiceUnitTest extends DAOTest
                                        .toReturn(createEntityManager());
 
         final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final ProjectDAO projectDAO = new ProjectDAO(emf.createEntityManager());
         final MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         groupService = new GroupService(emf, groupDAOFactory, metadataAssociationDAOFactory, researchFileDAOFactory);
 
-        final Group myGroup = groupService.createNewGroup("testGetGroupsWithAssociatedMetadata", new Project());
+        final Project project = new Project();
+        projectDAO.createProject(project);
+        final Group myGroup = groupService.createNewGroup("testGetGroupsWithAssociatedMetadata", project);
         assertNotNull(myGroup.getId());
 
         assertNull(groupService.findGroupByID(myGroup.getId() + 1000l));
@@ -717,14 +743,17 @@ public class GroupServiceUnitTest extends DAOTest
                                        .toReturn(createEntityManager())
                                        .toReturn(createEntityManager())
                                        .toReturn(createEntityManager())
+                                       .toReturn(createEntityManager())
                                        .toReturn(createEntityManager());
 
         final GroupDAOFactory groupDAOFactory = new GroupDAOFactory();
+        final ProjectDAO projectDAO = new ProjectDAO(emf.createEntityManager());
         final MetadataAssociationDAOFactory metadataAssociationDAOFactory = new MetadataAssociationDAOFactory();
         final ResearchFileDAOFactory researchFileDAOFactory = new ResearchFileDAOFactory();
         groupService = new GroupService(emf, groupDAOFactory, metadataAssociationDAOFactory, researchFileDAOFactory);
 
         final Project project = new Project();
+        projectDAO.createProject(project);
         final Group parent = groupService.createNewGroup("parent", project);
         final Group child = groupService.createNewGroup("child", project);
         groupService.addChildGroup(parent, child);
