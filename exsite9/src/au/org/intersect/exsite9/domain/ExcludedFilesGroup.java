@@ -17,11 +17,12 @@ import javax.persistence.Entity;
 @Entity
 public final class ExcludedFilesGroup extends Group
 {
+    public static final String NAME = "Excluded Files";
     private static final long serialVersionUID = -5078733345256805564L;
 
     public ExcludedFilesGroup()
     {
-        super("Excluded Files");
+        super(NAME);
     }
 
     /**

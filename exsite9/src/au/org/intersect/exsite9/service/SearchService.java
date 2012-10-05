@@ -27,10 +27,10 @@ import au.org.intersect.exsite9.domain.SearchDefinition;
  */
 public class SearchService implements ISearchService
 {
-    private static final String FILE_METADATA_CATEGORY_ATTRIBUTE_QUERY_STRING = "SELECT DISTINCT f FROM ResearchFile f JOIN f.metadataAssociations a WHERE f.project = :project AND LOWER(a.metadataAttributeValue.value) LIKE LOWER(:searchTerm)";
-    private static final String FILE_METADATA_CATEGORY_VALUE_QUERY_STRING = "SELECT DISTINCT f FROM ResearchFile f JOIN f.metadataAssociations a JOIN a.metadataValues va WHERE f.project = :project AND a.metadataCategory.type = :categoryType AND LOWER(va.value) LIKE LOWER(:searchTerm)";
-    private static final String FILE_METADATA_VALUE_IRRELEVANT_OF_VALUE_TYPE_QUERY_STRING = "SELECT DISTINCT f FROM ResearchFile f JOIN f.metadataAssociations a JOIN a.metadataValues va WHERE f.project = :project AND LOWER(va.value) LIKE LOWER(:searchTerm)";
-    private static final String FILE_METADATA_CATEGORY_NAME_QUERY_STRING = "SELECT DISTINCT f FROM ResearchFile f JOIN f.metadataAssociations a WHERE f.project = :project AND LOWER(a.metadataCategory.name) LIKE LOWER(:searchTerm)";
+    private static final String FILE_METADATA_CATEGORY_ATTRIBUTE_QUERY_STRING = "SELECT DISTINCT f FROM ResearchFile f JOIN f.metadataAssociations a WHERE f.project = :project AND f.parentGroup != :excludedGroup AND LOWER(a.metadataAttributeValue.value) LIKE LOWER(:searchTerm)";
+    private static final String FILE_METADATA_CATEGORY_VALUE_QUERY_STRING = "SELECT DISTINCT f FROM ResearchFile f JOIN f.metadataAssociations a JOIN a.metadataValues va WHERE f.project = :project AND f.parentGroup != :excludedGroup AND a.metadataCategory.type = :categoryType AND LOWER(va.value) LIKE LOWER(:searchTerm)";
+    private static final String FILE_METADATA_VALUE_IRRELEVANT_OF_VALUE_TYPE_QUERY_STRING = "SELECT DISTINCT f FROM ResearchFile f JOIN f.metadataAssociations a JOIN a.metadataValues va WHERE f.project = :project AND f.parentGroup != :excludedGroup AND LOWER(va.value) LIKE LOWER(:searchTerm)";
+    private static final String FILE_METADATA_CATEGORY_NAME_QUERY_STRING = "SELECT DISTINCT f FROM ResearchFile f JOIN f.metadataAssociations a WHERE f.project = :project AND f.parentGroup != :excludedGroup AND LOWER(a.metadataCategory.name) LIKE LOWER(:searchTerm)";
     private static final String GROUP_METADATA_CATEGORY_ATTRIBUTE_QUERY_STRING = "SELECT DISTINCT g FROM Group g JOIN g.metadataAssociations a WHERE g.project = :project AND LOWER(a.metadataAttributeValue.value) LIKE LOWER(:searchTerm)";
     private static final String GROUP_METADATA_CATEGORY_VALUE_QUERY_STRING = "SELECT DISTINCT g FROM Group g JOIN g.metadataAssociations a JOIN a.metadataValues va WHERE g.project = :project AND a.metadataCategory.type = :categoryType AND LOWER(va.value) LIKE LOWER(:searchTerm)";
     private static final String GROUP_METADATA_VALUE_IRRELEVANT_OF_VALUE_TYPE_QUERY_STRING = "SELECT DISTINCT g FROM Group g JOIN g.metadataAssociations a JOIN a.metadataValues va WHERE g.project = :project AND LOWER(va.value) LIKE LOWER(:searchTerm)";
@@ -64,12 +64,15 @@ public class SearchService implements ISearchService
                     fileQuery = em.createQuery(FILE_METADATA_CATEGORY_NAME_QUERY_STRING, ResearchFile.class);
                     fileQuery.setParameter("searchTerm", sb.toString());
                     fileQuery.setParameter("project", currentProject);
+                    fileQuery.setParameter("excludedGroup", currentProject.getExcludedFilesNode());
                     TypedQuery<ResearchFile> fileQuery2 = em.createQuery(FILE_METADATA_VALUE_IRRELEVANT_OF_VALUE_TYPE_QUERY_STRING, ResearchFile.class);
                     fileQuery2.setParameter("searchTerm", sb.toString());
                     fileQuery2.setParameter("project", currentProject);
+                    fileQuery2.setParameter("excludedGroup", currentProject.getExcludedFilesNode());
                     TypedQuery<ResearchFile> fileQuery3 = em.createQuery(FILE_METADATA_CATEGORY_ATTRIBUTE_QUERY_STRING, ResearchFile.class);
                     fileQuery3.setParameter("searchTerm", sb.toString());
                     fileQuery3.setParameter("project", currentProject);
+                    fileQuery3.setParameter("excludedGroup", currentProject.getExcludedFilesNode());
 
                     List<ResearchFile> resultsFromFileCategoryName = fileQuery.getResultList();
                     List<ResearchFile> resultsFromFileValue = fileQuery2.getResultList();
@@ -136,6 +139,7 @@ public class SearchService implements ISearchService
             groupQuery.setParameter("project", currentProject);
             fileQuery.setParameter("searchTerm", sb.toString());
             fileQuery.setParameter("project", currentProject);
+            fileQuery.setParameter("excludedGroup", currentProject.getExcludedFilesNode());
 
             List<Group> groupResultList = groupQuery.getResultList();
             List<ResearchFile> fileResultList = fileQuery.getResultList();

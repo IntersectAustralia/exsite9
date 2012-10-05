@@ -402,6 +402,7 @@ public class ResearchFileService implements IResearchFileService
         {
             newGroup = new Group(folder.getName());
             newGroup.setParentGroup(parentGroup);
+            newGroup.setProject(project);
             newGroup.setResearchFileSortDirection(parentGroup.getResearchFileSortDirection());
             newGroup.setResearchFileSortField(parentGroup.getResearchFileSortField());
             parentGroup.getGroups().add(newGroup);

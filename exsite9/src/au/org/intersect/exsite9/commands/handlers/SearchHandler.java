@@ -63,12 +63,17 @@ public class SearchHandler implements IHandler
         final ProjectExplorerView projectExplorerView = (ProjectExplorerView) ViewUtils.getViewByID(PlatformUI
                 .getWorkbench().getActiveWorkbenchWindow(), ProjectExplorerView.ID);
         
-        projectExplorerView.setSelection(new StructuredSelection(searchResults));
-        projectExplorerView.refresh();
         
         if (searchResults.isEmpty())
         {
+            projectExplorerView.setSelection(new StructuredSelection());
+            projectExplorerView.refresh();
             MessageDialog.openInformation(shell, "Search Results", "Your Search Returned 0 Results.");
+        }
+        else
+        {
+            projectExplorerView.setSelection(new StructuredSelection(searchResults));
+            projectExplorerView.refresh();            
         }
         
         return null;
