@@ -8,3 +8,6 @@ Head over to [the wiki](https://github.com/IntersectAustralia/exsite9/wiki) for 
 
 This code is licensed under the GNU GPL v3 license - see LICENSE.txt
 
+The documentation (contained in the Github wiki) is licensed under Creative Commons Attribution-Share Alike
+
+http://creativecommons.org/licenses/by-sa/2.5/au/
