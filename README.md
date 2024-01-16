@@ -1,5 +1,7 @@
 This is the ExSite9 (EIF009) application.
 
+**UPDATE 2023:** Please note that ExSite9 has been superseded by the new tool Lameta (https://lameta.org)
+
 Head over to [the wiki](https://github.com/IntersectAustralia/exsite9/wiki) for project documentation.
 Or [Downloads](https://github.com/IntersectAustralia/exsite9/wiki/Install-packages) for installation packages.
 
